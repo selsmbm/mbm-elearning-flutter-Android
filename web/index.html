@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <base href="/">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="A new Flutter application.">
+  <meta name="google-signin-client_id" content="304334437374-1sal5n4gjdqbq84163hj2nq8i6ci94eb.apps.googleusercontent.com">
+  <script src="/__/firebase/init.js"></script>
+
+  <!-- iOS meta tags & icons -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="mbmelearning">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <title>mbmelearning</title>
+  <link rel="manifest" href="manifest.json">
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-KKJVW6F');</script>
+  <!-- End Google Tag Manager -->
+  <script async src="https://static.addtoany.com/menu/page.js"></script>
+
+</head>
+<body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KKJVW6F"
+                  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+<!-- This script installs service_worker.js to provide PWA functionality to
+     application. For more information, see:
+     https://developers.google.com/web/fundamentals/primers/service-workers -->
+<script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('flutter-first-frame', function () {
+        navigator.serviceWorker.register('flutter_service_worker.js');
+        navigator.serviceWorker.register("/firebase-messaging-sw.js");
+      });
+    }
+  </script>
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/8.2.4/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-analytics.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-messaging.js"></script>
+
+
+<script>
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  var firebaseConfig = {
+     apiKey: "AIzaSyDAJoQfqX7XVEShds_pw-mBLx3uOo2yldM",
+    authDomain: "mbmecj.firebaseapp.com",
+    databaseURL: "https://mbmecj.firebaseio.com",
+    projectId: "mbmecj",
+    storageBucket: "mbmecj.appspot.com",
+    messagingSenderId: "304334437374",
+    appId: "1:304334437374:web:2cd637b99eb3c8d8f29eaf",
+    measurementId: "G-MGLBGX8E73"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+  const messaging = firebase.messaging();
+
+// Optional:
+messaging.onBackgroundMessage((message) => {
+  console.log("onBackgroundMessage", message);
+});
+</script>
+<script src="main.dart.js" type="application/javascript"></script>
+</body>
+</html>
