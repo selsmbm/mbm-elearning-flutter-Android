@@ -108,8 +108,13 @@ class _FirstyearMaterialMobileAddState
       body: SafeArea(
         child: ZStack([
           VStack([
-            60.heightBox,
-            "Add Only First Year Material Hare".text.xl2.center.make(),
+            40.heightBox,
+            Text(
+              "Only First Year Material Add Hare",
+              style: TextStyle(
+                fontSize: 17,
+              ),
+            ),
             10.heightBox,
             TextField(
               onChanged: (value) {

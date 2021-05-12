@@ -104,7 +104,12 @@ class _MathsMtaddMobileState extends State<MathsMtaddMobile> {
         child: ZStack([
           VStack([
             60.heightBox,
-            "Add Only Math Material Hare".text.xl2.center.make(),
+            Text(
+              "Only Math Material Add Hare",
+              style: TextStyle(
+                fontSize: 19,
+              ),
+            ),
             10.heightBox,
             TextField(
               onChanged: (value) {

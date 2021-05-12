@@ -130,7 +130,12 @@ class _SecondtoFinaladdmtmbState extends State<SecondtoFinaladdmtmb> {
         child: ZStack([
           VStack([
             60.heightBox,
-            "Add Only Second to Final Year Material Hare".text.xl2.center.make(),
+            Text(
+              "Only Second to Final Year Material Add Hare",
+              style: TextStyle(
+                fontSize: 13,
+              ),
+            ),
             10.heightBox,
             TextField(
               onChanged: (value) {
