@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:304334437374:android:88b3710e331a6d3cf29eaf",
+        "mobilesdk_app_id": "1:304334437374:android:86388ef40a4cb924f29eaf",
         "android_client_info": {
-          "package_name": "com.mbmecj.apk"
+          "package_name": "com.mbm.elereaning.mbmecj"
         }
       },
       "oauth_client": [
@@ -34,6 +34,44 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:304334437374:android:88b3710e331a6d3cf29eaf",
+        "android_client_info": {
+          "package_name": "com.mbmecj.apk"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "304334437374-mlbn4r88g6vsvqomnafd7skjtgmeqsod.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mbmecj.apk",
+            "certificate_hash": "37f5060826f700c0b11704ad1476b4ac052e4195"
+          }
+        },
+        {
+          "client_id": "304334437374-1sal5n4gjdqbq84163hj2nq8i6ci94eb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbH1yRTuj7goXbrICzFISo2T7wE4l0CBM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "304334437374-1sal5n4gjdqbq84163hj2nq8i6ci94eb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-8551736194468843~8779306249"
     }
   ],
   "configuration_version": "1"

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mbmelearning/Widgets/AlertDialog.dart';
 import 'package:mbmelearning/Widgets/bottomBar.dart';
 import 'package:mbmelearning/mobile/staticPages/contactmobile.dart';
@@ -120,10 +121,7 @@ class _SettingMBState extends State<SettingMB> {
                 onPressed: () {
                   setState(() {
                     _auth.signOut();
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => MobileMainScreen()));
+                    SystemNavigator.pop();
                   });
                 },
                 child: Container(

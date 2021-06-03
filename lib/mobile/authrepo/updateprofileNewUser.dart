@@ -1,14 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 import 'package:mbmelearning/Widgets/AlertDialog.dart';
 import 'package:mbmelearning/Widgets/Buttons.dart';
 import 'package:mbmelearning/Widgets/customPaint.dart';
 import 'package:mbmelearning/constants.dart';
 import 'package:mbmelearning/mobile/authrepo/signinmobile.dart';
+import 'package:mbmelearning/mobile/mobiledashbord.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:velocity_x/velocity_x.dart';
+
+import '../../branchesandsems.dart';
 
 const kTextFieldDecoration = InputDecoration(
   hintText: 'Enter a value',
@@ -26,35 +28,57 @@ const kTextFieldDecoration = InputDecoration(
   ),
 );
 
-class SignupMobile extends StatefulWidget {
+class UpdateProfileOldUser extends StatefulWidget {
+  final userid;
+  final userEmail;
+  UpdateProfileOldUser({this.userid,this.userEmail});
   @override
-  _SignupMobileState createState() => _SignupMobileState();
+  _UpdateProfileOldUserState createState() => _UpdateProfileOldUserState();
 }
 
-class _SignupMobileState extends State<SignupMobile> {
-  final _auth = FirebaseAuth.instance;
-  String userid;
-  String email;
+class _UpdateProfileOldUserState extends State<UpdateProfileOldUser> {
+  String branch = 'select branch';
   String name;
-  String password;
-
+  String mobileNo;
+  String year;
   bool showSpiner = false;
 
-  var user =
-      FirebaseFirestore.instance
-          .collection('users');
+  DropdownButton<String> androidDropdownBranches() {
+    List<DropdownMenuItem<String>> dropdownItems = [];
+    for (String branch in branches) {
+      var newItem = DropdownMenuItem(
+        child: Text(branch).w(context.percentWidth * 60),
+        value: branch,
+      );
+      dropdownItems.add(newItem);
+    }
 
-  Future<void> addUser(id) {
+    return DropdownButton<String>(
+      value: branch,
+      items: dropdownItems,
+      onChanged: (value) {
+        setState(() {
+          branch = value;
+          print(branch);
+        });
+      },
+    );
+  }
+
+  var user = FirebaseFirestore.instance.collection('users');
+
+  Future<void> _addUser(id) {
     return user.doc(id).set({
       'username': name,
-      'useremail': email,
-      'year':'null',
-      'branch':'null',
-      'mobileNo':'null',
+      'useremail': widget.userEmail,
+      'year': year,
+      'branch': branch,
+      'mobileNo':mobileNo,
     }).then((value) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => SigninMobile()),
+        MaterialPageRoute(
+            builder: (context) => MobileDashbord()),
       );
       setState(() {
         showSpiner = false;
@@ -85,7 +109,7 @@ class _SignupMobileState extends State<SignupMobile> {
                     painter: RPSCustomPainter(),
                   ),
                 ),
-                "Signup".text.xl4.bold.color(kFirstColour).make(),
+                "User Profile".text.xl4.bold.color(kFirstColour).make(),
                 50.heightBox,
                 TextField(
                   keyboardType: TextInputType.emailAddress,
@@ -94,110 +118,51 @@ class _SignupMobileState extends State<SignupMobile> {
                     name = value;
                   },
                   decoration: kTextFieldDecoration.copyWith(
-                      hintText: 'Enter your full name'),
+                      hintText: 'Enter your Name'),
                 ).w64(context),
                 10.heightBox,
                 TextField(
                   keyboardType: TextInputType.emailAddress,
                   textAlign: TextAlign.center,
                   onChanged: (value) {
-                    email = value;
+                    mobileNo = value;
                   },
                   decoration: kTextFieldDecoration.copyWith(
-                      hintText: 'Enter your email'),
+                      hintText: 'Enter your Mobile NO.'),
                 ).w64(context),
                 10.heightBox,
                 TextField(
-                  obscureText: true,
+                  keyboardType: TextInputType.emailAddress,
                   textAlign: TextAlign.center,
                   onChanged: (value) {
-                    password = value;
+                    year = value;
                   },
                   decoration: kTextFieldDecoration.copyWith(
-                      hintText: 'Enter your password'),
+                      hintText: 'Enter your Year'),
                 ).w64(context),
+                10.heightBox,
+                androidDropdownBranches(),
                 10.heightBox,
                 CKGradientButton(
                   onprassed: () async {
-                    if (email == null || password == null || name == null) {
-                      showAlertDialog(
-                        context,
-                      );
+                    if (year == null || mobileNo == null || name == null) {
+                      showAlertDialog(context,);
                     } else {
                       setState(() {
                         showSpiner = true;
                       });
                       try {
-                        final newUser =
-                            await _auth.createUserWithEmailAndPassword(
-                                email: email, password: password);
-                        if (newUser != null) {
-                          userid = _auth.currentUser.uid;
-                          addUser(userid);
-                        }
-                      } on FirebaseAuthException catch (e) {
-                        if (e.code == 'weak-password') {
-                          setState(() {
-                            showSpiner = false;
-                          });
-                          showAlertofError(
-                            context,
-                            "The password provided is too weak.",
-                          );
-                        } else if (e.code == 'email-already-in-use') {
-                          setState(() {
-                            showSpiner = false;
-                          });
-                          showAlertofError(
-                            context,
-                            "The account already exists for that email.",
-                          );
-                        }
+                        _addUser(widget.userid);
                       } catch (e) {
                         setState(() {
                           showSpiner = false;
                         });
-                        showAlertofError(
-                          context,
-                          e,
-                        );
+                        showAlertofError(context, e,);
                         print(e);
                       }
                     }
                   },
-                  buttonText: "signup",
-                ),
-                50.heightBox,
-                "or".text.color(kFirstColour).make(),
-                50.heightBox,
-                Container(
-                  padding: EdgeInsets.all(8.0),
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: kFirstColour,
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      "Already have an account !"
-                          .text
-                          .color(Colors.grey)
-                          .make(),
-                      10.widthBox,
-                      FlatButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SigninMobile()),
-                          );
-                        },
-                        child: "Signin".text.color(kFirstColour).make(),
-                      ),
-                    ],
-                  ),
+                  buttonText: "submit",
                 ),
                 10.heightBox,
               ],

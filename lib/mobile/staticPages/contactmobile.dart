@@ -108,7 +108,7 @@ class _ContactMobileState extends State<ContactMobile> {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         image: DecorationImage(
-                          image: AssetImage('assets/lokesh.jpg'),
+                          image: NetworkImage('https://media-exp1.licdn.com/dms/image/C5603AQFqh_Yy0Wcu4A/profile-displayphoto-shrink_400_400/0/1593108247402?e=1628121600&v=beta&t=BKNze0PdijQRlONxCRGCmRO0zvK1uJK_m9YZfSBgGlQ'),
                           fit: BoxFit.fill,
                         ),
                       ),
@@ -135,7 +135,7 @@ class _ContactMobileState extends State<ContactMobile> {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         image: DecorationImage(
-                          image: AssetImage('assets/lokesh.jpg'),
+                          image: NetworkImage('https://media-exp1.licdn.com/dms/image/C4E03AQFjn-uaiJWO1w/profile-displayphoto-shrink_400_400/0/1610263761229?e=1628121600&v=beta&t=ZwyObu64Djbpjo0y3PXK5DyIHJBktwxFf0vnPYc3rRg'),
                           fit: BoxFit.fill,
                         ),
                       ),

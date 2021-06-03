@@ -1,15 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mbmelearning/Widgets/AlertDialog.dart';
 import 'package:mbmelearning/Widgets/Buttons.dart';
 import 'package:mbmelearning/Widgets/customPaint.dart';
 import 'package:mbmelearning/constants.dart';
+import 'package:mbmelearning/mobile/authrepo/UpdateProfile.dart';
 import 'package:mbmelearning/mobile/authrepo/forgetmobile.dart';
+import 'package:mbmelearning/mobile/authrepo/updateprofileNewUser.dart';
 import 'package:mbmelearning/mobile/mobiledashbord.dart';
 import 'package:mbmelearning/mobile/authrepo/signupmobile.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:velocity_x/velocity_x.dart';
-import 'dart:ui' as ui;
 
 const kTextFieldDecoration = InputDecoration(
   hintText: 'Enter a value',
@@ -34,6 +36,8 @@ class SigninMobile extends StatefulWidget {
 
 class _SigninMobileState extends State<SigninMobile> {
   final _auth = FirebaseAuth.instance;
+  var user = FirebaseFirestore.instance.collection('users');
+  String userId;
   String email;
 
   String password;
@@ -91,21 +95,53 @@ class _SigninMobileState extends State<SigninMobile> {
                         final newUser = await _auth.signInWithEmailAndPassword(
                             email: email, password: password);
                         if (newUser != null) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => MobileDashbord()),
-                          );
+                          userId = _auth.currentUser.uid;
+                          user.doc(userId).get().then((DocumentSnapshot documentSnapshot) {
+                            if (documentSnapshot.exists) {
+                              var mobile = documentSnapshot.data()['mobileNo'];
+                              if (mobile == 'null') {
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => UpdateProfile(
+                                          userid: userId,
+                                          userEmail: email,
+                                        )),
+                                  );
+                              } else {
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => MobileDashbord()),
+                                  );
+                              }
+                            } else {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => UpdateProfileOldUser(
+                                      userid: userId,
+                                      userEmail: email,
+                                    ),
+                                  ),
+                                );
+                            }
+                          });
                         }
                         setState(() {
                           showSpiner = false;
                         });
                       } on FirebaseAuthException catch (e) {
                         if (e.code == 'user-not-found') {
+                          setState(() {
+                            showSpiner = false;
+                          });
                           print('No user found for that email.');
                           showAlertofError(context,
                               'No user found for that email.',);
                         } else if (e.code == 'wrong-password') {
+                          setState(() {
+                            showSpiner = false;
+                          });
                           print('Wrong password provided for that user.');
                           showAlertofError(
                               context,
@@ -113,6 +149,9 @@ class _SigninMobileState extends State<SigninMobile> {
                               );
                         }
                       } catch (e) {
+                        setState(() {
+                          showSpiner = false;
+                        });
                         showAlertofError(context, e, );
                         print(e);
                       }

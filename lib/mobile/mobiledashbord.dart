@@ -2,14 +2,12 @@ import 'dart:async';
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
-import 'package:mbmelearning/mobile/staticPages/Departmentmb.dart';
 import 'package:mbmelearning/mobile/materialpagebyyear/FirstYearMtPageMb.dart';
 import 'package:mbmelearning/mobile/materialpagebyyear/MathmtPageMb.dart';
 import 'package:mbmelearning/mobile/materialpagebyyear/SecondYearMtPageMb.dart';
-import 'package:mbmelearning/mobile/staticPages/aboutmobile.dart';
-import 'package:mbmelearning/mobile/staticPages/clubmb.dart';
 import 'package:mbmelearning/mobile/settingmb.dart';
 import 'package:mbmelearning/mobile/materialpagebyyear/usefullinksmb.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:mbmelearning/constants.dart';
 import 'package:mbmelearning/branchesandsems.dart';
@@ -197,7 +195,7 @@ class _MobileDashbordState extends State<MobileDashbord> {
                       .size(60, 2)
                       .make()
                       .pLTRB(5, 0, 0, 0),
-                  "select your sem".text.make().pLTRB(5, 0, 0, 0),
+                  "Select SEM".text.make().pLTRB(5, 0, 0, 0),
                 ]),
                 IconButton(
                     icon: Icon(Icons.add_box_outlined),
@@ -226,7 +224,7 @@ class _MobileDashbordState extends State<MobileDashbord> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 VStack([
-                  "Second - Fourth Year"
+                  "Second - Final Year"
                       .text
                       .color(kFirstColour)
                       .xl2
@@ -239,7 +237,7 @@ class _MobileDashbordState extends State<MobileDashbord> {
                       .size(60, 2)
                       .make()
                       .pLTRB(5, 0, 0, 0),
-                  "select your branch and sem".text.make().pLTRB(5, 0, 0, 0),
+                  "Select Branch and SEM".text.make().pLTRB(5, 0, 0, 0),
                 ]),
                 IconButton(
                     icon: Icon(Icons.add_box_outlined),
@@ -286,7 +284,7 @@ class _MobileDashbordState extends State<MobileDashbord> {
                       .size(60, 2)
                       .make()
                       .pLTRB(5, 0, 0, 0),
-                  "select your math sem".text.make().pLTRB(5, 0, 0, 0),
+                  "Select SEM".text.make().pLTRB(5, 0, 0, 0),
                 ]),
                 IconButton(
                     icon: Icon(Icons.add_box_outlined),
@@ -350,11 +348,7 @@ class _MobileDashbordState extends State<MobileDashbord> {
                             ),
                             TextButton(
                               onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => DepartmentMB()),
-                                );
+                                launch('https://mbmec.weebly.com/departments.html');
                               },
                               child: HStack([
                                 Icon(
@@ -367,11 +361,7 @@ class _MobileDashbordState extends State<MobileDashbord> {
                             ),
                             TextButton(
                               onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => ClubMB()),
-                                );
+                                launch('https://mbmec.weebly.com/clubs.html');
                               },
                               child: HStack([
                                 Icon(
@@ -380,6 +370,37 @@ class _MobileDashbordState extends State<MobileDashbord> {
                                 ),
                                 10.widthBox,
                                 "Clubs".text.black.xl.make(),
+                              ]),
+                            ),
+
+                            TextButton(
+                              onPressed: () {
+                                launch('https://mbmec.weebly.com/about-mbm.html');
+                              },
+                              child: HStack([
+                                Icon(Icons.location_on, color: kFirstColour),
+                                10.widthBox,
+                                "About".text.black.xl.make(),
+                              ]),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                launch('https://mbmec.weebly.com/t--p-cell.html');
+                              },
+                              child: HStack([
+                                Icon(Icons.event, color: kFirstColour),
+                                10.widthBox,
+                                "T&P-Cell".text.black.xl.make(),
+                              ]),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                launch('https://mbmec.weebly.com/notifications.html');
+                              },
+                              child: HStack([
+                                Icon(Icons.notification_important_rounded, color: kFirstColour),
+                                10.widthBox,
+                                "Notifications".text.black.xl.make(),
                               ]),
                             ),
                             TextButton(
@@ -408,20 +429,6 @@ class _MobileDashbordState extends State<MobileDashbord> {
                                 ),
                                 10.widthBox,
                                 "Setting".text.black.xl.make(),
-                              ]),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => AboutMobile()),
-                                );
-                              },
-                              child: HStack([
-                                Icon(Icons.location_on, color: kFirstColour),
-                                10.widthBox,
-                                "About".text.black.xl.make(),
                               ]),
                             ),
                             50.heightBox,
@@ -466,14 +473,50 @@ class ImageSlider extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         items: [
           ProjectWidget(
-            imgurl: 'assets/sl11.jpg',
-          ),
+              imgurl:
+              'https://firebasestorage.googleapis.com/v0/b/mbmecj.appspot.com/o/homeimgslider%2Fsl1.jpg?alt=media&token=3383105e-0798-471d-a510-100860429387'),
           ProjectWidget(
-            imgurl: 'assets/sl1.jpg',
-          ),
+            imgurl:
+                'https://firebasestorage.googleapis.com/v0/b/mbmecj.appspot.com/o/homeimgslider%2Fsl15.png?alt=media&token=8e18cb5e-5e66-445c-a24c-acb365c2cfce',),
           ProjectWidget(
-            imgurl: 'assets/sl2.jpg',
-          ),
+            imgurl:
+                'https://firebasestorage.googleapis.com/v0/b/mbmecj.appspot.com/o/homeimgslider%2Fsl14.png?alt=media&token=e6d37b23-29fe-4ce0-a5f1-66a6b39aed8d',),
+          ProjectWidget(
+              imgurl:
+                  'https://firebasestorage.googleapis.com/v0/b/mbmecj.appspot.com/o/homeimgslider%2Fsl10.jpeg?alt=media&token=1590ecb6-16b7-4806-8965-5e4004c2c4a6'),
+          ProjectWidget(
+              imgurl:
+                  'https://firebasestorage.googleapis.com/v0/b/mbmecj.appspot.com/o/homeimgslider%2Fsl11.jpg?alt=media&token=e7b9ea2a-3b64-459b-bdd1-56ed98ed053e'),
+          ProjectWidget(
+              imgurl:
+                  'https://firebasestorage.googleapis.com/v0/b/mbmecj.appspot.com/o/homeimgslider%2Fsl12.jpeg?alt=media&token=9a18e1be-f6d4-4cb0-a0d1-8db216bb6048'),
+          ProjectWidget(
+              imgurl:
+                  'https://firebasestorage.googleapis.com/v0/b/mbmecj.appspot.com/o/homeimgslider%2Fsl13.jpeg?alt=media&token=64cdbcb3-6dc0-4500-bf20-8b7840a7a238'),
+          ProjectWidget(
+              imgurl:
+                  'https://firebasestorage.googleapis.com/v0/b/mbmecj.appspot.com/o/homeimgslider%2Fsl2.jpg?alt=media&token=8a270b21-6ef7-442d-8428-8f4e4dbf9caa'),
+          ProjectWidget(
+              imgurl:
+                  'https://firebasestorage.googleapis.com/v0/b/mbmecj.appspot.com/o/homeimgslider%2Fsl3.jpeg?alt=media&token=f28f1aa0-b33f-4eeb-a10d-b911dec3f931'),
+          ProjectWidget(
+              imgurl:
+                  'https://firebasestorage.googleapis.com/v0/b/mbmecj.appspot.com/o/homeimgslider%2Fsl4.jpeg?alt=media&token=054e2be5-c8c8-4e44-b7e8-62870560072a'),
+          ProjectWidget(
+              imgurl:
+                  'https://firebasestorage.googleapis.com/v0/b/mbmecj.appspot.com/o/homeimgslider%2Fsl5.jpeg?alt=media&token=15dd89e2-a4ed-4b77-acb8-a20a8c3d2d84'),
+          ProjectWidget(
+              imgurl:
+                  'https://firebasestorage.googleapis.com/v0/b/mbmecj.appspot.com/o/homeimgslider%2Fsl6.jpeg?alt=media&token=c227fb43-320b-4556-9513-4d7d63d684da'),
+          ProjectWidget(
+              imgurl:
+                  'https://firebasestorage.googleapis.com/v0/b/mbmecj.appspot.com/o/homeimgslider%2Fsl7.jpeg?alt=media&token=1e83fd1b-0650-4137-9d33-9807c78d4751'),
+          ProjectWidget(
+              imgurl:
+                  'https://firebasestorage.googleapis.com/v0/b/mbmecj.appspot.com/o/homeimgslider%2Fsl8.jpeg?alt=media&token=07f2a652-bcb0-40ac-8627-9defa5be6d6e'),
+          ProjectWidget(
+              imgurl:
+                  'https://firebasestorage.googleapis.com/v0/b/mbmecj.appspot.com/o/homeimgslider%2Fsl9.jpeg?alt=media&token=661eff66-3a93-4236-a70e-56e5a40d029d'),
         ],
         autoPlay: true,
         autoPlayAnimationDuration: 1.seconds,
@@ -498,7 +541,7 @@ class ProjectWidget extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30.0),
             image: DecorationImage(
-              image: AssetImage(imgurl),
+              image: NetworkImage(imgurl),
               fit: BoxFit.fill,
             ),
           ),

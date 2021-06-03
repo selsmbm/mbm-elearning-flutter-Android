@@ -1,8 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:mbmelearning/mobile/mobiledashbord.dart';
-import 'package:mbmelearning/mobile/authrepo/mobilemainScreen.dart';
+import 'package:mbmelearning/SplashScreen.dart';
+
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,7 +17,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'MBM E-LEARNING',
       theme: ThemeData.light(),
-      home: FirebaseAuth.instance.currentUser == null ? MobileMainScreen() : MobileDashbord(),
+      home: LandingPage(),
     );
   }
 }

@@ -119,7 +119,7 @@ class _AdminMobileDashbordState extends State<AdminMobileDashbord> {
                         size: 35,
                       ),
                       10.heightBox,
-                      "Add Second - Fourth year metarial"
+                      "Add Second - Final year material"
                           .text
                           .xl2
                           .center

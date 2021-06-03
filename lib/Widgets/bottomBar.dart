@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -14,16 +16,29 @@ class BottomBar extends StatefulWidget {
 }
 
 class _BottomBarState extends State<BottomBar> {
+  var userId = FirebaseAuth.instance.currentUser.uid;
+
   @override
   Widget build(BuildContext context) {
     return Container(
       child: VStack([
         TextButton(onPressed: (){
           setState(() {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => AdminMobileDashbord()),
-            );
+            FirebaseFirestore.instance
+                .collection('adminids')
+                .get()
+                .then((QuerySnapshot querySnapshot) {
+              querySnapshot.docs.forEach((doc) {
+                print(doc["id"]);
+                print(userId);
+                if(doc["id"] == userId){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => AdminMobileDashbord()),
+                  );
+                }
+              });
+            });
           });
         }, child: "MBM E-LEARNING".text.color(kFirstColour).xl2.bold.make().centered(),),
         "Made by SELS".text.makeCentered(),

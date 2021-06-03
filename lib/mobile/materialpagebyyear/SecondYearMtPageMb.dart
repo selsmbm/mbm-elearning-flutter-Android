@@ -5,6 +5,7 @@ import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 import 'package:mbmelearning/Widgets/mtListTileSecondTofinal.dart';
 import 'package:mbmelearning/Widgets/progressBar.dart';
+import 'package:mbmelearning/mobile/settingmb.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:mbmelearning/constants.dart';
@@ -104,7 +105,9 @@ class _MaterialTileState extends State<MaterialTile> {
           final messages = snapshot.data.docs;
           return ListView(
             children: messages
-                .map((doc) => MtTileSecondToFinalListTile(
+                .map(
+                  (doc) {
+                    return MtTileSecondToFinalListTile(
                       onPressed: () {
                         setState(() {
                           launch("${doc['mturl']}");
@@ -115,7 +118,9 @@ class _MaterialTileState extends State<MaterialTile> {
                       type: "${doc['mttype']}",
                       sem: "${doc['mtsem']}",
                       branch: "${doc['mtbranch']}",
-                    ))
+                    );
+                  }
+                )
                 .toList(),
           );
         },
