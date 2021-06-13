@@ -19,7 +19,7 @@ showAlertofError(BuildContext context, String errors,) {
 showAlertDialog(BuildContext context) {
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
-    title: Text("⚠ Worning"),
+    title: Text("⚠ Warning"),
     content: Text("Please fill all the details"),
   );
 

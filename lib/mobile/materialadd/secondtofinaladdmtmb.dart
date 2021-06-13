@@ -15,6 +15,10 @@ class SecondtoFinaladdmtmb extends StatefulWidget {
 }
 
 class _SecondtoFinaladdmtmbState extends State<SecondtoFinaladdmtmb> {
+  bool isVisible = false ;
+  var textFieldController1 = TextEditingController();
+  var textFieldController2 = TextEditingController();
+  var textFieldController3 = TextEditingController();
   String mtname;
   String mturl;
   String mtsubject;
@@ -100,8 +104,19 @@ class _SecondtoFinaladdmtmbState extends State<SecondtoFinaladdmtmb> {
       'mttype': selectedtype,
       'approve': widget.approve,
     }).then((value) {
+      setState(() {
+        isVisible = false;
+      });
+      textFieldController1.clear();
+      textFieldController2.clear();
+      textFieldController3.clear();
       showSuccessAlert(context,"material Added Successfully");
-    }).catchError((error) => showAlertofError(context, error));
+    }).catchError((error) {
+      setState(() {
+        isVisible = false;
+      });
+      showAlertofError(context, error);
+    });
   }
 
   showAlertofError(BuildContext context, String errors) {
@@ -138,6 +153,7 @@ class _SecondtoFinaladdmtmbState extends State<SecondtoFinaladdmtmb> {
             ),
             10.heightBox,
             TextField(
+              controller: textFieldController1,
               onChanged: (value) {
                 mtname = value;
               },
@@ -148,6 +164,7 @@ class _SecondtoFinaladdmtmbState extends State<SecondtoFinaladdmtmb> {
             ).w64(context),
             10.heightBox,
             TextField(
+              controller: textFieldController2,
               onChanged: (value) {
                 mturl = value;
               },
@@ -158,6 +175,7 @@ class _SecondtoFinaladdmtmbState extends State<SecondtoFinaladdmtmb> {
             ).w64(context),
             10.heightBox,
             TextField(
+              controller: textFieldController3,
               onChanged: (value) {
                 mtsubject = value;
               },
@@ -183,6 +201,9 @@ class _SecondtoFinaladdmtmbState extends State<SecondtoFinaladdmtmb> {
                     (selectedBranch == 'select branch')) {
                   showAlertDialog(context);
                 } else {
+                  setState(() {
+                    isVisible = true;
+                  });
                   addMaterial();
                 }
               },

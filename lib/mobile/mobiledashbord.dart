@@ -3,7 +3,6 @@ import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:mbmelearning/mobile/materialpagebyyear/FirstYearMtPageMb.dart';
-import 'package:mbmelearning/mobile/materialpagebyyear/MathmtPageMb.dart';
 import 'package:mbmelearning/mobile/materialpagebyyear/SecondYearMtPageMb.dart';
 import 'package:mbmelearning/mobile/settingmb.dart';
 import 'package:mbmelearning/mobile/materialpagebyyear/usefullinksmb.dart';
@@ -27,7 +26,7 @@ class _MobileDashbordState extends State<MobileDashbord> {
     List<DropdownMenuItem<String>> dropdownItems = [];
     for (String m in maths) {
       var newItem = DropdownMenuItem(
-        child: Text(m),
+        child: Text(m.toUpperCase()),
         value: m,
       );
       dropdownItems.add(newItem);
@@ -43,9 +42,10 @@ class _MobileDashbordState extends State<MobileDashbord> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => MathmtPageMb(
-                          sem: mathtype,
-                        )));
+                    builder: (context) => FirstYearAndMathMtPageMb(
+                      materialKey: 'mathsmt',
+                      sem: mathtype,
+                    ),),);
           }
           print(mathtype);
         });
@@ -59,7 +59,7 @@ class _MobileDashbordState extends State<MobileDashbord> {
     List<DropdownMenuItem<String>> dropdownItems = [];
     for (String sem in firstyr) {
       var newItem = DropdownMenuItem(
-        child: Text(sem),
+        child: Text(sem.toUpperCase()),
         value: sem,
       );
       dropdownItems.add(newItem);
@@ -75,7 +75,8 @@ class _MobileDashbordState extends State<MobileDashbord> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => FirstYearMtPageMb(
+                    builder: (context) => FirstYearAndMathMtPageMb(
+                      materialKey: 'firstyearmt',
                           sem: firstyrsem,
                         )));
           }
@@ -91,7 +92,7 @@ class _MobileDashbordState extends State<MobileDashbord> {
     List<DropdownMenuItem<String>> dropdownItems = [];
     for (String branch in branches) {
       var newItem = DropdownMenuItem(
-        child: Text(branch),
+        child: Text(branch.toUpperCase()),
         value: branch,
       );
       dropdownItems.add(newItem);
@@ -115,7 +116,7 @@ class _MobileDashbordState extends State<MobileDashbord> {
     List<DropdownMenuItem<String>> dropdownItemssem = [];
     for (String sem in sems) {
       var newItemsem = DropdownMenuItem(
-        child: Text(sem),
+        child: Text(sem.toUpperCase()),
         value: sem,
       );
       dropdownItemssem.add(newItemsem);
@@ -195,7 +196,6 @@ class _MobileDashbordState extends State<MobileDashbord> {
                       .size(60, 2)
                       .make()
                       .pLTRB(5, 0, 0, 0),
-                  "Select SEM".text.make().pLTRB(5, 0, 0, 0),
                 ]),
                 IconButton(
                     icon: Icon(Icons.add_box_outlined),
@@ -213,7 +213,7 @@ class _MobileDashbordState extends State<MobileDashbord> {
             ),
             10.heightBox,
             Container(
-              width: context.percentWidth * 40,
+              width: context.percentWidth * 45,
               height: 50,
               child: androidDropdownFirstyr(),
             ).centered(),
@@ -237,7 +237,6 @@ class _MobileDashbordState extends State<MobileDashbord> {
                       .size(60, 2)
                       .make()
                       .pLTRB(5, 0, 0, 0),
-                  "Select Branch and SEM".text.make().pLTRB(5, 0, 0, 0),
                 ]),
                 IconButton(
                     icon: Icon(Icons.add_box_outlined),
@@ -255,7 +254,7 @@ class _MobileDashbordState extends State<MobileDashbord> {
             ),
             10.heightBox,
             Container(
-              width: context.percentWidth * 40,
+              width: context.percentWidth * 43,
               height: 50,
               child: androidDropdownBranches(),
             ).centered(),
@@ -284,7 +283,6 @@ class _MobileDashbordState extends State<MobileDashbord> {
                       .size(60, 2)
                       .make()
                       .pLTRB(5, 0, 0, 0),
-                  "Select SEM".text.make().pLTRB(5, 0, 0, 0),
                 ]),
                 IconButton(
                     icon: Icon(Icons.add_box_outlined),
@@ -302,7 +300,7 @@ class _MobileDashbordState extends State<MobileDashbord> {
             ),
             10.heightBox,
             Container(
-              width: context.percentWidth * 40,
+              width: context.percentWidth * 47,
               height: 50,
               child: androidDropdownmath(),
             ).centered(),
@@ -372,7 +370,16 @@ class _MobileDashbordState extends State<MobileDashbord> {
                                 "Clubs".text.black.xl.make(),
                               ]),
                             ),
-
+                            TextButton(
+                              onPressed: () {
+                                launch('https://mbmec.weebly.com/events.html');
+                              },
+                              child: HStack([
+                                Icon(Icons.ac_unit, color: kFirstColour),
+                                10.widthBox,
+                                "Events".text.black.xl.make(),
+                              ]),
+                            ),
                             TextButton(
                               onPressed: () {
                                 launch('https://mbmec.weebly.com/about-mbm.html');

@@ -20,20 +20,21 @@ class SemText extends StatelessWidget {
             color: kFirstColour,
           ),
         ),
-        child: HStack([
-          VStack([
-            Image.network(imgurl,
-              height: 40,
-              width: 40,
-            ).centered(),
-          ]).centered(),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+            children:[
+              Image.network(imgurl,
+                height: 40,
+                width: 40,
+              ).centered(),
           10.widthBox,
           VStack([
             title.text.color(kFirstColour).bold.center.makeCentered(),
             5.heightBox,
             desc.text.color(kFirstColour).center.makeCentered(),
-          ]).centered(),
-        ]).scrollHorizontal(physics: AlwaysScrollableScrollPhysics()).p(20).centered(),
+          ]),
+        ]).scrollHorizontal(physics: AlwaysScrollableScrollPhysics()).p(20),
       ).cornerRadius(10),
     ));
   }

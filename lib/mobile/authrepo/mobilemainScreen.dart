@@ -80,8 +80,8 @@ class _MobileMainScreenState extends State<MobileMainScreen> {
           Center(
             child: Image.asset(
                 'assets/mainscreen.png',
-              height: 250,
-              width: 250,
+              height: 300,
+              width: 300,
             ),
           ),
           20.heightBox,
@@ -107,32 +107,32 @@ class _MobileMainScreenState extends State<MobileMainScreen> {
             ),
           ]).centered(),
           20.heightBox,
-          "or".text.color(kFirstColour).makeCentered(),
-          20.heightBox,
-          Center(
-            child: FlatButton(
-              onPressed: () async {
-                await signInWithGoogle().then((result) {
-                  print(result);
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                      fullscreenDialog: true,
-                      builder: (context) => MobileDashbord(),
-                    ),
-                  );
-                }).catchError((error) {
-                  print('Registration Error: $error');
-                });
-              },
-              child: Container(
-                height: 45,
-                width: 200,
-                child: Image.asset(
-                    'assets/googlesignin.png'
-                ),
-              ),
-            ),
-          ),
+          // "or".text.color(kFirstColour).makeCentered(),
+          // 20.heightBox,
+          // Center(
+          //   child: FlatButton(
+          //     onPressed: () async {
+          //       await signInWithGoogle().then((result) {
+          //         print(result);
+          //         Navigator.of(context).pushReplacement(
+          //           MaterialPageRoute(
+          //             fullscreenDialog: true,
+          //             builder: (context) => MobileDashbord(),
+          //           ),
+          //         );
+          //       }).catchError((error) {
+          //         print('Registration Error: $error');
+          //       });
+          //     },
+          //     child: Container(
+          //       height: 45,
+          //       width: 200,
+          //       child: Image.asset(
+          //           'assets/googlesignin.png'
+          //       ),
+          //     ),
+          //   ),
+          // ),
           20.heightBox,
         ]).scrollVertical(physics: AlwaysScrollableScrollPhysics()),
       ),

@@ -24,38 +24,45 @@ class MtTile extends StatelessWidget {
               color: kFirstColour,
             ),
           ),
-          child: HStack([
-            Container(
-              width: 130,
-              child: VStack([
-                5.heightBox,
-                name.text.color(kFirstColour).bold.center.make(),
-                5.heightBox,
-              ]),
-            ),
-            10.widthBox,
-            VStack([
-              5.heightBox,
-              VxCapsule(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children:[
+            Row(
+              children: [
+                RotatedBox(
+                  quarterTurns: -1,
+                  child: VxCapsule(
                       height: 20,
-                      width: 103,
-                      backgroundColor: Colors.lightBlue,
-                      child: subject.text.white.center.makeCentered().p(1))
-                  .p(2),
-              VxCapsule(
-                      height: 20,
-                      width: 103,
+                      width: context.percentHeight * 15,
                       backgroundColor: Colors.greenAccent,
                       child: type.text.white.center.makeCentered().p(1))
+                      .p(2),
+                ),
+                10.widthBox,
+                VStack([
+                  Container(
+                    width: context.percentWidth * 60,
+                    child: VStack([
+                      5.heightBox,
+                      name.text.color(kFirstColour).xl2.bold.make(),
+                      5.heightBox,
+                    ]),
+                  ),
+                  5.heightBox,
+                  subject.text.gray500.center.makeCentered().p(1)
+                ]),
+              ],
+            ),
+            RotatedBox(
+              quarterTurns: 1,
+              child: VxCapsule(
+                  height: 20,
+                  width: context.percentHeight * 15,
+                  backgroundColor: Colors.deepPurple,
+                  child: Center(child: sem.text.white.center.xs.makeCentered().p(1),))
                   .p(2),
-              VxCapsule(
-                      height: 20,
-                      width: 103,
-                      backgroundColor: Colors.deepPurple,
-                      child: sem.text.white.center.makeCentered().p(1))
-                  .p(2),
-            ]).scrollVertical(physics: AlwaysScrollableScrollPhysics()),
-          ]).centered(),
+            )
+          ]),
         ).cornerRadius(10));
   }
 }

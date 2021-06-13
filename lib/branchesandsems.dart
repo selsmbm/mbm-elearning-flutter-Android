@@ -1,6 +1,7 @@
 const List<String> branches = [
   'select branch',
   'CE',
+  'CH',
   'MI',
   'EE',
   'CSE',

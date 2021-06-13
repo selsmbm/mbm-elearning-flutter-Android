@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mbmelearning/Widgets/AlertDialog.dart';
 import 'package:mbmelearning/Widgets/Buttons.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:mbmelearning/constants.dart';
 
@@ -15,6 +16,11 @@ class MathsMtaddMobile extends StatefulWidget {
 }
 
 class _MathsMtaddMobileState extends State<MathsMtaddMobile> {
+  var textFieldController1 = TextEditingController();
+  var textFieldController2 = TextEditingController();
+  var textFieldController3 = TextEditingController();
+
+  bool isVisible= false;
   String mtname;
   String mturl;
   String mtsubject;
@@ -76,8 +82,19 @@ class _MathsMtaddMobileState extends State<MathsMtaddMobile> {
       'mttype': selectedtype,
       'approve': widget.approve,
     }).then((value) {
+      setState(() {
+        isVisible = false;
+      });
+      textFieldController1.clear();
+      textFieldController2.clear();
+      textFieldController3.clear();
       showSuccessAlert(context, "material Added Successfully");
-    }).catchError((error) => showAlertofError(context, error));
+    }).catchError((error) {
+      setState(() {
+        isVisible = false;
+      });
+      showAlertofError(context, error);
+    });
   }
 
   showAlertofError(BuildContext context, String errors) {
@@ -98,97 +115,106 @@ class _MathsMtaddMobileState extends State<MathsMtaddMobile> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xffffffff),
-      body: SafeArea(
-        child: ZStack([
-          VStack([
-            60.heightBox,
-            Text(
-              "Only Math Material Add Hare",
-              style: TextStyle(
-                fontSize: 19,
+    return ModalProgressHUD(
+      inAsyncCall: isVisible,
+      child: Scaffold(
+        backgroundColor: const Color(0xffffffff),
+        body: SafeArea(
+          child: ZStack([
+            VStack([
+              60.heightBox,
+              Text(
+                "Only Math Material Add Hare",
+                style: TextStyle(
+                  fontSize: 19,
+                ),
               ),
-            ),
-            10.heightBox,
-            TextField(
-              onChanged: (value) {
-                mtname = value;
-              },
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Material Name',
-              ),
-            ).w64(context),
-            10.heightBox,
-            TextField(
-              onChanged: (value) {
-                mturl = value;
-              },
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Material URL',
-              ),
-            ).w64(context),
-            10.heightBox,
-            TextField(
-              onChanged: (value) {
-                mtsubject = value;
-              },
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Material Subject',
-              ),
-            ).w64(context),
-            10.heightBox,
-            androidDropdownmtType(),
-            10.heightBox,
-            androidDropdownmath(),
-            10.heightBox,
-            CKOutlineButton(
-              onprassed: () {
-                if ((mtsubject == null) ||
-                    (mtname == null) ||
-                    (mturl == null) ||
-                    (mathtype == 'select math sem') ||
-                    (selectedtype == 'select type')) {
-                  showAlertDialog(context);
-                } else {
-                  addMaterial();
-                }
-              },
-              buttonText: "Submit",
-            ),
-            20.heightBox,
-          ])
-              .scrollVertical(physics: AlwaysScrollableScrollPhysics())
-              .p(20)
-              .centered(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
+              10.heightBox,
+              TextField(
+                controller: textFieldController1,
+                onChanged: (value) {
+                  mtname = value;
                 },
-                child: VxBox(
-                  child: Icon(
-                    Icons.arrow_back_rounded,
-                    color: kFirstColour,
-                  ),
-                ).color(kSecondColour).size(50, 40).make(),
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Material Name',
+                ),
+              ).w64(context),
+              10.heightBox,
+              TextField(
+                controller: textFieldController2,
+                onChanged: (value) {
+                  mturl = value;
+                },
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Material URL',
+                ),
+              ).w64(context),
+              10.heightBox,
+              TextField(
+                controller: textFieldController3,
+                onChanged: (value) {
+                  mtsubject = value;
+                },
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Material Subject',
+                ),
+              ).w64(context),
+              10.heightBox,
+              androidDropdownmtType(),
+              10.heightBox,
+              androidDropdownmath(),
+              10.heightBox,
+              CKOutlineButton(
+                onprassed: () {
+                  if ((mtsubject == null) ||
+                      (mtname == null) ||
+                      (mturl == null) ||
+                      (mathtype == 'select math sem') ||
+                      (selectedtype == 'select type')) {
+                    showAlertDialog(context);
+                  } else {
+                    setState(() {
+                      isVisible = true;
+                    });
+                    addMaterial();
+                  }
+                },
+                buttonText: "Submit",
               ),
-              VxBox(
-                child: "Add Math Material"
-                    .text
-                    .color(kFirstColour)
-                    .bold
-                    .xl3
-                    .makeCentered(),
-              ).color(kSecondColour).size(220, 40).make(),
-            ],
-          ),
-        ]),
+              20.heightBox,
+            ])
+                .scrollVertical(physics: AlwaysScrollableScrollPhysics())
+                .p(20)
+                .centered(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: VxBox(
+                    child: Icon(
+                      Icons.arrow_back_rounded,
+                      color: kFirstColour,
+                    ),
+                  ).color(kSecondColour).size(50, 40).make(),
+                ),
+                VxBox(
+                  child: "Add Math Material"
+                      .text
+                      .color(kFirstColour)
+                      .bold
+                      .xl3
+                      .makeCentered(),
+                ).color(kSecondColour).size(220, 40).make(),
+              ],
+            ),
+          ]),
+        ),
       ),
     );
   }

@@ -114,8 +114,8 @@ class _ContactMobileState extends State<ContactMobile> {
                       ),
                     ),
                     "Kapil Gupta".text.xl2.make(),
-                    "Mechanical Engineering".text.gray500.make(),
-                    "lkrjangid@gmail.com".text.gray500.make(),
+                    "Civil Engineering".text.gray500.make(),
+                    "guptakapil24000@gmail.com".text.gray500.make(),
                     FlatButton(
                       onPressed: () {},
                       child: Icon(
@@ -142,7 +142,7 @@ class _ContactMobileState extends State<ContactMobile> {
                     ),
                     "Kashish Agarawal".text.xl2.make(),
                     "Civil Engineering".text.gray500.make(),
-                    "lkrjangid@gmail.com".text.gray500.make(),
+                    "kashishagrawal0005@gmail.com".text.gray500.make(),
                     FlatButton(
                       onPressed: () {},
                       child: Icon(

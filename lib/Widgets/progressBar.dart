@@ -5,12 +5,15 @@ class ProgressBarCus extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: Column(
-      children: [
-        CircularProgressIndicator(),
-        Text('Loading...'),
-      ],
-    ));
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Center(
+          child: Column(
+        children: [
+          CircularProgressIndicator(),
+          Text('Loading...'),
+        ],
+      )),
+    );
   }
 }
