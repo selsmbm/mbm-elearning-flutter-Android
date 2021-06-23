@@ -1,32 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mbmelearning/Widgets/AlertDialog.dart';
 import 'package:mbmelearning/Widgets/Buttons.dart';
 import 'package:mbmelearning/Widgets/customPaint.dart';
 import 'package:mbmelearning/constants.dart';
-import 'package:mbmelearning/mobile/authrepo/signinmobile.dart';
 import 'package:mbmelearning/mobile/mobiledashbord.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:velocity_x/velocity_x.dart';
-
 import '../../branchesandsems.dart';
 
-const kTextFieldDecoration = InputDecoration(
-  hintText: 'Enter a value',
-  contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-  border: OutlineInputBorder(
-    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-  ),
-  enabledBorder: OutlineInputBorder(
-    borderSide: BorderSide(color: kFirstColour, width: 1.0),
-    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-  ),
-  focusedBorder: OutlineInputBorder(
-    borderSide: BorderSide(color: Colors.lightBlueAccent, width: 2.0),
-    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-  ),
-);
 
 class UpdateProfile extends StatefulWidget {
   final userid;
@@ -37,32 +19,10 @@ class UpdateProfile extends StatefulWidget {
 }
 
 class _UpdateProfileState extends State<UpdateProfile> {
-  String branch = 'select branch';
+  String branch;
   String mobileNo;
   String year;
   bool showSpiner = false;
-
-  DropdownButton<String> androidDropdownBranches() {
-    List<DropdownMenuItem<String>> dropdownItems = [];
-    for (String branch in branches) {
-      var newItem = DropdownMenuItem(
-        child: Text(branch).w(context.percentWidth * 60),
-        value: branch,
-      );
-      dropdownItems.add(newItem);
-    }
-
-    return DropdownButton<String>(
-      value: branch,
-      items: dropdownItems,
-      onChanged: (value) {
-        setState(() {
-          branch = value;
-          print(branch);
-        });
-      },
-    );
-  }
 
   var user = FirebaseFirestore.instance.collection('users');
 
@@ -109,7 +69,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                 "User Profile".text.xl4.bold.color(kFirstColour).make(),
                 50.heightBox,
                 TextField(
-                  keyboardType: TextInputType.emailAddress,
+                  keyboardType: TextInputType.number,
                   textAlign: TextAlign.center,
                   onChanged: (value) {
                     mobileNo = value;
@@ -118,34 +78,60 @@ class _UpdateProfileState extends State<UpdateProfile> {
                       hintText: 'Enter your Mobile NO.'),
                 ).w64(context),
                 10.heightBox,
-                TextField(
-                  keyboardType: TextInputType.emailAddress,
-                  textAlign: TextAlign.center,
-                  onChanged: (value) {
-                    year = value;
-                  },
-                  decoration: kTextFieldDecoration.copyWith(
-                      hintText: 'Enter your Year'),
-                ).w64(context),
+                Container(
+                  child: DropdownButtonFormField(
+                    decoration: kTextFieldDecoration.copyWith(
+                        hintText: "Select Your Year"),
+                    value: year,
+                    onChanged: (value) {
+                      setState(() {
+                        year = value;
+                      });
+                    },
+                    items: years
+                        .map((subject) => DropdownMenuItem(
+                        value: subject, child: Text("$subject".toUpperCase())))
+                        .toList(),
+                  ),
+                ).centered().w64(context),
                 10.heightBox,
-                androidDropdownBranches(),
+                Container(
+                  child: DropdownButtonFormField(
+                    decoration: kTextFieldDecoration.copyWith(
+                        hintText: "Select Your Branch"),
+                    value: branch,
+                    onChanged: (value) {
+                      setState(() {
+                        branch = value;
+                      });
+                    },
+                    items: branches
+                        .map((subject) => DropdownMenuItem(
+                        value: subject, child: Text("$subject".toUpperCase())))
+                        .toList(),
+                  ),
+                ).centered().w64(context),
                 10.heightBox,
                 CKGradientButton(
                   onprassed: () async {
-                    if (year == null || mobileNo == null) {
-                      showAlertDialog(context,);
-                    } else {
-                      setState(() {
-                        showSpiner = true;
-                      });
-                      try {
-                        _addUser(widget.userid);
-                      } catch (e) {
+                    if (mobileNo.split('').length<10 || mobileNo == '0000000000' || mobileNo == '1234567890') {
+                      showAlertofError(context,'invalid mobile number');
+                    } else{
+                      if (year == null || mobileNo == null) {
+                        showAlertDialog(context,);
+                      } else {
                         setState(() {
-                          showSpiner = false;
+                          showSpiner = true;
                         });
-                        showAlertofError(context, e,);
-                        print(e);
+                        try {
+                          _addUser(widget.userid);
+                        } catch (e) {
+                          setState(() {
+                            showSpiner = false;
+                          });
+                          showAlertofError(context, e,);
+                          print(e);
+                        }
                       }
                     }
                   },

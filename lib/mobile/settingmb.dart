@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:firebase_admob/firebase_admob.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -18,9 +18,6 @@ String email = _auth.currentUser.email;
 String uid = _auth.currentUser.uid;
 String newPassword;
 String confirmPassword;
-final String link = "https://mbmec.weebly.com/";
-final String massage =
-    "MBM Engineering College Jodhpur ________________ MBM E-Learning ________________Hello MBMites you are Informed that the web is designed for help of our collegeous.In the MBM section you are provided the information related to College.And in the MBM E-Learning section We have provided all type of Notes,Books,Lab files, previous papers etc for every year& Branch of students..Uploading options: Whether you need to post your own notes or material to this web then attach it to an email (lkrjangid@gmail.com , guptakapil24000@gmail.com)this app offer a variety of study materials.link of website :-";
 
 class SettingMB extends StatefulWidget {
   @override
@@ -78,32 +75,9 @@ class _SettingMBState extends State<SettingMB> {
   }
   final newPassController = TextEditingController();
   final confPassController = TextEditingController();
-  BannerAd _bannerAd;
-  static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo();
-
-  BannerAd createBannerAd() {
-    return BannerAd(
-      adUnitId: BannerAd.testAdUnitId,
-      size: AdSize.smartBanner,
-      targetingInfo: targetingInfo,
-      listener: (MobileAdEvent event) {
-        print("BannerAd event $event");
-      },
-    );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    FirebaseAdMob.instance.initialize(appId: kBannerAdsId);
-    _bannerAd = createBannerAd()..load();
-  }
 
   @override
   Widget build(BuildContext context) {
-    Timer(Duration(seconds: 1), () {
-      _bannerAd.show();
-    });
     return Scaffold(
       backgroundColor: const Color(0xffffffff),
       body: SafeArea(
@@ -150,8 +124,21 @@ class _SettingMBState extends State<SettingMB> {
               TextButton(
                 onPressed: () {
                   setState(() {
-                    launch(
-                        'https://www.addtoany.com/share#url=$link&title=$massage');
+                    setState(() {
+                      FirebaseFirestore.instance
+                          .collection('share')
+                          .doc('cG2SEGWyCocbHDLdqJLX')
+                          .get()
+                          .then((DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists) {
+                          launch(
+                              'https://www.addtoany.com/share#url=${documentSnapshot.data()['link']}&title=${documentSnapshot.data()['massage']}');
+                          print('Document data: ${documentSnapshot.data()}');
+                        } else {
+                          launch('https://mbmec.weebly.com/mbm-apk.html');
+                        }
+                      });
+                    });
                   });
                 },
                 child: Container(
@@ -326,16 +313,16 @@ class _SettingMBState extends State<SettingMB> {
               },
               buttonText: "Submit",
             ).centered(),
-            20.heightBox,
-            "Delete Account".text.xl2.color(kFirstColour).make().centered(),
-            VxBox().color(kFirstColour).size(60, 2).make().centered(),
-            10.heightBox,
-            CKOutlineButton(
-              onprassed: (){
-                _confirmDelete(context);
-              },
-              buttonText: "Delete",
-            ).centered(),
+            // 20.heightBox,
+            // "Delete Account".text.xl2.color(kFirstColour).make().centered(),
+            // VxBox().color(kFirstColour).size(60, 2).make().centered(),
+            // 10.heightBox,
+            // CKOutlineButton(
+            //   onprassed: (){
+            //     _confirmDelete(context);
+            //   },
+            //   buttonText: "Delete",
+            // ).centered(),
             20.heightBox,
             BottomBar(),
           ]).scrollVertical(physics: AlwaysScrollableScrollPhysics()).p(10),

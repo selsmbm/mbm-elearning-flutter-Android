@@ -1,8 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.mbmecj.mbmelearning">
+    package="com.mbmecj.mbmelearning"
+    android:installLocation="auto"
+    android:versionCode="2"
+    android:versionName="2.0.0">
    <application
-        android:label="mbmelearning"
-        android:icon="@mipmap/ic_launcher">
+        android:label="MBM E-LEARNING"
+        android:logo="@mipmap/ic_launcher_icon"
+        android:icon="@mipmap/ic_launcher_icon">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
@@ -37,8 +41,5 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-        <meta-data
-           android:name="com.google.android.gms.ads.APPLICATION_ID"
-           android:value="ca-app-pub-8551736194468843~8779306249"/>
     </application>
 </manifest>

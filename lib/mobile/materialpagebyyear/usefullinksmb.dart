@@ -1,6 +1,4 @@
-import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 import 'package:mbmelearning/Widgets/progressBar.dart';
 import 'package:mbmelearning/Widgets/semTextlistTile.dart';
@@ -14,32 +12,10 @@ class UsefulLinkMb extends StatefulWidget {
 }
 
 class _UsefulLinkMbState extends State<UsefulLinkMb> {
-  BannerAd _bannerAd;
-  static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo();
 
-  BannerAd createBannerAd() {
-    return BannerAd(
-      adUnitId: BannerAd.testAdUnitId,
-      size: AdSize.smartBanner,
-      targetingInfo: targetingInfo,
-      listener: (MobileAdEvent event) {
-        print("BannerAd event $event");
-      },
-    );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    FirebaseAdMob.instance.initialize(appId: kBannerAdsId);
-    _bannerAd = createBannerAd()..load();
-  }
 
   @override
   Widget build(BuildContext context) {
-    Timer(Duration(seconds: 1), () {
-      _bannerAd.show();
-    });
     return Scaffold(
       backgroundColor: const Color(0xffffffff),
       body: SafeArea(

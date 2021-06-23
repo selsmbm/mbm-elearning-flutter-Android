@@ -22,74 +22,9 @@ class _SecondtoFinaladdmtmbState extends State<SecondtoFinaladdmtmb> {
   String mtname;
   String mturl;
   String mtsubject;
-  String selectedSems = 'select sem';
-  String selectedBranch = 'select branch';
-  String selectedtype = 'select type';
-  DropdownButton<String> androidDropdownSems() {
-    List<DropdownMenuItem<String>> dropdownItemssem = [];
-    for (String sem in sems) {
-      var newItemsem = DropdownMenuItem(
-        child: Text(sem).w(context.percentWidth * 60),
-        value: sem,
-      );
-      dropdownItemssem.add(newItemsem);
-    }
-
-    return DropdownButton<String>(
-      value: selectedSems,
-      items: dropdownItemssem,
-      onChanged: (value) {
-        setState(() {
-          selectedSems = value;
-          print(selectedSems);
-        });
-      },
-    );
-  }
-
-  DropdownButton<String> androidDropdownBranches() {
-    List<DropdownMenuItem<String>> dropdownItems = [];
-    for (String branch in branches) {
-      var newItem = DropdownMenuItem(
-        child: Text(branch).w(context.percentWidth * 60),
-        value: branch,
-      );
-      dropdownItems.add(newItem);
-    }
-
-    return DropdownButton<String>(
-      value: selectedBranch,
-      items: dropdownItems,
-      onChanged: (value) {
-        setState(() {
-          selectedBranch = value;
-          print(selectedBranch);
-        });
-      },
-    );
-  }
-
-  DropdownButton<String> androidDropdownmtType() {
-    List<DropdownMenuItem<String>> dropdownItems = [];
-    for (String type in mttypes) {
-      var newItem = DropdownMenuItem(
-        child: Text(type).w(context.percentWidth * 60),
-        value: type,
-      );
-      dropdownItems.add(newItem);
-    }
-
-    return DropdownButton<String>(
-      value: selectedtype,
-      items: dropdownItems,
-      onChanged: (value) {
-        setState(() {
-          selectedtype = value;
-          print(selectedtype);
-        });
-      },
-    );
-  }
+  String selectedSems;
+  String selectedBranch;
+  String selectedtype;
 
   CollectionReference mt =
       FirebaseFirestore.instance.collection('secondtofinalyearmt');
@@ -185,20 +120,77 @@ class _SecondtoFinaladdmtmbState extends State<SecondtoFinaladdmtmb> {
               ),
             ).w64(context),
             10.heightBox,
-            androidDropdownmtType(),
+            Container(
+              child: DropdownButtonFormField(
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  filled: true,
+                  hintStyle: TextStyle(color: Colors.grey[800]),
+                  hintText: "Select Type",
+                ),
+                value: selectedtype,
+                onChanged: (value) {
+                  setState(() {
+                    selectedtype = value;
+                  });
+                },
+                items: mttypes
+                    .map((subject) => DropdownMenuItem(
+                    value: subject, child: Text("$subject".toUpperCase())))
+                    .toList(),
+              ),
+            ).centered().w64(context),
             10.heightBox,
-            androidDropdownBranches(),
+            Container(
+              child: DropdownButtonFormField(
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  filled: true,
+                  hintStyle: TextStyle(color: Colors.grey[800]),
+                  hintText: "Select Branch",
+                ),
+                value: selectedBranch,
+                onChanged: (value) {
+                  setState(() {
+                    selectedBranch = value;
+                  });
+                },
+                items: branches
+                    .map((subject) => DropdownMenuItem(
+                    value: subject, child: Text("$subject".toUpperCase())))
+                    .toList(),
+              ),
+            ).centered().w64(context),
             10.heightBox,
-            androidDropdownSems(),
+            Container(
+              child: DropdownButtonFormField(
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  filled: true,
+                  hintStyle: TextStyle(color: Colors.grey[800]),
+                  hintText: "Select Sem",
+                ),
+                value: selectedSems,
+                onChanged: (value) {
+                  setState(() {
+                    selectedSems = value;
+                  });
+                },
+                items: sems
+                    .map((subject) => DropdownMenuItem(
+                    value: subject, child: Text("$subject".toUpperCase())))
+                    .toList(),
+              ),
+            ).centered().w64(context),
             10.heightBox,
             CKOutlineButton(
               onprassed: () {
                 if ((mtsubject == null) ||
                     (mtname == null) ||
                     (mturl == null) ||
-                    (selectedSems == 'select sem') ||
-                    (selectedtype == 'select type') ||
-                    (selectedBranch == 'select branch')) {
+                    (selectedSems == null) ||
+                    (selectedtype == null) ||
+                    (selectedBranch == null)) {
                   showAlertDialog(context);
                 } else {
                   setState(() {
@@ -209,7 +201,7 @@ class _SecondtoFinaladdmtmbState extends State<SecondtoFinaladdmtmb> {
               },
               buttonText: "Submit",
             ),
-            20.heightBox,
+            50.heightBox,
           ])
               .scrollVertical(physics: AlwaysScrollableScrollPhysics())
               .p(20)

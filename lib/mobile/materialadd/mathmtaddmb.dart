@@ -24,52 +24,9 @@ class _MathsMtaddMobileState extends State<MathsMtaddMobile> {
   String mtname;
   String mturl;
   String mtsubject;
-  String mathtype = 'select math sem';
-  String selectedtype = 'select type';
+  String mathtype;
+  String selectedtype;
 
-  DropdownButton<String> androidDropdownmath() {
-    List<DropdownMenuItem<String>> dropdownItems = [];
-    for (String m in maths) {
-      var newItem = DropdownMenuItem(
-        child: Text(m).w(context.percentWidth * 60),
-        value: m,
-      );
-      dropdownItems.add(newItem);
-    }
-
-    return DropdownButton<String>(
-      value: mathtype,
-      items: dropdownItems,
-      onChanged: (value) {
-        setState(() {
-          mathtype = value;
-          print(mathtype);
-        });
-      },
-    );
-  }
-
-  DropdownButton<String> androidDropdownmtType() {
-    List<DropdownMenuItem<String>> dropdownItems = [];
-    for (String type in mttypes) {
-      var newItem = DropdownMenuItem(
-        child: Text(type).w(context.percentWidth * 60),
-        value: type,
-      );
-      dropdownItems.add(newItem);
-    }
-
-    return DropdownButton<String>(
-      value: selectedtype,
-      items: dropdownItems,
-      onChanged: (value) {
-        setState(() {
-          selectedtype = value;
-          print(selectedtype);
-        });
-      },
-    );
-  }
 
   CollectionReference mt = FirebaseFirestore.instance.collection('mathsmt');
 
@@ -124,7 +81,7 @@ class _MathsMtaddMobileState extends State<MathsMtaddMobile> {
             VStack([
               60.heightBox,
               Text(
-                "Only Math Material Add Hare",
+                "Only Maths Material Add Hare",
                 style: TextStyle(
                   fontSize: 19,
                 ),
@@ -163,17 +120,55 @@ class _MathsMtaddMobileState extends State<MathsMtaddMobile> {
                 ),
               ).w64(context),
               10.heightBox,
-              androidDropdownmtType(),
+              Container(
+                child: DropdownButtonFormField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    filled: true,
+                    hintStyle: TextStyle(color: Colors.grey[800]),
+                    hintText: "Select Type",
+                  ),
+                  value: selectedtype,
+                  onChanged: (value) {
+                    setState(() {
+                      selectedtype = value;
+                    });
+                  },
+                  items: mttypes
+                      .map((subject) => DropdownMenuItem(
+                      value: subject, child: Text("$subject".toUpperCase())))
+                      .toList(),
+                ),
+              ).centered().w64(context),
               10.heightBox,
-              androidDropdownmath(),
+              Container(
+                child: DropdownButtonFormField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    filled: true,
+                    hintStyle: TextStyle(color: Colors.grey[800]),
+                    hintText: "Select Sem",
+                  ),
+                  value: mathtype,
+                  onChanged: (value) {
+                    setState(() {
+                      mathtype = value;
+                    });
+                  },
+                  items: maths
+                      .map((subject) => DropdownMenuItem(
+                      value: subject, child: Text("$subject".toUpperCase())))
+                      .toList(),
+                ),
+              ).centered().w64(context),
               10.heightBox,
               CKOutlineButton(
                 onprassed: () {
                   if ((mtsubject == null) ||
                       (mtname == null) ||
                       (mturl == null) ||
-                      (mathtype == 'select math sem') ||
-                      (selectedtype == 'select type')) {
+                      (mathtype == null) ||
+                      (selectedtype == null)) {
                     showAlertDialog(context);
                   } else {
                     setState(() {

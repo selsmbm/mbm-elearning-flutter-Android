@@ -13,21 +13,6 @@ import 'package:mbmelearning/mobile/authrepo/signupmobile.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-const kTextFieldDecoration = InputDecoration(
-  hintText: 'Enter a value',
-  contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-  border: OutlineInputBorder(
-    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-  ),
-  enabledBorder: OutlineInputBorder(
-    borderSide: BorderSide(color: kFirstColour, width: 1.0),
-    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-  ),
-  focusedBorder: OutlineInputBorder(
-    borderSide: BorderSide(color: Colors.lightBlueAccent, width: 2.0),
-    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-  ),
-);
 
 class SigninMobile extends StatefulWidget {
   @override
@@ -47,6 +32,32 @@ class _SigninMobileState extends State<SigninMobile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: Container(
+        padding: EdgeInsets.all(8.0),
+        width: double.infinity,
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: kFirstColour,
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            "Don't have an account !".text.color(Colors.grey).make(),
+            10.widthBox,
+            TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => SignupMobile()),
+                );
+              },
+              child: "Signup".text.color(kFirstColour).make(),
+            ),
+          ],
+        ),
+      ),
       body: SafeArea(
         child: ModalProgressHUD(
           inAsyncCall: showSpiner,
@@ -100,6 +111,9 @@ class _SigninMobileState extends State<SigninMobile> {
                             if (documentSnapshot.exists) {
                               var mobile = documentSnapshot.data()['mobileNo'];
                               if (mobile == 'null') {
+                                setState(() {
+                                  showSpiner = false;
+                                });
                                   Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
@@ -109,12 +123,18 @@ class _SigninMobileState extends State<SigninMobile> {
                                         )),
                                   );
                               } else {
+                                setState(() {
+                                  showSpiner = false;
+                                });
                                   Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(builder: (context) => MobileDashbord()),
                                   );
                               }
                             } else {
+                              setState(() {
+                                showSpiner = false;
+                              });
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
@@ -127,9 +147,6 @@ class _SigninMobileState extends State<SigninMobile> {
                             }
                           });
                         }
-                        setState(() {
-                          showSpiner = false;
-                        });
                       } on FirebaseAuthException catch (e) {
                         if (e.code == 'user-not-found') {
                           setState(() {
@@ -159,48 +176,19 @@ class _SigninMobileState extends State<SigninMobile> {
                   },
                   buttonText: "signin",
                 ),
-                30.heightBox,
+                20.heightBox,
                 "or".text.color(kFirstColour).make(),
-                30.heightBox,
-                FlatButton(
+                20.heightBox,
+                TextButton(
                   onPressed: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => ForgetMobile()),
                     );
                   },
-                  child: "Forgetpassword ?".text.color(Colors.grey).make(),
+                  child: "Forgot Password?".text.color(Colors.grey).make(),
                 ),
-                30.heightBox,
-                "or".text.color(kFirstColour).make(),
-                30.heightBox,
-                Container(
-                  padding: EdgeInsets.all(8.0),
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: kFirstColour,
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      "Don't have an account !".text.color(Colors.grey).make(),
-                      10.widthBox,
-                      FlatButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SignupMobile()),
-                          );
-                        },
-                        child: "Signup".text.color(kFirstColour).make(),
-                      ),
-                    ],
-                  ),
-                ),
-                10.heightBox,
+                20.heightBox,
               ],
             ),
           ]).scrollVertical(physics: AlwaysScrollableScrollPhysics()),

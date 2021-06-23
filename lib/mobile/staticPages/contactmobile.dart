@@ -1,20 +1,15 @@
 import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:mbmelearning/Widgets/AlertDialog.dart';
 import 'package:mbmelearning/Widgets/Buttons.dart';
-import 'package:mbmelearning/Widgets/appheader.dart';
 import 'package:mbmelearning/Widgets/bottomBar.dart';
 import 'package:mbmelearning/constants.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 
 class ContactMobile extends StatefulWidget {
-  static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo();
-
   @override
   _ContactMobileState createState() => _ContactMobileState();
 }
@@ -36,33 +31,12 @@ class _ContactMobileState extends State<ContactMobile> {
     }).catchError((error) => showAlertofError(context, error));
   }
 
-  BannerAd _bannerAd;
 
-  BannerAd createBannerAd() {
-    return BannerAd(
-      adUnitId: BannerAd.testAdUnitId,
-      size: AdSize.smartBanner,
-      targetingInfo: ContactMobile.targetingInfo,
-      listener: (MobileAdEvent event) {
-        print("BannerAd event $event");
-      },
-    );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    FirebaseAdMob.instance.initialize(appId: kBannerAdsId);
-    _bannerAd = createBannerAd()..load();
-  }
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final massageController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    Timer(Duration(seconds: 1), () {
-      _bannerAd.show();
-    });
     return Scaffold(
       backgroundColor: const Color(0xffffffff),
       body: SafeArea(
@@ -108,7 +82,8 @@ class _ContactMobileState extends State<ContactMobile> {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         image: DecorationImage(
-                          image: NetworkImage('https://media-exp1.licdn.com/dms/image/C5603AQFqh_Yy0Wcu4A/profile-displayphoto-shrink_400_400/0/1593108247402?e=1628121600&v=beta&t=BKNze0PdijQRlONxCRGCmRO0zvK1uJK_m9YZfSBgGlQ'),
+                          image: NetworkImage(
+                              'https://media-exp1.licdn.com/dms/image/C5603AQFqh_Yy0Wcu4A/profile-displayphoto-shrink_400_400/0/1593108247402?e=1628121600&v=beta&t=BKNze0PdijQRlONxCRGCmRO0zvK1uJK_m9YZfSBgGlQ'),
                           fit: BoxFit.fill,
                         ),
                       ),
@@ -135,7 +110,8 @@ class _ContactMobileState extends State<ContactMobile> {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         image: DecorationImage(
-                          image: NetworkImage('https://media-exp1.licdn.com/dms/image/C4E03AQFjn-uaiJWO1w/profile-displayphoto-shrink_400_400/0/1610263761229?e=1628121600&v=beta&t=ZwyObu64Djbpjo0y3PXK5DyIHJBktwxFf0vnPYc3rRg'),
+                          image: NetworkImage(
+                              'https://media-exp3.licdn.com/dms/image/C4E03AQHQe68CynXXVg/profile-displayphoto-shrink_400_400/0/1623041275486?e=1629936000&v=beta&t=7cQE_OrbjdKUUV0Wz2IGd-poHqlHlvPxZvJnTsfxLNg'),
                           fit: BoxFit.fill,
                         ),
                       ),

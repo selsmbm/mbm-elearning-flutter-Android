@@ -1,7 +1,10 @@
-import 'dart:async';
-import 'package:firebase_admob/firebase_admob.dart';
+import 'dart:convert';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:in_app_update/in_app_update.dart';
+import 'package:mbmelearning/Widgets/AlertDialog.dart';
 import 'package:mbmelearning/mobile/materialpagebyyear/FirstYearMtPageMb.dart';
 import 'package:mbmelearning/mobile/materialpagebyyear/SecondYearMtPageMb.dart';
 import 'package:mbmelearning/mobile/settingmb.dart';
@@ -13,6 +16,7 @@ import 'package:mbmelearning/branchesandsems.dart';
 import 'materialadd/firstyearmtaddmb.dart';
 import 'materialadd/mathmtaddmb.dart';
 import 'materialadd/secondtofinaladdmtmb.dart';
+import 'package:firebase_in_app_messaging/firebase_in_app_messaging.dart';
 
 class MobileDashbord extends StatefulWidget {
   @override
@@ -20,156 +24,64 @@ class MobileDashbord extends StatefulWidget {
 }
 
 class _MobileDashbordState extends State<MobileDashbord> {
-  String mathtype = 'select math sem';
+  String firstyrsem;
+  String mathtype;
+  String selectedBranch;
+  String selectedSems;
+  AppUpdateInfo _updateInfo;
 
-  DropdownButton<String> androidDropdownmath() {
-    List<DropdownMenuItem<String>> dropdownItems = [];
-    for (String m in maths) {
-      var newItem = DropdownMenuItem(
-        child: Text(m.toUpperCase()),
-        value: m,
-      );
-      dropdownItems.add(newItem);
-    }
-
-    return DropdownButton<String>(
-      value: mathtype,
-      items: dropdownItems,
-      onChanged: (value) {
-        setState(() {
-          mathtype = value;
-          if (mathtype != 'select math sem') {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => FirstYearAndMathMtPageMb(
-                      materialKey: 'mathsmt',
-                      sem: mathtype,
-                    ),),);
-          }
-          print(mathtype);
-        });
-      },
-    );
+  Future<void> checkForUpdate() async {
+    InAppUpdate.checkForUpdate().then((info) {
+      setState(() {
+        _updateInfo = info;
+      });
+      _updateInfo?.updateAvailability ==
+          UpdateAvailability.updateAvailable
+          ?
+        InAppUpdate.performImmediateUpdate()
+            .catchError((e) => print(e))
+          : null;
+    }).catchError((e) {
+      print('Update error'+e.toString());
+    });
   }
 
-  String firstyrsem = 'select sem';
-
-  DropdownButton<String> androidDropdownFirstyr() {
-    List<DropdownMenuItem<String>> dropdownItems = [];
-    for (String sem in firstyr) {
-      var newItem = DropdownMenuItem(
-        child: Text(sem.toUpperCase()),
-        value: sem,
-      );
-      dropdownItems.add(newItem);
-    }
-
-    return DropdownButton<String>(
-      value: firstyrsem,
-      items: dropdownItems,
-      onChanged: (value) {
-        setState(() {
-          firstyrsem = value;
-          if (firstyrsem != 'select sem') {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => FirstYearAndMathMtPageMb(
-                      materialKey: 'firstyearmt',
-                          sem: firstyrsem,
-                        )));
-          }
-          print(firstyrsem);
-        });
-      },
-    );
-  }
-
-  String selectedBranch = 'select branch';
-
-  DropdownButton<String> androidDropdownBranches() {
-    List<DropdownMenuItem<String>> dropdownItems = [];
-    for (String branch in branches) {
-      var newItem = DropdownMenuItem(
-        child: Text(branch.toUpperCase()),
-        value: branch,
-      );
-      dropdownItems.add(newItem);
-    }
-
-    return DropdownButton<String>(
-      value: selectedBranch,
-      items: dropdownItems,
-      onChanged: (value) {
-        setState(() {
-          selectedBranch = value;
-          print(selectedBranch);
-        });
-      },
-    );
-  }
-
-  String selectedSems = 'select sem';
-
-  DropdownButton<String> androidDropdownSems() {
-    List<DropdownMenuItem<String>> dropdownItemssem = [];
-    for (String sem in sems) {
-      var newItemsem = DropdownMenuItem(
-        child: Text(sem.toUpperCase()),
-        value: sem,
-      );
-      dropdownItemssem.add(newItemsem);
-    }
-
-    return DropdownButton<String>(
-      value: selectedSems,
-      items: dropdownItemssem,
-      onChanged: (value) {
-        setState(() {
-          selectedSems = value;
-          if (selectedSems != 'select sem' &&
-              selectedBranch != 'select branch') {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => SecondYearMtPageMb(
-                          sem: selectedSems,
-                          branch: selectedBranch,
-                        )));
-          }
-          print(selectedSems);
-        });
-      },
-    );
-  }
-
-  BannerAd _bannerAd;
-  static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo();
-
-  BannerAd createBannerAd() {
-    return BannerAd(
-      adUnitId: BannerAd.testAdUnitId,
-      size: AdSize.smartBanner,
-      targetingInfo: targetingInfo,
-      listener: (MobileAdEvent event) {
-        print("BannerAd event $event");
-      },
-    );
-  }
-
+  FirebaseMessaging messaging;
   @override
   void initState() {
     super.initState();
-    FirebaseAdMob.instance.initialize(appId: kBannerAdsId);
-    _bannerAd = createBannerAd()..load();
+    FirebaseInAppMessaging.instance.setMessagesSuppressed(true);
+    messaging = FirebaseMessaging.instance;
+    messaging.getToken().then((value){
+      print(json.decode(value)['notification']);
+    });
+    FirebaseMessaging.onMessage.listen((RemoteMessage event) {
+      print("message recieved");
+      print(event.notification.body);
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(event.notification.title),
+              content: Linkify(text:event.notification.body,onOpen: (l){launch(l.url);},),
+              actions: [
+                TextButton(
+                  child: Text("Ok"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          });
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      print('Message clicked!');
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    Timer(Duration(seconds: 1), () {
-      _bannerAd.show();
-    });
     return Scaffold(
       backgroundColor: const Color(0xffffffff),
       body: SafeArea(
@@ -213,12 +125,38 @@ class _MobileDashbordState extends State<MobileDashbord> {
             ),
             10.heightBox,
             Container(
-              width: context.percentWidth * 45,
-              height: 50,
-              child: androidDropdownFirstyr(),
+              width: 200,
+              child: DropdownButtonFormField(
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  filled: true,
+                  hintStyle: TextStyle(color: Colors.grey[800]),
+                  hintText: "Select Your Sem",
+                ),
+                value: firstyrsem,
+                onChanged: (value) {
+                  setState(() {
+                    firstyrsem = value;
+                  });
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) {
+                      return FirstYearAndMathMtPageMb(
+                        materialKey: 'firstyearmt',
+                        sem: firstyrsem,
+                      );
+                    }),
+                  ).then((value) => setState(() {
+                        firstyrsem = null;
+                      }));
+                },
+                items: firstyr
+                    .map((subject) => DropdownMenuItem(
+                        value: subject, child: Text("$subject".toUpperCase())))
+                    .toList(),
+              ),
             ).centered(),
-            20.heightBox,
-            5.heightBox,
+            25.heightBox,
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -254,17 +192,74 @@ class _MobileDashbordState extends State<MobileDashbord> {
             ),
             10.heightBox,
             Container(
-              width: context.percentWidth * 43,
-              height: 50,
-              child: androidDropdownBranches(),
+              width: 200,
+              child: DropdownButtonFormField(
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  filled: true,
+                  hintStyle: TextStyle(color: Colors.grey[800]),
+                  hintText: "Select Your Branch",
+                ),
+                value: selectedBranch,
+                onChanged: (value) {
+                  setState(() {
+                    selectedBranch = value;
+                  });
+                },
+                items: branches
+                    .map((subject) => DropdownMenuItem(
+                        value: subject, child: Text("$subject".toUpperCase())))
+                    .toList(),
+              ),
             ).centered(),
+            10.heightBox,
             Container(
-                    width: context.percentWidth * 40,
-                    height: 50,
-                    child: androidDropdownSems())
-                .centered(),
-            20.heightBox,
-            5.heightBox,
+              width: 200,
+              child: DropdownButtonFormField(
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  filled: true,
+                  hintStyle: TextStyle(color: Colors.grey[800]),
+                  hintText: "Select Your Sem",
+                ),
+                value: selectedSems,
+                onChanged: (value) {
+                  setState(() {
+                    selectedSems = value;
+                  });
+                  if (selectedSems != null && selectedBranch != null) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SecondYearMtPageMb(
+                          sem: selectedSems,
+                          branch: selectedBranch,
+                        ),
+                      ),
+                    ).then(
+                      (value) => setState(
+                        () {
+                          selectedSems = null;
+                          selectedBranch = null;
+                        },
+                      ),
+                    );
+                  } else{
+                    showAlertofError(
+                        context, 'first choose branch and then sem');
+                  }
+                },
+                items: sems
+                    .map(
+                      (subject) => DropdownMenuItem(
+                        value: subject,
+                        child: Text("$subject".toUpperCase()),
+                      ),
+                    )
+                    .toList(),
+              ),
+            ).centered(),
+            25.heightBox,
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -300,9 +295,36 @@ class _MobileDashbordState extends State<MobileDashbord> {
             ),
             10.heightBox,
             Container(
-              width: context.percentWidth * 47,
-              height: 50,
-              child: androidDropdownmath(),
+              width: 200,
+              child: DropdownButtonFormField(
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  filled: true,
+                  hintStyle: TextStyle(color: Colors.grey[800]),
+                  hintText: "Select Your Sem",
+                ),
+                value: mathtype,
+                onChanged: (value) {
+                  setState(() {
+                    mathtype = value;
+                  });
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => FirstYearAndMathMtPageMb(
+                        materialKey: 'mathsmt',
+                        sem: mathtype,
+                      ),
+                    ),
+                  ).then((value) => setState(() {
+                        mathtype = null;
+                      }));
+                },
+                items: maths
+                    .map((subject) => DropdownMenuItem(
+                        value: subject, child: Text("$subject".toUpperCase())))
+                    .toList(),
+              ),
             ).centered(),
             20.heightBox,
             "Copyright © All rights reserved | Made by SELS"
@@ -346,7 +368,8 @@ class _MobileDashbordState extends State<MobileDashbord> {
                             ),
                             TextButton(
                               onPressed: () {
-                                launch('https://mbmec.weebly.com/departments.html');
+                                launch(
+                                    'https://mbmec.weebly.com/departments.html');
                               },
                               child: HStack([
                                 Icon(
@@ -382,7 +405,8 @@ class _MobileDashbordState extends State<MobileDashbord> {
                             ),
                             TextButton(
                               onPressed: () {
-                                launch('https://mbmec.weebly.com/about-mbm.html');
+                                launch(
+                                    'https://mbmec.weebly.com/about-mbm.html');
                               },
                               child: HStack([
                                 Icon(Icons.location_on, color: kFirstColour),
@@ -392,7 +416,8 @@ class _MobileDashbordState extends State<MobileDashbord> {
                             ),
                             TextButton(
                               onPressed: () {
-                                launch('https://mbmec.weebly.com/t--p-cell.html');
+                                launch(
+                                    'https://mbmec.weebly.com/t--p-cell.html');
                               },
                               child: HStack([
                                 Icon(Icons.event, color: kFirstColour),
@@ -402,16 +427,20 @@ class _MobileDashbordState extends State<MobileDashbord> {
                             ),
                             TextButton(
                               onPressed: () {
-                                launch('https://mbmec.weebly.com/notifications.html');
+                                launch(
+                                    'https://mbmec.weebly.com/notifications.html');
                               },
                               child: HStack([
-                                Icon(Icons.notification_important_rounded, color: kFirstColour),
+                                Icon(Icons.notification_important_rounded,
+                                    color: kFirstColour),
                                 10.widthBox,
                                 "Notifications".text.black.xl.make(),
                               ]),
                             ),
                             TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                launch('https://www.buymeacoffee.com/mbmec');
+                              },
                               child: HStack([
                                 Icon(
                                   AntDesign.bank,
@@ -481,13 +510,15 @@ class ImageSlider extends StatelessWidget {
         items: [
           ProjectWidget(
               imgurl:
-              'https://firebasestorage.googleapis.com/v0/b/mbmecj.appspot.com/o/homeimgslider%2Fsl1.jpg?alt=media&token=3383105e-0798-471d-a510-100860429387'),
+                  'https://firebasestorage.googleapis.com/v0/b/mbmecj.appspot.com/o/homeimgslider%2Fsl1.jpg?alt=media&token=3383105e-0798-471d-a510-100860429387'),
           ProjectWidget(
             imgurl:
-                'https://firebasestorage.googleapis.com/v0/b/mbmecj.appspot.com/o/homeimgslider%2Fsl15.png?alt=media&token=8e18cb5e-5e66-445c-a24c-acb365c2cfce',),
+                'https://firebasestorage.googleapis.com/v0/b/mbmecj.appspot.com/o/homeimgslider%2Fsl15.png?alt=media&token=8e18cb5e-5e66-445c-a24c-acb365c2cfce',
+          ),
           ProjectWidget(
             imgurl:
-                'https://firebasestorage.googleapis.com/v0/b/mbmecj.appspot.com/o/homeimgslider%2Fsl14.png?alt=media&token=e6d37b23-29fe-4ce0-a5f1-66a6b39aed8d',),
+                'https://firebasestorage.googleapis.com/v0/b/mbmecj.appspot.com/o/homeimgslider%2Fsl14.png?alt=media&token=e6d37b23-29fe-4ce0-a5f1-66a6b39aed8d',
+          ),
           ProjectWidget(
               imgurl:
                   'https://firebasestorage.googleapis.com/v0/b/mbmecj.appspot.com/o/homeimgslider%2Fsl10.jpeg?alt=media&token=1590ecb6-16b7-4806-8965-5e4004c2c4a6'),

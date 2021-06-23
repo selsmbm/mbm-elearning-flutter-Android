@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 import 'package:mbmelearning/Widgets/AlertDialog.dart';
 import 'package:mbmelearning/Widgets/Buttons.dart';
 import 'package:mbmelearning/Widgets/customPaint.dart';
@@ -10,21 +9,6 @@ import 'package:mbmelearning/mobile/authrepo/signinmobile.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-const kTextFieldDecoration = InputDecoration(
-  hintText: 'Enter a value',
-  contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-  border: OutlineInputBorder(
-    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-  ),
-  enabledBorder: OutlineInputBorder(
-    borderSide: BorderSide(color: kFirstColour, width: 1.0),
-    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-  ),
-  focusedBorder: OutlineInputBorder(
-    borderSide: BorderSide(color: Colors.lightBlueAccent, width: 2.0),
-    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-  ),
-);
 
 class SignupMobile extends StatefulWidget {
   @override
@@ -71,6 +55,35 @@ class _SignupMobileState extends State<SignupMobile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: Container(
+        padding: EdgeInsets.all(8.0),
+        width: double.infinity,
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: kFirstColour,
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            "Already have an account !"
+                .text
+                .color(Colors.grey)
+                .make(),
+            10.widthBox,
+            TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => SigninMobile()),
+                );
+              },
+              child: "Signin".text.color(kFirstColour).make(),
+            ),
+          ],
+        ),
+      ),
       body: ModalProgressHUD(
         inAsyncCall: showSpiner,
         child: SafeArea(
@@ -168,38 +181,6 @@ class _SignupMobileState extends State<SignupMobile> {
                   buttonText: "signup",
                 ),
                 50.heightBox,
-                "or".text.color(kFirstColour).make(),
-                50.heightBox,
-                Container(
-                  padding: EdgeInsets.all(8.0),
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: kFirstColour,
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      "Already have an account !"
-                          .text
-                          .color(Colors.grey)
-                          .make(),
-                      10.widthBox,
-                      FlatButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SigninMobile()),
-                          );
-                        },
-                        child: "Signin".text.color(kFirstColour).make(),
-                      ),
-                    ],
-                  ),
-                ),
-                10.heightBox,
               ],
             ),
           ]).scrollVertical(physics: AlwaysScrollableScrollPhysics()),

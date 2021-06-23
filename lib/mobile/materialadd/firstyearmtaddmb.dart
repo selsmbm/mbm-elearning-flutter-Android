@@ -24,57 +24,11 @@ class _FirstyearMaterialMobileAddState
 
   bool isVisible = false;
   String mtname;
-
   String mturl;
-
   String mtsubject;
-  String firstyrsem = 'select sem';
+  String firstyrsem;
+  String selectedtype;
 
-  DropdownButton<String> androidDropdownFirstyr() {
-    List<DropdownMenuItem<String>> dropdownItems = [];
-    for (String sem in firstyr) {
-      var newItem = DropdownMenuItem(
-        child: Text(sem).w(context.percentWidth * 60),
-        value: sem,
-      );
-      dropdownItems.add(newItem);
-    }
-
-    return DropdownButton<String>(
-      value: firstyrsem,
-      items: dropdownItems,
-      onChanged: (value) {
-        setState(() {
-          firstyrsem = value;
-          print(firstyrsem);
-        });
-      },
-    );
-  }
-
-  String selectedtype = 'select type';
-
-  DropdownButton<String> androidDropdownmtType() {
-    List<DropdownMenuItem<String>> dropdownItems = [];
-    for (String type in mttypes) {
-      var newItem = DropdownMenuItem(
-        child: Text(type).w(context.percentWidth * 60),
-        value: type,
-      );
-      dropdownItems.add(newItem);
-    }
-
-    return DropdownButton<String>(
-      value: selectedtype,
-      items: dropdownItems,
-      onChanged: (value) {
-        setState(() {
-          selectedtype = value;
-          print(selectedtype);
-        });
-      },
-    );
-  }
 
   CollectionReference mt = FirebaseFirestore.instance.collection('firstyearmt');
 
@@ -168,17 +122,55 @@ class _FirstyearMaterialMobileAddState
                 ),
               ).w64(context),
               10.heightBox,
-              androidDropdownmtType(),
+              Container(
+                child: DropdownButtonFormField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    filled: true,
+                    hintStyle: TextStyle(color: Colors.grey[800]),
+                    hintText: "Select Type",
+                  ),
+                  value: selectedtype,
+                  onChanged: (value) {
+                    setState(() {
+                      selectedtype = value;
+                    });
+                  },
+                  items: mttypes
+                      .map((subject) => DropdownMenuItem(
+                      value: subject, child: Text("$subject".toUpperCase())))
+                      .toList(),
+                ),
+              ).centered().w64(context),
               10.heightBox,
-              androidDropdownFirstyr(),
+              Container(
+                child: DropdownButtonFormField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    filled: true,
+                    hintStyle: TextStyle(color: Colors.grey[800]),
+                    hintText: "Select Sem",
+                  ),
+                  value: firstyrsem,
+                  onChanged: (value) {
+                    setState(() {
+                      firstyrsem = value;
+                    });
+                  },
+                  items: firstyr
+                      .map((subject) => DropdownMenuItem(
+                      value: subject, child: Text("$subject".toUpperCase())))
+                      .toList(),
+                ),
+              ).centered().w64(context),
               10.heightBox,
               CKOutlineButton(
                 onprassed: () {
                   if ((mtsubject == null) ||
                       (mtname == null) ||
                       (mturl == null) ||
-                      (firstyrsem == 'select sem') ||
-                      (selectedtype == 'select type')) {
+                      (firstyrsem == null) ||
+                      (selectedtype == null)) {
                     showAlertDialog(context);
                   } else {
                     setState(() {

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -13,33 +12,8 @@ class TNCmb extends StatefulWidget {
 }
 
 class _TNCmbState extends State<TNCmb> {
-  BannerAd _bannerAd;
-  static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo();
-
-  BannerAd createBannerAd() {
-    return BannerAd(
-      adUnitId: BannerAd.testAdUnitId,
-      size: AdSize.smartBanner,
-      targetingInfo: targetingInfo,
-      listener: (MobileAdEvent event) {
-        print("BannerAd event $event");
-      },
-    );
-  }
-  @override
-  void initState() {
-    super.initState();
-    FirebaseAdMob.instance.initialize(appId: kBannerAdsId);
-    _bannerAd = createBannerAd()..load();
-  }
   @override
   Widget build(BuildContext context) {
-    Timer(
-        Duration(seconds: 1),
-            (){
-          _bannerAd.show();
-        }
-    );
     return Scaffold(
       backgroundColor: const Color(0xffffffff),
       body: SafeArea(

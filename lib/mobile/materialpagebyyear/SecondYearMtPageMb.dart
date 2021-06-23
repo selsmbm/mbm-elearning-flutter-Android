@@ -1,11 +1,10 @@
-import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_admob/firebase_admob.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mbmelearning/Widgets/AlertDialog.dart';
+import 'package:mbmelearning/Widgets/Buttons.dart';
 import 'package:mbmelearning/Widgets/mtListTileSecondTofinal.dart';
 import 'package:mbmelearning/Widgets/progressBar.dart';
-import 'package:mbmelearning/mobile/settingmb.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:mbmelearning/constants.dart';
@@ -19,32 +18,10 @@ class SecondYearMtPageMb extends StatefulWidget {
 }
 
 class _SecondYearMtPageMbState extends State<SecondYearMtPageMb> {
-  BannerAd _bannerAd;
-  static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo();
 
-  BannerAd createBannerAd() {
-    return BannerAd(
-      adUnitId: BannerAd.testAdUnitId,
-      size: AdSize.smartBanner,
-      targetingInfo: targetingInfo,
-      listener: (MobileAdEvent event) {
-        print("BannerAd event $event");
-      },
-    );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    FirebaseAdMob.instance.initialize(appId: kBannerAdsId);
-    _bannerAd = createBannerAd()..load();
-  }
 
   @override
   Widget build(BuildContext context) {
-    Timer(Duration(seconds: 1), () {
-      _bannerAd.show();
-    });
     return DefaultTabController(
       length: 5,
       child: Scaffold(
@@ -159,7 +136,6 @@ class _SecondYearMtPageMbState extends State<SecondYearMtPageMb> {
   }
 }
 
-
 class MaterialTile extends StatefulWidget {
   final String sem;
   final String mtType;
@@ -174,6 +150,8 @@ class _MaterialTileState extends State<MaterialTile> {
   List _materialList = [];
   var _materialFilteredList;
   bool filterBool = true;
+  bool showUpdateDialog = false;
+  var userId = FirebaseAuth.instance.currentUser.uid;
 
   _getData(sem) {
     firestore
@@ -181,7 +159,8 @@ class _MaterialTileState extends State<MaterialTile> {
         .where("mtsem", isEqualTo: sem)
         .where("mtbranch", isEqualTo: widget.branch)
         .where("mttype", isEqualTo: widget.mtType)
-        .where("approve", isEqualTo: true)
+        .where("approve",
+            isEqualTo: true) // .orderBy("mtsubject", descending: false)
         .get()
         .then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((doc) {
@@ -280,7 +259,136 @@ class _MaterialTileState extends State<MaterialTile> {
                               type: "${doc['mttype']}",
                               sem: "${doc['mtsem']}",
                               branch: "${doc['mtbranch']}",
-                            ),
+                            ).onLongPress(() {
+                              FirebaseFirestore.instance
+                                  .collection('adminids')
+                                  .get()
+                                  .then((QuerySnapshot querySnapshot) {
+                                querySnapshot.docs.forEach((doc) {
+                                  if(doc["id"] == userId){
+                                    setState(() {
+                                      showUpdateDialog = true;
+                                    });
+                                  }
+                                });
+                              });
+                              if(showUpdateDialog){
+                                var mtName = "${doc['mtname']}";
+                                var mtSubject = "${doc['mtsubject']}";
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return Dialog(
+                                          child: Container(
+                                              height: 280,
+                                              child: SingleChildScrollView(
+                                                child: Column(
+                                                  children: [
+                                                    'Update material details'
+                                                        .text
+                                                        .xl2
+                                                        .make(),
+                                                    TextField(
+                                                      controller:
+                                                      TextEditingController(
+                                                          text:
+                                                          "${doc['mtname']}"),
+                                                      decoration: InputDecoration(
+                                                          hintText:
+                                                          'Material new name'),
+                                                      onChanged: (value) =>
+                                                      mtName = value,
+                                                    ),
+                                                    10.heightBox,
+                                                    TextField(
+                                                      controller:
+                                                      TextEditingController(
+                                                          text:
+                                                          "${doc['mtsubject']}"),
+                                                      decoration: InputDecoration(
+                                                          hintText:
+                                                          'Material new subject'),
+                                                      onChanged: (value) =>
+                                                      mtSubject = value,
+                                                    ),
+                                                    10.heightBox,
+                                                    CKGradientButton(
+                                                      buttonText: 'Submit',
+                                                      onprassed: () {
+                                                        firestore
+                                                            .collection(
+                                                            'secondtofinalyearmt')
+                                                            .doc("${doc['mtid']}")
+                                                            .update({
+                                                          'mtname': mtName,
+                                                          'mtsubject': mtSubject,
+                                                        }).then((value) {
+                                                          Navigator.pop(context);
+                                                          showSuccessAlert(
+                                                              context,
+                                                              "material updated Successfully, Now close this dialog and refresh material");
+                                                        }).catchError((error) {
+                                                          showAlertofError(
+                                                              context, error);
+                                                        });
+                                                      },
+                                                    ),
+                                                    'or'.text.makeCentered(),
+                                                    CKGradientButton(
+                                                      buttonText: 'Delete',
+                                                      onprassed: () {
+                                                        showDialog(
+                                                            context: context,
+                                                            builder:
+                                                                (context) =>
+                                                                AlertDialog(
+                                                                  title: 'Warning'
+                                                                      .text
+                                                                      .make(),
+                                                                  content: 'Are you sure want to delete this material'
+                                                                      .text
+                                                                      .make(),
+                                                                  actions: [
+                                                                    TextButton(
+                                                                      child: Text(
+                                                                          "Yes"),
+                                                                      onPressed:
+                                                                          () {
+                                                                        firestore
+                                                                            .collection(
+                                                                            'secondtofinalyearmt')
+                                                                            .doc(
+                                                                            "${doc['mtid']}")
+                                                                            .delete()
+                                                                            .then((value) {
+                                                                          Navigator.pop(context);
+                                                                          showSuccessAlert(
+                                                                              context,
+                                                                              "material deleted Successfully");
+                                                                        }).catchError(
+                                                                                (error) {
+                                                                              showAlertofError(
+                                                                                  context,
+                                                                                  error);
+                                                                            });
+                                                                      },
+                                                                    ),
+                                                                    TextButton(
+                                                                      child: Text("No"),
+                                                                      onPressed: () {
+                                                                        Navigator.of(context).pop();
+                                                                      },
+                                                                    )
+                                                                  ],
+                                                                ));
+                                                      },
+                                                    )
+                                                  ],
+                                                ).p12(),
+                                              )));
+                                    });
+                              }
+                            }),
                           )
                           .toList(),
                     ),
@@ -358,7 +466,136 @@ class _MaterialTileState extends State<MaterialTile> {
                           type: "${_materialFilteredList[index]['mttype']}",
                           sem: "${_materialFilteredList[index]['mtsem']}",
                           branch: "${_materialFilteredList[index]['mtbranch']}",
-                        );
+                        ).onLongPress(() {
+                          FirebaseFirestore.instance
+                              .collection('adminids')
+                              .get()
+                              .then((QuerySnapshot querySnapshot) {
+                            querySnapshot.docs.forEach((doc) {
+                              if(doc["id"] == userId){
+                                setState(() {
+                                  showUpdateDialog = true;
+                                });
+                              }
+                            });
+                          });
+                          if(showUpdateDialog){
+                            var mtName = "${_materialFilteredList[index]['mtname']}";
+                            var mtSubject = "${_materialFilteredList[index]['mtsubject']}";
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return Dialog(
+                                      child: Container(
+                                          height: 280,
+                                          child: SingleChildScrollView(
+                                            child: Column(
+                                              children: [
+                                                'Update material details'
+                                                    .text
+                                                    .xl2
+                                                    .make(),
+                                                TextField(
+                                                  controller:
+                                                  TextEditingController(
+                                                      text:
+                                                      "${_materialFilteredList[index]['mtname']}"),
+                                                  decoration: InputDecoration(
+                                                      hintText:
+                                                      'Material new name'),
+                                                  onChanged: (value) =>
+                                                  mtName = value,
+                                                ),
+                                                10.heightBox,
+                                                TextField(
+                                                  controller:
+                                                  TextEditingController(
+                                                      text:
+                                                      "${_materialFilteredList[index]['mtsubject']}"),
+                                                  decoration: InputDecoration(
+                                                      hintText:
+                                                      'Material new subject'),
+                                                  onChanged: (value) =>
+                                                  mtSubject = value,
+                                                ),
+                                                10.heightBox,
+                                                CKGradientButton(
+                                                  buttonText: 'Submit',
+                                                  onprassed: () {
+                                                    firestore
+                                                        .collection(
+                                                        'secondtofinalyearmt')
+                                                        .doc("${_materialFilteredList[index]['mtid']}")
+                                                        .update({
+                                                      'mtname': mtName,
+                                                      'mtsubject': mtSubject,
+                                                    }).then((value) {
+                                                      Navigator.pop(context);
+                                                      showSuccessAlert(
+                                                          context,
+                                                          "material updated Successfully, Now close this dialog and refresh material");
+                                                    }).catchError((error) {
+                                                      showAlertofError(
+                                                          context, error);
+                                                    });
+                                                  },
+                                                ),
+                                                'or'.text.makeCentered(),
+                                                CKGradientButton(
+                                                  buttonText: 'Delete',
+                                                  onprassed: () {
+                                                    showDialog(
+                                                        context: context,
+                                                        builder:
+                                                            (context) =>
+                                                            AlertDialog(
+                                                              title: 'Warning'
+                                                                  .text
+                                                                  .make(),
+                                                              content: 'Are you sure want to delete this material'
+                                                                  .text
+                                                                  .make(),
+                                                              actions: [
+                                                                TextButton(
+                                                                  child: Text(
+                                                                      "Yes"),
+                                                                  onPressed:
+                                                                      () {
+                                                                    firestore
+                                                                        .collection(
+                                                                        'secondtofinalyearmt')
+                                                                        .doc(
+                                                                        "${_materialFilteredList[index]['mtid']}")
+                                                                        .delete()
+                                                                        .then((value) {
+                                                                      Navigator.pop(context);
+                                                                      showSuccessAlert(
+                                                                          context,
+                                                                          "material deleted Successfully");
+                                                                    }).catchError(
+                                                                            (error) {
+                                                                          showAlertofError(
+                                                                              context,
+                                                                              error);
+                                                                        });
+                                                                  },
+                                                                ),
+                                                                TextButton(
+                                                                  child: Text("No"),
+                                                                  onPressed: () {
+                                                                    Navigator.of(context).pop();
+                                                                  },
+                                                                )
+                                                              ],
+                                                            ));
+                                                  },
+                                                )
+                                              ],
+                                            ).p12(),
+                                          )));
+                                });
+                          }
+                        });
                       },
                     ),
                   )

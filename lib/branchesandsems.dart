@@ -1,5 +1,4 @@
 const List<String> branches = [
-  'select branch',
   'CE',
   'CH',
   'MI',
@@ -15,7 +14,6 @@ const List<String> branches = [
   'PE',
 ];
 const List<String> sems = [
-  'select sem',
   '3sem',
   '4sem',
   '5sem',
@@ -25,7 +23,6 @@ const List<String> sems = [
 ];
 
 const List<String> maths = [
-  'select math sem',
   'M1',
   'M2',
   'M3',
@@ -33,16 +30,21 @@ const List<String> maths = [
 ];
 
 const List<String> firstyr = [
-  'select sem',
   'civilsem',
   'mechanicalsem',
 ];
 
 const List<String> mttypes =[
-  'select type',
   'notes',
   'paper',
   'book',
   'file',
   'video',
+];
+
+const List<String> years =[
+  '1',
+  '2',
+  '3',
+  '4',
 ];
