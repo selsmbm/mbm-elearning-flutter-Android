@@ -1,13 +1,14 @@
 import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:mbmelearning/Widgets/AlertDialog.dart';
 import 'package:mbmelearning/Widgets/Buttons.dart';
 import 'package:mbmelearning/Widgets/bottomBar.dart';
 import 'package:mbmelearning/constants.dart';
 import 'package:velocity_x/velocity_x.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 
 class ContactMobile extends StatefulWidget {
   @override
@@ -31,7 +32,6 @@ class _ContactMobileState extends State<ContactMobile> {
     }).catchError((error) => showAlertofError(context, error));
   }
 
-
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final massageController = TextEditingController();
@@ -46,6 +46,35 @@ class _ContactMobileState extends State<ContactMobile> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 60.heightBox,
+                // Column(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //Todo: add sir profile
+                //     Container(
+                //       height: 100,
+                //       width: 100,
+                //       decoration: BoxDecoration(
+                //         shape: BoxShape.circle,
+                //         image: DecorationImage(
+                //           image: NetworkImage(
+                //               'https://media-exp1.licdn.com/dms/image/C5603AQFqh_Yy0Wcu4A/profile-displayphoto-shrink_400_400/0/1593108247402?e=1628121600&v=beta&t=BKNze0PdijQRlONxCRGCmRO0zvK1uJK_m9YZfSBgGlQ'),
+                //           fit: BoxFit.fill,
+                //         ),
+                //       ),
+                //     ),
+                //     "Kapil Gupta".text.xl2.make(),
+                //     "Civil Engineering".text.gray500.make(),
+                //     "guptakapil24000@gmail.com".text.gray500.make(),
+                //     FlatButton(
+                //       onPressed: () {},
+                //       child: Icon(
+                //         AntDesign.linkedin_square,
+                //         color: Colors.blue,
+                //       ),
+                //     ),
+                //   ],
+                // ),
+                // 20.heightBox,
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

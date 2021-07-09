@@ -26,6 +26,11 @@ dependencies:
   flutter_linkify: ^5.0.2
   firebase_in_app_messaging: ^0.3.0+1
   in_app_update: ^2.0.0
+  google_mobile_ads: ^0.13.2
+  firebase_database:
+  flutter_html:
+  http:
+  webfeed:
 
 
 dev_dependencies:

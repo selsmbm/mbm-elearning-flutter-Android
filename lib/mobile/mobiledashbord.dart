@@ -1,22 +1,28 @@
 import 'dart:convert';
+
+import 'package:firebase_in_app_messaging/firebase_in_app_messaging.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:in_app_update/in_app_update.dart';
 import 'package:mbmelearning/Widgets/AlertDialog.dart';
+import 'package:mbmelearning/branchesandsems.dart';
+import 'package:mbmelearning/constants.dart';
+import 'package:mbmelearning/mobile/Feed/MbmStories.dart';
+import 'package:mbmelearning/mobile/Feed/Notification.dart';
 import 'package:mbmelearning/mobile/materialpagebyyear/FirstYearMtPageMb.dart';
+import 'package:mbmelearning/mobile/materialpagebyyear/GateMaterial.dart';
 import 'package:mbmelearning/mobile/materialpagebyyear/SecondYearMtPageMb.dart';
-import 'package:mbmelearning/mobile/settingmb.dart';
 import 'package:mbmelearning/mobile/materialpagebyyear/usefullinksmb.dart';
+import 'package:mbmelearning/mobile/settingmb.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:velocity_x/velocity_x.dart';
-import 'package:mbmelearning/constants.dart';
-import 'package:mbmelearning/branchesandsems.dart';
+
 import 'materialadd/firstyearmtaddmb.dart';
 import 'materialadd/mathmtaddmb.dart';
 import 'materialadd/secondtofinaladdmtmb.dart';
-import 'package:firebase_in_app_messaging/firebase_in_app_messaging.dart';
 
 class MobileDashbord extends StatefulWidget {
   @override
@@ -30,19 +36,80 @@ class _MobileDashbordState extends State<MobileDashbord> {
   String selectedSems;
   AppUpdateInfo _updateInfo;
 
+  BannerAd _kABannerAds = BannerAd(
+    adUnitId: kBannerAdsId,
+    size: AdSize.banner,
+    request: AdRequest(),
+    listener: BannerAdListener(
+      onAdLoaded: (Ad ad) => print('Ad loaded.'),
+      onAdFailedToLoad: (Ad ad, LoadAdError error) {
+        ad.dispose();
+        print('Ad failed to load: $error');
+      },
+      onAdOpened: (Ad ad) => print('Ad opened.'),
+      onAdClosed: (Ad ad) => print('Ad closed.'),
+      onAdImpression: (Ad ad) => print('Ad impression.'),
+    ),
+  );
+
+  BannerAd _kAMediumBannerAds1 = BannerAd(
+    adUnitId: kBannerAdsId,
+    size: AdSize.largeBanner,
+    request: AdRequest(),
+    listener: BannerAdListener(
+      onAdLoaded: (Ad ad) => print('Ad loaded.'),
+      onAdFailedToLoad: (Ad ad, LoadAdError error) {
+        ad.dispose();
+        print('Ad failed to load: $error');
+      },
+      onAdOpened: (Ad ad) => print('Ad opened.'),
+      onAdClosed: (Ad ad) => print('Ad closed.'),
+      onAdImpression: (Ad ad) => print('Ad impression.'),
+    ),
+  );
+
+  BannerAd _kAMediumBannerAds2 = BannerAd(
+    adUnitId: kBannerAdsId,
+    size: AdSize.largeBanner,
+    request: AdRequest(),
+    listener: BannerAdListener(
+      onAdLoaded: (Ad ad) => print('Ad loaded.'),
+      onAdFailedToLoad: (Ad ad, LoadAdError error) {
+        ad.dispose();
+        print('Ad failed to load: $error');
+      },
+      onAdOpened: (Ad ad) => print('Ad opened.'),
+      onAdClosed: (Ad ad) => print('Ad closed.'),
+      onAdImpression: (Ad ad) => print('Ad impression.'),
+    ),
+  );
+
+  BannerAd _kALargeBannerAds = BannerAd(
+    adUnitId: kBannerAdsId,
+    size: AdSize.mediumRectangle,
+    request: AdRequest(),
+    listener: BannerAdListener(
+      onAdLoaded: (Ad ad) => print('Ad loaded.'),
+      onAdFailedToLoad: (Ad ad, LoadAdError error) {
+        ad.dispose();
+        print('Ad failed to load: $error');
+      },
+      onAdOpened: (Ad ad) => print('Ad opened.'),
+      onAdClosed: (Ad ad) => print('Ad closed.'),
+      onAdImpression: (Ad ad) => print('Ad impression.'),
+    ),
+  );
+
   Future<void> checkForUpdate() async {
     InAppUpdate.checkForUpdate().then((info) {
       setState(() {
         _updateInfo = info;
       });
-      _updateInfo?.updateAvailability ==
-          UpdateAvailability.updateAvailable
-          ?
-        InAppUpdate.performImmediateUpdate()
-            .catchError((e) => print(e))
+      _updateInfo?.updateAvailability == UpdateAvailability.updateAvailable
+          ? InAppUpdate.performImmediateUpdate().catchError((e) => print(e))
           : null;
     }).catchError((e) {
-      print('Update error'+e.toString());
+      print('Update error' + e.toString());
     });
   }
 
@@ -50,9 +117,10 @@ class _MobileDashbordState extends State<MobileDashbord> {
   @override
   void initState() {
     super.initState();
+    createInterstitialAds();
     FirebaseInAppMessaging.instance.setMessagesSuppressed(true);
     messaging = FirebaseMessaging.instance;
-    messaging.getToken().then((value){
+    messaging.getToken().then((value) {
       print(json.decode(value)['notification']);
     });
     FirebaseMessaging.onMessage.listen((RemoteMessage event) {
@@ -63,7 +131,12 @@ class _MobileDashbordState extends State<MobileDashbord> {
           builder: (BuildContext context) {
             return AlertDialog(
               title: Text(event.notification.title),
-              content: Linkify(text:event.notification.body,onOpen: (l){launch(l.url);},),
+              content: Linkify(
+                text: event.notification.body,
+                onOpen: (l) {
+                  launch(l.url);
+                },
+              ),
               actions: [
                 TextButton(
                   child: Text("Ok"),
@@ -80,10 +153,124 @@ class _MobileDashbordState extends State<MobileDashbord> {
     });
   }
 
+  InterstitialAd _interstitialAd;
+  int numOfAttemptLoad = 0;
+
+  initialization() {
+    if (MobileAds.instance == null) {
+      MobileAds.instance.initialize();
+    }
+  }
+
+  void createInterstitialAds() {
+    InterstitialAd.load(
+      adUnitId: kInterstitialAdsId,
+      request: AdRequest(),
+      adLoadCallback:
+          InterstitialAdLoadCallback(onAdLoaded: (InterstitialAd ad) {
+        _interstitialAd = ad;
+        numOfAttemptLoad = 0;
+      }, onAdFailedToLoad: (LoadAdError error) {
+        numOfAttemptLoad + 1;
+        _interstitialAd = null;
+
+        if (numOfAttemptLoad <= 2) {
+          createInterstitialAds();
+        }
+      }),
+    );
+  }
+
+  void showInterstitialAds() {
+    if (_interstitialAd == null) {
+      return;
+    }
+
+    _interstitialAd.fullScreenContentCallback = FullScreenContentCallback(
+        onAdShowedFullScreenContent: (InterstitialAd ad) {
+      print("ad onAdshowedFullscreen");
+    }, onAdDismissedFullScreenContent: (InterstitialAd ad) {
+      print("ad Disposed");
+      ad.dispose();
+      if (firstyrsem != null) _firstYearNavigator();
+      if (selectedSems != null) _secondToFinalYearNavigator();
+      if (mathtype != null) _mathNavigator();
+    }, onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError aderror) {
+      print('$ad OnAdFailed $aderror');
+      ad.dispose();
+      createInterstitialAds();
+    });
+
+    _interstitialAd.show();
+
+    _interstitialAd = null;
+  }
+
+  _firstYearNavigator() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) {
+        return FirstYearAndMathMtPageMb(
+          materialKey: 'firstyearmt',
+          sem: firstyrsem,
+        );
+      }),
+    ).then((value) => setState(() {
+          firstyrsem = null;
+        }));
+  }
+
+  _secondToFinalYearNavigator() {
+    if (selectedSems != null && selectedBranch != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SecondYearMtPageMb(
+            sem: selectedSems,
+            branch: selectedBranch,
+          ),
+        ),
+      ).then(
+        (value) => setState(
+          () {
+            selectedSems = null;
+            selectedBranch = null;
+          },
+        ),
+      );
+    } else {
+      showAlertofError(context, 'first choose branch and then sem');
+    }
+  }
+
+  _mathNavigator() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => FirstYearAndMathMtPageMb(
+          materialKey: 'mathsmt',
+          sem: mathtype,
+        ),
+      ),
+    ).then((value) => setState(() {
+          mathtype = null;
+        }));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xffffffff),
+      bottomNavigationBar: Container(
+        color: Colors.transparent,
+        height: 50,
+        width: double.infinity,
+        alignment: Alignment.center,
+        child: AdWidget(
+          ad: _kABannerAds..load(),
+          key: UniqueKey(),
+        ),
+      ),
       body: SafeArea(
         child: ZStack([
           VStack([
@@ -138,17 +325,8 @@ class _MobileDashbordState extends State<MobileDashbord> {
                   setState(() {
                     firstyrsem = value;
                   });
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) {
-                      return FirstYearAndMathMtPageMb(
-                        materialKey: 'firstyearmt',
-                        sem: firstyrsem,
-                      );
-                    }),
-                  ).then((value) => setState(() {
-                        firstyrsem = null;
-                      }));
+                  createInterstitialAds();
+                  showInterstitialAds();
                 },
                 items: firstyr
                     .map((subject) => DropdownMenuItem(
@@ -156,6 +334,17 @@ class _MobileDashbordState extends State<MobileDashbord> {
                     .toList(),
               ),
             ).centered(),
+            10.heightBox,
+            Container(
+              color: Colors.transparent,
+              height: 100,
+              width: double.infinity,
+              alignment: Alignment.center,
+              child: AdWidget(
+                ad: _kAMediumBannerAds1..load(),
+                key: UniqueKey(),
+              ),
+            ),
             25.heightBox,
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -227,27 +416,8 @@ class _MobileDashbordState extends State<MobileDashbord> {
                   setState(() {
                     selectedSems = value;
                   });
-                  if (selectedSems != null && selectedBranch != null) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SecondYearMtPageMb(
-                          sem: selectedSems,
-                          branch: selectedBranch,
-                        ),
-                      ),
-                    ).then(
-                      (value) => setState(
-                        () {
-                          selectedSems = null;
-                          selectedBranch = null;
-                        },
-                      ),
-                    );
-                  } else{
-                    showAlertofError(
-                        context, 'first choose branch and then sem');
-                  }
+                  createInterstitialAds();
+                  showInterstitialAds();
                 },
                 items: sems
                     .map(
@@ -259,6 +429,17 @@ class _MobileDashbordState extends State<MobileDashbord> {
                     .toList(),
               ),
             ).centered(),
+            10.heightBox,
+            Container(
+              color: Colors.transparent,
+              height: 100,
+              width: double.infinity,
+              alignment: Alignment.center,
+              child: AdWidget(
+                ad: _kAMediumBannerAds2..load(),
+                key: UniqueKey(),
+              ),
+            ),
             25.heightBox,
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -308,23 +489,105 @@ class _MobileDashbordState extends State<MobileDashbord> {
                   setState(() {
                     mathtype = value;
                   });
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => FirstYearAndMathMtPageMb(
-                        materialKey: 'mathsmt',
-                        sem: mathtype,
-                      ),
-                    ),
-                  ).then((value) => setState(() {
-                        mathtype = null;
-                      }));
+                  createInterstitialAds();
+                  showInterstitialAds();
                 },
                 items: maths
                     .map((subject) => DropdownMenuItem(
                         value: subject, child: Text("$subject".toUpperCase())))
                     .toList(),
               ),
+            ).centered(),
+            10.heightBox,
+            Container(
+              color: Colors.transparent,
+              height: 250,
+              width: double.infinity,
+              alignment: Alignment.center,
+              child: AdWidget(
+                ad: _kALargeBannerAds..load(),
+                key: UniqueKey(),
+              ),
+            ),
+            20.heightBox,
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                VStack([
+                  "MBM"
+                      .text
+                      .color(kFirstColour)
+                      .xl2
+                      .center
+                      .bold
+                      .make()
+                      .pLTRB(5, 0, 0, 0),
+                  VxBox()
+                      .color(kFirstColour)
+                      .size(30, 2)
+                      .make()
+                      .pLTRB(5, 0, 0, 0),
+                ]),
+              ],
+            ),
+            20.heightBox,
+            Wrap(
+              children: [
+                MBMButtons(
+                  title: 'About',
+                  color: Color(0xFF63B3ED),
+                  onPressed: () {
+                    launch('https://mbmec.weebly.com/about-mbm.html');
+                  },
+                ),
+                MBMButtons(
+                  title: 'Departments',
+                  color: Color(0xFF63B3ED),
+                  onPressed: () {
+                    launch('https://mbmec.weebly.com/departments.html');
+                  },
+                ),
+                MBMButtons(
+                  title: 'Clubs',
+                  color: Color(0xFF63B3ED),
+                  onPressed: () {
+                    launch('https://mbmec.weebly.com/clubs.html');
+                  },
+                ),
+                MBMButtons(
+                  title: 'Events',
+                  color: Color(0xFF63B3ED),
+                  onPressed: () {
+                    launch('https://mbmec.weebly.com/events.html');
+                  },
+                ),
+                MBMButtons(
+                  title: 'T&P',
+                  color: Color(0xFF63B3ED),
+                  onPressed: () {
+                    launch('https://mbmec.weebly.com/t--p-cell.html');
+                  },
+                ),
+                MBMButtons(
+                  title: 'MBM\nStories',
+                  color: Color(0xFF63B3ED),
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => MBMStories()));
+                  },
+                ),
+                MBMButtons(
+                  title: 'Gate',
+                  color: Color(0xFF63B3ED),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => GateMaterial()));
+                  },
+                ),
+              ],
             ).centered(),
             20.heightBox,
             "Copyright © All rights reserved | Made by SELS"
@@ -339,6 +602,7 @@ class _MobileDashbordState extends State<MobileDashbord> {
               TextButton(
                 onPressed: () {
                   showModalBottomSheet(
+                    backgroundColor: Colors.white,
                     context: context,
                     isScrollControlled: true,
                     builder: (context) => SingleChildScrollView(
@@ -347,7 +611,7 @@ class _MobileDashbordState extends State<MobileDashbord> {
                             bottom: MediaQuery.of(context).viewInsets.bottom),
                         child: Container(
                           color: Colors.white,
-                          height: 300,
+                          height: 200,
                           child: VStack([
                             TextButton(
                               onPressed: () {
@@ -368,67 +632,11 @@ class _MobileDashbordState extends State<MobileDashbord> {
                             ),
                             TextButton(
                               onPressed: () {
-                                launch(
-                                    'https://mbmec.weebly.com/departments.html');
-                              },
-                              child: HStack([
-                                Icon(
-                                  Icons.location_city,
-                                  color: kFirstColour,
-                                ),
-                                10.widthBox,
-                                "Departments".text.black.xl.make(),
-                              ]),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                launch('https://mbmec.weebly.com/clubs.html');
-                              },
-                              child: HStack([
-                                Icon(
-                                  Icons.api_outlined,
-                                  color: kFirstColour,
-                                ),
-                                10.widthBox,
-                                "Clubs".text.black.xl.make(),
-                              ]),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                launch('https://mbmec.weebly.com/events.html');
-                              },
-                              child: HStack([
-                                Icon(Icons.ac_unit, color: kFirstColour),
-                                10.widthBox,
-                                "Events".text.black.xl.make(),
-                              ]),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                launch(
-                                    'https://mbmec.weebly.com/about-mbm.html');
-                              },
-                              child: HStack([
-                                Icon(Icons.location_on, color: kFirstColour),
-                                10.widthBox,
-                                "About".text.black.xl.make(),
-                              ]),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                launch(
-                                    'https://mbmec.weebly.com/t--p-cell.html');
-                              },
-                              child: HStack([
-                                Icon(Icons.event, color: kFirstColour),
-                                10.widthBox,
-                                "T&P-Cell".text.black.xl.make(),
-                              ]),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                launch(
-                                    'https://mbmec.weebly.com/notifications.html');
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            NotificationsPage()));
                               },
                               child: HStack([
                                 Icon(Icons.notification_important_rounded,
@@ -467,7 +675,7 @@ class _MobileDashbordState extends State<MobileDashbord> {
                                 "Setting".text.black.xl.make(),
                               ]),
                             ),
-                            50.heightBox,
+                            10.heightBox,
                           ]).scrollVertical(
                               physics: AlwaysScrollableScrollPhysics()),
                         ).p(20),
@@ -493,6 +701,32 @@ class _MobileDashbordState extends State<MobileDashbord> {
             ],
           ),
         ]),
+      ),
+    );
+  }
+}
+
+class MBMButtons extends StatelessWidget {
+  final String title;
+  final Color color;
+  final Function onPressed;
+  MBMButtons({this.title, this.onPressed, this.color});
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: onPressed,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10.0),
+          color: color,
+        ),
+        height: 90,
+        width: 90,
+        child: title.text.xl2.white
+            .align(TextAlign.center)
+            .makeCentered()
+            .centered()
+            .p(10),
       ),
     );
   }
