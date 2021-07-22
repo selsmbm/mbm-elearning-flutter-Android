@@ -4,11 +4,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:mbmelearning/Analytics.dart';
 import 'package:mbmelearning/Widgets/AlertDialog.dart';
 import 'package:mbmelearning/Widgets/Buttons.dart';
 import 'package:mbmelearning/Widgets/bottomBar.dart';
 import 'package:mbmelearning/constants.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:velocity_x/velocity_x.dart';
+
+AnalyticsClass _analyticsClass = AnalyticsClass();
 
 class ContactMobile extends StatefulWidget {
   @override
@@ -35,6 +40,13 @@ class _ContactMobileState extends State<ContactMobile> {
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final massageController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _analyticsClass.setCurrentScreen('Contact us', 'Home');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,35 +58,58 @@ class _ContactMobileState extends State<ContactMobile> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 60.heightBox,
-                // Column(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   children: [
-                //Todo: add sir profile
-                //     Container(
-                //       height: 100,
-                //       width: 100,
-                //       decoration: BoxDecoration(
-                //         shape: BoxShape.circle,
-                //         image: DecorationImage(
-                //           image: NetworkImage(
-                //               'https://media-exp1.licdn.com/dms/image/C5603AQFqh_Yy0Wcu4A/profile-displayphoto-shrink_400_400/0/1593108247402?e=1628121600&v=beta&t=BKNze0PdijQRlONxCRGCmRO0zvK1uJK_m9YZfSBgGlQ'),
-                //           fit: BoxFit.fill,
-                //         ),
-                //       ),
-                //     ),
-                //     "Kapil Gupta".text.xl2.make(),
-                //     "Civil Engineering".text.gray500.make(),
-                //     "guptakapil24000@gmail.com".text.gray500.make(),
-                //     FlatButton(
-                //       onPressed: () {},
-                //       child: Icon(
-                //         AntDesign.linkedin_square,
-                //         color: Colors.blue,
-                //       ),
-                //     ),
-                //   ],
-                // ),
-                // 20.heightBox,
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      height: 100,
+                      width: 100,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          image: NetworkImage(
+                              'https://firebasestorage.googleapis.com/v0/b/mbmecj.appspot.com/o/dev%2F1604127426346.jpg?alt=media&token=2153ac7b-97ff-4929-b63e-49a33d21ff98'),
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                    ),
+                    "Dr. Kailash Chaudhary".text.xl2.make(),
+                    "Assistant Professor".text.gray500.make(),
+                    "k.chaudhary.mech@jnvu.edu.in"
+                        .text
+                        .gray500
+                        .make()
+                        .onTap(() {
+                      launch('mailto:k.chaudhary.mech@jnvu.edu.in');
+                    }),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            launch(
+                                'https://www.linkedin.com/in/dr-kailash-chaudhary-5b36bb12/');
+                          },
+                          icon: Icon(
+                            AntDesign.linkedin_square,
+                            color: Colors.blue,
+                          ),
+                        ).centered(),
+                        IconButton(
+                          onPressed: () {
+                            launch(
+                                'https://sites.google.com/jnvu.edu.in/drkailashchaudhary/home');
+                          },
+                          icon: Icon(
+                            AntDesign.link,
+                            color: Colors.blue,
+                          ),
+                        ).centered(),
+                      ],
+                    ).w(double.infinity),
+                  ],
+                ),
+                20.heightBox,
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -91,10 +126,14 @@ class _ContactMobileState extends State<ContactMobile> {
                     ),
                     "Lokesh Jangid".text.xl2.make(),
                     "Electrical Engineering".text.gray500.make(),
-                    "lkrjangid@gmail.com".text.gray500.make(),
-                    FlatButton(
-                      onPressed: () {},
-                      child: Icon(
+                    "lkrjangid@gmail.com".text.gray500.make().onTap(() {
+                      launch('mailto:lkrjangid@gmail.com');
+                    }),
+                    IconButton(
+                      onPressed: () {
+                        launch('https://www.linkedin.com/in/lkrjangid/');
+                      },
+                      icon: Icon(
                         AntDesign.linkedin_square,
                         color: Colors.blue,
                       ),
@@ -112,17 +151,22 @@ class _ContactMobileState extends State<ContactMobile> {
                         shape: BoxShape.circle,
                         image: DecorationImage(
                           image: NetworkImage(
-                              'https://media-exp1.licdn.com/dms/image/C5603AQFqh_Yy0Wcu4A/profile-displayphoto-shrink_400_400/0/1593108247402?e=1628121600&v=beta&t=BKNze0PdijQRlONxCRGCmRO0zvK1uJK_m9YZfSBgGlQ'),
+                              'https://firebasestorage.googleapis.com/v0/b/mbmecj.appspot.com/o/dev%2F1625904826562.jpg?alt=media&token=2321ea10-4298-493b-b15b-296f87ce23b2'),
                           fit: BoxFit.fill,
                         ),
                       ),
                     ),
                     "Kapil Gupta".text.xl2.make(),
                     "Civil Engineering".text.gray500.make(),
-                    "guptakapil24000@gmail.com".text.gray500.make(),
-                    FlatButton(
-                      onPressed: () {},
-                      child: Icon(
+                    "guptakapil24000@gmail.com".text.gray500.make().onTap(() {
+                      launch('mailto:guptakapil24000@gmail.com');
+                    }),
+                    IconButton(
+                      onPressed: () {
+                        launch(
+                            'https://www.linkedin.com/in/kapil-gupta-b991b511b/');
+                      },
+                      icon: Icon(
                         AntDesign.linkedin_square,
                         color: Colors.blue,
                       ),
@@ -140,17 +184,26 @@ class _ContactMobileState extends State<ContactMobile> {
                         shape: BoxShape.circle,
                         image: DecorationImage(
                           image: NetworkImage(
-                              'https://media-exp3.licdn.com/dms/image/C4E03AQHQe68CynXXVg/profile-displayphoto-shrink_400_400/0/1623041275486?e=1629936000&v=beta&t=7cQE_OrbjdKUUV0Wz2IGd-poHqlHlvPxZvJnTsfxLNg'),
+                              'https://firebasestorage.googleapis.com/v0/b/mbmecj.appspot.com/o/dev%2F1623041275486.jpg?alt=media&token=20d5d246-8cbc-4a64-9098-5a58e0f6d6cf'),
                           fit: BoxFit.fill,
                         ),
                       ),
                     ),
                     "Kashish Agarawal".text.xl2.make(),
                     "Civil Engineering".text.gray500.make(),
-                    "kashishagrawal0005@gmail.com".text.gray500.make(),
-                    FlatButton(
-                      onPressed: () {},
-                      child: Icon(
+                    "kashishagrawal0005@gmail.com"
+                        .text
+                        .gray500
+                        .make()
+                        .onTap(() {
+                      launch('mailto:kashishagrawal0005@gmail.com');
+                    }),
+                    IconButton(
+                      onPressed: () {
+                        launch(
+                            'https://www.linkedin.com/in/kashish-agrawal-a814161aa/');
+                      },
+                      icon: Icon(
                         AntDesign.linkedin_square,
                         color: Colors.blue,
                       ),
@@ -158,6 +211,30 @@ class _ContactMobileState extends State<ContactMobile> {
                   ],
                 ),
                 30.heightBox,
+                Container(
+                  color: Colors.transparent,
+                  height: 250,
+                  width: double.infinity,
+                  alignment: Alignment.center,
+                  child: AdWidget(
+                    ad: BannerAd(
+                      adUnitId: kBannerAdsId,
+                      size: AdSize.mediumRectangle,
+                      request: AdRequest(),
+                      listener: BannerAdListener(
+                        onAdLoaded: (Ad ad) => print('Ad loaded.'),
+                        onAdFailedToLoad: (Ad ad, LoadAdError error) {
+                          ad.dispose();
+                          print('Ad failed to load: $error');
+                        },
+                        onAdOpened: (Ad ad) => print('Ad opened.'),
+                        onAdClosed: (Ad ad) => print('Ad closed.'),
+                        onAdImpression: (Ad ad) => print('Ad impression.'),
+                      ),
+                    )..load(),
+                    key: UniqueKey(),
+                  ),
+                ),
                 Image.asset(
                   'assets/contact.png',
                 ),

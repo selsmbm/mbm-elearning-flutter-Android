@@ -1,13 +1,43 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:mbmelearning/Analytics.dart';
 import 'package:mbmelearning/Widgets/AlertDialog.dart';
 import 'package:mbmelearning/Widgets/Buttons.dart';
 import 'package:mbmelearning/Widgets/mtListTileSecondTofinal.dart';
 import 'package:mbmelearning/Widgets/progressBar.dart';
+import 'package:mbmelearning/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:velocity_x/velocity_x.dart';
-import 'package:mbmelearning/constants.dart';
+
+AnalyticsClass _analyticsClass = AnalyticsClass();
+InterstitialAd _interstitialAd;
+int numOfAttemptLoad = 0;
+
+initialization() {
+  if (MobileAds.instance == null) {
+    MobileAds.instance.initialize();
+  }
+}
+
+void createInterstitialAds() {
+  InterstitialAd.load(
+    adUnitId: kInterstitialAdsId,
+    request: AdRequest(),
+    adLoadCallback: InterstitialAdLoadCallback(onAdLoaded: (InterstitialAd ad) {
+      _interstitialAd = ad;
+      numOfAttemptLoad = 0;
+    }, onAdFailedToLoad: (LoadAdError error) {
+      numOfAttemptLoad += 1;
+      _interstitialAd = null;
+
+      if (numOfAttemptLoad <= 2) {
+        createInterstitialAds();
+      }
+    }),
+  );
+}
 
 class SecondYearMtPageMb extends StatefulWidget {
   final String sem;
@@ -18,13 +48,43 @@ class SecondYearMtPageMb extends StatefulWidget {
 }
 
 class _SecondYearMtPageMbState extends State<SecondYearMtPageMb> {
-
+  @override
+  void initState() {
+    super.initState();
+    _analyticsClass.setCurrentScreen(
+        'Second to final year Material', 'Material');
+    createInterstitialAds();
+  }
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 5,
       child: Scaffold(
+        bottomNavigationBar: Container(
+          color: Colors.transparent,
+          height: 50,
+          width: double.infinity,
+          alignment: Alignment.center,
+          child: AdWidget(
+            ad: BannerAd(
+              adUnitId: kBannerAdsId,
+              size: AdSize.banner,
+              request: AdRequest(),
+              listener: BannerAdListener(
+                onAdLoaded: (Ad ad) => print('Ad loaded.'),
+                onAdFailedToLoad: (Ad ad, LoadAdError error) {
+                  ad.dispose();
+                  print('Ad failed to load: $error');
+                },
+                onAdOpened: (Ad ad) => print('Ad opened.'),
+                onAdClosed: (Ad ad) => print('Ad closed.'),
+                onAdImpression: (Ad ad) => print('Ad impression.'),
+              ),
+            )..load(),
+            key: UniqueKey(),
+          ),
+        ),
         backgroundColor: const Color(0xffffffff),
         body: SafeArea(
           child: ZStack([
@@ -250,9 +310,32 @@ class _MaterialTileState extends State<MaterialTile> {
                           .map(
                             (doc) => MtTileSecondToFinalListTile(
                               onPressed: () {
-                                setState(() {
+                                if (_interstitialAd == null) {
                                   launch("${doc['mturl']}");
+                                }
+
+                                _interstitialAd.fullScreenContentCallback =
+                                    FullScreenContentCallback(
+                                        onAdShowedFullScreenContent:
+                                            (InterstitialAd ad) {
+                                  print("ad onAdshowedFullscreen");
+                                }, onAdDismissedFullScreenContent:
+                                            (InterstitialAd ad) {
+                                  print("ad Disposed");
+                                  ad.dispose();
+                                  launch("${doc['mturl']}");
+                                  createInterstitialAds();
+                                }, onAdFailedToShowFullScreenContent:
+                                            (InterstitialAd ad,
+                                                AdError aderror) {
+                                  print('$ad OnAdFailed $aderror');
+                                  ad.dispose();
+                                  createInterstitialAds();
                                 });
+
+                                _interstitialAd.show();
+
+                                _interstitialAd = null;
                               },
                               name: "${doc['mtname']}",
                               subject: "${doc['mtsubject']}",
@@ -265,14 +348,14 @@ class _MaterialTileState extends State<MaterialTile> {
                                   .get()
                                   .then((QuerySnapshot querySnapshot) {
                                 querySnapshot.docs.forEach((doc) {
-                                  if(doc["id"] == userId){
+                                  if (doc["id"] == userId) {
                                     setState(() {
                                       showUpdateDialog = true;
                                     });
                                   }
                                 });
                               });
-                              if(showUpdateDialog){
+                              if (showUpdateDialog) {
                                 var mtName = "${doc['mtname']}";
                                 var mtSubject = "${doc['mtsubject']}";
                                 showDialog(
@@ -290,26 +373,26 @@ class _MaterialTileState extends State<MaterialTile> {
                                                         .make(),
                                                     TextField(
                                                       controller:
-                                                      TextEditingController(
-                                                          text:
-                                                          "${doc['mtname']}"),
+                                                          TextEditingController(
+                                                              text:
+                                                                  "${doc['mtname']}"),
                                                       decoration: InputDecoration(
                                                           hintText:
-                                                          'Material new name'),
+                                                              'Material new name'),
                                                       onChanged: (value) =>
-                                                      mtName = value,
+                                                          mtName = value,
                                                     ),
                                                     10.heightBox,
                                                     TextField(
                                                       controller:
-                                                      TextEditingController(
-                                                          text:
-                                                          "${doc['mtsubject']}"),
+                                                          TextEditingController(
+                                                              text:
+                                                                  "${doc['mtsubject']}"),
                                                       decoration: InputDecoration(
                                                           hintText:
-                                                          'Material new subject'),
+                                                              'Material new subject'),
                                                       onChanged: (value) =>
-                                                      mtSubject = value,
+                                                          mtSubject = value,
                                                     ),
                                                     10.heightBox,
                                                     CKGradientButton(
@@ -317,13 +400,16 @@ class _MaterialTileState extends State<MaterialTile> {
                                                       onprassed: () {
                                                         firestore
                                                             .collection(
-                                                            'secondtofinalyearmt')
-                                                            .doc("${doc['mtid']}")
+                                                                'secondtofinalyearmt')
+                                                            .doc(
+                                                                "${doc['mtid']}")
                                                             .update({
                                                           'mtname': mtName,
-                                                          'mtsubject': mtSubject,
+                                                          'mtsubject':
+                                                              mtSubject,
                                                         }).then((value) {
-                                                          Navigator.pop(context);
+                                                          Navigator.pop(
+                                                              context);
                                                           showSuccessAlert(
                                                               context,
                                                               "material updated Successfully, Now close this dialog and refresh material");
@@ -341,46 +427,37 @@ class _MaterialTileState extends State<MaterialTile> {
                                                             context: context,
                                                             builder:
                                                                 (context) =>
-                                                                AlertDialog(
-                                                                  title: 'Warning'
-                                                                      .text
-                                                                      .make(),
-                                                                  content: 'Are you sure want to delete this material'
-                                                                      .text
-                                                                      .make(),
-                                                                  actions: [
-                                                                    TextButton(
-                                                                      child: Text(
-                                                                          "Yes"),
-                                                                      onPressed:
-                                                                          () {
-                                                                        firestore
-                                                                            .collection(
-                                                                            'secondtofinalyearmt')
-                                                                            .doc(
-                                                                            "${doc['mtid']}")
-                                                                            .delete()
-                                                                            .then((value) {
-                                                                          Navigator.pop(context);
-                                                                          showSuccessAlert(
-                                                                              context,
-                                                                              "material deleted Successfully");
-                                                                        }).catchError(
-                                                                                (error) {
-                                                                              showAlertofError(
-                                                                                  context,
-                                                                                  error);
+                                                                    AlertDialog(
+                                                                      title: 'Warning'
+                                                                          .text
+                                                                          .make(),
+                                                                      content: 'Are you sure want to delete this material'
+                                                                          .text
+                                                                          .make(),
+                                                                      actions: [
+                                                                        TextButton(
+                                                                          child:
+                                                                              Text("Yes"),
+                                                                          onPressed:
+                                                                              () {
+                                                                            firestore.collection('secondtofinalyearmt').doc("${doc['mtid']}").delete().then((value) {
+                                                                              Navigator.pop(context);
+                                                                              showSuccessAlert(context, "material deleted Successfully");
+                                                                            }).catchError((error) {
+                                                                              showAlertofError(context, error);
                                                                             });
-                                                                      },
-                                                                    ),
-                                                                    TextButton(
-                                                                      child: Text("No"),
-                                                                      onPressed: () {
-                                                                        Navigator.of(context).pop();
-                                                                      },
-                                                                    )
-                                                                  ],
-                                                                ));
+                                                                          },
+                                                                        ),
+                                                                        TextButton(
+                                                                          child:
+                                                                              Text("No"),
+                                                                          onPressed:
+                                                                              () {
+                                                                            Navigator.of(context).pop();
+                                                                          },
+                                                                        )
+                                                                      ],
+                                                                    ));
                                                       },
                                                     )
                                                   ],
@@ -456,8 +533,33 @@ class _MaterialTileState extends State<MaterialTile> {
                         return MtTileSecondToFinalListTile(
                           onPressed: () {
                             setState(() {
-                              launch(
-                                  "${_materialFilteredList[index]['mturl']}");
+                              if (_interstitialAd == null) {
+                                launch(
+                                    "${_materialFilteredList[index]['mturl']}");
+                              }
+
+                              _interstitialAd.fullScreenContentCallback =
+                                  FullScreenContentCallback(
+                                      onAdShowedFullScreenContent:
+                                          (InterstitialAd ad) {
+                                print("ad onAdshowedFullscreen");
+                              }, onAdDismissedFullScreenContent:
+                                          (InterstitialAd ad) {
+                                print("ad Disposed");
+                                ad.dispose();
+                                launch(
+                                    "${_materialFilteredList[index]['mturl']}");
+                                createInterstitialAds();
+                              }, onAdFailedToShowFullScreenContent:
+                                          (InterstitialAd ad, AdError aderror) {
+                                print('$ad OnAdFailed $aderror');
+                                ad.dispose();
+                                createInterstitialAds();
+                              });
+
+                              _interstitialAd.show();
+
+                              _interstitialAd = null;
                             });
                           },
                           name: "${_materialFilteredList[index]['mtname']}",
@@ -472,16 +574,18 @@ class _MaterialTileState extends State<MaterialTile> {
                               .get()
                               .then((QuerySnapshot querySnapshot) {
                             querySnapshot.docs.forEach((doc) {
-                              if(doc["id"] == userId){
+                              if (doc["id"] == userId) {
                                 setState(() {
                                   showUpdateDialog = true;
                                 });
                               }
                             });
                           });
-                          if(showUpdateDialog){
-                            var mtName = "${_materialFilteredList[index]['mtname']}";
-                            var mtSubject = "${_materialFilteredList[index]['mtsubject']}";
+                          if (showUpdateDialog) {
+                            var mtName =
+                                "${_materialFilteredList[index]['mtname']}";
+                            var mtSubject =
+                                "${_materialFilteredList[index]['mtsubject']}";
                             showDialog(
                                 context: context,
                                 builder: (context) {
@@ -496,27 +600,25 @@ class _MaterialTileState extends State<MaterialTile> {
                                                     .xl2
                                                     .make(),
                                                 TextField(
-                                                  controller:
-                                                  TextEditingController(
+                                                  controller: TextEditingController(
                                                       text:
-                                                      "${_materialFilteredList[index]['mtname']}"),
+                                                          "${_materialFilteredList[index]['mtname']}"),
                                                   decoration: InputDecoration(
                                                       hintText:
-                                                      'Material new name'),
+                                                          'Material new name'),
                                                   onChanged: (value) =>
-                                                  mtName = value,
+                                                      mtName = value,
                                                 ),
                                                 10.heightBox,
                                                 TextField(
-                                                  controller:
-                                                  TextEditingController(
+                                                  controller: TextEditingController(
                                                       text:
-                                                      "${_materialFilteredList[index]['mtsubject']}"),
+                                                          "${_materialFilteredList[index]['mtsubject']}"),
                                                   decoration: InputDecoration(
                                                       hintText:
-                                                      'Material new subject'),
+                                                          'Material new subject'),
                                                   onChanged: (value) =>
-                                                  mtSubject = value,
+                                                      mtSubject = value,
                                                 ),
                                                 10.heightBox,
                                                 CKGradientButton(
@@ -524,15 +626,15 @@ class _MaterialTileState extends State<MaterialTile> {
                                                   onprassed: () {
                                                     firestore
                                                         .collection(
-                                                        'secondtofinalyearmt')
-                                                        .doc("${_materialFilteredList[index]['mtid']}")
+                                                            'secondtofinalyearmt')
+                                                        .doc(
+                                                            "${_materialFilteredList[index]['mtid']}")
                                                         .update({
                                                       'mtname': mtName,
                                                       'mtsubject': mtSubject,
                                                     }).then((value) {
                                                       Navigator.pop(context);
-                                                      showSuccessAlert(
-                                                          context,
+                                                      showSuccessAlert(context,
                                                           "material updated Successfully, Now close this dialog and refresh material");
                                                     }).catchError((error) {
                                                       showAlertofError(
@@ -548,46 +650,48 @@ class _MaterialTileState extends State<MaterialTile> {
                                                         context: context,
                                                         builder:
                                                             (context) =>
-                                                            AlertDialog(
-                                                              title: 'Warning'
-                                                                  .text
-                                                                  .make(),
-                                                              content: 'Are you sure want to delete this material'
-                                                                  .text
-                                                                  .make(),
-                                                              actions: [
-                                                                TextButton(
-                                                                  child: Text(
-                                                                      "Yes"),
-                                                                  onPressed:
-                                                                      () {
-                                                                    firestore
-                                                                        .collection(
-                                                                        'secondtofinalyearmt')
-                                                                        .doc(
-                                                                        "${_materialFilteredList[index]['mtid']}")
-                                                                        .delete()
-                                                                        .then((value) {
-                                                                      Navigator.pop(context);
-                                                                      showSuccessAlert(
-                                                                          context,
-                                                                          "material deleted Successfully");
-                                                                    }).catchError(
-                                                                            (error) {
+                                                                AlertDialog(
+                                                                  title: 'Warning'
+                                                                      .text
+                                                                      .make(),
+                                                                  content:
+                                                                      'Are you sure want to delete this material'
+                                                                          .text
+                                                                          .make(),
+                                                                  actions: [
+                                                                    TextButton(
+                                                                      child: Text(
+                                                                          "Yes"),
+                                                                      onPressed:
+                                                                          () {
+                                                                        firestore
+                                                                            .collection('secondtofinalyearmt')
+                                                                            .doc("${_materialFilteredList[index]['mtid']}")
+                                                                            .delete()
+                                                                            .then((value) {
+                                                                          Navigator.pop(
+                                                                              context);
+                                                                          showSuccessAlert(
+                                                                              context,
+                                                                              "material deleted Successfully");
+                                                                        }).catchError((error) {
                                                                           showAlertofError(
                                                                               context,
                                                                               error);
                                                                         });
-                                                                  },
-                                                                ),
-                                                                TextButton(
-                                                                  child: Text("No"),
-                                                                  onPressed: () {
-                                                                    Navigator.of(context).pop();
-                                                                  },
-                                                                )
-                                                              ],
-                                                            ));
+                                                                      },
+                                                                    ),
+                                                                    TextButton(
+                                                                      child: Text(
+                                                                          "No"),
+                                                                      onPressed:
+                                                                          () {
+                                                                        Navigator.of(context)
+                                                                            .pop();
+                                                                      },
+                                                                    )
+                                                                  ],
+                                                                ));
                                                   },
                                                 )
                                               ],

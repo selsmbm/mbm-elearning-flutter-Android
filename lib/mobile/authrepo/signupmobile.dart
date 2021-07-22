@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mbmelearning/Analytics.dart';
 import 'package:mbmelearning/Widgets/AlertDialog.dart';
 import 'package:mbmelearning/Widgets/Buttons.dart';
 import 'package:mbmelearning/Widgets/customPaint.dart';
@@ -9,6 +10,7 @@ import 'package:mbmelearning/mobile/authrepo/signinmobile.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:velocity_x/velocity_x.dart';
 
+AnalyticsClass _analyticsClass = AnalyticsClass();
 
 class SignupMobile extends StatefulWidget {
   @override
@@ -24,17 +26,15 @@ class _SignupMobileState extends State<SignupMobile> {
 
   bool showSpiner = false;
 
-  var user =
-      FirebaseFirestore.instance
-          .collection('users');
+  var user = FirebaseFirestore.instance.collection('users');
 
   Future<void> addUser(id) {
     return user.doc(id).set({
       'username': name,
       'useremail': email,
-      'year':'null',
-      'branch':'null',
-      'mobileNo':'null',
+      'year': 'null',
+      'branch': 'null',
+      'mobileNo': 'null',
     }).then((value) {
       Navigator.pushReplacement(
         context,
@@ -53,6 +53,12 @@ class _SignupMobileState extends State<SignupMobile> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _analyticsClass.setCurrentScreen('Sign up page', 'Auth');
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: Container(
@@ -66,17 +72,13 @@ class _SignupMobileState extends State<SignupMobile> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            "Already have an account !"
-                .text
-                .color(Colors.grey)
-                .make(),
+            "Already have an account !".text.color(Colors.grey).make(),
             10.widthBox,
             TextButton(
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => SigninMobile()),
+                  MaterialPageRoute(builder: (context) => SigninMobile()),
                 );
               },
               child: "Signin".text.color(kFirstColour).make(),

@@ -1,11 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:mbmelearning/Analytics.dart';
 import 'package:mbmelearning/Widgets/AlertDialog.dart';
 import 'package:mbmelearning/Widgets/Buttons.dart';
-import 'package:velocity_x/velocity_x.dart';
 import 'package:mbmelearning/constants.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 import '../../branchesandsems.dart';
+
+AnalyticsClass _analyticsClass = AnalyticsClass();
 
 class SecondtoFinaladdmtmb extends StatefulWidget {
   final approve;
@@ -15,7 +19,7 @@ class SecondtoFinaladdmtmb extends StatefulWidget {
 }
 
 class _SecondtoFinaladdmtmbState extends State<SecondtoFinaladdmtmb> {
-  bool isVisible = false ;
+  bool isVisible = false;
   var textFieldController1 = TextEditingController();
   var textFieldController2 = TextEditingController();
   var textFieldController3 = TextEditingController();
@@ -45,7 +49,7 @@ class _SecondtoFinaladdmtmbState extends State<SecondtoFinaladdmtmb> {
       textFieldController1.clear();
       textFieldController2.clear();
       textFieldController3.clear();
-      showSuccessAlert(context,"material Added Successfully");
+      showSuccessAlert(context, "material Added Successfully");
     }).catchError((error) {
       setState(() {
         isVisible = false;
@@ -70,22 +74,53 @@ class _SecondtoFinaladdmtmbState extends State<SecondtoFinaladdmtmb> {
     );
   }
 
-
+  @override
+  void initState() {
+    super.initState();
+    _analyticsClass.setCurrentScreen(
+        'Second to final year Material Add', 'MtAdd');
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: Container(
+        color: Colors.transparent,
+        height: 50,
+        width: double.infinity,
+        alignment: Alignment.center,
+        child: AdWidget(
+          ad: BannerAd(
+            adUnitId: kBannerAdsId,
+            size: AdSize.banner,
+            request: AdRequest(),
+            listener: BannerAdListener(
+              onAdLoaded: (Ad ad) => print('Ad loaded.'),
+              onAdFailedToLoad: (Ad ad, LoadAdError error) {
+                ad.dispose();
+                print('Ad failed to load: $error');
+              },
+              onAdOpened: (Ad ad) => print('Ad opened.'),
+              onAdClosed: (Ad ad) => print('Ad closed.'),
+              onAdImpression: (Ad ad) => print('Ad impression.'),
+            ),
+          )..load(),
+          key: UniqueKey(),
+        ),
+      ),
       backgroundColor: const Color(0xffffffff),
       body: SafeArea(
         child: ZStack([
           VStack([
             60.heightBox,
+            Image.asset('assets/signinimg.jpg'),
+            10.heightBox,
             Text(
               "Only Second to Final Year Material Add Hare",
               style: TextStyle(
                 fontSize: 13,
               ),
-            ),
+            ).centered(),
             10.heightBox,
             TextField(
               controller: textFieldController1,
@@ -96,7 +131,7 @@ class _SecondtoFinaladdmtmbState extends State<SecondtoFinaladdmtmb> {
                 border: OutlineInputBorder(),
                 labelText: 'Material Name',
               ),
-            ).w64(context),
+            ),
             10.heightBox,
             TextField(
               controller: textFieldController2,
@@ -107,7 +142,7 @@ class _SecondtoFinaladdmtmbState extends State<SecondtoFinaladdmtmb> {
                 border: OutlineInputBorder(),
                 labelText: 'Material URL',
               ),
-            ).w64(context),
+            ),
             10.heightBox,
             TextField(
               controller: textFieldController3,
@@ -118,7 +153,7 @@ class _SecondtoFinaladdmtmbState extends State<SecondtoFinaladdmtmb> {
                 border: OutlineInputBorder(),
                 labelText: 'Material Subject',
               ),
-            ).w64(context),
+            ),
             10.heightBox,
             Container(
               child: DropdownButtonFormField(
@@ -136,10 +171,10 @@ class _SecondtoFinaladdmtmbState extends State<SecondtoFinaladdmtmb> {
                 },
                 items: mttypes
                     .map((subject) => DropdownMenuItem(
-                    value: subject, child: Text("$subject".toUpperCase())))
+                        value: subject, child: Text("$subject".toUpperCase())))
                     .toList(),
               ),
-            ).centered().w64(context),
+            ),
             10.heightBox,
             Container(
               child: DropdownButtonFormField(
@@ -157,10 +192,10 @@ class _SecondtoFinaladdmtmbState extends State<SecondtoFinaladdmtmb> {
                 },
                 items: branches
                     .map((subject) => DropdownMenuItem(
-                    value: subject, child: Text("$subject".toUpperCase())))
+                        value: subject, child: Text("$subject".toUpperCase())))
                     .toList(),
               ),
-            ).centered().w64(context),
+            ),
             10.heightBox,
             Container(
               child: DropdownButtonFormField(
@@ -178,28 +213,31 @@ class _SecondtoFinaladdmtmbState extends State<SecondtoFinaladdmtmb> {
                 },
                 items: sems
                     .map((subject) => DropdownMenuItem(
-                    value: subject, child: Text("$subject".toUpperCase())))
+                        value: subject, child: Text("$subject".toUpperCase())))
                     .toList(),
               ),
-            ).centered().w64(context),
+            ),
             10.heightBox,
-            CKOutlineButton(
-              onprassed: () {
-                if ((mtsubject == null) ||
-                    (mtname == null) ||
-                    (mturl == null) ||
-                    (selectedSems == null) ||
-                    (selectedtype == null) ||
-                    (selectedBranch == null)) {
-                  showAlertDialog(context);
-                } else {
-                  setState(() {
-                    isVisible = true;
-                  });
-                  addMaterial();
-                }
-              },
-              buttonText: "Submit",
+            Align(
+              alignment: Alignment.bottomRight,
+              child: CKOutlineButton(
+                onprassed: () {
+                  if ((mtsubject == null) ||
+                      (mtname == null) ||
+                      (mturl == null) ||
+                      (selectedSems == null) ||
+                      (selectedtype == null) ||
+                      (selectedBranch == null)) {
+                    showAlertDialog(context);
+                  } else {
+                    setState(() {
+                      isVisible = true;
+                    });
+                    addMaterial();
+                  }
+                },
+                buttonText: "Submit",
+              ),
             ),
             50.heightBox,
           ])

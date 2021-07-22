@@ -1,18 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mbmelearning/Analytics.dart';
 import 'package:mbmelearning/Widgets/AlertDialog.dart';
 import 'package:mbmelearning/Widgets/Buttons.dart';
 import 'package:mbmelearning/Widgets/customPaint.dart';
 import 'package:mbmelearning/constants.dart';
 import 'package:mbmelearning/mobile/authrepo/UpdateProfile.dart';
 import 'package:mbmelearning/mobile/authrepo/forgetmobile.dart';
-import 'package:mbmelearning/mobile/authrepo/updateprofileNewUser.dart';
-import 'package:mbmelearning/mobile/mobiledashbord.dart';
 import 'package:mbmelearning/mobile/authrepo/signupmobile.dart';
+import 'package:mbmelearning/mobile/authrepo/updateprofileNewUser.dart';
+import 'package:mbmelearning/mobile/mobiledashboard.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:velocity_x/velocity_x.dart';
 
+AnalyticsClass _analyticsClass = AnalyticsClass();
 
 class SigninMobile extends StatefulWidget {
   @override
@@ -28,6 +30,12 @@ class _SigninMobileState extends State<SigninMobile> {
   String password;
 
   bool showSpiner = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _analyticsClass.setCurrentScreen('Sign In Page', 'Auth');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,8 +57,7 @@ class _SigninMobileState extends State<SigninMobile> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => SignupMobile()),
+                  MaterialPageRoute(builder: (context) => SignupMobile()),
                 );
               },
               child: "Signup".text.color(kFirstColour).make(),
@@ -107,43 +114,47 @@ class _SigninMobileState extends State<SigninMobile> {
                             email: email, password: password);
                         if (newUser != null) {
                           userId = _auth.currentUser.uid;
-                          user.doc(userId).get().then((DocumentSnapshot documentSnapshot) {
+                          user
+                              .doc(userId)
+                              .get()
+                              .then((DocumentSnapshot documentSnapshot) {
                             if (documentSnapshot.exists) {
                               var mobile = documentSnapshot.data()['mobileNo'];
                               if (mobile == 'null') {
                                 setState(() {
                                   showSpiner = false;
                                 });
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => UpdateProfile(
-                                          userid: userId,
-                                          userEmail: email,
-                                        )),
-                                  );
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => UpdateProfile(
+                                            userid: userId,
+                                            userEmail: email,
+                                          )),
+                                );
                               } else {
                                 setState(() {
                                   showSpiner = false;
                                 });
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => MobileDashbord()),
-                                  );
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => MobileDashbord()),
+                                );
                               }
                             } else {
                               setState(() {
                                 showSpiner = false;
                               });
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => UpdateProfileOldUser(
-                                      userid: userId,
-                                      userEmail: email,
-                                    ),
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => UpdateProfileOldUser(
+                                    userid: userId,
+                                    userEmail: email,
                                   ),
-                                );
+                                ),
+                              );
                             }
                           });
                         }
@@ -153,23 +164,28 @@ class _SigninMobileState extends State<SigninMobile> {
                             showSpiner = false;
                           });
                           print('No user found for that email.');
-                          showAlertofError(context,
-                              'No user found for that email.',);
+                          showAlertofError(
+                            context,
+                            'No user found for that email.',
+                          );
                         } else if (e.code == 'wrong-password') {
                           setState(() {
                             showSpiner = false;
                           });
                           print('Wrong password provided for that user.');
                           showAlertofError(
-                              context,
-                              'Wrong password provided for that user.',
-                              );
+                            context,
+                            'Wrong password provided for that user.',
+                          );
                         }
                       } catch (e) {
                         setState(() {
                           showSpiner = false;
                         });
-                        showAlertofError(context, e, );
+                        showAlertofError(
+                          context,
+                          e,
+                        );
                         print(e);
                       }
                     }

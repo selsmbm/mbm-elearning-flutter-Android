@@ -1,19 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:mbmelearning/Analytics.dart';
 import 'package:mbmelearning/Widgets/AlertDialog.dart';
 import 'package:mbmelearning/Widgets/Buttons.dart';
 import 'package:mbmelearning/Widgets/customPaint.dart';
 import 'package:mbmelearning/constants.dart';
-import 'package:mbmelearning/mobile/mobiledashbord.dart';
+import 'package:mbmelearning/mobile/mobiledashboard.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:velocity_x/velocity_x.dart';
+
 import '../../branchesandsems.dart';
 
+AnalyticsClass _analyticsClass = AnalyticsClass();
 
 class UpdateProfileOldUser extends StatefulWidget {
   final userid;
   final userEmail;
-  UpdateProfileOldUser({this.userid,this.userEmail});
+  UpdateProfileOldUser({this.userid, this.userEmail});
   @override
   _UpdateProfileOldUserState createState() => _UpdateProfileOldUserState();
 }
@@ -33,12 +36,11 @@ class _UpdateProfileOldUserState extends State<UpdateProfileOldUser> {
       'useremail': widget.userEmail,
       'year': year,
       'branch': branch,
-      'mobileNo':mobileNo,
+      'mobileNo': mobileNo,
     }).then((value) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(
-            builder: (context) => MobileDashbord()),
+        MaterialPageRoute(builder: (context) => MobileDashbord()),
       );
       setState(() {
         showSpiner = false;
@@ -50,6 +52,12 @@ class _UpdateProfileOldUserState extends State<UpdateProfileOldUser> {
         showSpiner = false;
       });
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _analyticsClass.setCurrentScreen('Update profile new', 'Auth');
   }
 
   @override
@@ -103,7 +111,8 @@ class _UpdateProfileOldUserState extends State<UpdateProfileOldUser> {
                     },
                     items: years
                         .map((subject) => DropdownMenuItem(
-                        value: subject, child: Text("$subject".toUpperCase())))
+                            value: subject,
+                            child: Text("$subject".toUpperCase())))
                         .toList(),
                   ),
                 ).centered().w64(context),
@@ -120,21 +129,23 @@ class _UpdateProfileOldUserState extends State<UpdateProfileOldUser> {
                     },
                     items: branches
                         .map((subject) => DropdownMenuItem(
-                        value: subject, child: Text("$subject".toUpperCase())))
+                            value: subject,
+                            child: Text("$subject".toUpperCase())))
                         .toList(),
                   ),
                 ).centered().w64(context),
                 10.heightBox,
                 CKGradientButton(
                   onprassed: () async {
-                    if (mobileNo
-                        .split('')
-                        .length < 10 || mobileNo == '0000000000' ||
+                    if (mobileNo.split('').length < 10 ||
+                        mobileNo == '0000000000' ||
                         mobileNo == '1234567890') {
                       showAlertofError(context, 'invalid mobile number');
                     } else {
                       if (year == null || mobileNo == null || name == null) {
-                        showAlertDialog(context,);
+                        showAlertDialog(
+                          context,
+                        );
                       } else {
                         setState(() {
                           showSpiner = true;
@@ -145,7 +156,10 @@ class _UpdateProfileOldUserState extends State<UpdateProfileOldUser> {
                           setState(() {
                             showSpiner = false;
                           });
-                          showAlertofError(context, e,);
+                          showAlertofError(
+                            context,
+                            e,
+                          );
                           print(e);
                         }
                       }

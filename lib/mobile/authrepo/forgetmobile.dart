@@ -1,12 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mbmelearning/Analytics.dart';
 import 'package:mbmelearning/Widgets/AlertDialog.dart';
 import 'package:mbmelearning/Widgets/Buttons.dart';
 import 'package:mbmelearning/Widgets/customPaint.dart';
 import 'package:mbmelearning/constants.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:velocity_x/velocity_x.dart';
-import 'dart:ui' as ui;
+AnalyticsClass _analyticsClass = AnalyticsClass();
 
 class ForgetMobile extends StatefulWidget {
   @override
@@ -19,6 +20,11 @@ class _ForgetMobileState extends State<ForgetMobile> {
   String email;
   bool showSpiner = false;
 
+  @override
+  void initState() {
+    super.initState();
+    _analyticsClass.setCurrentScreen('Forget Password Page', 'Auth');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +42,7 @@ class _ForgetMobileState extends State<ForgetMobile> {
           children: [
             "Back to".text.color(Colors.grey).make(),
             TextButton(
-              onPressed: (){
+              onPressed: () {
                 Navigator.pop(context);
               },
               child: "Signin".text.color(kFirstColour).make(),
@@ -46,58 +52,58 @@ class _ForgetMobileState extends State<ForgetMobile> {
       ),
       body: ModalProgressHUD(
         inAsyncCall: showSpiner,
-        child: SafeArea(child: VStack([
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                height: 110,
-                width: double.infinity,
-                child: CustomPaint(
-                  painter: RPSCustomPainter(
+        child: SafeArea(
+          child: VStack([
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  height: 110,
+                  width: double.infinity,
+                  child: CustomPaint(
+                    painter: RPSCustomPainter(),
                   ),
                 ),
-              ),
-              "Forgot Password".text.xl4.bold.color(kFirstColour).make(),
-              50.heightBox,
-              TextField(
-                keyboardType: TextInputType.emailAddress,
-                textAlign: TextAlign.center,
-                onChanged: (value) {
-                  email = value;
-                },
-                decoration:
-                kTextFieldDecoration.copyWith(hintText: 'Enter your email'),
-              ).w64(context),
-              10.heightBox,
-              CKGradientButton(
-                onprassed: () async{
-                 if(email == null){
-                   showAlertDialog(context);
-                 } else{
-                   setState(() {
-                     showSpiner = true;
-                   });
-                   try{
-                     await _auth.sendPasswordResetEmail(email: email);
-                     setState(() {
-                       showSpiner = false;
-                       showSuccessAlert(context,"Password Reset email send successfully");
-                     });
-                   }
-                   catch (e){
-                     showAlertofError(context, e);
-                     print(e);
-                   }
-                 }
-                },
-                buttonText: "submit",
-              ),
-            ],
-          ),
-        ]).scrollVertical(physics: AlwaysScrollableScrollPhysics()),),
+                "Forgot Password".text.xl4.bold.color(kFirstColour).make(),
+                50.heightBox,
+                TextField(
+                  keyboardType: TextInputType.emailAddress,
+                  textAlign: TextAlign.center,
+                  onChanged: (value) {
+                    email = value;
+                  },
+                  decoration: kTextFieldDecoration.copyWith(
+                      hintText: 'Enter your email'),
+                ).w64(context),
+                10.heightBox,
+                CKGradientButton(
+                  onprassed: () async {
+                    if (email == null) {
+                      showAlertDialog(context);
+                    } else {
+                      setState(() {
+                        showSpiner = true;
+                      });
+                      try {
+                        await _auth.sendPasswordResetEmail(email: email);
+                        setState(() {
+                          showSpiner = false;
+                          showSuccessAlert(context,
+                              "Password Reset email send successfully");
+                        });
+                      } catch (e) {
+                        showAlertofError(context, e);
+                        print(e);
+                      }
+                    }
+                  },
+                  buttonText: "submit",
+                ),
+              ],
+            ),
+          ]).scrollVertical(physics: AlwaysScrollableScrollPhysics()),
+        ),
       ),
     );
   }
 }
-

@@ -1,18 +1,22 @@
 import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:mbmelearning/Analytics.dart';
 import 'package:mbmelearning/Widgets/AlertDialog.dart';
+import 'package:mbmelearning/Widgets/Buttons.dart';
 import 'package:mbmelearning/Widgets/bottomBar.dart';
-import 'package:mbmelearning/mobile/staticPages/contactmobile.dart';
+import 'package:mbmelearning/constants.dart';
 import 'package:mbmelearning/mobile/authrepo/mobilemainScreen.dart';
+import 'package:mbmelearning/mobile/staticPages/contactmobile.dart';
 import 'package:mbmelearning/mobile/staticPages/tncmb.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:velocity_x/velocity_x.dart';
-import 'package:mbmelearning/constants.dart';
-import 'package:mbmelearning/Widgets/Buttons.dart';
 
+AnalyticsClass _analyticsClass = AnalyticsClass();
 final _auth = FirebaseAuth.instance;
 String email = _auth.currentUser.email;
 String uid = _auth.currentUser.uid;
@@ -25,7 +29,6 @@ class SettingMB extends StatefulWidget {
 }
 
 class _SettingMBState extends State<SettingMB> {
-
   void _changePassword(String newpassword) async {
     _auth.currentUser.updatePassword(newpassword).then((_) {
       showSuccessAlert(context, "Successfully changed password");
@@ -34,23 +37,24 @@ class _SettingMBState extends State<SettingMB> {
     });
   }
 
-  void _deleteAccount() async{
+  void _deleteAccount() async {
     _auth.currentUser.delete().then((value) {
       showSuccessAlert(context, "Successfully Delete your Account");
-      Navigator.push(context, MaterialPageRoute(builder: (context)=>MobileMainScreen()));
-    }).onError((error, stackTrace) => showAlertofError(context,error));
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => MobileMainScreen()));
+    }).onError((error, stackTrace) => showAlertofError(context, error));
   }
 
   Future<void> _confirmDelete(BuildContext context) async {
     Widget cancelButton = FlatButton(
       child: Text("Cancel"),
-      onPressed:  () {
+      onPressed: () {
         Navigator.pop(context);
       },
     );
     Widget continueButton = FlatButton(
       child: Text("delete"),
-      onPressed:  () {
+      onPressed: () {
         _deleteAccount();
       },
     );
@@ -73,12 +77,71 @@ class _SettingMBState extends State<SettingMB> {
       },
     );
   }
+
   final newPassController = TextEditingController();
   final confPassController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    _analyticsClass.setCurrentScreen('Setting', 'Home');
+    createInterstitialAds();
+  }
+
+  InterstitialAd _interstitialAd;
+  int numOfAttemptLoad = 0;
+
+  initialization() {
+    if (MobileAds.instance == null) {
+      MobileAds.instance.initialize();
+    }
+  }
+
+  void createInterstitialAds() {
+    InterstitialAd.load(
+      adUnitId: kInterstitialAdsId,
+      request: AdRequest(),
+      adLoadCallback:
+          InterstitialAdLoadCallback(onAdLoaded: (InterstitialAd ad) {
+        _interstitialAd = ad;
+        numOfAttemptLoad = 0;
+      }, onAdFailedToLoad: (LoadAdError error) {
+        numOfAttemptLoad + 1;
+        _interstitialAd = null;
+
+        if (numOfAttemptLoad <= 2) {
+          createInterstitialAds();
+        }
+      }),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: Container(
+        color: Colors.transparent,
+        height: 50,
+        width: double.infinity,
+        alignment: Alignment.center,
+        child: AdWidget(
+          ad: BannerAd(
+            adUnitId: kBannerAdsId,
+            size: AdSize.banner,
+            request: AdRequest(),
+            listener: BannerAdListener(
+              onAdLoaded: (Ad ad) => print('Ad loaded.'),
+              onAdFailedToLoad: (Ad ad, LoadAdError error) {
+                ad.dispose();
+                print('Ad failed to load: $error');
+              },
+              onAdOpened: (Ad ad) => print('Ad opened.'),
+              onAdClosed: (Ad ad) => print('Ad closed.'),
+              onAdImpression: (Ad ad) => print('Ad impression.'),
+            ),
+          )..load(),
+          key: UniqueKey(),
+        ),
+      ),
       backgroundColor: const Color(0xffffffff),
       body: SafeArea(
         child: ZStack([
@@ -124,20 +187,18 @@ class _SettingMBState extends State<SettingMB> {
               TextButton(
                 onPressed: () {
                   setState(() {
-                    setState(() {
-                      FirebaseFirestore.instance
-                          .collection('share')
-                          .doc('cG2SEGWyCocbHDLdqJLX')
-                          .get()
-                          .then((DocumentSnapshot documentSnapshot) {
-                        if (documentSnapshot.exists) {
-                          launch(
-                              'https://www.addtoany.com/share#url=${documentSnapshot.data()['link']}&title=${documentSnapshot.data()['massage']}');
-                          print('Document data: ${documentSnapshot.data()}');
-                        } else {
-                          launch('https://mbmec.weebly.com/mbm-apk.html');
-                        }
-                      });
+                    FirebaseFirestore.instance
+                        .collection('share')
+                        .doc('cG2SEGWyCocbHDLdqJLX')
+                        .get()
+                        .then((DocumentSnapshot documentSnapshot) {
+                      if (documentSnapshot.exists) {
+                        launch(
+                            'https://www.addtoany.com/share#url=${documentSnapshot.data()['link']}&title=${documentSnapshot.data()['massage']}');
+                        print('Document data: ${documentSnapshot.data()}');
+                      } else {
+                        launch('https://mbmec.weebly.com/mbm-apk.html');
+                      }
                     });
                   });
                 },
@@ -166,6 +227,31 @@ class _SettingMBState extends State<SettingMB> {
             ])
                 .scrollHorizontal(physics: AlwaysScrollableScrollPhysics())
                 .centered(),
+            10.heightBox,
+            Container(
+              color: Colors.transparent,
+              height: 250,
+              width: double.infinity,
+              alignment: Alignment.center,
+              child: AdWidget(
+                ad: BannerAd(
+                  adUnitId: kBannerAdsId,
+                  size: AdSize.mediumRectangle,
+                  request: AdRequest(),
+                  listener: BannerAdListener(
+                    onAdLoaded: (Ad ad) => print('Ad loaded.'),
+                    onAdFailedToLoad: (Ad ad, LoadAdError error) {
+                      ad.dispose();
+                      print('Ad failed to load: $error');
+                    },
+                    onAdOpened: (Ad ad) => print('Ad opened.'),
+                    onAdClosed: (Ad ad) => print('Ad closed.'),
+                    onAdImpression: (Ad ad) => print('Ad impression.'),
+                  ),
+                )..load(),
+                key: UniqueKey(),
+              ),
+            ),
             10.heightBox,
             HStack([
               TextButton(
@@ -267,6 +353,30 @@ class _SettingMBState extends State<SettingMB> {
             ])
                 .scrollHorizontal(physics: AlwaysScrollableScrollPhysics())
                 .centered(),
+            Container(
+              color: Colors.transparent,
+              height: 250,
+              width: double.infinity,
+              alignment: Alignment.center,
+              child: AdWidget(
+                ad: BannerAd(
+                  adUnitId: kBannerAdsId,
+                  size: AdSize.mediumRectangle,
+                  request: AdRequest(),
+                  listener: BannerAdListener(
+                    onAdLoaded: (Ad ad) => print('Ad loaded.'),
+                    onAdFailedToLoad: (Ad ad, LoadAdError error) {
+                      ad.dispose();
+                      print('Ad failed to load: $error');
+                    },
+                    onAdOpened: (Ad ad) => print('Ad opened.'),
+                    onAdClosed: (Ad ad) => print('Ad closed.'),
+                    onAdImpression: (Ad ad) => print('Ad impression.'),
+                  ),
+                )..load(),
+                key: UniqueKey(),
+              ),
+            ),
             20.heightBox,
             "Change Password".text.xl2.color(kFirstColour).make().centered(),
             VxBox().color(kFirstColour).size(60, 2).make().centered(),
@@ -300,7 +410,7 @@ class _SettingMBState extends State<SettingMB> {
                     newPassword == '' ||
                     confirmPassword == '') {
                   showAlertDialog(context);
-                } else{
+                } else {
                   if (newPassword == confirmPassword) {
                     confPassController.clear();
                     newPassController.clear();

@@ -3,10 +3,14 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mbmelearning/Analytics.dart';
+
 import 'mobile/authrepo/UpdateProfile.dart';
 import 'mobile/authrepo/mobilemainScreen.dart';
 import 'mobile/authrepo/updateprofileNewUser.dart';
-import 'mobile/mobiledashbord.dart';
+import 'mobile/mobiledashboard.dart';
+
+AnalyticsClass _analyticsClass = AnalyticsClass();
 
 class LandingPage extends StatefulWidget {
   @override
@@ -69,6 +73,7 @@ class _LandingPageState extends State<LandingPage> {
   void initState() {
     super.initState();
     checkUser();
+    _analyticsClass.setCurrentScreen('Splash Screen', 'Spalsh');
   }
 
   @override

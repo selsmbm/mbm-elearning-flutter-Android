@@ -11,7 +11,18 @@ class ProgressBarCus extends StatelessWidget {
           child: Column(
         children: [
           CircularProgressIndicator(),
+          SizedBox(
+            height: 10,
+          ),
           Text('Loading...'),
+          SizedBox(
+            height: 10,
+          ),
+          Text(
+            'If it takes more time then it \nmeans there is no data or your \ninternet connection is very low.',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 9, color: Colors.red),
+          ),
         ],
       )),
     );

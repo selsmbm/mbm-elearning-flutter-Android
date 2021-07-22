@@ -1,12 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:mbmelearning/Analytics.dart';
 import 'package:mbmelearning/Widgets/AlertDialog.dart';
 import 'package:mbmelearning/Widgets/Buttons.dart';
+import 'package:mbmelearning/constants.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:velocity_x/velocity_x.dart';
-import 'package:mbmelearning/constants.dart';
 
 import '../../branchesandsems.dart';
+
+AnalyticsClass _analyticsClass = AnalyticsClass();
 
 class MathsMtaddMobile extends StatefulWidget {
   final approve;
@@ -20,13 +24,12 @@ class _MathsMtaddMobileState extends State<MathsMtaddMobile> {
   var textFieldController2 = TextEditingController();
   var textFieldController3 = TextEditingController();
 
-  bool isVisible= false;
+  bool isVisible = false;
   String mtname;
   String mturl;
   String mtsubject;
   String mathtype;
   String selectedtype;
-
 
   CollectionReference mt = FirebaseFirestore.instance.collection('mathsmt');
 
@@ -71,21 +74,53 @@ class _MathsMtaddMobileState extends State<MathsMtaddMobile> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _analyticsClass.setCurrentScreen('Math Material Add', 'MtAdd');
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ModalProgressHUD(
       inAsyncCall: isVisible,
       child: Scaffold(
+        bottomNavigationBar: Container(
+          color: Colors.transparent,
+          height: 50,
+          width: double.infinity,
+          alignment: Alignment.center,
+          child: AdWidget(
+            ad: BannerAd(
+              adUnitId: kBannerAdsId,
+              size: AdSize.banner,
+              request: AdRequest(),
+              listener: BannerAdListener(
+                onAdLoaded: (Ad ad) => print('Ad loaded.'),
+                onAdFailedToLoad: (Ad ad, LoadAdError error) {
+                  ad.dispose();
+                  print('Ad failed to load: $error');
+                },
+                onAdOpened: (Ad ad) => print('Ad opened.'),
+                onAdClosed: (Ad ad) => print('Ad closed.'),
+                onAdImpression: (Ad ad) => print('Ad impression.'),
+              ),
+            )..load(),
+            key: UniqueKey(),
+          ),
+        ),
         backgroundColor: const Color(0xffffffff),
         body: SafeArea(
           child: ZStack([
             VStack([
               60.heightBox,
+              Image.asset('assets/signinimg.jpg'),
+              10.heightBox,
               Text(
                 "Only Maths Material Add Hare",
                 style: TextStyle(
                   fontSize: 19,
                 ),
-              ),
+              ).centered(),
               10.heightBox,
               TextField(
                 controller: textFieldController1,
@@ -96,7 +131,7 @@ class _MathsMtaddMobileState extends State<MathsMtaddMobile> {
                   border: OutlineInputBorder(),
                   labelText: 'Material Name',
                 ),
-              ).w64(context),
+              ),
               10.heightBox,
               TextField(
                 controller: textFieldController2,
@@ -107,7 +142,7 @@ class _MathsMtaddMobileState extends State<MathsMtaddMobile> {
                   border: OutlineInputBorder(),
                   labelText: 'Material URL',
                 ),
-              ).w64(context),
+              ),
               10.heightBox,
               TextField(
                 controller: textFieldController3,
@@ -118,7 +153,7 @@ class _MathsMtaddMobileState extends State<MathsMtaddMobile> {
                   border: OutlineInputBorder(),
                   labelText: 'Material Subject',
                 ),
-              ).w64(context),
+              ),
               10.heightBox,
               Container(
                 child: DropdownButtonFormField(
@@ -136,10 +171,11 @@ class _MathsMtaddMobileState extends State<MathsMtaddMobile> {
                   },
                   items: mttypes
                       .map((subject) => DropdownMenuItem(
-                      value: subject, child: Text("$subject".toUpperCase())))
+                          value: subject,
+                          child: Text("$subject".toUpperCase())))
                       .toList(),
                 ),
-              ).centered().w64(context),
+              ),
               10.heightBox,
               Container(
                 child: DropdownButtonFormField(
@@ -157,27 +193,31 @@ class _MathsMtaddMobileState extends State<MathsMtaddMobile> {
                   },
                   items: maths
                       .map((subject) => DropdownMenuItem(
-                      value: subject, child: Text("$subject".toUpperCase())))
+                          value: subject,
+                          child: Text("$subject".toUpperCase())))
                       .toList(),
                 ),
-              ).centered().w64(context),
+              ),
               10.heightBox,
-              CKOutlineButton(
-                onprassed: () {
-                  if ((mtsubject == null) ||
-                      (mtname == null) ||
-                      (mturl == null) ||
-                      (mathtype == null) ||
-                      (selectedtype == null)) {
-                    showAlertDialog(context);
-                  } else {
-                    setState(() {
-                      isVisible = true;
-                    });
-                    addMaterial();
-                  }
-                },
-                buttonText: "Submit",
+              Align(
+                alignment: Alignment.bottomRight,
+                child: CKOutlineButton(
+                  onprassed: () {
+                    if ((mtsubject == null) ||
+                        (mtname == null) ||
+                        (mturl == null) ||
+                        (mathtype == null) ||
+                        (selectedtype == null)) {
+                      showAlertDialog(context);
+                    } else {
+                      setState(() {
+                        isVisible = true;
+                      });
+                      addMaterial();
+                    }
+                  },
+                  buttonText: "Submit",
+                ),
               ),
               20.heightBox,
             ])

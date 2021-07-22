@@ -42,7 +42,7 @@ class _BottomBarState extends State<BottomBar> {
           });
         }, child: "MBM E-LEARNING".text.color(kFirstColour).xl2.bold.make().centered(),),
         "Made by SELS".text.makeCentered(),
-        "Version : ^2.0.0".text.makeCentered(),
+        "Version : ^4.0.0".text.makeCentered(),
         IconButton(
           icon: Icon(AntDesign.linkedin_square,color: kFirstColour,),
           tooltip: 'SELS Linkedin',

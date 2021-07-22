@@ -1,19 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:mbmelearning/Analytics.dart';
 import 'package:mbmelearning/Widgets/AlertDialog.dart';
 import 'package:mbmelearning/Widgets/Buttons.dart';
 import 'package:mbmelearning/Widgets/customPaint.dart';
 import 'package:mbmelearning/constants.dart';
-import 'package:mbmelearning/mobile/mobiledashbord.dart';
+import 'package:mbmelearning/mobile/mobiledashboard.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:velocity_x/velocity_x.dart';
+
 import '../../branchesandsems.dart';
 
+AnalyticsClass _analyticsClass = AnalyticsClass();
 
 class UpdateProfile extends StatefulWidget {
   final userid;
   final userEmail;
-  UpdateProfile({this.userid,this.userEmail});
+  UpdateProfile({this.userid, this.userEmail});
   @override
   _UpdateProfileState createState() => _UpdateProfileState();
 }
@@ -30,12 +33,11 @@ class _UpdateProfileState extends State<UpdateProfile> {
     return user.doc(id).update({
       'year': year,
       'branch': branch,
-      'mobileNo':mobileNo,
+      'mobileNo': mobileNo,
     }).then((value) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(
-            builder: (context) => MobileDashbord()),
+        MaterialPageRoute(builder: (context) => MobileDashbord()),
       );
       setState(() {
         showSpiner = false;
@@ -47,6 +49,12 @@ class _UpdateProfileState extends State<UpdateProfile> {
         showSpiner = false;
       });
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _analyticsClass.setCurrentScreen('Update profile', 'Auth');
   }
 
   @override
@@ -90,7 +98,8 @@ class _UpdateProfileState extends State<UpdateProfile> {
                     },
                     items: years
                         .map((subject) => DropdownMenuItem(
-                        value: subject, child: Text("$subject".toUpperCase())))
+                            value: subject,
+                            child: Text("$subject".toUpperCase())))
                         .toList(),
                   ),
                 ).centered().w64(context),
@@ -107,18 +116,23 @@ class _UpdateProfileState extends State<UpdateProfile> {
                     },
                     items: branches
                         .map((subject) => DropdownMenuItem(
-                        value: subject, child: Text("$subject".toUpperCase())))
+                            value: subject,
+                            child: Text("$subject".toUpperCase())))
                         .toList(),
                   ),
                 ).centered().w64(context),
                 10.heightBox,
                 CKGradientButton(
                   onprassed: () async {
-                    if (mobileNo.split('').length<10 || mobileNo == '0000000000' || mobileNo == '1234567890') {
-                      showAlertofError(context,'invalid mobile number');
-                    } else{
+                    if (mobileNo.split('').length < 10 ||
+                        mobileNo == '0000000000' ||
+                        mobileNo == '1234567890') {
+                      showAlertofError(context, 'invalid mobile number');
+                    } else {
                       if (year == null || mobileNo == null) {
-                        showAlertDialog(context,);
+                        showAlertDialog(
+                          context,
+                        );
                       } else {
                         setState(() {
                           showSpiner = true;
@@ -129,7 +143,10 @@ class _UpdateProfileState extends State<UpdateProfile> {
                           setState(() {
                             showSpiner = false;
                           });
-                          showAlertofError(context, e,);
+                          showAlertofError(
+                            context,
+                            e,
+                          );
                           print(e);
                         }
                       }

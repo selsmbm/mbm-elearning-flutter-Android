@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_in_app_messaging/firebase_in_app_messaging.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -7,11 +8,13 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:in_app_update/in_app_update.dart';
+import 'package:mbmelearning/Analytics.dart';
 import 'package:mbmelearning/Widgets/AlertDialog.dart';
 import 'package:mbmelearning/branchesandsems.dart';
 import 'package:mbmelearning/constants.dart';
 import 'package:mbmelearning/mobile/Feed/MbmStories.dart';
 import 'package:mbmelearning/mobile/Feed/Notification.dart';
+import 'package:mbmelearning/mobile/Feed/TeachersDetails.dart';
 import 'package:mbmelearning/mobile/materialpagebyyear/FirstYearMtPageMb.dart';
 import 'package:mbmelearning/mobile/materialpagebyyear/GateMaterial.dart';
 import 'package:mbmelearning/mobile/materialpagebyyear/SecondYearMtPageMb.dart';
@@ -23,6 +26,34 @@ import 'package:velocity_x/velocity_x.dart';
 import 'materialadd/firstyearmtaddmb.dart';
 import 'materialadd/mathmtaddmb.dart';
 import 'materialadd/secondtofinaladdmtmb.dart';
+
+AnalyticsClass _analyticsClass = AnalyticsClass();
+InterstitialAd _interstitialAd;
+int numOfAttemptLoad = 0;
+
+initialization() {
+  if (MobileAds.instance == null) {
+    MobileAds.instance.initialize();
+  }
+}
+
+void createInterstitialAds() {
+  InterstitialAd.load(
+    adUnitId: kInterstitialAdsId,
+    request: AdRequest(),
+    adLoadCallback: InterstitialAdLoadCallback(onAdLoaded: (InterstitialAd ad) {
+      _interstitialAd = ad;
+      numOfAttemptLoad = 0;
+    }, onAdFailedToLoad: (LoadAdError error) {
+      numOfAttemptLoad + 1;
+      _interstitialAd = null;
+
+      if (numOfAttemptLoad <= 2) {
+        createInterstitialAds();
+      }
+    }),
+  );
+}
 
 class MobileDashbord extends StatefulWidget {
   @override
@@ -117,6 +148,11 @@ class _MobileDashbordState extends State<MobileDashbord> {
   @override
   void initState() {
     super.initState();
+    _analyticsClass.setCurrentScreen('Dashboard', 'Home');
+    _analyticsClass.setUserId(
+        FirebaseAuth.instance.currentUser.uid,
+        FirebaseAuth.instance.currentUser.email,
+        FirebaseAuth.instance.currentUser.uid);
     createInterstitialAds();
     FirebaseInAppMessaging.instance.setMessagesSuppressed(true);
     messaging = FirebaseMessaging.instance;
@@ -124,7 +160,7 @@ class _MobileDashbordState extends State<MobileDashbord> {
       print(json.decode(value)['notification']);
     });
     FirebaseMessaging.onMessage.listen((RemoteMessage event) {
-      print("message recieved");
+      print("message received");
       print(event.notification.body);
       showDialog(
           context: context,
@@ -151,34 +187,6 @@ class _MobileDashbordState extends State<MobileDashbord> {
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
       print('Message clicked!');
     });
-  }
-
-  InterstitialAd _interstitialAd;
-  int numOfAttemptLoad = 0;
-
-  initialization() {
-    if (MobileAds.instance == null) {
-      MobileAds.instance.initialize();
-    }
-  }
-
-  void createInterstitialAds() {
-    InterstitialAd.load(
-      adUnitId: kInterstitialAdsId,
-      request: AdRequest(),
-      adLoadCallback:
-          InterstitialAdLoadCallback(onAdLoaded: (InterstitialAd ad) {
-        _interstitialAd = ad;
-        numOfAttemptLoad = 0;
-      }, onAdFailedToLoad: (LoadAdError error) {
-        numOfAttemptLoad + 1;
-        _interstitialAd = null;
-
-        if (numOfAttemptLoad <= 2) {
-          createInterstitialAds();
-        }
-      }),
-    );
   }
 
   void showInterstitialAds() {
@@ -394,6 +402,7 @@ class _MobileDashbordState extends State<MobileDashbord> {
                   setState(() {
                     selectedBranch = value;
                   });
+                  setState(() {});
                 },
                 items: branches
                     .map((subject) => DropdownMenuItem(
@@ -563,7 +572,7 @@ class _MobileDashbordState extends State<MobileDashbord> {
                   },
                 ),
                 MBMButtons(
-                  title: 'T&P',
+                  title: 'T&P\nCell',
                   color: Color(0xFF63B3ED),
                   onPressed: () {
                     launch('https://mbmec.weebly.com/t--p-cell.html');
@@ -577,18 +586,32 @@ class _MobileDashbordState extends State<MobileDashbord> {
                         MaterialPageRoute(builder: (context) => MBMStories()));
                   },
                 ),
-                MBMButtons(
-                  title: 'Gate',
-                  color: Color(0xFF63B3ED),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => GateMaterial()));
-                  },
-                ),
               ],
             ).centered(),
+            Container(
+              color: Colors.transparent,
+              height: 250,
+              width: double.infinity,
+              alignment: Alignment.center,
+              child: AdWidget(
+                ad: BannerAd(
+                  adUnitId: kBannerAdsId,
+                  size: AdSize.mediumRectangle,
+                  request: AdRequest(),
+                  listener: BannerAdListener(
+                    onAdLoaded: (Ad ad) => print('Ad loaded.'),
+                    onAdFailedToLoad: (Ad ad, LoadAdError error) {
+                      ad.dispose();
+                      print('Ad failed to load: $error');
+                    },
+                    onAdOpened: (Ad ad) => print('Ad opened.'),
+                    onAdClosed: (Ad ad) => print('Ad closed.'),
+                    onAdImpression: (Ad ad) => print('Ad impression.'),
+                  ),
+                )..load(),
+                key: UniqueKey(),
+              ),
+            ),
             20.heightBox,
             "Copyright © All rights reserved | Made by SELS"
                 .text
@@ -611,15 +634,40 @@ class _MobileDashbordState extends State<MobileDashbord> {
                             bottom: MediaQuery.of(context).viewInsets.bottom),
                         child: Container(
                           color: Colors.white,
-                          height: 200,
+                          height: 250,
                           child: VStack([
                             TextButton(
                               onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => UsefulLinkMb()),
-                                );
+                                if (_interstitialAd == null) {
+                                  return;
+                                }
+
+                                _interstitialAd.fullScreenContentCallback =
+                                    FullScreenContentCallback(
+                                        onAdShowedFullScreenContent:
+                                            (InterstitialAd ad) {
+                                  print("ad onAdshowedFullscreen");
+                                }, onAdDismissedFullScreenContent:
+                                            (InterstitialAd ad) {
+                                  print("ad Disposed");
+                                  ad.dispose();
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => UsefulLinkMb()),
+                                  );
+                                  createInterstitialAds();
+                                }, onAdFailedToShowFullScreenContent:
+                                            (InterstitialAd ad,
+                                                AdError aderror) {
+                                  print('$ad OnAdFailed $aderror');
+                                  ad.dispose();
+                                  createInterstitialAds();
+                                });
+
+                                _interstitialAd.show();
+
+                                _interstitialAd = null;
                               },
                               child: HStack([
                                 Icon(
@@ -632,11 +680,118 @@ class _MobileDashbordState extends State<MobileDashbord> {
                             ),
                             TextButton(
                               onPressed: () {
-                                Navigator.push(
+                                if (_interstitialAd == null) {
+                                  return;
+                                }
+
+                                _interstitialAd.fullScreenContentCallback =
+                                    FullScreenContentCallback(
+                                        onAdShowedFullScreenContent:
+                                            (InterstitialAd ad) {
+                                  print("ad onAdshowedFullscreen");
+                                }, onAdDismissedFullScreenContent:
+                                            (InterstitialAd ad) {
+                                  print("ad Disposed");
+                                  ad.dispose();
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              TeachersDetails()));
+                                  createInterstitialAds();
+                                }, onAdFailedToShowFullScreenContent:
+                                            (InterstitialAd ad,
+                                                AdError aderror) {
+                                  print('$ad OnAdFailed $aderror');
+                                  ad.dispose();
+                                  createInterstitialAds();
+                                });
+
+                                _interstitialAd.show();
+
+                                _interstitialAd = null;
+                              },
+                              child: HStack([
+                                Icon(Icons.history_edu, color: kFirstColour),
+                                10.widthBox,
+                                "Teachers".text.black.xl.make(),
+                              ]),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                if (_interstitialAd == null) {
+                                  return;
+                                }
+
+                                _interstitialAd.fullScreenContentCallback =
+                                    FullScreenContentCallback(
+                                        onAdShowedFullScreenContent:
+                                            (InterstitialAd ad) {
+                                  print("ad onAdshowedFullscreen");
+                                }, onAdDismissedFullScreenContent:
+                                            (InterstitialAd ad) {
+                                  print("ad Disposed");
+                                  ad.dispose();
+                                  Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            NotificationsPage()));
+                                      builder: (context) => GateMaterial(),
+                                    ),
+                                  );
+                                  createInterstitialAds();
+                                }, onAdFailedToShowFullScreenContent:
+                                            (InterstitialAd ad,
+                                                AdError aderror) {
+                                  print('$ad OnAdFailed $aderror');
+                                  ad.dispose();
+                                  createInterstitialAds();
+                                });
+
+                                _interstitialAd.show();
+
+                                _interstitialAd = null;
+                              },
+                              child: HStack([
+                                Icon(
+                                  Icons.book,
+                                  color: kFirstColour,
+                                ),
+                                10.widthBox,
+                                "GATE/IES/UPSC/SSC/CAT".text.black.xl.make(),
+                              ]),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                if (_interstitialAd == null) {
+                                  return;
+                                }
+
+                                _interstitialAd.fullScreenContentCallback =
+                                    FullScreenContentCallback(
+                                        onAdShowedFullScreenContent:
+                                            (InterstitialAd ad) {
+                                  print("ad onAdshowedFullscreen");
+                                }, onAdDismissedFullScreenContent:
+                                            (InterstitialAd ad) {
+                                  print("ad Disposed");
+                                  ad.dispose();
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              NotificationsPage()));
+                                  createInterstitialAds();
+                                }, onAdFailedToShowFullScreenContent:
+                                            (InterstitialAd ad,
+                                                AdError aderror) {
+                                  print('$ad OnAdFailed $aderror');
+                                  ad.dispose();
+                                  createInterstitialAds();
+                                });
+
+                                _interstitialAd.show();
+
+                                _interstitialAd = null;
                               },
                               child: HStack([
                                 Icon(Icons.notification_important_rounded,
@@ -660,11 +815,36 @@ class _MobileDashbordState extends State<MobileDashbord> {
                             ),
                             TextButton(
                               onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => SettingMB()),
-                                );
+                                if (_interstitialAd == null) {
+                                  return;
+                                }
+
+                                _interstitialAd.fullScreenContentCallback =
+                                    FullScreenContentCallback(
+                                        onAdShowedFullScreenContent:
+                                            (InterstitialAd ad) {
+                                  print("ad onAdshowedFullscreen");
+                                }, onAdDismissedFullScreenContent:
+                                            (InterstitialAd ad) {
+                                  print("ad Disposed");
+                                  ad.dispose();
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => SettingMB()),
+                                  );
+                                  createInterstitialAds();
+                                }, onAdFailedToShowFullScreenContent:
+                                            (InterstitialAd ad,
+                                                AdError aderror) {
+                                  print('$ad OnAdFailed $aderror');
+                                  ad.dispose();
+                                  createInterstitialAds();
+                                });
+
+                                _interstitialAd.show();
+
+                                _interstitialAd = null;
                               },
                               child: HStack([
                                 Icon(
@@ -714,14 +894,37 @@ class MBMButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      onPressed: onPressed,
+      onPressed: () {
+        if (_interstitialAd == null) {
+          return;
+        }
+
+        _interstitialAd.fullScreenContentCallback = FullScreenContentCallback(
+            onAdShowedFullScreenContent: (InterstitialAd ad) {
+          print("ad onAdshowedFullscreen");
+        }, onAdDismissedFullScreenContent: (InterstitialAd ad) {
+          print("ad Disposed");
+          ad.dispose();
+          onPressed();
+          createInterstitialAds();
+        }, onAdFailedToShowFullScreenContent:
+                (InterstitialAd ad, AdError aderror) {
+          print('$ad OnAdFailed $aderror');
+          ad.dispose();
+          createInterstitialAds();
+        });
+
+        _interstitialAd.show();
+
+        _interstitialAd = null;
+      },
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.0),
           color: color,
         ),
-        height: 90,
-        width: 90,
+        height: 100,
+        width: 150,
         child: title.text.xl2.white
             .align(TextAlign.center)
             .makeCentered()

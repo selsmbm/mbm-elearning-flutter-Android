@@ -2,12 +2,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:mbmelearning/mobile/mobiledashbord.dart';
+import 'package:mbmelearning/Analytics.dart';
+import 'package:mbmelearning/Widgets/Buttons.dart';
+import 'package:mbmelearning/constants.dart';
 import 'package:mbmelearning/mobile/authrepo/signinmobile.dart';
 import 'package:mbmelearning/mobile/authrepo/signupmobile.dart';
 import 'package:velocity_x/velocity_x.dart';
-import 'package:mbmelearning/Widgets/Buttons.dart';
-import 'package:mbmelearning/constants.dart';
+
+AnalyticsClass _analyticsClass = AnalyticsClass();
 
 //Todo:google signin.
 class MobileMainScreen extends StatefulWidget {
@@ -31,15 +33,18 @@ class _MobileMainScreenState extends State<MobileMainScreen> {
     // Initialize Firebase
     await Firebase.initializeApp();
 
-    final GoogleSignInAccount googleSignInAccount = await _googleSignIn.signIn();
-    final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount.authentication;
+    final GoogleSignInAccount googleSignInAccount =
+        await _googleSignIn.signIn();
+    final GoogleSignInAuthentication googleSignInAuthentication =
+        await googleSignInAccount.authentication;
 
     final AuthCredential credential = GoogleAuthProvider.credential(
       accessToken: googleSignInAuthentication.accessToken,
       idToken: googleSignInAuthentication.idToken,
     );
 
-    final UserCredential userCredential = await _auth.signInWithCredential(credential);
+    final UserCredential userCredential =
+        await _auth.signInWithCredential(credential);
     final User user = userCredential.user;
 
     if (user != null) {
@@ -68,6 +73,13 @@ class _MobileMainScreenState extends State<MobileMainScreen> {
 
     return null;
   }
+
+  @override
+  void initState() {
+    super.initState();
+    _analyticsClass.setCurrentScreen('MainScreen', 'Auth');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,7 +91,7 @@ class _MobileMainScreenState extends State<MobileMainScreen> {
           10.heightBox,
           Center(
             child: Image.asset(
-                'assets/mainscreen.png',
+              'assets/mainscreen.png',
               height: 300,
               width: 300,
             ),
@@ -88,7 +100,7 @@ class _MobileMainScreenState extends State<MobileMainScreen> {
           HStack([
             CKGradientButton(
               buttonText: "Signin",
-              onprassed: (){
+              onprassed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => SigninMobile()),
@@ -98,7 +110,7 @@ class _MobileMainScreenState extends State<MobileMainScreen> {
             30.widthBox,
             CKOutlineButton(
               buttonText: "Signup",
-              onprassed: (){
+              onprassed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => SignupMobile()),
@@ -139,4 +151,3 @@ class _MobileMainScreenState extends State<MobileMainScreen> {
     );
   }
 }
-

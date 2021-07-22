@@ -12,6 +12,7 @@ const List<String> branches = [
   'BCT',
   'IT',
   'PE',
+  'AE',
 ];
 const List<String> sems = [
   '3sem',
@@ -34,7 +35,7 @@ const List<String> firstyr = [
   'mechanicalsem',
 ];
 
-const List<String> mttypes =[
+const List<String> mttypes = [
   'notes',
   'paper',
   'book',
@@ -42,7 +43,7 @@ const List<String> mttypes =[
   'video',
 ];
 
-const List<String> years =[
+const List<String> years = [
   '1',
   '2',
   '3',

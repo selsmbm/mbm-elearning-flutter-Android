@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:mbmelearning/constants.dart';
 import 'package:mbmelearning/mobile/admin/addusefullinks.dart';
 import 'package:mbmelearning/mobile/materialadd/firstyearmtaddmb.dart';
 import 'package:mbmelearning/mobile/materialadd/mathmtaddmb.dart';
 import 'package:mbmelearning/mobile/materialadd/secondtofinaladdmtmb.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:velocity_x/velocity_x.dart';
-import 'package:mbmelearning/constants.dart';
 
 class AdminMobileDashbord extends StatefulWidget {
   @override
@@ -163,6 +164,14 @@ class _AdminMobileDashbordState extends State<AdminMobileDashbord> {
                 ),
               ),
             ]).centered(),
+            20.heightBox,
+            TextButton(
+                    onPressed: () {
+                      launch(
+                          'https://docs.google.com/spreadsheets/d/1rPIc8dEupQdp8YosDsKt9PW1gmYIqcUEf3srhjHZa84/edit?usp=sharing');
+                    },
+                    child: 'Gate Material Sheet'.text.make())
+                .centered(),
             20.heightBox,
           ]).scrollVertical(physics: AlwaysScrollableScrollPhysics()).p(20),
           Row(
