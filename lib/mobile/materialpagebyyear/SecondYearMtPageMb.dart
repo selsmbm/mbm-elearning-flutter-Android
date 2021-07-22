@@ -12,32 +12,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 AnalyticsClass _analyticsClass = AnalyticsClass();
-InterstitialAd _interstitialAd;
-int numOfAttemptLoad = 0;
-
-initialization() {
-  if (MobileAds.instance == null) {
-    MobileAds.instance.initialize();
-  }
-}
-
-void createInterstitialAds() {
-  InterstitialAd.load(
-    adUnitId: kInterstitialAdsId,
-    request: AdRequest(),
-    adLoadCallback: InterstitialAdLoadCallback(onAdLoaded: (InterstitialAd ad) {
-      _interstitialAd = ad;
-      numOfAttemptLoad = 0;
-    }, onAdFailedToLoad: (LoadAdError error) {
-      numOfAttemptLoad += 1;
-      _interstitialAd = null;
-
-      if (numOfAttemptLoad <= 2) {
-        createInterstitialAds();
-      }
-    }),
-  );
-}
 
 class SecondYearMtPageMb extends StatefulWidget {
   final String sem;
@@ -53,7 +27,6 @@ class _SecondYearMtPageMbState extends State<SecondYearMtPageMb> {
     super.initState();
     _analyticsClass.setCurrentScreen(
         'Second to final year Material', 'Material');
-    createInterstitialAds();
   }
 
   @override
@@ -310,32 +283,7 @@ class _MaterialTileState extends State<MaterialTile> {
                           .map(
                             (doc) => MtTileSecondToFinalListTile(
                               onPressed: () {
-                                if (_interstitialAd == null) {
-                                  launch("${doc['mturl']}");
-                                }
-
-                                _interstitialAd.fullScreenContentCallback =
-                                    FullScreenContentCallback(
-                                        onAdShowedFullScreenContent:
-                                            (InterstitialAd ad) {
-                                  print("ad onAdshowedFullscreen");
-                                }, onAdDismissedFullScreenContent:
-                                            (InterstitialAd ad) {
-                                  print("ad Disposed");
-                                  ad.dispose();
-                                  launch("${doc['mturl']}");
-                                  createInterstitialAds();
-                                }, onAdFailedToShowFullScreenContent:
-                                            (InterstitialAd ad,
-                                                AdError aderror) {
-                                  print('$ad OnAdFailed $aderror');
-                                  ad.dispose();
-                                  createInterstitialAds();
-                                });
-
-                                _interstitialAd.show();
-
-                                _interstitialAd = null;
+                                launch("${doc['mturl']}");
                               },
                               name: "${doc['mtname']}",
                               subject: "${doc['mtsubject']}",
@@ -532,35 +480,7 @@ class _MaterialTileState extends State<MaterialTile> {
                       itemBuilder: (context, index) {
                         return MtTileSecondToFinalListTile(
                           onPressed: () {
-                            setState(() {
-                              if (_interstitialAd == null) {
-                                launch(
-                                    "${_materialFilteredList[index]['mturl']}");
-                              }
-
-                              _interstitialAd.fullScreenContentCallback =
-                                  FullScreenContentCallback(
-                                      onAdShowedFullScreenContent:
-                                          (InterstitialAd ad) {
-                                print("ad onAdshowedFullscreen");
-                              }, onAdDismissedFullScreenContent:
-                                          (InterstitialAd ad) {
-                                print("ad Disposed");
-                                ad.dispose();
-                                launch(
-                                    "${_materialFilteredList[index]['mturl']}");
-                                createInterstitialAds();
-                              }, onAdFailedToShowFullScreenContent:
-                                          (InterstitialAd ad, AdError aderror) {
-                                print('$ad OnAdFailed $aderror');
-                                ad.dispose();
-                                createInterstitialAds();
-                              });
-
-                              _interstitialAd.show();
-
-                              _interstitialAd = null;
-                            });
+                            launch("${_materialFilteredList[index]['mturl']}");
                           },
                           name: "${_materialFilteredList[index]['mtname']}",
                           subject:

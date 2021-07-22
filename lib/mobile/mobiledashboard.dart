@@ -83,54 +83,6 @@ class _MobileDashbordState extends State<MobileDashbord> {
     ),
   );
 
-  BannerAd _kAMediumBannerAds1 = BannerAd(
-    adUnitId: kBannerAdsId,
-    size: AdSize.largeBanner,
-    request: AdRequest(),
-    listener: BannerAdListener(
-      onAdLoaded: (Ad ad) => print('Ad loaded.'),
-      onAdFailedToLoad: (Ad ad, LoadAdError error) {
-        ad.dispose();
-        print('Ad failed to load: $error');
-      },
-      onAdOpened: (Ad ad) => print('Ad opened.'),
-      onAdClosed: (Ad ad) => print('Ad closed.'),
-      onAdImpression: (Ad ad) => print('Ad impression.'),
-    ),
-  );
-
-  BannerAd _kAMediumBannerAds2 = BannerAd(
-    adUnitId: kBannerAdsId,
-    size: AdSize.largeBanner,
-    request: AdRequest(),
-    listener: BannerAdListener(
-      onAdLoaded: (Ad ad) => print('Ad loaded.'),
-      onAdFailedToLoad: (Ad ad, LoadAdError error) {
-        ad.dispose();
-        print('Ad failed to load: $error');
-      },
-      onAdOpened: (Ad ad) => print('Ad opened.'),
-      onAdClosed: (Ad ad) => print('Ad closed.'),
-      onAdImpression: (Ad ad) => print('Ad impression.'),
-    ),
-  );
-
-  BannerAd _kALargeBannerAds = BannerAd(
-    adUnitId: kBannerAdsId,
-    size: AdSize.mediumRectangle,
-    request: AdRequest(),
-    listener: BannerAdListener(
-      onAdLoaded: (Ad ad) => print('Ad loaded.'),
-      onAdFailedToLoad: (Ad ad, LoadAdError error) {
-        ad.dispose();
-        print('Ad failed to load: $error');
-      },
-      onAdOpened: (Ad ad) => print('Ad opened.'),
-      onAdClosed: (Ad ad) => print('Ad closed.'),
-      onAdImpression: (Ad ad) => print('Ad impression.'),
-    ),
-  );
-
   Future<void> checkForUpdate() async {
     InAppUpdate.checkForUpdate().then((info) {
       setState(() {
@@ -191,7 +143,9 @@ class _MobileDashbordState extends State<MobileDashbord> {
 
   void showInterstitialAds() {
     if (_interstitialAd == null) {
-      return;
+      if (firstyrsem != null) _firstYearNavigator();
+      if (selectedSems != null) _secondToFinalYearNavigator();
+      if (mathtype != null) _mathNavigator();
     }
 
     _interstitialAd.fullScreenContentCallback = FullScreenContentCallback(
@@ -342,17 +296,6 @@ class _MobileDashbordState extends State<MobileDashbord> {
                     .toList(),
               ),
             ).centered(),
-            10.heightBox,
-            Container(
-              color: Colors.transparent,
-              height: 100,
-              width: double.infinity,
-              alignment: Alignment.center,
-              child: AdWidget(
-                ad: _kAMediumBannerAds1..load(),
-                key: UniqueKey(),
-              ),
-            ),
             25.heightBox,
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -438,17 +381,6 @@ class _MobileDashbordState extends State<MobileDashbord> {
                     .toList(),
               ),
             ).centered(),
-            10.heightBox,
-            Container(
-              color: Colors.transparent,
-              height: 100,
-              width: double.infinity,
-              alignment: Alignment.center,
-              child: AdWidget(
-                ad: _kAMediumBannerAds2..load(),
-                key: UniqueKey(),
-              ),
-            ),
             25.heightBox,
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -507,17 +439,6 @@ class _MobileDashbordState extends State<MobileDashbord> {
                     .toList(),
               ),
             ).centered(),
-            10.heightBox,
-            Container(
-              color: Colors.transparent,
-              height: 250,
-              width: double.infinity,
-              alignment: Alignment.center,
-              child: AdWidget(
-                ad: _kALargeBannerAds..load(),
-                key: UniqueKey(),
-              ),
-            ),
             20.heightBox,
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -639,7 +560,11 @@ class _MobileDashbordState extends State<MobileDashbord> {
                             TextButton(
                               onPressed: () {
                                 if (_interstitialAd == null) {
-                                  return;
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => UsefulLinkMb()),
+                                  );
                                 }
 
                                 _interstitialAd.fullScreenContentCallback =
@@ -681,7 +606,12 @@ class _MobileDashbordState extends State<MobileDashbord> {
                             TextButton(
                               onPressed: () {
                                 if (_interstitialAd == null) {
-                                  return;
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => TeachersDetails(),
+                                    ),
+                                  );
                                 }
 
                                 _interstitialAd.fullScreenContentCallback =
@@ -720,7 +650,12 @@ class _MobileDashbordState extends State<MobileDashbord> {
                             TextButton(
                               onPressed: () {
                                 if (_interstitialAd == null) {
-                                  return;
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => GateMaterial(),
+                                    ),
+                                  );
                                 }
 
                                 _interstitialAd.fullScreenContentCallback =
@@ -763,7 +698,11 @@ class _MobileDashbordState extends State<MobileDashbord> {
                             TextButton(
                               onPressed: () {
                                 if (_interstitialAd == null) {
-                                  return;
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              NotificationsPage()));
                                 }
 
                                 _interstitialAd.fullScreenContentCallback =
@@ -816,7 +755,11 @@ class _MobileDashbordState extends State<MobileDashbord> {
                             TextButton(
                               onPressed: () {
                                 if (_interstitialAd == null) {
-                                  return;
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => SettingMB()),
+                                  );
                                 }
 
                                 _interstitialAd.fullScreenContentCallback =
@@ -896,7 +839,7 @@ class MBMButtons extends StatelessWidget {
     return TextButton(
       onPressed: () {
         if (_interstitialAd == null) {
-          return;
+          onPressed();
         }
 
         _interstitialAd.fullScreenContentCallback = FullScreenContentCallback(

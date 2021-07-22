@@ -132,7 +132,7 @@ class _TeachersDetailsState extends State<TeachersDetails> {
                 Expanded(
                   child: ListView.separated(
                       separatorBuilder: (context, index) {
-                        if (index % 3 == 0) {
+                        if (index % 7 == 0) {
                           return Container(
                             color: Colors.transparent,
                             height: 100,
@@ -616,7 +616,7 @@ class _TeachersDetailsState extends State<TeachersDetails> {
                         } else {
                           return ListView.separated(
                               separatorBuilder: (context, index) {
-                                if (index % 3 == 0) {
+                                if (index % 7 == 0) {
                                   return Container(
                                     color: Colors.transparent,
                                     height: 100,

@@ -64,7 +64,7 @@ class _GateMaterialState extends State<GateMaterial> {
         _interstitialAd = ad;
         numOfAttemptLoad = 0;
       }, onAdFailedToLoad: (LoadAdError error) {
-        numOfAttemptLoad + 1;
+        numOfAttemptLoad += 1;
         _interstitialAd = null;
 
         if (numOfAttemptLoad <= 2) {
@@ -148,7 +148,7 @@ class _GateMaterialState extends State<GateMaterial> {
                 Expanded(
                   child: ListView.separated(
                       separatorBuilder: (context, index) {
-                        if (index % 3 == 0) {
+                        if (index % 7 == 0) {
                           return Container(
                             color: Colors.transparent,
                             height: 100,
@@ -219,7 +219,8 @@ class _GateMaterialState extends State<GateMaterial> {
                                         _filteredData[index]['url'].toString(),
                                     onOpen: (l) {
                                       if (_interstitialAd == null) {
-                                        launch("${_filteredData[index]['url'].toString()}");
+                                        launch(
+                                            "${_filteredData[index]['url'].toString()}");
                                       }
 
                                       _interstitialAd
@@ -265,7 +266,7 @@ class _GateMaterialState extends State<GateMaterial> {
                         } else {
                           return ListView.separated(
                               separatorBuilder: (context, index) {
-                                if (index % 3 == 0) {
+                                if (index % 9 == 0) {
                                   return Container(
                                     color: Colors.transparent,
                                     height: 100,

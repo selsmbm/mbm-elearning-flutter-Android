@@ -91,7 +91,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                     padding: const EdgeInsets.only(top: 40.0),
                     child: ListView.separated(
                         separatorBuilder: (context, index) {
-                          if (index % 3 == 0) {
+                          if (index % 7 == 0) {
                             return Container(
                               color: Colors.transparent,
                               height: 100,
