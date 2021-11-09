@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:http/http.dart' as http;
 import 'package:mbmelearning/Analytics.dart';
 import 'package:mbmelearning/constants.dart';
@@ -33,36 +32,36 @@ class _NotificationsPageState extends State<NotificationsPage> {
   void initState() {
     super.initState();
     _analyticsClass.setCurrentScreen('Notification', 'Home');
-    createInterstitialAds();
+    // createInterstitialAds();
   }
 
-  InterstitialAd _interstitialAd;
-  int numOfAttemptLoad = 0;
-
-  initialization() {
-    if (MobileAds.instance == null) {
-      MobileAds.instance.initialize();
-    }
-  }
-
-  void createInterstitialAds() {
-    InterstitialAd.load(
-      adUnitId: kInterstitialAdsId,
-      request: AdRequest(),
-      adLoadCallback:
-          InterstitialAdLoadCallback(onAdLoaded: (InterstitialAd ad) {
-        _interstitialAd = ad;
-        numOfAttemptLoad = 0;
-      }, onAdFailedToLoad: (LoadAdError error) {
-        numOfAttemptLoad + 1;
-        _interstitialAd = null;
-
-        if (numOfAttemptLoad <= 2) {
-          createInterstitialAds();
-        }
-      }),
-    );
-  }
+  // InterstitialAd _interstitialAd;
+  // int numOfAttemptLoad = 0;
+  //
+  // initialization() {
+  //   if (MobileAds.instance == null) {
+  //     MobileAds.instance.initialize();
+  //   }
+  // }
+  //
+  // void createInterstitialAds() {
+  //   InterstitialAd.load(
+  //     adUnitId: kInterstitialAdsId,
+  //     request: AdRequest(),
+  //     adLoadCallback:
+  //         InterstitialAdLoadCallback(onAdLoaded: (InterstitialAd ad) {
+  //       _interstitialAd = ad;
+  //       numOfAttemptLoad = 0;
+  //     }, onAdFailedToLoad: (LoadAdError error) {
+  //       numOfAttemptLoad + 1;
+  //       _interstitialAd = null;
+  //
+  //       if (numOfAttemptLoad <= 2) {
+  //         createInterstitialAds();
+  //       }
+  //     }),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -91,38 +90,41 @@ class _NotificationsPageState extends State<NotificationsPage> {
                     padding: const EdgeInsets.only(top: 40.0),
                     child: ListView.separated(
                         separatorBuilder: (context, index) {
-                          if (index % 7 == 0) {
-                            return Container(
-                              color: Colors.transparent,
-                              height: 100,
-                              width: double.infinity,
-                              alignment: Alignment.center,
-                              child: AdWidget(
-                                ad: BannerAd(
-                                  adUnitId: kBannerAdsId,
-                                  size: AdSize.largeBanner,
-                                  request: AdRequest(),
-                                  listener: BannerAdListener(
-                                    onAdLoaded: (Ad ad) => print('Ad loaded.'),
-                                    onAdFailedToLoad:
-                                        (Ad ad, LoadAdError error) {
-                                      ad.dispose();
-                                      print('Ad failed to load: $error');
-                                    },
-                                    onAdOpened: (Ad ad) => print('Ad opened.'),
-                                    onAdClosed: (Ad ad) => print('Ad closed.'),
-                                    onAdImpression: (Ad ad) =>
-                                        print('Ad impression.'),
-                                  ),
-                                )..load(),
-                                key: UniqueKey(),
-                              ),
-                            );
-                          } else {
-                            return SizedBox(
-                              height: 0,
-                            );
-                          }
+                          return SizedBox(
+                            height: 0,
+                          );
+                          // if (index % 7 == 0) {
+                          //   return Container(
+                          //     color: Colors.transparent,
+                          //     height: 100,
+                          //     width: double.infinity,
+                          //     alignment: Alignment.center,
+                          //     child: AdWidget(
+                          //       ad: BannerAd(
+                          //         adUnitId: kBannerAdsId,
+                          //         size: AdSize.largeBanner,
+                          //         request: AdRequest(),
+                          //         listener: BannerAdListener(
+                          //           onAdLoaded: (Ad ad) => print('Ad loaded.'),
+                          //           onAdFailedToLoad:
+                          //               (Ad ad, LoadAdError error) {
+                          //             ad.dispose();
+                          //             print('Ad failed to load: $error');
+                          //           },
+                          //           onAdOpened: (Ad ad) => print('Ad opened.'),
+                          //           onAdClosed: (Ad ad) => print('Ad closed.'),
+                          //           onAdImpression: (Ad ad) =>
+                          //               print('Ad impression.'),
+                          //         ),
+                          //       )..load(),
+                          //       key: UniqueKey(),
+                          //     ),
+                          //   );
+                          // } else {
+                          //   return SizedBox(
+                          //     height: 0,
+                          //   );
+                          // }
                         },
                         itemCount: snapShot.data.length,
                         itemBuilder: (context, index) {
@@ -156,33 +158,35 @@ class _NotificationsPageState extends State<NotificationsPage> {
                                     ),
                                   ],
                                 ).onTap(() {
-                                  if (_interstitialAd == null) {
-                                    return;
-                                  }
-
-                                  _interstitialAd.fullScreenContentCallback =
-                                      FullScreenContentCallback(
-                                          onAdShowedFullScreenContent:
-                                              (InterstitialAd ad) {
-                                    print("ad onAdshowedFullscreen");
-                                  }, onAdDismissedFullScreenContent:
-                                              (InterstitialAd ad) {
-                                    print("ad Disposed");
-                                    ad.dispose();
-                                    launch(
-                                        '${snapShot.data[index]['url'].toString()}');
-                                    createInterstitialAds();
-                                  }, onAdFailedToShowFullScreenContent:
-                                              (InterstitialAd ad,
-                                                  AdError aderror) {
-                                    print('$ad OnAdFailed $aderror');
-                                    ad.dispose();
-                                    createInterstitialAds();
-                                  });
-
-                                  _interstitialAd.show();
-
-                                  _interstitialAd = null;
+                                  launch(
+                                      '${snapShot.data[index]['url'].toString()}');
+                                  // if (_interstitialAd == null) {
+                                  //   return;
+                                  // }
+                                  //
+                                  // _interstitialAd.fullScreenContentCallback =
+                                  //     FullScreenContentCallback(
+                                  //         onAdShowedFullScreenContent:
+                                  //             (InterstitialAd ad) {
+                                  //   print("ad onAdshowedFullscreen");
+                                  // }, onAdDismissedFullScreenContent:
+                                  //             (InterstitialAd ad) {
+                                  //   print("ad Disposed");
+                                  //   ad.dispose();
+                                  //   launch(
+                                  //       '${snapShot.data[index]['url'].toString()}');
+                                  //   createInterstitialAds();
+                                  // }, onAdFailedToShowFullScreenContent:
+                                  //             (InterstitialAd ad,
+                                  //                 AdError aderror) {
+                                  //   print('$ad OnAdFailed $aderror');
+                                  //   ad.dispose();
+                                  //   createInterstitialAds();
+                                  // });
+                                  //
+                                  // _interstitialAd.show();
+                                  //
+                                  // _interstitialAd = null;
                                 }),
                               ),
                             ),

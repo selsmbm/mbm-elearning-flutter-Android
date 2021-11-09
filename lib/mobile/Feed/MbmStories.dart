@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:http/http.dart' as http;
 import 'package:mbmelearning/Analytics.dart';
 import 'package:mbmelearning/constants.dart';
@@ -33,36 +32,36 @@ class _MBMStoriesState extends State<MBMStories> {
   void initState() {
     super.initState();
     _analyticsClass.setCurrentScreen('MBM Stories', 'Home');
-    createInterstitialAds();
+    // createInterstitialAds();
   }
 
-  InterstitialAd _interstitialAd;
-  int numOfAttemptLoad = 0;
-
-  initialization() {
-    if (MobileAds.instance == null) {
-      MobileAds.instance.initialize();
-    }
-  }
-
-  void createInterstitialAds() {
-    InterstitialAd.load(
-      adUnitId: kInterstitialAdsId,
-      request: AdRequest(),
-      adLoadCallback:
-          InterstitialAdLoadCallback(onAdLoaded: (InterstitialAd ad) {
-        _interstitialAd = ad;
-        numOfAttemptLoad = 0;
-      }, onAdFailedToLoad: (LoadAdError error) {
-        numOfAttemptLoad + 1;
-        _interstitialAd = null;
-
-        if (numOfAttemptLoad <= 2) {
-          createInterstitialAds();
-        }
-      }),
-    );
-  }
+  // InterstitialAd _interstitialAd;
+  // int numOfAttemptLoad = 0;
+  //
+  // initialization() {
+  //   if (MobileAds.instance == null) {
+  //     MobileAds.instance.initialize();
+  //   }
+  // }
+  //
+  // void createInterstitialAds() {
+  //   InterstitialAd.load(
+  //     adUnitId: kInterstitialAdsId,
+  //     request: AdRequest(),
+  //     adLoadCallback:
+  //         InterstitialAdLoadCallback(onAdLoaded: (InterstitialAd ad) {
+  //       _interstitialAd = ad;
+  //       numOfAttemptLoad = 0;
+  //     }, onAdFailedToLoad: (LoadAdError error) {
+  //       numOfAttemptLoad + 1;
+  //       _interstitialAd = null;
+  //
+  //       if (numOfAttemptLoad <= 2) {
+  //         createInterstitialAds();
+  //       }
+  //     }),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -80,38 +79,41 @@ class _MBMStoriesState extends State<MBMStories> {
                     padding: const EdgeInsets.only(top: 40.0),
                     child: ListView.separated(
                         separatorBuilder: (context, index) {
-                          if (index % 7 == 0) {
-                            return Container(
-                              color: Colors.transparent,
-                              height: 100,
-                              width: double.infinity,
-                              alignment: Alignment.center,
-                              child: AdWidget(
-                                ad: BannerAd(
-                                  adUnitId: kBannerAdsId,
-                                  size: AdSize.largeBanner,
-                                  request: AdRequest(),
-                                  listener: BannerAdListener(
-                                    onAdLoaded: (Ad ad) => print('Ad loaded.'),
-                                    onAdFailedToLoad:
-                                        (Ad ad, LoadAdError error) {
-                                      ad.dispose();
-                                      print('Ad failed to load: $error');
-                                    },
-                                    onAdOpened: (Ad ad) => print('Ad opened.'),
-                                    onAdClosed: (Ad ad) => print('Ad closed.'),
-                                    onAdImpression: (Ad ad) =>
-                                        print('Ad impression.'),
-                                  ),
-                                )..load(),
-                                key: UniqueKey(),
-                              ),
-                            );
-                          } else {
-                            return SizedBox(
-                              height: 0,
-                            );
-                          }
+                          return SizedBox(
+                            width: 0,
+                          );
+                          // if (index % 7 == 0) {
+                          //   return Container(
+                          //     color: Colors.transparent,
+                          //     height: 100,
+                          //     width: double.infinity,
+                          //     alignment: Alignment.center,
+                          //     child: AdWidget(
+                          //       ad: BannerAd(
+                          //         adUnitId: kBannerAdsId,
+                          //         size: AdSize.largeBanner,
+                          //         request: AdRequest(),
+                          //         listener: BannerAdListener(
+                          //           onAdLoaded: (Ad ad) => print('Ad loaded.'),
+                          //           onAdFailedToLoad:
+                          //               (Ad ad, LoadAdError error) {
+                          //             ad.dispose();
+                          //             print('Ad failed to load: $error');
+                          //           },
+                          //           onAdOpened: (Ad ad) => print('Ad opened.'),
+                          //           onAdClosed: (Ad ad) => print('Ad closed.'),
+                          //           onAdImpression: (Ad ad) =>
+                          //               print('Ad impression.'),
+                          //         ),
+                          //       )..load(),
+                          //       key: UniqueKey(),
+                          //     ),
+                          //   );
+                          // } else {
+                          //   return SizedBox(
+                          //     height: 0,
+                          //   );
+                          // }
                         },
                         itemCount: snapShot.data.length,
                         itemBuilder: (context, index) {
@@ -151,85 +153,83 @@ class _MBMStoriesState extends State<MBMStories> {
                                       ),
                                   ],
                                 ).onTap(() {
-                                  createInterstitialAds();
-                                  if (_interstitialAd == null) {
-                                    return;
-                                  }
-
-                                  _interstitialAd.fullScreenContentCallback =
-                                      FullScreenContentCallback(
-                                          onAdShowedFullScreenContent:
-                                              (InterstitialAd ad) {
-                                    print("ad onAdshowedFullscreen");
-                                  }, onAdDismissedFullScreenContent:
-                                              (InterstitialAd ad) {
-                                    print("ad Disposed");
-                                    ad.dispose();
-                                    createInterstitialAds();
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) => Dialog(
-                                        child: Container(
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: VStack(
-                                              [
-                                                '${snapShot.data[index]['title']['rendered'].toString()}'
-                                                    .text
-                                                    .xl2
-                                                    .bold
-                                                    .make(),
-                                                '${snapShot.data[index]['date'].toString()}'
-                                                    .text
-                                                    .xs
-                                                    .gray600
-                                                    .make(),
-                                                Html(
-                                                  data:
-                                                      '''${snapShot.data[index]['content']['rendered'].toString()}''',
-                                                  onLinkTap: (url) {
-                                                    launch(url.toString());
-                                                  },
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    OutlinedButton(
-                                                        onPressed: () {
-                                                          launch(
-                                                              '${snapShot.data[index]['link'].toString()}');
-                                                        },
-                                                        child:
-                                                            'open'.text.make()),
-                                                    OutlinedButton(
-                                                        onPressed: () {
-                                                          Navigator.pop(
-                                                              context);
-                                                        },
-                                                        child: 'close'
-                                                            .text
-                                                            .make()),
-                                                  ],
-                                                )
-                                              ],
-                                            ).scrollVertical(),
-                                          ),
+                                  // createInterstitialAds();
+                                  // if (_interstitialAd == null) {
+                                  //   return;
+                                  // }
+                                  //
+                                  // _interstitialAd.fullScreenContentCallback =
+                                  //     FullScreenContentCallback(
+                                  //         onAdShowedFullScreenContent:
+                                  //             (InterstitialAd ad) {
+                                  //   print("ad onAdshowedFullscreen");
+                                  // }, onAdDismissedFullScreenContent:
+                                  //             (InterstitialAd ad) {
+                                  //   print("ad Disposed");
+                                  //   ad.dispose();
+                                  //   createInterstitialAds();
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => Dialog(
+                                      child: Container(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: VStack(
+                                            [
+                                              '${snapShot.data[index]['title']['rendered'].toString()}'
+                                                  .text
+                                                  .xl2
+                                                  .bold
+                                                  .make(),
+                                              '${snapShot.data[index]['date'].toString()}'
+                                                  .text
+                                                  .xs
+                                                  .gray600
+                                                  .make(),
+                                              Html(
+                                                data:
+                                                    '''${snapShot.data[index]['content']['rendered'].toString()}''',
+                                                onLinkTap: (url) {
+                                                  launch(url.toString());
+                                                },
+                                              ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  OutlinedButton(
+                                                      onPressed: () {
+                                                        launch(
+                                                            '${snapShot.data[index]['link'].toString()}');
+                                                      },
+                                                      child:
+                                                          'open'.text.make()),
+                                                  OutlinedButton(
+                                                      onPressed: () {
+                                                        Navigator.pop(context);
+                                                      },
+                                                      child:
+                                                          'close'.text.make()),
+                                                ],
+                                              )
+                                            ],
+                                          ).scrollVertical(),
                                         ),
                                       ),
-                                    );
-                                  }, onAdFailedToShowFullScreenContent:
-                                              (InterstitialAd ad,
-                                                  AdError aderror) {
-                                    print('$ad OnAdFailed $aderror');
-                                    ad.dispose();
-                                    createInterstitialAds();
-                                  });
-
-                                  _interstitialAd.show();
-
-                                  _interstitialAd = null;
+                                    ),
+                                  );
+                                  // }, onAdFailedToShowFullScreenContent:
+                                  //             (InterstitialAd ad,
+                                  //                 AdError aderror) {
+                                  //   print('$ad OnAdFailed $aderror');
+                                  //   ad.dispose();
+                                  //   createInterstitialAds();
+                                  // });
+                                  //
+                                  // _interstitialAd.show();
+                                  //
+                                  // _interstitialAd = null;
                                 }),
                               ),
                             ),
@@ -271,28 +271,29 @@ class _MBMStoriesState extends State<MBMStories> {
                 children: [
                   'powered by  '.text.gray400.make(),
                   'MBM STORIES'.text.bold.italic.make().onTap(() {
-                    if (_interstitialAd == null) {
-                      return;
-                    }
-
-                    _interstitialAd.fullScreenContentCallback =
-                        FullScreenContentCallback(
-                            onAdShowedFullScreenContent: (InterstitialAd ad) {
-                      print("ad onAdshowedFullscreen");
-                    }, onAdDismissedFullScreenContent: (InterstitialAd ad) {
-                      print("ad Disposed");
-                      ad.dispose();
-                      launch('https://mbmstories.com/');
-                    }, onAdFailedToShowFullScreenContent:
-                                (InterstitialAd ad, AdError aderror) {
-                      print('$ad OnAdFailed $aderror');
-                      ad.dispose();
-                      createInterstitialAds();
-                    });
-
-                    _interstitialAd.show();
-
-                    _interstitialAd = null;
+                    launch('https://mbmstories.com/');
+                    // if (_interstitialAd == null) {
+                    //   return;
+                    // }
+                    //
+                    // _interstitialAd.fullScreenContentCallback =
+                    //     FullScreenContentCallback(
+                    //         onAdShowedFullScreenContent: (InterstitialAd ad) {
+                    //   print("ad onAdshowedFullscreen");
+                    // }, onAdDismissedFullScreenContent: (InterstitialAd ad) {
+                    //   print("ad Disposed");
+                    //   ad.dispose();
+                    //   launch('https://mbmstories.com/');
+                    // }, onAdFailedToShowFullScreenContent:
+                    //             (InterstitialAd ad, AdError aderror) {
+                    //   print('$ad OnAdFailed $aderror');
+                    //   ad.dispose();
+                    //   createInterstitialAds();
+                    // });
+                    //
+                    // _interstitialAd.show();
+                    //
+                    // _interstitialAd = null;
                   }),
                 ],
               ).centered(),

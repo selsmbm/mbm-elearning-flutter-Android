@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:http/http.dart' as http;
 import 'package:mbmelearning/Analytics.dart';
 import 'package:mbmelearning/constants.dart';
@@ -23,16 +22,16 @@ class _GateMaterialState extends State<GateMaterial> {
     _outPutData.clear();
     try {
       http.Response response = await http.get(Uri.parse(
-          'https://spreadsheets.google.com/feeds/list/1rPIc8dEupQdp8YosDsKt9PW1gmYIqcUEf3srhjHZa84/1/public/values?alt=json'));
+          'https://script.google.com/macros/s/AKfycbyIR0HysY0I91nHAagWsR7G8lz-RwrmL-eM0_0g48tdZqJBIwbl96EtZOWNb4mRuUdJYg/exec'));
       if (response.statusCode == 200) {
-        for (var mt in json.decode(response.body)['feed']['entry']) {
+        for (var mt in json.decode(response.body)) {
           _outPutData.add({
-            'title': mt[r'gsx$title'][r'$t'],
-            'desc': mt[r'gsx$description'][r'$t'],
-            'url': mt[r'gsx$url'][r'$t'],
+            'title': mt[r'title'],
+            'desc': mt[r'description'],
+            'url': mt[r'url'],
           });
         }
-        return _outPutData.reversed.toList();
+        return _outPutData;
       }
     } catch (e) {
       print(e);
@@ -43,64 +42,11 @@ class _GateMaterialState extends State<GateMaterial> {
   void initState() {
     super.initState();
     _analyticsClass.setCurrentScreen('Gate Material', 'Material');
-    createInterstitialAds();
-  }
-
-  InterstitialAd _interstitialAd;
-  int numOfAttemptLoad = 0;
-
-  initialization() {
-    if (MobileAds.instance == null) {
-      MobileAds.instance.initialize();
-    }
-  }
-
-  void createInterstitialAds() {
-    InterstitialAd.load(
-      adUnitId: kInterstitialAdsId,
-      request: AdRequest(),
-      adLoadCallback:
-          InterstitialAdLoadCallback(onAdLoaded: (InterstitialAd ad) {
-        _interstitialAd = ad;
-        numOfAttemptLoad = 0;
-      }, onAdFailedToLoad: (LoadAdError error) {
-        numOfAttemptLoad += 1;
-        _interstitialAd = null;
-
-        if (numOfAttemptLoad <= 2) {
-          createInterstitialAds();
-        }
-      }),
-    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: Container(
-        color: Colors.transparent,
-        height: 50,
-        width: double.infinity,
-        alignment: Alignment.center,
-        child: AdWidget(
-          ad: BannerAd(
-            adUnitId: kBannerAdsId,
-            size: AdSize.banner,
-            request: AdRequest(),
-            listener: BannerAdListener(
-              onAdLoaded: (Ad ad) => print('Ad loaded.'),
-              onAdFailedToLoad: (Ad ad, LoadAdError error) {
-                ad.dispose();
-                print('Ad failed to load: $error');
-              },
-              onAdOpened: (Ad ad) => print('Ad opened.'),
-              onAdClosed: (Ad ad) => print('Ad closed.'),
-              onAdImpression: (Ad ad) => print('Ad impression.'),
-            ),
-          )..load(),
-          key: UniqueKey(),
-        ),
-      ),
       backgroundColor: const Color(0xffffffff),
       body: SafeArea(
         child: ZStack([
@@ -146,40 +92,7 @@ class _GateMaterialState extends State<GateMaterial> {
                   )),
               if (_filteredData.isNotEmpty)
                 Expanded(
-                  child: ListView.separated(
-                      separatorBuilder: (context, index) {
-                        if (index % 7 == 0) {
-                          return Container(
-                            color: Colors.transparent,
-                            height: 100,
-                            width: double.infinity,
-                            alignment: Alignment.center,
-                            child: AdWidget(
-                              ad: BannerAd(
-                                adUnitId: kBannerAdsId,
-                                size: AdSize.largeBanner,
-                                request: AdRequest(),
-                                listener: BannerAdListener(
-                                  onAdLoaded: (Ad ad) => print('Ad loaded.'),
-                                  onAdFailedToLoad: (Ad ad, LoadAdError error) {
-                                    ad.dispose();
-                                    print('Ad failed to load: $error');
-                                  },
-                                  onAdOpened: (Ad ad) => print('Ad opened.'),
-                                  onAdClosed: (Ad ad) => print('Ad closed.'),
-                                  onAdImpression: (Ad ad) =>
-                                      print('Ad impression.'),
-                                ),
-                              )..load(),
-                              key: UniqueKey(),
-                            ),
-                          );
-                        } else {
-                          return SizedBox(
-                            height: 0,
-                          );
-                        }
-                      },
+                  child: ListView.builder(
                       itemCount: _filteredData.length,
                       itemBuilder: (context, index) {
                         return Padding(
@@ -218,34 +131,8 @@ class _GateMaterialState extends State<GateMaterial> {
                                     text:
                                         _filteredData[index]['url'].toString(),
                                     onOpen: (l) {
-                                      if (_interstitialAd == null) {
-                                        launch(
-                                            "${_filteredData[index]['url'].toString()}");
-                                      }
-
-                                      _interstitialAd
-                                              .fullScreenContentCallback =
-                                          FullScreenContentCallback(
-                                              onAdShowedFullScreenContent:
-                                                  (InterstitialAd ad) {
-                                        print("ad onAdshowedFullscreen");
-                                      }, onAdDismissedFullScreenContent:
-                                                  (InterstitialAd ad) {
-                                        print("ad Disposed");
-                                        ad.dispose();
-                                        launch(l.url);
-                                        createInterstitialAds();
-                                      }, onAdFailedToShowFullScreenContent:
-                                                  (InterstitialAd ad,
-                                                      AdError aderror) {
-                                        print('$ad OnAdFailed $aderror');
-                                        ad.dispose();
-                                        createInterstitialAds();
-                                      });
-
-                                      _interstitialAd.show();
-
-                                      _interstitialAd = null;
+                                      launch(
+                                          "${_filteredData[index]['url'].toString()}");
                                     },
                                   ),
                                 ],
@@ -266,41 +153,9 @@ class _GateMaterialState extends State<GateMaterial> {
                         } else {
                           return ListView.separated(
                               separatorBuilder: (context, index) {
-                                if (index % 9 == 0) {
-                                  return Container(
-                                    color: Colors.transparent,
-                                    height: 100,
-                                    width: double.infinity,
-                                    alignment: Alignment.center,
-                                    child: AdWidget(
-                                      ad: BannerAd(
-                                        adUnitId: kBannerAdsId,
-                                        size: AdSize.largeBanner,
-                                        request: AdRequest(),
-                                        listener: BannerAdListener(
-                                          onAdLoaded: (Ad ad) =>
-                                              print('Ad loaded.'),
-                                          onAdFailedToLoad:
-                                              (Ad ad, LoadAdError error) {
-                                            ad.dispose();
-                                            print('Ad failed to load: $error');
-                                          },
-                                          onAdOpened: (Ad ad) =>
-                                              print('Ad opened.'),
-                                          onAdClosed: (Ad ad) =>
-                                              print('Ad closed.'),
-                                          onAdImpression: (Ad ad) =>
-                                              print('Ad impression.'),
-                                        ),
-                                      )..load(),
-                                      key: UniqueKey(),
-                                    ),
-                                  );
-                                } else {
-                                  return SizedBox(
-                                    height: 0,
-                                  );
-                                }
+                                return SizedBox(
+                                  height: 0,
+                                );
                               },
                               itemCount: snapShot.data.length,
                               itemBuilder: (context, index) {
@@ -344,35 +199,7 @@ class _GateMaterialState extends State<GateMaterial> {
                                             text: snapShot.data[index]['url']
                                                 .toString(),
                                             onOpen: (l) {
-                                              if (_interstitialAd == null) {
-                                                launch(l.url);
-                                              }
-
-                                              _interstitialAd
-                                                      .fullScreenContentCallback =
-                                                  FullScreenContentCallback(
-                                                      onAdShowedFullScreenContent:
-                                                          (InterstitialAd ad) {
-                                                print(
-                                                    "ad onAdshowedFullscreen");
-                                              }, onAdDismissedFullScreenContent:
-                                                          (InterstitialAd ad) {
-                                                print("ad Disposed");
-                                                ad.dispose();
-                                                launch(l.url);
-                                                createInterstitialAds();
-                                              }, onAdFailedToShowFullScreenContent:
-                                                          (InterstitialAd ad,
-                                                              AdError aderror) {
-                                                print(
-                                                    '$ad OnAdFailed $aderror');
-                                                ad.dispose();
-                                                createInterstitialAds();
-                                              });
-
-                                              _interstitialAd.show();
-
-                                              _interstitialAd = null;
+                                              launch(l.url);
                                             },
                                           ),
                                         ],

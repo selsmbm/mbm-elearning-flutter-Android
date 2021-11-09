@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:mbmelearning/Analytics.dart';
 import 'package:mbmelearning/Widgets/AlertDialog.dart';
 import 'package:mbmelearning/Widgets/Buttons.dart';
@@ -12,7 +11,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 AnalyticsClass _analyticsClass = AnalyticsClass();
-
 
 class FirstYearAndMathMtPageMb extends StatefulWidget {
   final String materialKey;
@@ -35,30 +33,6 @@ class _FirstYearAndMathMtPageMbState extends State<FirstYearAndMathMtPageMb> {
     return DefaultTabController(
       length: 5,
       child: Scaffold(
-        bottomNavigationBar: Container(
-          color: Colors.transparent,
-          height: 50,
-          width: double.infinity,
-          alignment: Alignment.center,
-          child: AdWidget(
-            ad: BannerAd(
-              adUnitId: kBannerAdsId,
-              size: AdSize.banner,
-              request: AdRequest(),
-              listener: BannerAdListener(
-                onAdLoaded: (Ad ad) => print('Ad loaded.'),
-                onAdFailedToLoad: (Ad ad, LoadAdError error) {
-                  ad.dispose();
-                  print('Ad failed to load: $error');
-                },
-                onAdOpened: (Ad ad) => print('Ad opened.'),
-                onAdClosed: (Ad ad) => print('Ad closed.'),
-                onAdImpression: (Ad ad) => print('Ad impression.'),
-              ),
-            )..load(),
-            key: UniqueKey(),
-          ),
-        ),
         backgroundColor: const Color(0xffffffff),
         body: SafeArea(
           child: ZStack([
@@ -476,8 +450,7 @@ class _MaterialTileState extends State<MaterialTile> {
                       itemBuilder: (context, index) {
                         return MtTile(
                           onPressed: () {
-                            launch(
-                                "${_materialFilteredList[index]['mturl']}");
+                            launch("${_materialFilteredList[index]['mturl']}");
                           },
                           name: "${_materialFilteredList[index]['mtname']}",
                           subject:

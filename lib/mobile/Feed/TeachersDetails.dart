@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:http/http.dart' as http;
 import 'package:mbmelearning/Analytics.dart';
 import 'package:mbmelearning/constants.dart';
@@ -23,20 +22,20 @@ class _TeachersDetailsState extends State<TeachersDetails> {
     _outPutData.clear();
     try {
       http.Response response = await http.get(Uri.parse(
-          'https://spreadsheets.google.com/feeds/list/1-gbH7Ysc-XktFgO5J1FfKrfjNG7ueudh-MIdqVodK3g/1/public/values?alt=json'));
+          'https://script.google.com/macros/s/AKfycbxXNxwBtmIMmeziuMJIfxyqskq3_8WkJvwPNEFx4w5QQiz2agssplQUTBvoO_U5O8-HPA/exec'));
       if (response.statusCode == 200) {
-        for (var mt in json.decode(response.body)['feed']['entry']) {
+        for (var mt in json.decode(response.body)) {
           _outPutData.add({
-            'name': mt[r'gsx$name'][r'$t'],
-            'phoneNo': mt[r'gsx$phoneno'][r'$t'],
-            'email': mt[r'gsx$email'][r'$t'],
-            'department': mt[r'gsx$department'][r'$t'],
-            'post': mt[r'gsx$post'][r'$t'],
-            'image': mt[r'gsx$image'][r'$t'],
-            'ug': mt[r'gsx$ug'][r'$t'],
-            'pg': mt[r'gsx$pg'][r'$t'],
-            'phd': mt[r'gsx$phd'][r'$t'],
-            'dob': mt[r'gsx$dob'][r'$t'],
+            'name': mt[r'name'],
+            'phoneNo': mt[r'mobile_no'],
+            'email': mt[r'email'],
+            'department': mt[r'department'],
+            'post': mt[r'post'],
+            'image': mt[r'image'],
+            'ug': mt[r'UG'],
+            'pg': mt[r'PG'],
+            'phd': mt[r'phd'],
+            'dob': mt[r'DOB'],
           });
         }
         return _outPutData.toList();
@@ -63,30 +62,30 @@ class _TeachersDetailsState extends State<TeachersDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: Container(
-        color: Colors.transparent,
-        height: 50,
-        width: double.infinity,
-        alignment: Alignment.center,
-        child: AdWidget(
-          ad: BannerAd(
-            adUnitId: kBannerAdsId,
-            size: AdSize.banner,
-            request: AdRequest(),
-            listener: BannerAdListener(
-              onAdLoaded: (Ad ad) => print('Ad loaded.'),
-              onAdFailedToLoad: (Ad ad, LoadAdError error) {
-                ad.dispose();
-                print('Ad failed to load: $error');
-              },
-              onAdOpened: (Ad ad) => print('Ad opened.'),
-              onAdClosed: (Ad ad) => print('Ad closed.'),
-              onAdImpression: (Ad ad) => print('Ad impression.'),
-            ),
-          )..load(),
-          key: UniqueKey(),
-        ),
-      ),
+      // bottomNavigationBar: Container(
+      //   color: Colors.transparent,
+      //   height: 50,
+      //   width: double.infinity,
+      //   alignment: Alignment.center,
+      //   child: AdWidget(
+      //     ad: BannerAd(
+      //       adUnitId: kBannerAdsId,
+      //       size: AdSize.banner,
+      //       request: AdRequest(),
+      //       listener: BannerAdListener(
+      //         onAdLoaded: (Ad ad) => print('Ad loaded.'),
+      //         onAdFailedToLoad: (Ad ad, LoadAdError error) {
+      //           ad.dispose();
+      //           print('Ad failed to load: $error');
+      //         },
+      //         onAdOpened: (Ad ad) => print('Ad opened.'),
+      //         onAdClosed: (Ad ad) => print('Ad closed.'),
+      //         onAdImpression: (Ad ad) => print('Ad impression.'),
+      //       ),
+      //     )..load(),
+      //     key: UniqueKey(),
+      //   ),
+      // ),
       backgroundColor: const Color(0xffffffff),
       body: SafeArea(
         child: ZStack([
@@ -132,37 +131,37 @@ class _TeachersDetailsState extends State<TeachersDetails> {
                 Expanded(
                   child: ListView.separated(
                       separatorBuilder: (context, index) {
-                        if (index % 7 == 0) {
-                          return Container(
-                            color: Colors.transparent,
-                            height: 100,
-                            width: double.infinity,
-                            alignment: Alignment.center,
-                            child: AdWidget(
-                              ad: BannerAd(
-                                adUnitId: kBannerAdsId,
-                                size: AdSize.largeBanner,
-                                request: AdRequest(),
-                                listener: BannerAdListener(
-                                  onAdLoaded: (Ad ad) => print('Ad loaded.'),
-                                  onAdFailedToLoad: (Ad ad, LoadAdError error) {
-                                    ad.dispose();
-                                    print('Ad failed to load: $error');
-                                  },
-                                  onAdOpened: (Ad ad) => print('Ad opened.'),
-                                  onAdClosed: (Ad ad) => print('Ad closed.'),
-                                  onAdImpression: (Ad ad) =>
-                                      print('Ad impression.'),
-                                ),
-                              )..load(),
-                              key: UniqueKey(),
-                            ),
-                          );
-                        } else {
-                          return SizedBox(
-                            height: 0,
-                          );
-                        }
+                        // if (index % 7 == 0) {
+                        //   return Container(
+                        //     color: Colors.transparent,
+                        //     height: 100,
+                        //     width: double.infinity,
+                        //     alignment: Alignment.center,
+                        //     child: AdWidget(
+                        //       ad: BannerAd(
+                        //         adUnitId: kBannerAdsId,
+                        //         size: AdSize.largeBanner,
+                        //         request: AdRequest(),
+                        //         listener: BannerAdListener(
+                        //           onAdLoaded: (Ad ad) => print('Ad loaded.'),
+                        //           onAdFailedToLoad: (Ad ad, LoadAdError error) {
+                        //             ad.dispose();
+                        //             print('Ad failed to load: $error');
+                        //           },
+                        //           onAdOpened: (Ad ad) => print('Ad opened.'),
+                        //           onAdClosed: (Ad ad) => print('Ad closed.'),
+                        //           onAdImpression: (Ad ad) =>
+                        //               print('Ad impression.'),
+                        //         ),
+                        //       )..load(),
+                        //       key: UniqueKey(),
+                        //     ),
+                        //   );
+                        // } else {
+                        return SizedBox(
+                          height: 0,
+                        );
+                        // }
                       },
                       itemCount: _filteredData.length,
                       itemBuilder: (context, index) {
@@ -616,41 +615,41 @@ class _TeachersDetailsState extends State<TeachersDetails> {
                         } else {
                           return ListView.separated(
                               separatorBuilder: (context, index) {
-                                if (index % 7 == 0) {
-                                  return Container(
-                                    color: Colors.transparent,
-                                    height: 100,
-                                    width: double.infinity,
-                                    alignment: Alignment.center,
-                                    child: AdWidget(
-                                      ad: BannerAd(
-                                        adUnitId: kBannerAdsId,
-                                        size: AdSize.largeBanner,
-                                        request: AdRequest(),
-                                        listener: BannerAdListener(
-                                          onAdLoaded: (Ad ad) =>
-                                              print('Ad loaded.'),
-                                          onAdFailedToLoad:
-                                              (Ad ad, LoadAdError error) {
-                                            ad.dispose();
-                                            print('Ad failed to load: $error');
-                                          },
-                                          onAdOpened: (Ad ad) =>
-                                              print('Ad opened.'),
-                                          onAdClosed: (Ad ad) =>
-                                              print('Ad closed.'),
-                                          onAdImpression: (Ad ad) =>
-                                              print('Ad impression.'),
-                                        ),
-                                      )..load(),
-                                      key: UniqueKey(),
-                                    ),
-                                  );
-                                } else {
-                                  return SizedBox(
-                                    height: 0,
-                                  );
-                                }
+                                // if (index % 7 == 0) {
+                                //   return Container(
+                                //     color: Colors.transparent,
+                                //     height: 100,
+                                //     width: double.infinity,
+                                //     alignment: Alignment.center,
+                                //     child: AdWidget(
+                                //       ad: BannerAd(
+                                //         adUnitId: kBannerAdsId,
+                                //         size: AdSize.largeBanner,
+                                //         request: AdRequest(),
+                                //         listener: BannerAdListener(
+                                //           onAdLoaded: (Ad ad) =>
+                                //               print('Ad loaded.'),
+                                //           onAdFailedToLoad:
+                                //               (Ad ad, LoadAdError error) {
+                                //             ad.dispose();
+                                //             print('Ad failed to load: $error');
+                                //           },
+                                //           onAdOpened: (Ad ad) =>
+                                //               print('Ad opened.'),
+                                //           onAdClosed: (Ad ad) =>
+                                //               print('Ad closed.'),
+                                //           onAdImpression: (Ad ad) =>
+                                //               print('Ad impression.'),
+                                //         ),
+                                //       )..load(),
+                                //       key: UniqueKey(),
+                                //     ),
+                                //   );
+                                // } else {
+                                return SizedBox(
+                                  height: 0,
+                                );
+                                // }
                               },
                               itemCount: snapShot.data.length,
                               itemBuilder: (context, index) {

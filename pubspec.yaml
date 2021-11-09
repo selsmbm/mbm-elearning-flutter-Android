@@ -1,7 +1,7 @@
 name: mbmelearning
 description: MBM e-learning app is the simple, thrilling and quite interesting way to learn and grow online . It is user- friendly and easily available in two modes - first is website and other is mobile Android application. In this, every student can get their needy branchwise study material such as all books, notes, PDFs, syllabus,  time table, informative videos and most importantly previous year papers. It also provide information about activities which are prevailing in our college , one can update themselves using this app and anyone can upload their useful content here. isn't it exciting?
 
-version: 5.0.0+5
+version: 6.0.0+6
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -26,12 +26,10 @@ dependencies:
   flutter_linkify: ^5.0.2
   firebase_in_app_messaging: ^0.3.0+1
   in_app_update: ^2.0.0
-  google_mobile_ads: ^0.13.2
-  photo_view: ^0.11.1
-  firebase_database:
+  photo_view: ^0.13.0
   flutter_html:
   http:
-  webfeed:
+
 
 
 dev_dependencies:

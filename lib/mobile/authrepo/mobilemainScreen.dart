@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -7,11 +8,15 @@ import 'package:mbmelearning/Widgets/Buttons.dart';
 import 'package:mbmelearning/constants.dart';
 import 'package:mbmelearning/mobile/authrepo/signinmobile.dart';
 import 'package:mbmelearning/mobile/authrepo/signupmobile.dart';
+import 'package:mbmelearning/mobile/authrepo/updateprofileNewUser.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:velocity_x/velocity_x.dart';
+
+import '../mobiledashboard.dart';
+import 'UpdateProfile.dart';
 
 AnalyticsClass _analyticsClass = AnalyticsClass();
 
-//Todo:google signin.
 class MobileMainScreen extends StatefulWidget {
   MobileMainScreen({
     Key key,
@@ -22,56 +27,30 @@ class MobileMainScreen extends StatefulWidget {
 }
 
 class _MobileMainScreenState extends State<MobileMainScreen> {
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
-  String name_google;
-  String email_google;
-  String imageUrl_google;
-  String uid;
+  var user = FirebaseFirestore.instance.collection('users');
+  bool showSpiner = false;
 
-  Future<String> signInWithGoogle() async {
-    // Initialize Firebase
+  Future googleSignIn() async {
     await Firebase.initializeApp();
-
     final GoogleSignInAccount googleSignInAccount =
         await _googleSignIn.signIn();
     final GoogleSignInAuthentication googleSignInAuthentication =
         await googleSignInAccount.authentication;
-
     final AuthCredential credential = GoogleAuthProvider.credential(
       accessToken: googleSignInAuthentication.accessToken,
       idToken: googleSignInAuthentication.idToken,
     );
-
-    final UserCredential userCredential =
+    final UserCredential authResult =
         await _auth.signInWithCredential(credential);
-    final User user = userCredential.user;
-
-    if (user != null) {
-      // Checking if email and name is null
-      assert(user.uid != null);
-      assert(user.email != null);
-      assert(user.displayName != null);
-      assert(user.photoURL != null);
-
-      uid = user.uid;
-      name_google = user.displayName;
-      email_google = user.email;
-      imageUrl_google = user.photoURL;
-
-      assert(!user.isAnonymous);
-      assert(await user.getIdToken() != null);
-
-      final User currentUser = _auth.currentUser;
-      assert(user.uid == currentUser.uid);
-
-      // SharedPreferences prefs = await SharedPreferences.getInstance();
-      // prefs.setBool('auth', true);
-
-      return 'Google sign in successful, User UID: ${user.uid}';
-    }
-
-    return null;
+    final User user = authResult.user;
+    assert(!user.isAnonymous);
+    assert(await user.getIdToken() != null);
+    final User currentUser = _auth.currentUser;
+    assert(user.uid == currentUser.uid);
+    print(currentUser.uid);
+    return currentUser;
   }
 
   @override
@@ -82,71 +61,115 @@ class _MobileMainScreenState extends State<MobileMainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xffffffff),
-      body: SafeArea(
-        child: VStack([
-          30.heightBox,
-          "MBM E-Learning".text.color(kFirstColour).bold.xl3.makeCentered(),
-          10.heightBox,
-          Center(
-            child: Image.asset(
-              'assets/mainscreen.png',
-              height: 300,
-              width: 300,
+    return ModalProgressHUD(
+      inAsyncCall: showSpiner,
+      child: Scaffold(
+        backgroundColor: const Color(0xffffffff),
+        body: SafeArea(
+          child: VStack([
+            30.heightBox,
+            "MBM E-Learning".text.color(kFirstColour).bold.xl3.makeCentered(),
+            10.heightBox,
+            Center(
+              child: Image.asset(
+                'assets/mainscreen.png',
+                height: 300,
+                width: 300,
+              ),
             ),
-          ),
-          20.heightBox,
-          HStack([
-            CKGradientButton(
-              buttonText: "Signin",
-              onprassed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SigninMobile()),
-                );
-              },
+            20.heightBox,
+            HStack([
+              CKGradientButton(
+                buttonText: "Signin",
+                onprassed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SigninMobile()),
+                  );
+                },
+              ),
+              30.widthBox,
+              CKOutlineButton(
+                buttonText: "Signup",
+                onprassed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SignupMobile()),
+                  );
+                },
+              ),
+            ]).centered(),
+            20.heightBox,
+            "or".text.color(kFirstColour).makeCentered(),
+            20.heightBox,
+            Center(
+              child: TextButton(
+                onPressed: () async {
+                  setState(() {
+                    showSpiner = true;
+                  });
+                  await googleSignIn().then((result) {
+                    if (_auth.currentUser != null) {
+                      var userId = _auth.currentUser.uid;
+                      var email = _auth.currentUser.email;
+                      user
+                          .doc(userId)
+                          .get()
+                          .then((DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists) {
+                          var mobile = documentSnapshot.data()['mobileNo'];
+                          if (mobile == 'null') {
+                            setState(() {
+                              showSpiner = false;
+                            });
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => UpdateProfile(
+                                        userid: userId,
+                                        userEmail: email,
+                                      )),
+                            );
+                          } else {
+                            setState(() {
+                              showSpiner = false;
+                            });
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MobileDashbord()),
+                            );
+                          }
+                        } else {
+                          setState(() {
+                            showSpiner = false;
+                          });
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => UpdateProfileOldUser(
+                                userid: userId,
+                                userEmail: email,
+                              ),
+                            ),
+                          );
+                        }
+                      });
+                    }
+                  }).catchError((error) {
+                    print('Registration Error: $error');
+                  });
+                },
+                child: Container(
+                  height: 50,
+                  width: 250,
+                  child: Image.asset('assets/googlesignin.png'),
+                ),
+              ),
             ),
-            30.widthBox,
-            CKOutlineButton(
-              buttonText: "Signup",
-              onprassed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SignupMobile()),
-                );
-              },
-            ),
-          ]).centered(),
-          20.heightBox,
-          // "or".text.color(kFirstColour).makeCentered(),
-          // 20.heightBox,
-          // Center(
-          //   child: FlatButton(
-          //     onPressed: () async {
-          //       await signInWithGoogle().then((result) {
-          //         print(result);
-          //         Navigator.of(context).pushReplacement(
-          //           MaterialPageRoute(
-          //             fullscreenDialog: true,
-          //             builder: (context) => MobileDashbord(),
-          //           ),
-          //         );
-          //       }).catchError((error) {
-          //         print('Registration Error: $error');
-          //       });
-          //     },
-          //     child: Container(
-          //       height: 45,
-          //       width: 200,
-          //       child: Image.asset(
-          //           'assets/googlesignin.png'
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          20.heightBox,
-        ]).scrollVertical(physics: AlwaysScrollableScrollPhysics()),
+            20.heightBox,
+          ]).scrollVertical(physics: AlwaysScrollableScrollPhysics()),
+        ),
       ),
     );
   }

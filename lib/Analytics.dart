@@ -13,8 +13,4 @@ class AnalyticsClass {
     );
   }
 
-  Future<void> setUserId(String userId, String userName, String value) async {
-    await analytics.setUserId(userId);
-    await analytics.setUserProperty(name: userName, value: value);
-  }
 }

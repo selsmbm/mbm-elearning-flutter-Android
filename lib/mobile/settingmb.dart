@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:mbmelearning/Analytics.dart';
 import 'package:mbmelearning/Widgets/AlertDialog.dart';
 import 'package:mbmelearning/Widgets/Buttons.dart';
@@ -84,64 +83,11 @@ class _SettingMBState extends State<SettingMB> {
   void initState() {
     super.initState();
     _analyticsClass.setCurrentScreen('Setting', 'Home');
-    createInterstitialAds();
-  }
-
-  InterstitialAd _interstitialAd;
-  int numOfAttemptLoad = 0;
-
-  initialization() {
-    if (MobileAds.instance == null) {
-      MobileAds.instance.initialize();
-    }
-  }
-
-  void createInterstitialAds() {
-    InterstitialAd.load(
-      adUnitId: kInterstitialAdsId,
-      request: AdRequest(),
-      adLoadCallback:
-          InterstitialAdLoadCallback(onAdLoaded: (InterstitialAd ad) {
-        _interstitialAd = ad;
-        numOfAttemptLoad = 0;
-      }, onAdFailedToLoad: (LoadAdError error) {
-        numOfAttemptLoad + 1;
-        _interstitialAd = null;
-
-        if (numOfAttemptLoad <= 2) {
-          createInterstitialAds();
-        }
-      }),
-    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: Container(
-        color: Colors.transparent,
-        height: 50,
-        width: double.infinity,
-        alignment: Alignment.center,
-        child: AdWidget(
-          ad: BannerAd(
-            adUnitId: kBannerAdsId,
-            size: AdSize.banner,
-            request: AdRequest(),
-            listener: BannerAdListener(
-              onAdLoaded: (Ad ad) => print('Ad loaded.'),
-              onAdFailedToLoad: (Ad ad, LoadAdError error) {
-                ad.dispose();
-                print('Ad failed to load: $error');
-              },
-              onAdOpened: (Ad ad) => print('Ad opened.'),
-              onAdClosed: (Ad ad) => print('Ad closed.'),
-              onAdImpression: (Ad ad) => print('Ad impression.'),
-            ),
-          )..load(),
-          key: UniqueKey(),
-        ),
-      ),
       backgroundColor: const Color(0xffffffff),
       body: SafeArea(
         child: ZStack([
@@ -227,31 +173,6 @@ class _SettingMBState extends State<SettingMB> {
             ])
                 .scrollHorizontal(physics: AlwaysScrollableScrollPhysics())
                 .centered(),
-            10.heightBox,
-            Container(
-              color: Colors.transparent,
-              height: 250,
-              width: double.infinity,
-              alignment: Alignment.center,
-              child: AdWidget(
-                ad: BannerAd(
-                  adUnitId: kBannerAdsId,
-                  size: AdSize.mediumRectangle,
-                  request: AdRequest(),
-                  listener: BannerAdListener(
-                    onAdLoaded: (Ad ad) => print('Ad loaded.'),
-                    onAdFailedToLoad: (Ad ad, LoadAdError error) {
-                      ad.dispose();
-                      print('Ad failed to load: $error');
-                    },
-                    onAdOpened: (Ad ad) => print('Ad opened.'),
-                    onAdClosed: (Ad ad) => print('Ad closed.'),
-                    onAdImpression: (Ad ad) => print('Ad impression.'),
-                  ),
-                )..load(),
-                key: UniqueKey(),
-              ),
-            ),
             10.heightBox,
             HStack([
               TextButton(
@@ -353,30 +274,7 @@ class _SettingMBState extends State<SettingMB> {
             ])
                 .scrollHorizontal(physics: AlwaysScrollableScrollPhysics())
                 .centered(),
-            Container(
-              color: Colors.transparent,
-              height: 250,
-              width: double.infinity,
-              alignment: Alignment.center,
-              child: AdWidget(
-                ad: BannerAd(
-                  adUnitId: kBannerAdsId,
-                  size: AdSize.mediumRectangle,
-                  request: AdRequest(),
-                  listener: BannerAdListener(
-                    onAdLoaded: (Ad ad) => print('Ad loaded.'),
-                    onAdFailedToLoad: (Ad ad, LoadAdError error) {
-                      ad.dispose();
-                      print('Ad failed to load: $error');
-                    },
-                    onAdOpened: (Ad ad) => print('Ad opened.'),
-                    onAdClosed: (Ad ad) => print('Ad closed.'),
-                    onAdImpression: (Ad ad) => print('Ad impression.'),
-                  ),
-                )..load(),
-                key: UniqueKey(),
-              ),
-            ),
+
             20.heightBox,
             "Change Password".text.xl2.color(kFirstColour).make().centered(),
             VxBox().color(kFirstColour).size(60, 2).make().centered(),
