@@ -1,16 +1,15 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_in_app_messaging/firebase_in_app_messaging.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
-import 'package:in_app_update/in_app_update.dart';
 import 'package:mbmelearning/Analytics.dart';
 import 'package:mbmelearning/Widgets/AlertDialog.dart';
 import 'package:mbmelearning/Widgets/MarqueWidget.dart';
+import 'package:mbmelearning/ads_helper.dart';
 import 'package:mbmelearning/branchesandsems.dart';
 import 'package:mbmelearning/constants.dart';
 import 'package:mbmelearning/mobile/Feed/MbmStories.dart';
@@ -21,6 +20,7 @@ import 'package:mbmelearning/mobile/materialpagebyyear/GateMaterial.dart';
 import 'package:mbmelearning/mobile/materialpagebyyear/SecondYearMtPageMb.dart';
 import 'package:mbmelearning/mobile/materialpagebyyear/usefullinksmb.dart';
 import 'package:mbmelearning/mobile/settingmb.dart';
+import 'package:unity_ads_plugin/unity_ads.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -40,31 +40,19 @@ class _MobileDashbordState extends State<MobileDashbord> {
   String mathtype;
   String selectedBranch;
   String selectedSems;
-  AppUpdateInfo _updateInfo;
-
-  Future<void> checkForUpdate() async {
-    InAppUpdate.checkForUpdate().then((info) {
-      setState(() {
-        _updateInfo = info;
-      });
-      _updateInfo?.updateAvailability == UpdateAvailability.updateAvailable
-          ? InAppUpdate.performImmediateUpdate().catchError((e) => print(e))
-          : null;
-    }).catchError((e) {
-      print('Update error' + e.toString());
-    });
-  }
 
   FirebaseMessaging messaging;
   @override
   void initState() {
     super.initState();
     _analyticsClass.setCurrentScreen('Dashboard', 'Home');
+    UnityAds.init(
+      gameId: appGameId,
+      listener: (state, args) => print('Init Listener: $state => $args'),
+    );
     FirebaseInAppMessaging.instance.setMessagesSuppressed(true);
     messaging = FirebaseMessaging.instance;
-    messaging.getToken().then((value) {
-      print(json.decode(value)['notification']);
-    });
+
     FirebaseMessaging.onMessage.listen((RemoteMessage event) {
       print("message received");
       print(event.notification.body);
@@ -242,6 +230,52 @@ class _MobileDashbordState extends State<MobileDashbord> {
               ),
             ).centered(),
             25.heightBox,
+             StreamBuilder(
+              stream:
+                  FirebaseFirestore.instance.collection('cusads').snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  List<Widget> ads = [];
+                  for (var doc in snapshot.data.docs) {
+                    ads.add(TextButton(
+                      onPressed: () {
+                        launch(doc.data()['url']);
+                      },
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: 100,
+                        child: Image.network(
+                          doc.data()['image'],
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                    ).centered());
+                  }
+                  if (ads.length > 0 &&
+                      snapshot.data.docs[0].data()['visible']) {
+                    return Container(
+                      height: 170,
+                      width: context.percentWidth * 100,
+                      child: VxSwiper(
+                        scrollDirection: Axis.horizontal,
+                        items: ads,
+                        autoPlay: true,
+                        autoPlayAnimationDuration: 1.seconds,
+                      ),
+                    );
+                  } else {
+                    return SizedBox(
+                      width: 0,
+                    );
+                  }
+                } else {
+                  return SizedBox(
+                    width: 0,
+                  );
+                }
+              },
+            ),
+            25.heightBox,
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -383,52 +417,7 @@ class _MobileDashbordState extends State<MobileDashbord> {
               ),
             ).centered(),
             20.heightBox,
-            StreamBuilder(
-              stream:
-                  FirebaseFirestore.instance.collection('cusads').snapshots(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  List<Widget> ads = [];
-                  for (var doc in snapshot.data.docs) {
-                    ads.add(TextButton(
-                      onPressed: () {
-                        launch(doc.data()['url']);
-                      },
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: 100,
-                        child: Image.network(
-                          doc.data()['image'],
-                          fit: BoxFit.fill,
-                        ),
-                      ),
-                    ).centered());
-                  }
-                  if (ads.length > 0 &&
-                      snapshot.data.docs[0].data()['visible']) {
-                    return Container(
-                      height: 170,
-                      width: context.percentWidth * 100,
-                      child: VxSwiper(
-                        scrollDirection: Axis.horizontal,
-                        items: ads,
-                        autoPlay: true,
-                        autoPlayAnimationDuration: 1.seconds,
-                      ),
-                    );
-                  } else {
-                    return SizedBox(
-                      width: 0,
-                    );
-                  }
-                } else {
-                  return SizedBox(
-                    width: 0,
-                  );
-                }
-              },
-            ),
-            20.heightBox,
+           
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -489,11 +478,10 @@ class _MobileDashbordState extends State<MobileDashbord> {
                   },
                 ),
                 MBMButtons(
-                  title: 'MBM\nStories',
+                  title: 'NCC',
                   color: Color(0xFF63B3ED),
                   onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => MBMStories()));
+                    launch('https://mbmec.weebly.com/ncc.html');
                   },
                 ),
               ],
@@ -544,7 +532,9 @@ class MBMButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: () {
-        onPressed();
+        onPressed().then((value) {
+          showUnityInitAds();
+        });
       },
       child: Container(
         decoration: BoxDecoration(
@@ -616,8 +606,8 @@ class ProjectWidget extends StatelessWidget {
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: onPressed,
+    return InkWell(
+      onTap: onPressed,
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30.0),
@@ -648,7 +638,7 @@ showBottomSheetDialog(context) {
             EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
         child: Container(
           color: Colors.white,
-          height: 390,
+          height: 430,
           child: VStack([
             TextButton(
               onPressed: () {
@@ -738,6 +728,17 @@ showBottomSheetDialog(context) {
                 Icon(Icons.notification_important_rounded, color: kFirstColour),
                 10.widthBox,
                 "Notifications".text.black.xl.make(),
+              ]),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => MBMStories()));
+              },
+              child: HStack([
+                Icon(Icons.outlined_flag, color: kFirstColour),
+                10.widthBox,
+                "MBM Stories".text.black.xl.make(),
               ]),
             ),
             TextButton(

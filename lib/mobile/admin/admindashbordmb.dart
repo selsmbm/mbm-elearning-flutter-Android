@@ -172,6 +172,13 @@ class _AdminMobileDashbordState extends State<AdminMobileDashbord> {
                     },
                     child: 'Gate Material Sheet'.text.make())
                 .centered(),
+                TextButton(
+                    onPressed: () {
+                      launch(
+                          'https://docs.google.com/spreadsheets/d/1-gbH7Ysc-XktFgO5J1FfKrfjNG7ueudh-MIdqVodK3g/edit#gid=0');
+                    },
+                    child: 'Teachers data Sheet'.text.make())
+                .centered(),
             20.heightBox,
           ]).scrollVertical(physics: AlwaysScrollableScrollPhysics()).p(20),
           Row(

@@ -19,9 +19,9 @@ class _NotificationsPageState extends State<NotificationsPage> {
   _getFeedData() async {
     try {
       http.Response response = await http.get(Uri.parse(
-          'https://morning-earth-19323.herokuapp.com/?feedURL=https://mbmec.weebly.com/3/feed'));
+          'https://api.factmaven.com/xml-to-json/?xml=https://mbmec.weebly.com/3/feed'));
       if (response.statusCode == 200) {
-        return json.decode(response.body)['items'];
+        return json.decode(response.body)['rss']['channel']['item'];
       }
     } catch (e) {
       print(e);
@@ -34,34 +34,6 @@ class _NotificationsPageState extends State<NotificationsPage> {
     _analyticsClass.setCurrentScreen('Notification', 'Home');
     // createInterstitialAds();
   }
-
-  // InterstitialAd _interstitialAd;
-  // int numOfAttemptLoad = 0;
-  //
-  // initialization() {
-  //   if (MobileAds.instance == null) {
-  //     MobileAds.instance.initialize();
-  //   }
-  // }
-  //
-  // void createInterstitialAds() {
-  //   InterstitialAd.load(
-  //     adUnitId: kInterstitialAdsId,
-  //     request: AdRequest(),
-  //     adLoadCallback:
-  //         InterstitialAdLoadCallback(onAdLoaded: (InterstitialAd ad) {
-  //       _interstitialAd = ad;
-  //       numOfAttemptLoad = 0;
-  //     }, onAdFailedToLoad: (LoadAdError error) {
-  //       numOfAttemptLoad + 1;
-  //       _interstitialAd = null;
-  //
-  //       if (numOfAttemptLoad <= 2) {
-  //         createInterstitialAds();
-  //       }
-  //     }),
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -88,44 +60,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                 } else {
                   return Padding(
                     padding: const EdgeInsets.only(top: 40.0),
-                    child: ListView.separated(
-                        separatorBuilder: (context, index) {
-                          return SizedBox(
-                            height: 0,
-                          );
-                          // if (index % 7 == 0) {
-                          //   return Container(
-                          //     color: Colors.transparent,
-                          //     height: 100,
-                          //     width: double.infinity,
-                          //     alignment: Alignment.center,
-                          //     child: AdWidget(
-                          //       ad: BannerAd(
-                          //         adUnitId: kBannerAdsId,
-                          //         size: AdSize.largeBanner,
-                          //         request: AdRequest(),
-                          //         listener: BannerAdListener(
-                          //           onAdLoaded: (Ad ad) => print('Ad loaded.'),
-                          //           onAdFailedToLoad:
-                          //               (Ad ad, LoadAdError error) {
-                          //             ad.dispose();
-                          //             print('Ad failed to load: $error');
-                          //           },
-                          //           onAdOpened: (Ad ad) => print('Ad opened.'),
-                          //           onAdClosed: (Ad ad) => print('Ad closed.'),
-                          //           onAdImpression: (Ad ad) =>
-                          //               print('Ad impression.'),
-                          //         ),
-                          //       )..load(),
-                          //       key: UniqueKey(),
-                          //     ),
-                          //   );
-                          // } else {
-                          //   return SizedBox(
-                          //     height: 0,
-                          //   );
-                          // }
-                        },
+                    child: ListView.builder(
                         itemCount: snapShot.data.length,
                         itemBuilder: (context, index) {
                           return Padding(
@@ -159,34 +94,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                                   ],
                                 ).onTap(() {
                                   launch(
-                                      '${snapShot.data[index]['url'].toString()}');
-                                  // if (_interstitialAd == null) {
-                                  //   return;
-                                  // }
-                                  //
-                                  // _interstitialAd.fullScreenContentCallback =
-                                  //     FullScreenContentCallback(
-                                  //         onAdShowedFullScreenContent:
-                                  //             (InterstitialAd ad) {
-                                  //   print("ad onAdshowedFullscreen");
-                                  // }, onAdDismissedFullScreenContent:
-                                  //             (InterstitialAd ad) {
-                                  //   print("ad Disposed");
-                                  //   ad.dispose();
-                                  //   launch(
-                                  //       '${snapShot.data[index]['url'].toString()}');
-                                  //   createInterstitialAds();
-                                  // }, onAdFailedToShowFullScreenContent:
-                                  //             (InterstitialAd ad,
-                                  //                 AdError aderror) {
-                                  //   print('$ad OnAdFailed $aderror');
-                                  //   ad.dispose();
-                                  //   createInterstitialAds();
-                                  // });
-                                  //
-                                  // _interstitialAd.show();
-                                  //
-                                  // _interstitialAd = null;
+                                      '${snapShot.data[index]['link'].toString()}');
                                 }),
                               ),
                             ),

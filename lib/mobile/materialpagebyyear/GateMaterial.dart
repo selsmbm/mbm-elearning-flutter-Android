@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:http/http.dart' as http;
 import 'package:mbmelearning/Analytics.dart';
+import 'package:mbmelearning/ads_helper.dart';
 import 'package:mbmelearning/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -124,6 +125,7 @@ class _GateMaterialState extends State<GateMaterial> {
                                       text: _filteredData[index]['desc']
                                           .toString(),
                                       onOpen: (l) {
+                                        showUnityInitAds();
                                         launch(l.url);
                                       },
                                     ),
@@ -131,6 +133,7 @@ class _GateMaterialState extends State<GateMaterial> {
                                     text:
                                         _filteredData[index]['url'].toString(),
                                     onOpen: (l) {
+                                      showUnityInitAds();
                                       launch(
                                           "${_filteredData[index]['url'].toString()}");
                                     },
@@ -192,6 +195,7 @@ class _GateMaterialState extends State<GateMaterial> {
                                               text: snapShot.data[index]['desc']
                                                   .toString(),
                                               onOpen: (l) {
+                                                showUnityInitAds();
                                                 launch(l.url);
                                               },
                                             ),
@@ -199,6 +203,7 @@ class _GateMaterialState extends State<GateMaterial> {
                                             text: snapShot.data[index]['url']
                                                 .toString(),
                                             onOpen: (l) {
+                                              showUnityInitAds();
                                               launch(l.url);
                                             },
                                           ),

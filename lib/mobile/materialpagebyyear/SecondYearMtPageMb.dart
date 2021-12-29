@@ -6,6 +6,7 @@ import 'package:mbmelearning/Widgets/AlertDialog.dart';
 import 'package:mbmelearning/Widgets/Buttons.dart';
 import 'package:mbmelearning/Widgets/mtListTileSecondTofinal.dart';
 import 'package:mbmelearning/Widgets/progressBar.dart';
+import 'package:mbmelearning/ads_helper.dart';
 import 'package:mbmelearning/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -258,6 +259,7 @@ class _MaterialTileState extends State<MaterialTile> {
                           .map(
                             (doc) => MtTileSecondToFinalListTile(
                               onPressed: () {
+                                showUnityInitAds();
                                 launch("${doc['mturl']}");
                               },
                               name: "${doc['mtname']}",
@@ -455,6 +457,7 @@ class _MaterialTileState extends State<MaterialTile> {
                       itemBuilder: (context, index) {
                         return MtTileSecondToFinalListTile(
                           onPressed: () {
+                            showUnityInitAds();
                             launch("${_materialFilteredList[index]['mturl']}");
                           },
                           name: "${_materialFilteredList[index]['mtname']}",

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mbmelearning/Analytics.dart';
 import 'package:mbmelearning/Widgets/progressBar.dart';
 import 'package:mbmelearning/Widgets/semTextlistTile.dart';
+import 'package:mbmelearning/ads_helper.dart';
 import 'package:mbmelearning/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -79,6 +80,7 @@ class _HomeWebsitesState extends State<HomeWebsites> {
                       children: [
                         SemText(
                           onPressed: () {
+                            showUnityInitAds();
                             launch("${doc['weburl']}");
                           },
                           imgurl: "${doc['imgurl']}",

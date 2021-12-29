@@ -129,40 +129,8 @@ class _TeachersDetailsState extends State<TeachersDetails> {
                   )),
               if (_filteredData.isNotEmpty)
                 Expanded(
-                  child: ListView.separated(
-                      separatorBuilder: (context, index) {
-                        // if (index % 7 == 0) {
-                        //   return Container(
-                        //     color: Colors.transparent,
-                        //     height: 100,
-                        //     width: double.infinity,
-                        //     alignment: Alignment.center,
-                        //     child: AdWidget(
-                        //       ad: BannerAd(
-                        //         adUnitId: kBannerAdsId,
-                        //         size: AdSize.largeBanner,
-                        //         request: AdRequest(),
-                        //         listener: BannerAdListener(
-                        //           onAdLoaded: (Ad ad) => print('Ad loaded.'),
-                        //           onAdFailedToLoad: (Ad ad, LoadAdError error) {
-                        //             ad.dispose();
-                        //             print('Ad failed to load: $error');
-                        //           },
-                        //           onAdOpened: (Ad ad) => print('Ad opened.'),
-                        //           onAdClosed: (Ad ad) => print('Ad closed.'),
-                        //           onAdImpression: (Ad ad) =>
-                        //               print('Ad impression.'),
-                        //         ),
-                        //       )..load(),
-                        //       key: UniqueKey(),
-                        //     ),
-                        //   );
-                        // } else {
-                        return SizedBox(
-                          height: 0,
-                        );
-                        // }
-                      },
+                  child: ListView.builder(
+                     
                       itemCount: _filteredData.length,
                       itemBuilder: (context, index) {
                         return Padding(
