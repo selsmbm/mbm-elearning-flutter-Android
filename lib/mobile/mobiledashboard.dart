@@ -230,7 +230,7 @@ class _MobileDashbordState extends State<MobileDashbord> {
               ),
             ).centered(),
             25.heightBox,
-             StreamBuilder(
+            StreamBuilder(
               stream:
                   FirebaseFirestore.instance.collection('cusads').snapshots(),
               builder: (context, snapshot) {
@@ -417,7 +417,6 @@ class _MobileDashbordState extends State<MobileDashbord> {
               ),
             ).centered(),
             20.heightBox,
-           
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

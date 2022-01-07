@@ -43,6 +43,7 @@ class _GateMaterialState extends State<GateMaterial> {
   void initState() {
     super.initState();
     _analyticsClass.setCurrentScreen('Gate Material', 'Material');
+    showUnityInitAds();
   }
 
   @override
@@ -125,16 +126,14 @@ class _GateMaterialState extends State<GateMaterial> {
                                       text: _filteredData[index]['desc']
                                           .toString(),
                                       onOpen: (l) {
-                                        showUnityInitAds();
-                                        launch(l.url);
+                                       launch(l.url);
                                       },
                                     ),
                                   Linkify(
                                     text:
                                         _filteredData[index]['url'].toString(),
                                     onOpen: (l) {
-                                      showUnityInitAds();
-                                      launch(
+                                     launch(
                                           "${_filteredData[index]['url'].toString()}");
                                     },
                                   ),
@@ -195,7 +194,6 @@ class _GateMaterialState extends State<GateMaterial> {
                                               text: snapShot.data[index]['desc']
                                                   .toString(),
                                               onOpen: (l) {
-                                                showUnityInitAds();
                                                 launch(l.url);
                                               },
                                             ),
@@ -203,8 +201,7 @@ class _GateMaterialState extends State<GateMaterial> {
                                             text: snapShot.data[index]['url']
                                                 .toString(),
                                             onOpen: (l) {
-                                              showUnityInitAds();
-                                              launch(l.url);
+                                             launch(l.url);
                                             },
                                           ),
                                         ],

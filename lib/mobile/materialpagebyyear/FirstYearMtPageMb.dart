@@ -27,6 +27,7 @@ class _FirstYearAndMathMtPageMbState extends State<FirstYearAndMathMtPageMb> {
   void initState() {
     super.initState();
     _analyticsClass.setCurrentScreen('First year Material', 'Material');
+    showUnityInitAds();
   }
 
   @override
@@ -255,7 +256,6 @@ class _MaterialTileState extends State<MaterialTile> {
                           .map(
                             (doc) => MtTile(
                               onPressed: () {
-                                showUnityInitAds();
                                 launch("${doc['mturl']}");
                               },
                               name: "${doc['mtname']}",
@@ -452,7 +452,6 @@ class _MaterialTileState extends State<MaterialTile> {
                       itemBuilder: (context, index) {
                         return MtTile(
                           onPressed: () {
-                            showUnityInitAds();
                             launch("${_materialFilteredList[index]['mturl']}");
                           },
                           name: "${_materialFilteredList[index]['mtname']}",

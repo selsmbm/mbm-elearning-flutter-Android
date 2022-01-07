@@ -20,6 +20,7 @@ class _UsefulLinkMbState extends State<UsefulLinkMb> {
   void initState() {
     super.initState();
     _analyticsClass.setCurrentScreen('Useful links', 'Material');
+    showUnityInitAds();
   }
 
   @override
@@ -80,7 +81,6 @@ class _HomeWebsitesState extends State<HomeWebsites> {
                       children: [
                         SemText(
                           onPressed: () {
-                            showUnityInitAds();
                             launch("${doc['weburl']}");
                           },
                           imgurl: "${doc['imgurl']}",

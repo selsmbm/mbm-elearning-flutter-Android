@@ -27,6 +27,7 @@ class _SecondYearMtPageMbState extends State<SecondYearMtPageMb> {
     super.initState();
     _analyticsClass.setCurrentScreen(
         'Second to final year Material', 'Material');
+        showUnityInitAds();
   }
 
   @override
@@ -259,7 +260,6 @@ class _MaterialTileState extends State<MaterialTile> {
                           .map(
                             (doc) => MtTileSecondToFinalListTile(
                               onPressed: () {
-                                showUnityInitAds();
                                 launch("${doc['mturl']}");
                               },
                               name: "${doc['mtname']}",
@@ -457,7 +457,6 @@ class _MaterialTileState extends State<MaterialTile> {
                       itemBuilder: (context, index) {
                         return MtTileSecondToFinalListTile(
                           onPressed: () {
-                            showUnityInitAds();
                             launch("${_materialFilteredList[index]['mturl']}");
                           },
                           name: "${_materialFilteredList[index]['mtname']}",
