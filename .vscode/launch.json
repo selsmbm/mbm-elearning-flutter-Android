@@ -1,0 +1,54 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        // {
+        //     "name": "Studyem",
+        //     "request": "launch",
+        //     "type": "dart",
+        //     "args": [
+        //         "--flavor", 
+        //         "sprod",
+        //         "-t", 
+        //         "lib/main_sprod.dart" 
+        //     ]
+        // },
+        {
+            "name": "MBM Elearning",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "--flavor", 
+                "mdev",
+                "-t", 
+                "lib/main_mdev.dart" 
+            ]
+        },
+        // {
+        //     "name": "studyem",
+        //     "request": "launch",
+        //     "type": "dart",
+        //     "args": [
+        //         "--profile", 
+        //         "--flavor", 
+        //         "sprod",
+        //         "-t", 
+        //         "lib/main_sprod.dart" 
+        //     ]
+        // },
+        // {
+        //     "name": "studyem",
+        //     "request": "launch",
+        //     "type": "dart",
+        //     "args": [
+        //         "--debug", 
+        //         "--flavor", 
+        //         "sprod",
+        //         "-t", 
+        //         "lib/main_sprod.dart" 
+        //     ]
+        // }
+    ]
+}

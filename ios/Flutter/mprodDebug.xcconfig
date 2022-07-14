@@ -1,0 +1,5 @@
+#include "Generated.xcconfig"
+
+FLUTTER_TARGET=lib/main_mprod.dart
+ASSET_PREFIX=mprod
+BUNDLE_NAME=MBM Elearning

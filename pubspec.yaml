@@ -1,0 +1,95 @@
+name: mbm_elearning
+description: mbm_elearning, A notes sharing plateform.
+
+version: 0.0.1+1
+
+environment:
+  sdk: ">=2.15.1 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.3
+  uuid: ^3.0.4
+  http: ^0.13.3
+  firebase_core: ^1.5.0
+  firebase_analytics: ^9.1.12
+  url_launcher: ^6.0.9
+  flutter_bloc: ^7.3.1
+  equatable: ^2.0.3
+  firebase_auth: ^3.0.2
+  google_sign_in: ^5.0.7
+  modal_progress_hud_nsn: ^0.2.1
+  share: ^2.0.4
+  carousel_slider: ^4.0.0
+  firebase_messaging: 
+  flutter_linkify: ^5.0.2
+  introduction_screen: ^3.0.2
+  sqflite: ^2.0.0+4
+  lottie: ^1.2.1
+  connectivity: ^3.0.6
+  cloud_firestore: ^3.1.5
+  shared_preferences: ^2.0.11
+  firebase_dynamic_links: ^4.3.1
+  flutter_svg: ^1.0.3
+  screenshot: ^1.2.3
+  path_provider: ^2.0.8
+  permission_handler: ^10.0.0
+  provider: ^6.0.3
+
+
+dev_dependencies:
+  flutter_lints: ^2.0.1
+  flutter_flavorizr: ^2.1.3
+  flutter_test:
+    sdk: flutter
+
+flutter:
+
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/icons/
+    - assets/rive/
+    - assets/lottie/
+
+  fonts:
+    - family: Righteous
+      fonts:
+        - asset: assets/fonts/Righteous-Regular.ttf
+  
+# flutter pub run flutter_flavorizr -p android:buildGradle,android:androidManifest
+flavorizr:
+  app:
+    android:
+      flavorDimensions: "mbm-elearning-type"
+    ios:
+
+  flavors:
+    mprod:
+      app:
+        name: "MBM Elearning"
+      android:
+        applicationId: "com.mbm.elereaning.mbmecj"
+        firebase:
+          config: ".firebase/mprod/google-services.json"
+      ios:
+        bundleId: "com.mbm.elereaning.mbmecj"
+
+    mdev:
+      app:
+        name: "MBM Elearning Dev"
+      android:
+        applicationId: "com.mbm.elereaning.mbmecj.dev"
+        firebase:
+          config: ".firebase/mdev/google-services.json"
+      ios:
+        bundleId: "com.mbm.elereaning.mbmecj.dev"
+
+# flutter build apk --flavor mprod -t lib/main_mprod.dart
+# flutter build apk --flavor mdev -t lib/main_mdev.dart
+# flutter build appbundle --flavor mprod -t lib/main_mprod.dart
+
+# flutter run --flavor mdev -t lib/main_mdev.dart
