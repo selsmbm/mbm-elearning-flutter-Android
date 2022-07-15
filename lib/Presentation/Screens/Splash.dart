@@ -16,18 +16,17 @@ class LandingPage extends StatefulWidget {
 
 class _LandingPageState extends State<LandingPage> {
   final _auth = FirebaseAuth.instance.currentUser;
-  var checkCollegePageStatus;
 
   checkUser() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult != ConnectivityResult.none) {
       if (_auth == null) {
-        Timer(const Duration(seconds: 2), () {
+        Timer(const Duration(seconds: 1), () {
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => OnBoardingPage()));
         });
       } else {
-        Timer(const Duration(seconds: 2), () async {
+        Timer(const Duration(seconds: 1), () async {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => DashboardPage()),

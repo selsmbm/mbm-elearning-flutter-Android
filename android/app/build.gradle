@@ -71,7 +71,7 @@ android {
 
     defaultConfig {
         applicationId "com.mbm.elereaning.mbmecj"
-        minSdkVersion flutter.minSdkVersion
+        minSdkVersion 21
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

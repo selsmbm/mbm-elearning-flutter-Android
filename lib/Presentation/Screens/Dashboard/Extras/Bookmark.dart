@@ -1,56 +1,43 @@
-import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mbm_elearning/BLoC/GetMaterialBloc/get_material_bloc.dart';
-import 'package:mbm_elearning/Data/BranchesAndSems.dart';
-import 'package:mbm_elearning/Data/LocalDbConnect.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
-import 'package:mbm_elearning/Presentation/Constants/textfieldDeco.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/dashboard.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../Home/Home.dart';
 
-var totalMaterial;
-String? sem;
-String? branch;
+late List<Map<String, dynamic>?> totalMaterial;
 
-class MaterialsPage extends StatefulWidget {
-  final String? sem;
-  final String? branch;
-  const MaterialsPage({Key? key, this.sem, this.branch}) : super(key: key);
+class BookmarkPage extends StatefulWidget {
   @override
-  _MaterialsPageState createState() => _MaterialsPageState();
+  _BookmarkPageState createState() => _BookmarkPageState();
 }
 
-class _MaterialsPageState extends State<MaterialsPage>
+class _BookmarkPageState extends State<BookmarkPage>
     with TickerProviderStateMixin {
   late TabController tabController;
 
   @override
   void initState() {
     super.initState();
-    sem = widget.sem;
-    if (allBranchSemsData.contains(sem)) {
-      branch = '';
-    } else {
-      branch = widget.branch;
-    }
     tabController = TabController(initialIndex: 0, length: 5, vsync: this);
     setCurrentScreenInGoogleAnalytics('material Page');
+  }
+
+  getMtData() async {
+    totalMaterial = await localDbConnect.getBookMarkMt();
+    setState(() {});
   }
 
   @override
   void dispose() {
     tabController.dispose();
-    if (totalMaterial != null) {
-      totalMaterial = null;
-    }
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    getMtData();
     var tabPadding = const EdgeInsets.symmetric(horizontal: 0, vertical: 5);
     var tabTextStyle = const TextStyle(
       color: rTextColor,
@@ -58,9 +45,8 @@ class _MaterialsPageState extends State<MaterialsPage>
     );
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
         title: const Text(
-          'Material',
+          'Bookmark',
         ),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(25),
@@ -72,7 +58,7 @@ class _MaterialsPageState extends State<MaterialsPage>
             },
             controller: tabController,
             unselectedLabelColor: Colors.grey,
-            labelColor: rPrimaryColor,
+            labelColor: Colors.white,
             indicator: const BoxDecoration(
               border: Border(
                 bottom: BorderSide(color: Colors.white, width: 3.0),
@@ -83,7 +69,7 @@ class _MaterialsPageState extends State<MaterialsPage>
                 Padding(
                   padding: tabPadding,
                   child: Text(
-                    t.toUpperCase(),
+                    t,
                     style: tabTextStyle,
                   ),
                 ),
@@ -97,97 +83,109 @@ class _MaterialsPageState extends State<MaterialsPage>
             controller: tabController,
             children: [
               for (var t in mttypes)
-                MtCard(
-                  title: t,
-                )
+                totalMaterial.isEmpty
+                    ? Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            CircularProgressIndicator(),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              'If it takes more than 5 seconds,\nThen it means no data available',
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      )
+                    : mtCard(
+                        totalMaterial,
+                        t,
+                      )
             ],
           ),
         ),
       ),
     );
   }
-}
 
-class MtCard extends StatefulWidget {
-  final String title;
-  const MtCard({
-    Key? key,
-    required this.title,
-  }) : super(key: key);
-
-  @override
-  _MtCardState createState() => _MtCardState();
-}
-
-class _MtCardState extends State<MtCard> {
-  int skip = 0;
-  int limit = 10;
-  bool showMt = false;
   List material = [];
+  final List _materialFilteredList = [];
+  setData(totalMaterial, title) {
+    material = totalMaterial
+        .where(
+            (element) => element['type'].toLowerCase() == title.toLowerCase())
+        .toList();
+    setState(() {});
+  }
 
-  @override
-  void initState() {
-    super.initState();
-    BlocProvider.of<GetMaterialApiBloc>(context).add(
-      FetchGetMaterialApi(
-        sem ?? '',
-        branch ?? '',
-        skip,
-        limit,
-        widget.title,
-        '',
-        '',
-        'true',
-      ),
+  mtCard(
+    totalMaterial,
+    title,
+  ) {
+    setData(totalMaterial, title);
+    return Column(
+      children: [
+        // SizedBox(
+        //   height: 60,
+        //   child: Padding(
+        //     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        //     child: TextField(
+        //         onChanged: (value) {
+        //           if (value == null || value == '') {
+        //             setState(() {
+        //               _materialFilteredList.clear();
+        //             });
+        //           }
+        //         },
+        //         onSubmitted: (value) {
+        //           if (value != null || value != '') {
+        //             setState(() {
+        //               _materialFilteredList = material
+        //                   .where((element) => element['title'].contains(
+        //                       new RegExp(value, caseSensitive: false)))
+        //                   .toList();
+        //             });
+        //           } else {
+        //             setState(() {
+        //               _materialFilteredList.clear();
+        //             });
+        //           }
+        //         },
+        //         decoration: textFieldDeco),
+        //   ),
+        // ),
+        Expanded(
+          child: SizedBox(
+            width: double.infinity,
+            height: double.infinity,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: material.isEmpty
+                  ? const Center(
+                      child: Text('No Data'),
+                    )
+                  : materialList(
+                      _materialFilteredList.isEmpty
+                          ? material
+                          : _materialFilteredList,
+                    ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<GetMaterialApiBloc, GetMaterialApiState>(
-      builder: (context, state) {
-        if (state is GetMaterialApiIsSuccess) {
-          if (material.isNotEmpty) {
-            material.clear();
-          }
-          material.addAll(state.output);
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: material.isEmpty
-                ? const Center(
-                    child: Text('No Data'),
-                  )
-                : MaterialList(
-                    material: material,
-                  ),
-          );
-        } else if (state is GetMaterialApiIsLoading) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        } else {
-          return Center(
-            child: Text("Something went wrong"),
-          );
-        }
-      },
-    );
-  }
-}
-
-class MaterialList extends StatelessWidget {
-  final material;
-  const MaterialList({Key? key, this.material}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
+  materialList(material) {
     return ListView.builder(
       itemCount: material.length,
       physics: const ClampingScrollPhysics(),
       itemBuilder: (context, index) {
         return GestureDetector(
           onTap: () async {
-            launch(material[index]['mturl']);
+            launch(material[index]['url']);
           },
           child: Padding(
             padding: const EdgeInsets.all(5.0),
@@ -213,7 +211,7 @@ class MaterialList extends StatelessWidget {
                           SizedBox(
                             width: double.infinity,
                             child: Text(
-                              material[index]['mtname'],
+                              material[index]['title'],
                               textAlign: TextAlign.start,
                               style: const TextStyle(
                                 color: Colors.black,
@@ -226,7 +224,11 @@ class MaterialList extends StatelessWidget {
                             height: 5,
                           ),
                           Text(
-                            material[index]['mtsub'].toUpperCase(),
+                            'Subject: ${material[index]['subject'].toUpperCase()}',
+                            style: const TextStyle(color: Colors.black54),
+                          ),
+                          Text(
+                            'Sem: ${material[index]['sem'].toUpperCase()}',
                             style: const TextStyle(color: Colors.black54),
                           ),
                         ],
@@ -234,40 +236,16 @@ class MaterialList extends StatelessWidget {
                     ),
                     IconButton(
                       onPressed: () {
-                        localDbConnect.addBookMarkMt(
-                          BookMarkMt(
-                            title: material[index]['mtname'],
-                            url: material[index]['mturl'],
-                            subject: material[index]['mtsub'],
-                            type: material[index]['mttype'],
-                            sem: material[index]['mtsem'],
-                            branch: material[index]['branch'],
-                          ),
-                        );
+                        setState(() {});
+                        localDbConnect.deleteMt(material[index]['id']);
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const Text(
-                                  'Material add to bookmark',
-                                ),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pushNamed(context, 'bookmark');
-                                  },
-                                  child: const Text(
-                                    'check',
-                                    style: TextStyle(color: Colors.blueAccent),
-                                  ),
-                                ),
-                              ],
-                            ),
+                          const SnackBar(
+                            content: Text('Material removed successfully'),
                           ),
                         );
                       },
                       icon: const Icon(
-                        Icons.bookmark_border_outlined,
+                        Icons.delete_outline,
                         color: Color(0xff0015CE),
                         size: 25,
                       ),

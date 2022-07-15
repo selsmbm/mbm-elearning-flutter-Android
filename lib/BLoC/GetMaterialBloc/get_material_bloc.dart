@@ -3,7 +3,8 @@ import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:mbm_elearning/Data/Repository/AddAndGetDataFromApi.dart';
+import 'package:mbm_elearning/Data/Repository/get_mterial_repo.dart';
+import 'package:mbm_elearning/Data/Repository/post_material_repo.dart';
 
 class GetMaterialApiEvent extends Equatable {
   @override
@@ -13,12 +14,13 @@ class GetMaterialApiEvent extends Equatable {
 class FetchGetMaterialApi extends GetMaterialApiEvent {
   final String sem;
   final String branch;
-  final int skip;
-  final int limit;
+  final int? skip;
+  final int? limit;
   final String type;
   final String query;
   final String userId;
   final String approve;
+  final bool showProgress;
   FetchGetMaterialApi(
     this.sem,
     this.branch,
@@ -28,17 +30,17 @@ class FetchGetMaterialApi extends GetMaterialApiEvent {
     this.query,
     this.userId,
     this.approve,
+    this.showProgress,
   );
   @override
   List<Object> get props => [
         branch,
         sem,
-        skip,
-        limit,
         type,
         query,
         userId,
         approve,
+        showProgress,
       ];
 }
 
@@ -56,30 +58,26 @@ class GetMaterialApiIsLoading extends GetMaterialApiState {}
 class GetMaterialApiIsSuccess extends GetMaterialApiState {
   final output;
   GetMaterialApiIsSuccess(this.output);
-
-  @override
-  List<Object> get props => [output];
 }
 
-class SignupGetOtpApiYetIsNotCall extends GetMaterialApiState {}
+class GetMaterialApiNotCall extends GetMaterialApiState {}
 
 class GetMaterialApiBloc
     extends Bloc<GetMaterialApiEvent, GetMaterialApiState> {
-  AllNetworkRequest allNetworkRequest;
-  GetMaterialApiBloc(this.allNetworkRequest)
-      : super(SignupGetOtpApiYetIsNotCall());
+  GetMaterialRepo allNetworkRequest;
+  GetMaterialApiBloc(this.allNetworkRequest) : super(GetMaterialApiNotCall());
 
-  @override
-  GetMaterialApiState get initialState => SignupGetOtpApiYetIsNotCall();
+  GetMaterialApiState get initialState => GetMaterialApiNotCall();
 
   @override
   Stream<GetMaterialApiState> mapEventToState(
       GetMaterialApiEvent event) async* {
     if (event is FetchGetMaterialApi) {
-      yield GetMaterialApiIsLoading();
-
+      if (event.showProgress) {
+        yield GetMaterialApiIsLoading();
+      }
       try {
-        var getMaterialApiOut = await allNetworkRequest.getMethodRequest(
+        var output = await allNetworkRequest.getMaterialRequest(
           event.sem,
           event.branch,
           event.query,
@@ -89,13 +87,13 @@ class GetMaterialApiBloc
           event.skip,
           event.limit,
         );
-        yield GetMaterialApiIsSuccess(getMaterialApiOut);
+        yield GetMaterialApiIsSuccess(output);
       } catch (_) {
         log(_.toString());
         yield GetMaterialApiIsFailed();
       }
     } else if (event is ResetGetMaterialApi) {
-      yield SignupGetOtpApiYetIsNotCall();
+      yield GetMaterialApiNotCall();
     }
   }
 }

@@ -37,6 +37,9 @@ dependencies:
   path_provider: ^2.0.8
   permission_handler: ^10.0.0
   provider: ^6.0.3
+  scrollable_positioned_list: ^0.3.2
+  linkfy_text: ^1.1.5
+  update_available: ^2.1.0
 
 
 dev_dependencies:

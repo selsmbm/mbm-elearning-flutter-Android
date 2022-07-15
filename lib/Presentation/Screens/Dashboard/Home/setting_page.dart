@@ -82,6 +82,14 @@ class _SettingPageState extends State<SettingPage> {
                 subtitle: 'All type of exam material',
                 icon: Icons.book,
               ),
+              SettingButton(
+                onTap: () {
+                  Navigator.pushNamed(context, 'yourmaterialPage');
+                },
+                title: 'Your Material',
+                subtitle: 'All of your uploaded material',
+                icon: Icons.list,
+              ),
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 18, vertical: 5),

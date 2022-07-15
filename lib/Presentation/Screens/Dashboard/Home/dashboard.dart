@@ -1,10 +1,15 @@
+import 'dart:developer';
+
+import 'package:connectivity/connectivity.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:mbm_elearning/Data/LocalDbConnect.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/Home.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/setting_page.dart';
-import 'package:mbm_elearning/Presentation/Screens/Dashboard/profile_page.dart';
+import 'package:mbm_elearning/flavors.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:update_available/update_available.dart';
 
 LocalDbConnect localDbConnect = LocalDbConnect();
 
@@ -60,6 +65,50 @@ class _DashboardPageState extends State<DashboardPage> {
     // } on Exception catch (e) {
     //   print(e);
     // }
+    checkForUpdate();
+  }
+
+  checkForUpdate() async {
+    ConnectivityResult connectivityResult =
+        await (Connectivity().checkConnectivity());
+    if (connectivityResult != ConnectivityResult.none) {
+      await getUpdateAvailability().then((value) {
+        value.fold(
+          available: () {
+            log('update is available for your app.');
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: Text('Update available!'),
+                content: Text('Please update this app for new features.'),
+                actions: [
+                  TextButton(
+                    child: Text('Later'),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  TextButton(
+                    child: Text('OK'),
+                    onPressed: () async {
+                      launch(
+                          'https://play.google.com/store/apps/details?id=${Flavors.package}');
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
+              ),
+            );
+          },
+          notAvailable: () {
+            log('No update is available for your app.');
+          },
+          unknown: () =>
+              log("It was not possible to determine if there is or not "
+                  "an update for your app."),
+        );
+      });
+    }
   }
 
   @override

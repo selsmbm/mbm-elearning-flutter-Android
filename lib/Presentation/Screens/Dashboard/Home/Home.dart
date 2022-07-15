@@ -2,14 +2,17 @@ import 'dart:convert';
 
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:lottie/lottie.dart';
+import 'package:mbm_elearning/BLoC/GetMaterialBloc/get_material_bloc.dart';
 import 'package:mbm_elearning/Data/LocalDbConnect.dart';
+import 'package:mbm_elearning/Data/Repository/get_mterial_repo.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/Presentation/Screens/Auth/Components/TextFielsContainer.dart';
-import 'package:mbm_elearning/Presentation/Screens/Dashboard/Material.dart';
+import 'package:mbm_elearning/Presentation/Screens/Dashboard/material/Material.dart';
 import 'package:mbm_elearning/Presentation/Widgets/carousel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -90,38 +93,12 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
         title: Text('MBM E-Learning'),
       ),
-      // appBar: AppBar(
-      //   centerTitle: true,
-      //   title:
-      //   actions: [
-      //     Padding(
-      //       padding:
-      //           const EdgeInsets.only(right: 5, top: 6, bottom: 6, left: 5),
-      //       child: IconButton(
-      //         onPressed: () {
-      //           Navigator.pushNamed(context, 'addMaterialPage');
-      //         },
-      //         icon: Container(
-      //           width: 30,
-      //           height: 30,
-      //           decoration: BoxDecoration(
-      //             border: Border.all(
-      //               color: Colors.white,
-      //               width: 2,
-      //             ),
-      //             borderRadius: BorderRadius.circular(5),
-      //           ),
-      //           child: const Center(
-      //             child: Icon(
-      //               Icons.add,
-      //               color: Colors.white,
-      //             ),
-      //           ),
-      //         ),
-      //       ),
-      //     ),
-      //   ],
-      // ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(context, 'addMaterialPage');
+        },
+        child: Icon(Icons.add),
+      ),
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
@@ -153,7 +130,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   const SizedBox(
-                    height: 5,
+                    height: 15,
                   ),
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.8,
@@ -288,9 +265,14 @@ class _HomePageState extends State<HomePage> {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => MaterialsPage(
-                    sem: materialSem ?? '',
-                    branch: materialBranch ?? '',
+              builder: (context) => BlocProvider(
+                    create: (context) => GetMaterialApiBloc(
+                      GetMaterialRepo(),
+                    ),
+                    child: MaterialsPage(
+                      sem: materialSem ?? '',
+                      branch: materialBranch ?? '',
+                    ),
                   ))).then((value) {
         materialBranch = null;
         materialSem = null;

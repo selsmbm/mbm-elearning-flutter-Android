@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:mbm_elearning/Data/Repository/AddAndGetDataFromApi.dart';
+import 'package:mbm_elearning/Data/Repository/post_material_repo.dart';
 
 class AddDataToApiEvent extends Equatable {
   @override
@@ -39,7 +39,7 @@ class AddDataToApiIsSuccess extends AddDataToApiState {
 class SignupGetOtpApiYetIsNotCall extends AddDataToApiState {}
 
 class AddDataToApiBloc extends Bloc<AddDataToApiEvent, AddDataToApiState> {
-  AllNetworkRequest allNetworkRequest;
+  PostMaterialRepo allNetworkRequest;
   AddDataToApiBloc(this.allNetworkRequest)
       : super(SignupGetOtpApiYetIsNotCall());
 
@@ -52,8 +52,8 @@ class AddDataToApiBloc extends Bloc<AddDataToApiEvent, AddDataToApiState> {
       yield AddDataToApiIsLoading();
 
       try {
-        var addDataToApiOut =
-            await allNetworkRequest.postMethodRequest(event._url, event._body);
+        var addDataToApiOut = await allNetworkRequest.postMaterialRequest(
+            event._url, event._body);
         yield AddDataToApiIsSuccess(addDataToApiOut);
       } catch (_) {
         print('error catch');
