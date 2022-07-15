@@ -19,6 +19,7 @@ class AddMaterialPage extends StatefulWidget {
 class _AddMaterialPageState extends State<AddMaterialPage> {
   String? materialType;
   String? materialName;
+  String? materialDesc;
   String? materialUrl;
   String? materialSubject;
   String? materialBranch;
@@ -84,6 +85,16 @@ class _AddMaterialPageState extends State<AddMaterialPage> {
                           height: 9,
                         ),
                         RoundedInputField(
+                          hintText: 'Description',
+                          onChanged: (v) {
+                            materialDesc = v;
+                          },
+                          maxLines: 3,
+                        ),
+                        const SizedBox(
+                          height: 9,
+                        ),
+                        RoundedInputField(
                           hintText: 'Subject',
                           onChanged: (v) {
                             materialSubject = v;
@@ -125,26 +136,6 @@ class _AddMaterialPageState extends State<AddMaterialPage> {
                           child: DropdownButtonFormField(
                             decoration: const InputDecoration(
                                 border: InputBorder.none,
-                                hintText: 'Material Branch'),
-                            value: materialBranch,
-                            onChanged: (value) {
-                              setState(() {
-                                materialBranch = value.toString();
-                              });
-                            },
-                            items: branches
-                                .map((subject) => DropdownMenuItem(
-                                    value: subject, child: Text("$subject")))
-                                .toList(),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 9,
-                        ),
-                        TextFieldContainer(
-                          child: DropdownButtonFormField(
-                            decoration: const InputDecoration(
-                                border: InputBorder.none,
                                 hintText: 'Material Sem'),
                             value: materialSem,
                             onChanged: (value) {
@@ -159,6 +150,26 @@ class _AddMaterialPageState extends State<AddMaterialPage> {
                           ),
                         ),
                         const SizedBox(
+                          height: 9,
+                        ),
+                        TextFieldContainer(
+                          child: DropdownButtonFormField(
+                            decoration: const InputDecoration(
+                                border: InputBorder.none,
+                                hintText: 'Material Branch'),
+                            value: materialBranch,
+                            onChanged: (value) {
+                              setState(() {
+                                materialBranch = value.toString();
+                              });
+                            },
+                            items: branches
+                                .map((subject) => DropdownMenuItem(
+                                    value: subject, child: Text("$subject")))
+                                .toList(),
+                          ),
+                        ),
+                        const SizedBox(
                           height: 14,
                         ),
                         TextButton(
@@ -166,19 +177,14 @@ class _AddMaterialPageState extends State<AddMaterialPage> {
                             if (materialUrl != null) {
                               BlocProvider.of<AddDataToApiBloc>(context).add(
                                 FetchAddDataToApi(
-                                  '',
-                                  {
-                                    'id': const Uuid().v4(),
-                                    'name': materialName,
-                                    'url': materialUrl,
-                                    'subject': materialSubject,
-                                    'branch': materialBranch,
-                                    'sem': materialSem,
-                                    'type': materialType,
-                                    'userid':
-                                        FirebaseAuth.instance.currentUser!.uid,
-                                    'approve': 'false',
-                                  },
+                                  materialName,
+                                  materialDesc,
+                                  materialType,
+                                  materialBranch,
+                                  materialSem,
+                                  materialUrl,
+                                  'false',
+                                  materialSubject,
                                 ),
                               );
                             } else {

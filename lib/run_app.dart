@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mbm_elearning/BLoC/AddDataToApi/add_data_to_api_bloc.dart';
 import 'package:mbm_elearning/BLoC/GetMaterialBloc/get_material_bloc.dart';
@@ -50,6 +51,13 @@ Future<Widget> runMainApp() async {
   FirebaseMessaging.onBackgroundMessage(_messageHandler);
   final themeController = ThemeController(ThemeService());
   await themeController.loadSettings();
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent, // status bar color
+    systemNavigationBarColor: rPrimaryLiteColor, // status bar color
+    statusBarIconBrightness: Brightness.light, // status bar icons' color
+    systemNavigationBarIconBrightness:
+        Brightness.dark, //navigation bar icons' color
+  ));
   return MyApp(
     theme: themeController,
   );

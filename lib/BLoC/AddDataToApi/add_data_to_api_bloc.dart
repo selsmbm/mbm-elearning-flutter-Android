@@ -10,11 +10,16 @@ class AddDataToApiEvent extends Equatable {
 }
 
 class FetchAddDataToApi extends AddDataToApiEvent {
-  final String _url;
-  final Map _body;
-  FetchAddDataToApi(this._url, this._body);
-  @override
-  List<Object> get props => [_body, _url];
+  final String? name;
+  final String? desc;
+  final String? type;
+  final String? branch;
+  final String? sem;
+  final String? url;
+  final String? approve;
+  final String? subject;
+  FetchAddDataToApi(this.name, this.desc, this.type, this.branch, this.sem,
+      this.url, this.approve, this.subject,);
 }
 
 class ResetAddDataToApi extends AddDataToApiEvent {}
@@ -29,11 +34,11 @@ class AddDataToApiIsFailed extends AddDataToApiState {}
 class AddDataToApiIsLoading extends AddDataToApiState {}
 
 class AddDataToApiIsSuccess extends AddDataToApiState {
-  final signupOutput;
-  AddDataToApiIsSuccess(this.signupOutput);
+  final output;
+  AddDataToApiIsSuccess(this.output);
 
   @override
-  List<Object> get props => [signupOutput];
+  List<Object> get props => [output];
 }
 
 class SignupGetOtpApiYetIsNotCall extends AddDataToApiState {}
@@ -43,7 +48,6 @@ class AddDataToApiBloc extends Bloc<AddDataToApiEvent, AddDataToApiState> {
   AddDataToApiBloc(this.allNetworkRequest)
       : super(SignupGetOtpApiYetIsNotCall());
 
-  @override
   AddDataToApiState get initialState => SignupGetOtpApiYetIsNotCall();
 
   @override
@@ -53,7 +57,15 @@ class AddDataToApiBloc extends Bloc<AddDataToApiEvent, AddDataToApiState> {
 
       try {
         var addDataToApiOut = await allNetworkRequest.postMaterialRequest(
-            event._url, event._body);
+          event.name,
+          event.desc,
+          event.type,
+          event.branch,
+          event.sem,
+          event.url,
+          event.approve,
+          event.subject,
+        );
         yield AddDataToApiIsSuccess(addDataToApiOut);
       } catch (_) {
         print('error catch');

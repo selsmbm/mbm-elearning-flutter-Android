@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 
 class ThemeService {
@@ -15,6 +16,7 @@ class ThemeController with ChangeNotifier {
     primaryColor: rPrimaryMaterialColorLite,
     useMaterial3: true,
     appBarTheme: const AppBarTheme(
+      elevation: 0.0,
       backgroundColor: rPrimaryLiteColor,
       titleTextStyle: TextStyle(
         fontSize: 23,

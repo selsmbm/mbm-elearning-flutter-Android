@@ -6,8 +6,6 @@ import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/dashboard.dart
 import 'package:url_launcher/url_launcher.dart';
 import '../Home/Home.dart';
 
-late List<Map<String, dynamic>?> totalMaterial;
-
 class BookmarkPage extends StatefulWidget {
   @override
   _BookmarkPageState createState() => _BookmarkPageState();
@@ -16,17 +14,13 @@ class BookmarkPage extends StatefulWidget {
 class _BookmarkPageState extends State<BookmarkPage>
     with TickerProviderStateMixin {
   late TabController tabController;
+  List<Map<String, dynamic>?> totalMaterial = [];
 
   @override
   void initState() {
     super.initState();
     tabController = TabController(initialIndex: 0, length: 5, vsync: this);
     setCurrentScreenInGoogleAnalytics('material Page');
-  }
-
-  getMtData() async {
-    totalMaterial = await localDbConnect.getBookMarkMt();
-    setState(() {});
   }
 
   @override
@@ -37,7 +31,6 @@ class _BookmarkPageState extends State<BookmarkPage>
 
   @override
   Widget build(BuildContext context) {
-    getMtData();
     var tabPadding = const EdgeInsets.symmetric(horizontal: 0, vertical: 5);
     var tabTextStyle = const TextStyle(
       color: rTextColor,
@@ -77,36 +70,45 @@ class _BookmarkPageState extends State<BookmarkPage>
           ),
         ),
       ),
-      body: SafeArea(
-        child: Center(
-          child: TabBarView(
-            controller: tabController,
-            children: [
-              for (var t in mttypes)
-                totalMaterial.isEmpty
-                    ? Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            CircularProgressIndicator(),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              'If it takes more than 5 seconds,\nThen it means no data available',
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
-                      )
-                    : mtCard(
-                        totalMaterial,
-                        t,
-                      )
-            ],
-          ),
-        ),
-      ),
+      body: FutureBuilder(
+          future: localDbConnect.getBookMarkMt(),
+          builder: (context, AsyncSnapshot snapshot) {
+            if (snapshot.hasData) {
+              if (snapshot.data.isNotEmpty) {
+                totalMaterial.addAll(snapshot.data);
+                return SafeArea(
+                  child: Center(
+                    child: TabBarView(
+                      controller: tabController,
+                      children: [
+                        for (var t in mttypes)
+                          mtCard(
+                            totalMaterial,
+                            t,
+                          )
+                      ],
+                    ),
+                  ),
+                );
+              } else {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Text(
+                        'No data available',
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                );
+              }
+            } else {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          }),
     );
   }
 
@@ -117,7 +119,6 @@ class _BookmarkPageState extends State<BookmarkPage>
         .where(
             (element) => element['type'].toLowerCase() == title.toLowerCase())
         .toList();
-    setState(() {});
   }
 
   mtCard(

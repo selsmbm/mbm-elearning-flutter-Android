@@ -19,7 +19,6 @@ class MaterialDetailsPage extends StatefulWidget {
 class _MaterialDetailsPageState extends State<MaterialDetailsPage> {
   @override
   Widget build(BuildContext context) {
-    print(widget.material);
     DateTime time =
         DateTime.fromMillisecondsSinceEpoch(widget.material['time'] * 1000);
     return Dialog(

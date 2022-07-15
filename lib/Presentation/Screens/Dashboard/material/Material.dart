@@ -9,6 +9,7 @@ import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/Presentation/Constants/textfieldDeco.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/dashboard.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/material/material_details_page.dart';
+import 'package:mbm_elearning/Presentation/Widgets/material_data_list_tile.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -189,111 +190,8 @@ class _MtCardState extends State<MtCard> {
                     itemCount: material.length,
                     physics: const ClampingScrollPhysics(),
                     itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () async {
-                           showDialog(
-                                context: context,
-                                builder: (context) => MaterialDetailsPage(
-                                  material: material[index],
-                                  isMe: false,
-                                ),
-                              );
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child: Container(
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(
-                                color: const Color(0xff0015CE),
-                                width: 1,
-                              ),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        SizedBox(
-                                          width: double.infinity,
-                                          child: Text(
-                                            material[index]['mtname'],
-                                            textAlign: TextAlign.start,
-                                            style: const TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        Text(
-                                          material[index]['mtsub']
-                                              .toUpperCase(),
-                                          style: const TextStyle(
-                                              color: Colors.black54),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  IconButton(
-                                    onPressed: () {
-                                      localDbConnect.addBookMarkMt(
-                                        BookMarkMt(
-                                          title: material[index]['mtname'],
-                                          url: material[index]['mturl'],
-                                          subject: material[index]['mtsub'],
-                                          type: material[index]['mttype'],
-                                          sem: material[index]['mtsem'],
-                                          branch: material[index]['branch'],
-                                        ),
-                                      );
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          content: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              const Text(
-                                                'Material add to bookmark',
-                                              ),
-                                              TextButton(
-                                                onPressed: () {
-                                                  Navigator.pushNamed(
-                                                      context, 'bookmark');
-                                                },
-                                                child: const Text(
-                                                  'check',
-                                                  style: TextStyle(
-                                                      color: Colors.blueAccent),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    icon: const Icon(
-                                      Icons.bookmark_border_outlined,
-                                      size: 25,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
+                      return MaterialListTile(
+                        materialData: material[index],
                       );
                     },
                   ),
