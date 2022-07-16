@@ -1,8 +1,15 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mbm_elearning/BLoC/AddDataToApi/add_data_to_api_bloc.dart';
+import 'package:mbm_elearning/BLoC/GetMaterialBloc/get_material_bloc.dart';
 import 'package:mbm_elearning/Data/LocalDbConnect.dart';
+import 'package:mbm_elearning/Data/Repository/delete_material_repo.dart';
+import 'package:mbm_elearning/Data/Repository/post_material_repo.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/dashboard.dart';
+import 'package:mbm_elearning/Presentation/Screens/Dashboard/material/AddMaterial.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MaterialDetailsPage extends StatefulWidget {
@@ -17,6 +24,7 @@ class MaterialDetailsPage extends StatefulWidget {
 }
 
 class _MaterialDetailsPageState extends State<MaterialDetailsPage> {
+  User? user = FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
     DateTime time =
@@ -28,6 +36,33 @@ class _MaterialDetailsPageState extends State<MaterialDetailsPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
+            const SizedBox(height: 10),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: rPrimaryLiteColor,
+              ),
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      typeIcon[widget.material['mttype']],
+                      color: rPrimaryColor,
+                    ),
+                    const SizedBox(width: 10),
+                    Text(
+                      widget.material['mttype'],
+                      style: TextStyle(
+                        fontSize: 15,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
             const SizedBox(height: 10),
             GestureDetector(
               onTap: () {
@@ -45,96 +80,122 @@ class _MaterialDetailsPageState extends State<MaterialDetailsPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: rPrimaryLiteColor,
-                  ),
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                    child: Row(
-                      children: [
-                        Icon(
-                          typeIcon[widget.material['mttype']],
-                          color: rPrimaryColor,
-                        ),
-                        const SizedBox(width: 10),
-                        Text(
-                          widget.material['mttype'],
-                          style: TextStyle(
-                            fontSize: 15,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Row(
-                  children: [
-                    // IconButton(
-                    //   onPressed: () {},
-                    //   icon: Icon(Icons.edit),
-                    // ),
-                    IconButton(
-                      onPressed: () {
-                        launch(widget.material['mturl']);
-                      },
-                      icon: Icon(Icons.open_in_browser),
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        localDbConnect.addBookMarkMt(
-                          BookMarkMt(
-                            title: widget.material['mtname'],
-                            url: widget.material['mturl'],
-                            subject: widget.material['mtsub'],
-                            type: widget.material['mttype'],
-                            sem: widget.material['mtsem'],
-                            branch: widget.material['branch'],
-                          ),
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const Text(
-                                  'Material add to bookmark',
-                                ),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pushNamed(context, 'bookmark');
-                                  },
-                                  child: const Text(
-                                    'check',
-                                    style: TextStyle(color: Colors.blueAccent),
-                                  ),
-                                ),
-                              ],
+                if (widget.isMe)
+                  IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => BlocProvider(
+                            create: (context) => AddDataToApiBloc(
+                              PostMaterialRepo(),
+                            ),
+                            child: AddMaterialPage(
+                              purpose: AddMaterialPagePurpose.update,
+                              materialData: widget.material,
                             ),
                           ),
-                        );
-                      },
-                      icon: const Icon(
-                        Icons.bookmark_border_outlined,
-                        size: 25,
-                      ),
-                    ),
-                    if (widget.isMe)
-                      Tooltip(
-                        message: widget.material['approve']
-                            ? "Material is live to everyone"
-                            : "Material is pending for approval",
-                        child: CircleAvatar(
-                          radius: 8,
-                          backgroundColor: widget.material['approve']
-                              ? Colors.green
-                              : Colors.red,
                         ),
-                      )
-                  ],
+                      );
+                    },
+                    icon: Icon(Icons.edit),
+                  ),
+                if (widget.isMe)
+                  IconButton(
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: Text('Delete Material'),
+                          content: Text(
+                              'Are you sure you want to delete this material?'),
+                          actions: [
+                            TextButton(
+                              child: Text('Cancel'),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                            ),
+                            TextButton(
+                              child: Text('Delete'),
+                              onPressed: () {
+                                DeleteMaterialRepo.post(
+                                    widget.material['mtid']);
+                                int i = 0;
+                                Navigator.popUntil(
+                                    context, (route) => i++ == 3);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content:
+                                        Text('Material deleted successfully'),
+                                    duration: Duration(seconds: 1),
+                                  ),
+                                );
+                              },
+                            )
+                          ],
+                        ),
+                      );
+                    },
+                    icon: Icon(Icons.delete),
+                  ),
+                IconButton(
+                  onPressed: () {
+                    launch(widget.material['mturl']);
+                  },
+                  icon: Icon(Icons.open_in_browser),
                 ),
+                IconButton(
+                  onPressed: () {
+                    localDbConnect.addBookMarkMt(
+                      BookMarkMt(
+                        title: widget.material['mtname'],
+                        url: widget.material['mturl'],
+                        subject: widget.material['mtsub'],
+                        type: widget.material['mttype'],
+                        sem: widget.material['mtsem'],
+                        branch: widget.material['branch'],
+                      ),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              'Material add to bookmark',
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pushNamed(context, 'bookmark');
+                              },
+                              child: const Text(
+                                'check',
+                                style: TextStyle(color: Colors.blueAccent),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.bookmark_border_outlined,
+                    size: 25,
+                  ),
+                ),
+                if (widget.isMe)
+                  Tooltip(
+                    message: widget.material['approve']
+                        ? "Material is live to everyone"
+                        : "Material is pending for approval",
+                    child: CircleAvatar(
+                      radius: 8,
+                      backgroundColor: widget.material['approve']
+                          ? Colors.green
+                          : Colors.red,
+                    ),
+                  ),
               ],
             ),
             const SizedBox(height: 10),

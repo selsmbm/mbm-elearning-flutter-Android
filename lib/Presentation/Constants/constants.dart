@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 const String getMaterialApi =
     "https://script.google.com/macros/s/AKfycbzq2WZOV3jG9ifOpdPJR713DhLd99PhA1Cea9o7HbGCmMi4txQEoN5KpYUzXJiZU-Y/exec";
 const String addMaterialApi =
-    "https://script.google.com/macros/s/AKfycbwzl-Od3VwUFZm6KW1xiW9PbWZPbXG6a-__v9ovjeaIahG4NSlWMyltV0_zQczpRpX6sQ/exec";
+    "https://script.google.com/macros/s/AKfycbzsre6Iu4Wu2r9yqE-xuCzVlFl0knMw7lMPx73CEFM5MwZbkCWIU0bA82WhQxn9BIfMaQ/exec";
 const String updateMaterialApi =
-    "https://script.google.com/macros/s/AKfycbxr3O95T32qb3YBVWxuDXGJ4pp0wwN3WJ5tFZ5Yw3dJ3hUrjJxtbqFRNUjjxGnmFb0oeA/exec";
+    "https://script.google.com/macros/s/AKfycbxYaxsj37TceUnPzOzG4IjF37487DfExQgx4mdR59UwiEN3YedTZJISPNb840OZiqiYlA/exec";
 const String deleteMaterialApi =
-    "https://script.google.com/macros/s/AKfycbxtKxqcTnJMwho0r2tvr3EOqFhIxlDDdbSSMH8XhYNPaXvM7Y0lvY3-fBEiND2TnsIL/exec";
+    "https://script.google.com/macros/s/AKfycbxlNiBQOGReRMX2AIUpB_0QQxHKEjPYfPPMrumXdsVxwtkTdG7wTRd5z1-G6jgUHtT4/exec";
 
 const List<String> mttypes = [
   'notes',
@@ -30,3 +30,10 @@ Map<String, IconData> typeIcon = {
   'file': Icons.file_copy,
   'video': Icons.videocam,
 };
+
+const String gdriveUploadClientId =
+    "304334437374-vmjld7k1vvc234p9loqtu57kv9a7e2qc.apps.googleusercontent.com";
+const String gDriveUploadClientSecreat = "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";
+const String gDriveFolder = '17RjQvK979j3RjwjtTBP5LtyEQ9Qh8Qdh';
+
+enum AddMaterialPagePurpose { add, update }

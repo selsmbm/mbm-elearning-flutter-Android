@@ -3,9 +3,13 @@ import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 
 class TextFieldContainer extends StatelessWidget {
   final Widget child;
+  final double? height;
+  final double? width;
   const TextFieldContainer({
     Key? key,
     required this.child,
+    this.height,
+    this.width,
   }) : super(key: key);
 
   @override
@@ -14,7 +18,8 @@ class TextFieldContainer extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 5),
       padding: const EdgeInsets.symmetric(horizontal: 15),
-      width: size.width * 0.8,
+      width: width ?? size.width * 0.8,
+      height: height,
       decoration: BoxDecoration(
         color: rPrimaryLiteColor,
         borderRadius: BorderRadius.circular(20),

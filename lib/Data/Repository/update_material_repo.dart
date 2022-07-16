@@ -1,14 +1,12 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:connectivity/connectivity.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
-import 'package:mbm_elearning/Data/Repository/GDrive/upload_to_drive.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 
-class PostMaterialRepo {
-  postMaterialRequest(
+class UpdateMaterialRepo {
+  static post(
+    int id,
     String? name,
     String? desc,
     String? type,
@@ -17,20 +15,13 @@ class PostMaterialRepo {
     String? url,
     String? approve,
     String? subject,
-    File? file,
   ) async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult != ConnectivityResult.none) {
       try {
-        User? user = FirebaseAuth.instance.currentUser;
-        var time = DateTime.now().millisecondsSinceEpoch / 1000;
-        if (file != null) {
-          GoogleDrive googleDrive = GoogleDrive();
-          url = await googleDrive.upload(file);
-        }
         http.Response response = await http.get(
           Uri.parse(
-            "$addMaterialApi?name=$name&desc=${desc ?? ''}&url=$url&subject=$subject&branch=${branch ?? ''}&sem=$sem&type=$type&user=${user!.displayName ?? ''}&approve=$approve&time=${time.toStringAsFixed(0)}&uid=${user.uid}",
+            "$updateMaterialApi?id=$id&name=${name ?? ''}&desc=${desc ?? ''}&url=${url ?? ''}&subject=${subject ?? ''}&branch=${branch ?? ''}&sem=$sem&type=$type&approve=${approve ?? ''}",
           ),
         );
         if (response.statusCode == 200) {

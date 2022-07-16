@@ -6,20 +6,22 @@ import 'TextFielsContainer.dart';
 class RoundedInputField extends StatelessWidget {
   final String? hintText;
   final String? errorText;
-  final ValueChanged<String> onChanged;
+  final Function(String)? onChanged;
   final int maxLines;
+  final TextEditingController? controller;
   const RoundedInputField({
     Key? key,
     this.hintText,
-    required this.onChanged,
+    this.onChanged,
     this.errorText,
-    this.maxLines = 1,
+    this.maxLines = 1, this.controller,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFieldContainer(
       child: TextField(
+        controller: controller,
         maxLines: maxLines,
         onChanged: onChanged,
         cursorColor: rPrimaryColor,

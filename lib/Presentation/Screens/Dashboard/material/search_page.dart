@@ -89,6 +89,7 @@ class _SearchPageState extends State<SearchPage> {
               const SizedBox(width: 5),
               Expanded(
                   child: TextField(
+                autofocus: true,
                 controller: queryController,
                 maxLines: 1,
                 onChanged: (value) {

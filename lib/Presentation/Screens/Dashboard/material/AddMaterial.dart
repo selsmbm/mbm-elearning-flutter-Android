@@ -1,6 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mbm_elearning/Data/Repository/GDrive/upload_to_drive.dart';
+import 'package:mbm_elearning/Data/Repository/update_material_repo.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:mbm_elearning/BLoC/AddDataToApi/add_data_to_api_bloc.dart';
@@ -8,22 +12,27 @@ import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Screens/Auth/Components/RoundedInputField.dart';
 import 'package:mbm_elearning/Presentation/Screens/Auth/Components/TextFielsContainer.dart';
-import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/Home.dart';
-import 'package:uuid/uuid.dart';
+import 'package:path/path.dart' as p;
 
 class AddMaterialPage extends StatefulWidget {
+  final AddMaterialPagePurpose purpose;
+  final Map<dynamic, dynamic>? materialData;
+  const AddMaterialPage(
+      {Key? key, this.purpose = AddMaterialPagePurpose.add, this.materialData})
+      : super(key: key);
   @override
   _AddMaterialPageState createState() => _AddMaterialPageState();
 }
 
 class _AddMaterialPageState extends State<AddMaterialPage> {
-  String? materialType;
-  String? materialName;
-  String? materialDesc;
-  String? materialUrl;
-  String? materialSubject;
+  TextEditingController materialName = TextEditingController();
+  TextEditingController materialDesc = TextEditingController();
+  TextEditingController materialUrl = TextEditingController();
+  TextEditingController materialSubject = TextEditingController();
   String? materialBranch;
   String? materialSem;
+  String? materialType;
+  File? file;
   bool showProgress = false;
   @override
   void initState() {
@@ -32,14 +41,30 @@ class _AddMaterialPageState extends State<AddMaterialPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  void didChangeDependencies() {
+    if (widget.purpose == AddMaterialPagePurpose.update) {
+      materialType = widget.materialData!['mttype'];
+      materialName.text = widget.materialData!['mtname'];
+      materialDesc.text = widget.materialData!['desc'];
+      materialUrl.text = widget.materialData!['mturl'];
+      materialSubject.text = widget.materialData!['mtsub'];
+      materialBranch = widget.materialData!['branch'];
+      materialSem = widget.materialData!['mtsem'];
+    }
+    super.didChangeDependencies();
+  }
+
+  @override
+  Widget build(BuildContext ctx) {
     return ModalProgressHUD(
       inAsyncCall: showProgress,
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: const Text(
-            'Add Material',
+          title: Text(
+            widget.purpose == AddMaterialPagePurpose.update
+                ? "Update Material"
+                : 'Add Material',
           ),
         ),
         body: SafeArea(
@@ -57,7 +82,7 @@ class _AddMaterialPageState extends State<AddMaterialPage> {
                 setState(() {
                   showProgress = false;
                 });
-                ScaffoldMessenger.of(context).showSnackBar(
+                ScaffoldMessenger.of(ctx).showSnackBar(
                   const SnackBar(
                     content: Text('Successfully added material.'),
                   ),
@@ -76,19 +101,15 @@ class _AddMaterialPageState extends State<AddMaterialPage> {
                           height: 10,
                         ),
                         RoundedInputField(
+                          controller: materialName,
                           hintText: 'Material Name',
-                          onChanged: (v) {
-                            materialName = v;
-                          },
                         ),
                         const SizedBox(
                           height: 9,
                         ),
                         RoundedInputField(
                           hintText: 'Description',
-                          onChanged: (v) {
-                            materialDesc = v;
-                          },
+                          controller: materialDesc,
                           maxLines: 3,
                         ),
                         const SizedBox(
@@ -96,18 +117,7 @@ class _AddMaterialPageState extends State<AddMaterialPage> {
                         ),
                         RoundedInputField(
                           hintText: 'Subject',
-                          onChanged: (v) {
-                            materialSubject = v;
-                          },
-                        ),
-                        const SizedBox(
-                          height: 9,
-                        ),
-                        RoundedInputField(
-                          hintText: 'Material url',
-                          onChanged: (v) {
-                            materialUrl = v;
-                          },
+                          controller: materialSubject,
                         ),
                         const SizedBox(
                           height: 9,
@@ -152,43 +162,146 @@ class _AddMaterialPageState extends State<AddMaterialPage> {
                         const SizedBox(
                           height: 9,
                         ),
-                        TextFieldContainer(
-                          child: DropdownButtonFormField(
-                            decoration: const InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'Material Branch'),
-                            value: materialBranch,
-                            onChanged: (value) {
-                              setState(() {
-                                materialBranch = value.toString();
-                              });
-                            },
-                            items: branches
-                                .map((subject) => DropdownMenuItem(
-                                    value: subject, child: Text("$subject")))
-                                .toList(),
+                        if (materialSem != null &&
+                            !allBranchSemsData.contains(materialSem))
+                          TextFieldContainer(
+                            child: DropdownButtonFormField(
+                              decoration: const InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: 'Material Branch'),
+                              value: materialBranch,
+                              onChanged: (value) {
+                                setState(() {
+                                  materialBranch = value.toString();
+                                });
+                              },
+                              items: branches
+                                  .map((subject) => DropdownMenuItem(
+                                      value: subject, child: Text("$subject")))
+                                  .toList(),
+                            ),
                           ),
+                        const SizedBox(
+                          height: 9,
                         ),
+                        if (widget.purpose != AddMaterialPagePurpose.update)
+                          InkWell(
+                            onTap: () async {
+                              var selectFile =
+                                  (await FilePicker.platform.pickFiles(
+                                type: FileType.any,
+                                allowMultiple: false,
+                                onFileLoading: (FilePickerStatus status) =>
+                                    print(status),
+                              ))
+                                      ?.files
+                                      .first;
+                              if (selectFile != null) {
+                                setState(() {
+                                  file = File(selectFile.path!);
+                                });
+                              }
+                            },
+                            child: TextFieldContainer(
+                              height: 100,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.attach_file),
+                                  Text(
+                                    file != null
+                                        ? p.basename(file!.path)
+                                        : "Choose a material",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        if (widget.purpose != AddMaterialPagePurpose.update)
+                          if (file == null) Text("AND"),
+                        if (file == null)
+                          RoundedInputField(
+                            hintText: 'Material url',
+                            controller: materialUrl,
+                          ),
                         const SizedBox(
                           height: 14,
                         ),
                         TextButton(
-                          onPressed: () {
-                            if (materialUrl != null) {
-                              BlocProvider.of<AddDataToApiBloc>(context).add(
-                                FetchAddDataToApi(
-                                  materialName,
-                                  materialDesc,
-                                  materialType,
-                                  materialBranch,
-                                  materialSem,
-                                  materialUrl,
-                                  'false',
-                                  materialSubject,
-                                ),
-                              );
+                          onPressed: () async {
+                            if (materialName.text != '' &&
+                                materialSubject.text != '' &&
+                                materialSem != '' &&
+                                materialType != '') {
+                              if (!allBranchSemsData.contains(materialSem)) {
+                                if (materialBranch != '') {
+                                  ScaffoldMessenger.of(ctx).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('Please select branch'),
+                                    ),
+                                  );
+                                  return;
+                                }
+                              }
+                              if (widget.purpose ==
+                                  AddMaterialPagePurpose.update) {
+                                setState(() {
+                                  showProgress = true;
+                                });
+                                var output = await UpdateMaterialRepo.post(
+                                    widget.materialData!['mtid'],
+                                    materialName.text,
+                                    materialDesc.text,
+                                    materialType,
+                                    materialBranch,
+                                    materialSem,
+                                    materialUrl.text,
+                                    '',
+                                    materialSubject.text);
+                                if (output == 'SUCCESS') {
+                                  Future.delayed(Duration(milliseconds: 300),
+                                      () {
+                                    ScaffoldMessenger.of(ctx).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                            'Material updated successfully'),
+                                        duration: Duration(seconds: 1),
+                                      ),
+                                    );
+                                    int i = 0;
+                                    Navigator.popUntil(
+                                        ctx, (route) => i++ == 3);
+                                  });
+                                }
+                              } else {
+                                if (file == null && materialUrl == null) {
+                                  ScaffoldMessenger.of(ctx).showSnackBar(
+                                    const SnackBar(
+                                      content:
+                                          Text('Please add a material or url'),
+                                    ),
+                                  );
+                                  return;
+                                }
+                                BlocProvider.of<AddDataToApiBloc>(context).add(
+                                  FetchAddDataToApi(
+                                    materialName.text,
+                                    materialDesc.text,
+                                    materialType,
+                                    materialBranch,
+                                    materialSem,
+                                    materialUrl.text,
+                                    'false',
+                                    materialSubject.text,
+                                    file,
+                                  ),
+                                );
+                              }
                             } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
+                              ScaffoldMessenger.of(ctx).showSnackBar(
                                 const SnackBar(
                                   content: Text('Please fill all details'),
                                 ),
@@ -207,11 +320,7 @@ class _AddMaterialPageState extends State<AddMaterialPage> {
                                   offset: Offset(-0.18, 2),
                                 ),
                               ],
-                              gradient: const LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                colors: [Color(0xff000b75), Color(0xff001cff)],
-                              ),
+                              color: rPrimaryColor,
                             ),
                             child: const Center(
                               child: Text(

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -18,8 +19,18 @@ class FetchAddDataToApi extends AddDataToApiEvent {
   final String? url;
   final String? approve;
   final String? subject;
-  FetchAddDataToApi(this.name, this.desc, this.type, this.branch, this.sem,
-      this.url, this.approve, this.subject,);
+  final File? file;
+  FetchAddDataToApi(
+    this.name,
+    this.desc,
+    this.type,
+    this.branch,
+    this.sem,
+    this.url,
+    this.approve,
+    this.subject,
+    this.file,
+  );
 }
 
 class ResetAddDataToApi extends AddDataToApiEvent {}
@@ -65,6 +76,7 @@ class AddDataToApiBloc extends Bloc<AddDataToApiEvent, AddDataToApiState> {
           event.url,
           event.approve,
           event.subject,
+          event.file,
         );
         yield AddDataToApiIsSuccess(addDataToApiOut);
       } catch (_) {

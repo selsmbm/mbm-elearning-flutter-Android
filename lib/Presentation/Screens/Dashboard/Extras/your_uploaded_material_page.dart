@@ -96,6 +96,7 @@ class _YourMaterialPageState extends State<YourMaterialPage> {
                         itemBuilder: (context, index) {
                           return MaterialListTile(
                             materialData: completeMaterial[index],
+                            isMe: true,
                           );
                         },
                       ),

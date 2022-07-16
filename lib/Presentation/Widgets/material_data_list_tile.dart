@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:mbm_elearning/Data/LocalDbConnect.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mbm_elearning/BLoC/GetMaterialBloc/get_material_bloc.dart';
+import 'package:mbm_elearning/Data/Repository/get_mterial_repo.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
-import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/dashboard.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/material/material_details_page.dart';
 
 class MaterialListTile extends StatelessWidget {
   const MaterialListTile({
     Key? key,
     required this.materialData,
+    this.isMe = false,
   }) : super(key: key);
 
   final Map<dynamic, dynamic> materialData;
+  final bool isMe;
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +22,14 @@ class MaterialListTile extends StatelessWidget {
       onTap: () async {
         showDialog(
           context: context,
-          builder: (context) => MaterialDetailsPage(
-            material: materialData,
-            isMe: false,
+          builder: (context) => BlocProvider(
+            create: (context) => GetMaterialApiBloc(
+              GetMaterialRepo(),
+            ),
+            child: MaterialDetailsPage(
+              material: materialData,
+              isMe: isMe,
+            ),
           ),
         );
       },

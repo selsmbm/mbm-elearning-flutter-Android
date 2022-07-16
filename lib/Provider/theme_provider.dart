@@ -15,6 +15,11 @@ class ThemeController with ChangeNotifier {
   ThemeData litethemeData = ThemeData.light().copyWith(
     primaryColor: rPrimaryMaterialColorLite,
     useMaterial3: true,
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(rPrimaryMaterialColor),
+      ),
+    ),
     appBarTheme: const AppBarTheme(
       elevation: 0.0,
       backgroundColor: rPrimaryLiteColor,
