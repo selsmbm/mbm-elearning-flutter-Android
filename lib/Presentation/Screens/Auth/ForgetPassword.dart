@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Widgets/Buttons/SigninButton.dart';
 
@@ -26,10 +27,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Container(
-                  height: 200,
-                  padding: const EdgeInsets.only(left: 30.0, right: 30.0),
-                ),
+                Lottie.asset('assets/lottie/sign-in-yellow.json', width: 300),
                 Container(
                   height: 200,
                   decoration: BoxDecoration(

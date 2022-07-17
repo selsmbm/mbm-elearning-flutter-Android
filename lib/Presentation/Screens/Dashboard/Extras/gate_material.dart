@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:http/http.dart' as http;
@@ -17,7 +18,13 @@ class GateMaterial extends StatefulWidget {
 class _GateMaterialState extends State<GateMaterial> {
   final List _outPutData = [];
   final List _filteredData = [];
+  bool showSearchBar = false;
+  bool showProgress = false;
+
   _getFeedData() async {
+    setState(() {
+      showProgress = true;
+    });
     _outPutData.clear();
     try {
       http.Response response = await http.get(Uri.parse(
@@ -30,15 +37,19 @@ class _GateMaterialState extends State<GateMaterial> {
             'url': mt[r'url'],
           });
         }
-        return _outPutData;
+        setState(() {});
       }
     } catch (e) {
       print(e);
     }
+    setState(() {
+      showProgress = false;
+    });
   }
 
   @override
   void initState() {
+    _getFeedData();
     super.initState();
     setCurrentScreenInGoogleAnalytics('Gate material Page');
   }
@@ -48,165 +59,167 @@ class _GateMaterialState extends State<GateMaterial> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text(
-          'Gate SSC etc.',
-        ),
+        title: showSearchBar
+            ? Container(
+                height: 40,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: Colors.white,
+                ),
+                child: Row(
+                  children: [
+                    const SizedBox(width: 5),
+                    Expanded(
+                        child: TextField(
+                      autofocus: true,
+                      maxLines: 1,
+                      onChanged: (value) {
+                        if (value.isEmpty) {
+                          setState(() {
+                            _filteredData.clear();
+                          });
+                        }
+                      },
+                      onSubmitted: (value) {
+                        if (value.isNotEmpty) {
+                          _filteredData.clear();
+                          setState(() {
+                            _filteredData.addAll(_outPutData.reversed
+                                .toList()
+                                .where((element) => element['title']
+                                    .toLowerCase()
+                                    .contains(RegExp(value.toLowerCase()))));
+                          });
+                        }
+                      },
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Search',
+                        hintStyle: TextStyle(color: Colors.black),
+                      ),
+                      style: const TextStyle(color: Colors.black),
+                    )),
+                    IconButton(
+                      onPressed: () {
+                        setState(() {
+                          showSearchBar = false;
+                        });
+                      },
+                      icon: Icon(
+                        Icons.close,
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            : const Text(
+                'Gate SSC etc.',
+              ),
+        actions: [
+          if (!showProgress)
+            if (!showSearchBar)
+              IconButton(
+                onPressed: () {
+                  setState(() {
+                    showSearchBar = true;
+                  });
+                },
+                icon: const Icon(
+                  Icons.search,
+                ),
+              ),
+        ],
       ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 15,
-              ),
-              TextField(
-                onChanged: (value) {
-                  if (value != null || value != '') {
-                    _filteredData.clear();
-                    setState(() {
-                      _filteredData.addAll(_outPutData.reversed.toList().where(
-                          (element) => element['title']
-                              .toLowerCase()
-                              .contains(RegExp(value.toLowerCase()))));
-                    });
-                    print(_filteredData);
-                  }
-                },
-                onSubmitted: (value) {},
-                decoration: textFieldDeco,
-              ),
-              if (_filteredData.isNotEmpty)
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: _filteredData.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: Colors.white70,
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(15)),
-                              border: Border.all(
-                                color: rPrimaryColor,
-                                width: 2,
-                              )),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  _filteredData[index]['title'].toString(),
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15,
-                                  ),
-                                ),
-                                if (_filteredData[index]['desc'].toString() !=
-                                    '')
-                                  Linkify(
-                                    text:
-                                        _filteredData[index]['desc'].toString(),
-                                    onOpen: (l) {
-                                      launch(l.url);
-                                      Future.delayed(const Duration(seconds: 2),
-                                          () => showUnityInitAds());
-                                    },
-                                  ),
-                                Linkify(
-                                  text:
-                                      "Url: ${_filteredData[index]['url'].toString()}",
-                                  onOpen: (l) {
-                                    launch(
-                                        _filteredData[index]['url'].toString());
-                                    Future.delayed(const Duration(seconds: 2),
-                                        () => showUnityInitAds());
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              if (_filteredData.isEmpty)
-                Expanded(
-                  child: FutureBuilder(
-                    future: _getFeedData(),
-                    builder: (context, AsyncSnapshot snapShot) {
-                      if (snapShot.connectionState == ConnectionState.waiting) {
-                        return const Center(child: CircularProgressIndicator());
-                      } else {
-                        return ListView.separated(
-                          separatorBuilder: (context, index) {
-                            return const SizedBox(
-                              height: 0,
-                            );
-                          },
-                          itemCount: snapShot.data.length,
+          child: showProgress
+              ? const Center(child: CircularProgressIndicator())
+              : Column(
+                  children: [
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    if (_filteredData.isNotEmpty)
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: _filteredData.length,
                           itemBuilder: (context, index) {
-                            return Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 8.0),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.white70,
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(15)),
-                                    border: Border.all(
-                                      color: Colors.grey,
-                                      width: 2,
-                                    )),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        snapShot.data[index]['title']
-                                            .toString(),
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 15,
-                                        ),
-                                      ),
-                                      if (snapShot.data[index]['desc']
-                                              .toString() !=
-                                          '')
-                                        Linkify(
-                                          text: snapShot.data[index]['desc']
-                                              .toString(),
-                                          onOpen: (l) {
-                                            showUnityInitAds();
-                                            launch(l.url);
-                                          },
-                                        ),
-                                      Linkify(
-                                        text: snapShot.data[index]['url']
-                                            .toString(),
-                                        onOpen: (l) {
-                                          showUnityInitAds();
-                                          launch(l.url);
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
+                            return listTile(_filteredData[index]);
                           },
-                        );
-                      }
-                    },
+                        ),
+                      ),
+                    if (_filteredData.isEmpty)
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: _outPutData.length,
+                          itemBuilder: (context, index) {
+                            return listTile(_outPutData[index]);
+                          },
+                        ),
+                      ),
+                  ],
+                ),
+        ),
+      ),
+    );
+  }
+
+  Padding listTile(Map data) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: InkWell(
+        onTap: () {
+          launch(data['url'].toString());
+        },
+        child: Row(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: rPrimaryLiteColor,
+              ),
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                child: Icon(
+                  Icons.assessment_outlined,
+                  color: rPrimaryColor,
+                ),
+              ),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.75,
+                  child: Text(
+                    data['title'].toString(),
+                    maxLines: 4,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
                   ),
                 ),
-            ],
-          ),
+                if (data['desc'].toString() != '')
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.75,
+                    child: Linkify(
+                      text: data['desc'].toString(),
+                      onOpen: (l) {
+                        launch(l.url);
+                        Future.delayed(const Duration(seconds: 2),
+                            () => showUnityInitAds());
+                      },
+                    ),
+                  ),
+              ],
+            ),
+          ],
         ),
       ),
     );

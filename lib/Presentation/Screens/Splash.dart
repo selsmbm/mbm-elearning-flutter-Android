@@ -80,11 +80,7 @@ class _LandingPageState extends State<LandingPage> {
                 ),
               ],
             ),
-            Image.asset(
-              'assets/images/cplogo.png',
-              width: 150,
-              height: 30,
-            ),
+            const Text("Made With ❤ by SELS"),
           ],
         ),
       ),
