@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mbm_elearning/Data/Repository/GDrive/upload_to_drive.dart';
 import 'package:mbm_elearning/Data/Repository/update_material_repo.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
+import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:mbm_elearning/BLoC/AddDataToApi/add_data_to_api_bloc.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
@@ -13,6 +14,7 @@ import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Screens/Auth/Components/RoundedInputField.dart';
 import 'package:mbm_elearning/Presentation/Screens/Auth/Components/TextFielsContainer.dart';
 import 'package:path/path.dart' as p;
+import 'package:provider/provider.dart';
 
 class AddMaterialPage extends StatefulWidget {
   final AddMaterialPagePurpose purpose;
@@ -25,6 +27,7 @@ class AddMaterialPage extends StatefulWidget {
 }
 
 class _AddMaterialPageState extends State<AddMaterialPage> {
+  late ScrapTableProvider scrapTableProvider;
   TextEditingController materialName = TextEditingController();
   TextEditingController materialDesc = TextEditingController();
   TextEditingController materialUrl = TextEditingController();
@@ -56,6 +59,9 @@ class _AddMaterialPageState extends State<AddMaterialPage> {
 
   @override
   Widget build(BuildContext ctx) {
+    scrapTableProvider = Provider.of<ScrapTableProvider>(
+      ctx,
+    );
     return ModalProgressHUD(
       inAsyncCall: showProgress,
       child: Scaffold(
@@ -82,6 +88,7 @@ class _AddMaterialPageState extends State<AddMaterialPage> {
                 setState(() {
                   showProgress = false;
                 });
+                scrapTableProvider.scrapMaterial();
                 ScaffoldMessenger.of(ctx).showSnackBar(
                   const SnackBar(
                     content: Text('Successfully added material.'),
@@ -260,7 +267,8 @@ class _AddMaterialPageState extends State<AddMaterialPage> {
                                     materialSem,
                                     materialUrl.text,
                                     '',
-                                    materialSubject.text);
+                                    materialSubject.text,
+                                    scrapTableProvider);
                                 if (output == 'SUCCESS') {
                                   Future.delayed(Duration(milliseconds: 300),
                                       () {

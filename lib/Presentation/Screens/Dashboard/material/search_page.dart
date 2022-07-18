@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mbm_elearning/BLoC/GetMaterialBloc/get_material_bloc.dart';
-import 'package:mbm_elearning/Data/LocalDbConnect.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
-import 'package:mbm_elearning/Presentation/Constants/constants.dart';
-import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/dashboard.dart';
-import 'package:mbm_elearning/Presentation/Screens/Dashboard/material/material_details_page.dart';
 import 'package:mbm_elearning/Presentation/Widgets/material_data_list_tile.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class SearchPage extends StatefulWidget {
@@ -25,6 +22,7 @@ class _SearchPageState extends State<SearchPage> {
   final TextEditingController queryController = TextEditingController();
   final ItemPositionsListener itemPositionsListener =
       ItemPositionsListener.create();
+  ScrapTableProvider? scrapTableProvider;
 
   @override
   void initState() {
@@ -32,21 +30,27 @@ class _SearchPageState extends State<SearchPage> {
     completeMaterial = [];
     setCurrentScreenInGoogleAnalytics('search Page');
     itemPositionsListener.itemPositions.addListener(() {
-      if (itemPositionsListener.itemPositions.value.last.index == skip + 14) {
-        skip = skip + limit;
-        BlocProvider.of<GetMaterialApiBloc>(context).add(
-          FetchGetMaterialApi(
-            '',
-            '',
-            skip,
-            limit,
-            '',
-            queryController.text,
-            '',
-            'true',
-            false,
-          ),
-        );
+      if (scrapTableProvider != null) {
+        if (!scrapTableProvider!.checkIsNotEmpty()) {
+          if (itemPositionsListener.itemPositions.value.last.index ==
+              skip + 14) {
+            skip = skip + limit;
+            BlocProvider.of<GetMaterialApiBloc>(context).add(
+              FetchGetMaterialApi(
+                '',
+                '',
+                skip,
+                limit,
+                '',
+                queryController.text,
+                '',
+                'true',
+                false,
+                scrapTableProvider!,
+              ),
+            );
+          }
+        }
       }
     });
   }
@@ -62,12 +66,15 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    var tabPadding = const EdgeInsets.symmetric(horizontal: 0, vertical: 5);
-    var tabTextStyle = const TextStyle(
-      color: rTextColor,
-      fontSize: 12,
+  void didChangeDependencies() {
+    scrapTableProvider = Provider.of<ScrapTableProvider>(
+      context,
     );
+    super.didChangeDependencies();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
@@ -113,6 +120,7 @@ class _SearchPageState extends State<SearchPage> {
                         '',
                         'true',
                         true,
+                        scrapTableProvider!,
                       ),
                     );
                   }

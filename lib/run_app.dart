@@ -21,6 +21,7 @@ import 'package:mbm_elearning/Presentation/Screens/Dashboard/Extras/gate_materia
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/profile_page.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/material/search_page.dart';
 import 'package:mbm_elearning/Presentation/Screens/Splash.dart';
+import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 import 'package:mbm_elearning/Provider/theme_provider.dart';
 import 'package:mbm_elearning/flavors.dart';
 import 'package:provider/provider.dart';
@@ -76,51 +77,56 @@ class MyApp extends StatelessWidget {
     return AnimatedBuilder(
       animation: theme,
       builder: (BuildContext context, Widget? child) {
-        return MaterialApp(
-          title: Flavors.title,
-          debugShowCheckedModeBanner: false,
-          theme: theme.litethemeData,
-          darkTheme: theme.darkthemeData,
-          themeMode: theme.themeMode,
-          routes: {
-            '/': (context) => LandingPage(),
-            'signInPage': (context) => SigninPage(),
-            'forgetPage': (context) => ForgetPasswordPage(),
-            'homePage': (context) => DashboardPage(),
-            'home': (context) => HomePage(),
-            'setting': (context) => SettingPage(),
-            'search': (context) => BlocProvider(
-                  create: (context) => GetMaterialApiBloc(
-                    GetMaterialRepo(),
+        return MultiProvider(
+          providers: [
+            ChangeNotifierProvider(create: (context) => ScrapTableProvider())
+          ],
+          child: MaterialApp(
+            title: Flavors.title,
+            debugShowCheckedModeBanner: false,
+            theme: theme.litethemeData,
+            darkTheme: theme.darkthemeData,
+            themeMode: theme.themeMode,
+            routes: {
+              '/': (context) => LandingPage(),
+              'signInPage': (context) => SigninPage(),
+              'forgetPage': (context) => ForgetPasswordPage(),
+              'homePage': (context) => DashboardPage(),
+              'home': (context) => HomePage(),
+              'setting': (context) => SettingPage(),
+              'search': (context) => BlocProvider(
+                    create: (context) => GetMaterialApiBloc(
+                      GetMaterialRepo(),
+                    ),
+                    child: SearchPage(),
                   ),
-                  child: SearchPage(),
-                ),
-            'profile': (context) => ProfilePage(),
-            'materialPage': (context) => BlocProvider(
-                  create: (context) => GetMaterialApiBloc(
-                    GetMaterialRepo(),
+              'profile': (context) => ProfilePage(),
+              'materialPage': (context) => BlocProvider(
+                    create: (context) => GetMaterialApiBloc(
+                      GetMaterialRepo(),
+                    ),
+                    child: MaterialsPage(),
                   ),
-                  child: MaterialsPage(),
-                ),
-            'yourmaterialPage': (context) => BlocProvider(
-                  create: (context) => GetMaterialApiBloc(
-                    GetMaterialRepo(),
+              'yourmaterialPage': (context) => BlocProvider(
+                    create: (context) => GetMaterialApiBloc(
+                      GetMaterialRepo(),
+                    ),
+                    child: YourMaterialPage(),
                   ),
-                  child: YourMaterialPage(),
-                ),
-            'bookmark': (context) => BookmarkPage(),
-            'intro': (context) => OnBoardingPage(),
-            'gateMaterial': (context) => GateMaterial(),
-            'adminDash': (context) => const AdminDashboard(),
-            'addCollege': (context) => AddCollegePage(),
-            'addMaterialPage': (context) => BlocProvider(
-                  create: (context) => AddDataToApiBloc(
-                    PostMaterialRepo(),
+              'bookmark': (context) => BookmarkPage(),
+              'intro': (context) => OnBoardingPage(),
+              'gateMaterial': (context) => GateMaterial(),
+              'adminDash': (context) => const AdminDashboard(),
+              'addCollege': (context) => AddCollegePage(),
+              'addMaterialPage': (context) => BlocProvider(
+                    create: (context) => AddDataToApiBloc(
+                      PostMaterialRepo(),
+                    ),
+                    child: AddMaterialPage(),
                   ),
-                  child: AddMaterialPage(),
-                ),
-          },
-          initialRoute: '/',
+            },
+            initialRoute: '/',
+          ),
         );
       },
     );

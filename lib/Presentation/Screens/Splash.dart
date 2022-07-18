@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/dashboard.dart';
 import 'package:mbm_elearning/Presentation/Screens/IntroPages.dart';
+import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
+import 'package:provider/provider.dart';
 
 class LandingPage extends StatefulWidget {
   const LandingPage({Key? key}) : super(key: key);
@@ -16,6 +18,7 @@ class LandingPage extends StatefulWidget {
 
 class _LandingPageState extends State<LandingPage> {
   final _auth = FirebaseAuth.instance.currentUser;
+  late ScrapTableProvider scrapTableProvider;
 
   checkUser() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
@@ -29,7 +32,7 @@ class _LandingPageState extends State<LandingPage> {
         Timer(const Duration(seconds: 1), () async {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => DashboardPage()),
+            MaterialPageRoute(builder: (context) => const DashboardPage()),
           );
         });
       }
@@ -50,6 +53,8 @@ class _LandingPageState extends State<LandingPage> {
 
   @override
   Widget build(BuildContext context) {
+    scrapTableProvider = Provider.of<ScrapTableProvider>(context);
+    scrapTableProvider.scrapMaterial();
     return Scaffold(
       body: Center(
         child: Column(

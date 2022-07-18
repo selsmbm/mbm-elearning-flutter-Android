@@ -10,6 +10,8 @@ import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/dashboard.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/material/AddMaterial.dart';
+import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MaterialDetailsPage extends StatefulWidget {
@@ -25,10 +27,16 @@ class MaterialDetailsPage extends StatefulWidget {
 
 class _MaterialDetailsPageState extends State<MaterialDetailsPage> {
   User? user = FirebaseAuth.instance.currentUser;
+  ScrapTableProvider? scrapTableProvider;
   @override
   Widget build(BuildContext context) {
-    DateTime time =
-        DateTime.fromMillisecondsSinceEpoch(widget.material['time'] * 1000);
+    DateTime time = DateTime.fromMillisecondsSinceEpoch(
+        widget.material['time'] is String
+            ? int.parse(widget.material['time'])
+            : widget.material['time'] * 1000);
+    scrapTableProvider = Provider.of<ScrapTableProvider>(
+      context,
+    );
     return Dialog(
       child: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -119,8 +127,8 @@ class _MaterialDetailsPageState extends State<MaterialDetailsPage> {
                             TextButton(
                               child: Text('Delete'),
                               onPressed: () {
-                                DeleteMaterialRepo.post(
-                                    widget.material['mtid']);
+                                DeleteMaterialRepo.post(widget.material['mtid'],
+                                    scrapTableProvider!);
                                 int i = 0;
                                 Navigator.popUntil(
                                     context, (route) => i++ == 3);
@@ -186,14 +194,18 @@ class _MaterialDetailsPageState extends State<MaterialDetailsPage> {
                 ),
                 if (widget.isMe)
                   Tooltip(
-                    message: widget.material['approve']
-                        ? "Material is live to everyone"
-                        : "Material is pending for approval",
+                    message:
+                        widget.material['approve'].toString().toLowerCase() ==
+                                'true'
+                            ? "Material is live to everyone"
+                            : "Material is pending for approval",
                     child: CircleAvatar(
                       radius: 8,
-                      backgroundColor: widget.material['approve']
-                          ? Colors.green
-                          : Colors.red,
+                      backgroundColor:
+                          widget.material['approve'].toString().toLowerCase() ==
+                                  'true'
+                              ? Colors.green
+                              : Colors.red,
                     ),
                   ),
               ],

@@ -2,12 +2,16 @@ import 'package:flutter/material.dart';
 
 const String getMaterialApi =
     "https://script.google.com/macros/s/AKfycbzq2WZOV3jG9ifOpdPJR713DhLd99PhA1Cea9o7HbGCmMi4txQEoN5KpYUzXJiZU-Y/exec";
+const String getMaterialTable =
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vTGOH3yf_in_iZeit55eYBfwr2TKUQdBNj_PZCISFq6LqEFwXjbEwEYzNFsVX5YAK9SjoJwB5UCRsJs/pubhtml";
 const String addMaterialApi =
     "https://script.google.com/macros/s/AKfycbzsre6Iu4Wu2r9yqE-xuCzVlFl0knMw7lMPx73CEFM5MwZbkCWIU0bA82WhQxn9BIfMaQ/exec";
 const String updateMaterialApi =
     "https://script.google.com/macros/s/AKfycbxYaxsj37TceUnPzOzG4IjF37487DfExQgx4mdR59UwiEN3YedTZJISPNb840OZiqiYlA/exec";
 const String deleteMaterialApi =
     "https://script.google.com/macros/s/AKfycbxlNiBQOGReRMX2AIUpB_0QQxHKEjPYfPPMrumXdsVxwtkTdG7wTRd5z1-G6jgUHtT4/exec";
+const String getBlogTable =
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vRkeaR_JfcrXsMLGndnFKscZdBuz5OcLsPVxpiFjIMwiLRLUbtd4BVbUwiznM3UBT2WPetmzJiqjort/pubhtml";    
 
 const List<String> mttypes = [
   'notes',

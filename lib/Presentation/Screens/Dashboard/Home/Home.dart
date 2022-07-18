@@ -202,7 +202,8 @@ class _HomePageState extends State<HomePage> {
                       },
                       items: semsData
                           .map((subject) => DropdownMenuItem(
-                              value: subject, child: Text("$subject")))
+                              value: subject,
+                              child: Text("${subject.toUpperCase()}")))
                           .toList(),
                     ),
                   ),

@@ -10,6 +10,8 @@ import 'package:mbm_elearning/Presentation/Constants/textfieldDeco.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/dashboard.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/material/material_details_page.dart';
 import 'package:mbm_elearning/Presentation/Widgets/material_data_list_tile.dart';
+import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -24,10 +26,7 @@ class MaterialsPage extends StatefulWidget {
   _MaterialsPageState createState() => _MaterialsPageState();
 }
 
-class _MaterialsPageState extends State<MaterialsPage>
-    with TickerProviderStateMixin {
-  late TabController tabController;
-
+class _MaterialsPageState extends State<MaterialsPage> {
   @override
   void initState() {
     super.initState();
@@ -37,13 +36,11 @@ class _MaterialsPageState extends State<MaterialsPage>
     } else {
       branch = widget.branch;
     }
-    tabController = TabController(initialIndex: 0, length: 5, vsync: this);
     setCurrentScreenInGoogleAnalytics('material Page');
   }
 
   @override
   void dispose() {
-    tabController.dispose();
     super.dispose();
   }
 
@@ -54,58 +51,54 @@ class _MaterialsPageState extends State<MaterialsPage>
       color: rTextColor,
       fontSize: 12,
     );
-    return Scaffold(
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          Navigator.pushNamed(context, 'addMaterialPage');
-        },
-        icon: Icon(Icons.add),
-        label: Text('Add material'),
-      ),
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text(
-          'Material',
+    return DefaultTabController(
+      length: 5,
+      child: Scaffold(
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {
+            Navigator.pushNamed(context, 'addMaterialPage');
+          },
+          icon: Icon(Icons.add),
+          label: Text('Add material'),
         ),
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(25),
-          child: TabBar(
-            onTap: (index) {
-              setState(() {
-                tabController.index = index;
-              });
-            },
-            controller: tabController,
-            unselectedLabelColor: Colors.grey,
-            labelColor: rPrimaryColor,
-            indicator: const BoxDecoration(
-              border: Border(
-                bottom: BorderSide(color: Colors.white, width: 3.0),
-              ),
-            ),
-            tabs: [
-              for (var t in mttypes)
-                Padding(
-                  padding: tabPadding,
-                  child: Text(
-                    t.toUpperCase(),
-                    style: tabTextStyle,
-                  ),
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text(
+            'Material',
+          ),
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(25),
+            child: TabBar(
+              unselectedLabelColor: Colors.grey,
+              labelColor: rPrimaryColor,
+              indicator: const BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(color: Colors.white, width: 3.0),
                 ),
-            ],
+              ),
+              tabs: [
+                for (var t in mttypes)
+                  Padding(
+                    padding: tabPadding,
+                    child: Text(
+                      t.toUpperCase(),
+                      style: tabTextStyle,
+                    ),
+                  ),
+              ],
+            ),
           ),
         ),
-      ),
-      body: SafeArea(
-        child: Center(
-          child: TabBarView(
-            controller: tabController,
-            children: [
-              for (var t in mttypes)
-                MtCard(
-                  title: t,
-                )
-            ],
+        body: SafeArea(
+          child: Center(
+            child: TabBarView(
+              children: [
+                for (var t in mttypes)
+                  MtCard(
+                    title: t,
+                  )
+              ],
+            ),
           ),
         ),
       ),
@@ -131,10 +124,45 @@ class _MtCardState extends State<MtCard> {
   List material = [];
   final ItemPositionsListener itemPositionsListener =
       ItemPositionsListener.create();
+  ScrapTableProvider? scrapTableProvider;
 
   @override
   void initState() {
     super.initState();
+    itemPositionsListener.itemPositions.addListener(() {
+      if (!scrapTableProvider!.checkIsNotEmpty()) {
+        if (itemPositionsListener.itemPositions.value.last.index == skip + 14) {
+          skip = skip + limit;
+          BlocProvider.of<GetMaterialApiBloc>(context).add(
+            FetchGetMaterialApi(
+              '',
+              '',
+              skip,
+              limit,
+              '',
+              '',
+              '',
+              'true',
+              false,
+              scrapTableProvider!,
+            ),
+          );
+        }
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    if (material.isNotEmpty) {
+      material.clear();
+    }
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    scrapTableProvider = Provider.of<ScrapTableProvider>(context);
     BlocProvider.of<GetMaterialApiBloc>(context).add(
       FetchGetMaterialApi(
         sem ?? '',
@@ -146,30 +174,9 @@ class _MtCardState extends State<MtCard> {
         '',
         'true',
         true,
+        scrapTableProvider!,
       ),
     );
-    itemPositionsListener.itemPositions.addListener(() {
-      if (itemPositionsListener.itemPositions.value.last.index == skip + 14) {
-        skip = skip + limit;
-        BlocProvider.of<GetMaterialApiBloc>(context).add(
-          FetchGetMaterialApi(
-            '',
-            '',
-            skip,
-            limit,
-            '',
-            '',
-            '',
-            'true',
-            false,
-          ),
-        );
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return BlocBuilder<GetMaterialApiBloc, GetMaterialApiState>(
       builder: (context, state) {
         if (state is GetMaterialApiIsSuccess) {

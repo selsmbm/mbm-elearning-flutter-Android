@@ -4,10 +4,14 @@ import 'package:connectivity/connectivity.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:mbm_elearning/Data/LocalDbConnect.dart';
+import 'package:mbm_elearning/Data/Repository/sheet_scrap.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/Home.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/setting_page.dart';
+import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 import 'package:mbm_elearning/flavors.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:update_available/update_available.dart';
 
@@ -21,12 +25,13 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
+  late ScrapTableProvider scrapTableProvider;
   late FirebaseMessaging messaging;
-  List<Widget> _pages = [
-    HomePage(),
+  final List<Widget> _pages = [
+    const HomePage(),
     Container(),
     Container(),
-    SettingPage(),
+    const SettingPage(),
   ];
   int _currentIndex = 0;
   @override
@@ -112,6 +117,12 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   @override
+  void didChangeDependencies() {
+    scrapTableProvider = Provider.of<ScrapTableProvider>(context);
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: NavigationBar(
@@ -143,7 +154,23 @@ class _DashboardPageState extends State<DashboardPage> {
               label: 'Setting',
             ),
           ]),
-      body: _pages[_currentIndex],
+      body: ModalProgressHUD(
+        inAsyncCall: scrapTableProvider.isGettingData,
+        progressIndicator: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: const [
+            SizedBox(width: 80, child: LinearProgressIndicator()),
+            SizedBox(height: 10),
+            Text(
+              'Getting data from server',
+              style: TextStyle(
+                fontSize: 15,
+              ),
+            ),
+          ],
+        ),
+        child: _pages[_currentIndex],
+      ),
     );
   }
 }

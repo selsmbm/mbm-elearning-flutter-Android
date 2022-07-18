@@ -10,9 +10,9 @@
         //     "type": "dart",
         //     "args": [
         //         "--flavor", 
-        //         "sprod",
+        //         "mprod",
         //         "-t", 
-        //         "lib/main_sprod.dart" 
+        //         "lib/main_mprod.dart" 
         //     ]
         // },
         {
@@ -33,9 +33,9 @@
         //     "args": [
         //         "--profile", 
         //         "--flavor", 
-        //         "sprod",
+        //         "mprod",
         //         "-t", 
-        //         "lib/main_sprod.dart" 
+        //         "lib/main_mprod.dart" 
         //     ]
         // },
         // {
@@ -45,9 +45,9 @@
         //     "args": [
         //         "--debug", 
         //         "--flavor", 
-        //         "sprod",
+        //         "mprod",
         //         "-t", 
-        //         "lib/main_sprod.dart" 
+        //         "lib/main_mprod.dart" 
         //     ]
         // }
     ]
