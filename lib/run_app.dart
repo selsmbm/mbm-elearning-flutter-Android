@@ -11,6 +11,7 @@ import 'package:mbm_elearning/Presentation/Screens/Admin/add_college.dart';
 import 'package:mbm_elearning/Presentation/Screens/Admin/dashboard.dart';
 import 'package:mbm_elearning/Presentation/Screens/Auth/ForgetPassword.dart';
 import 'package:mbm_elearning/Presentation/Screens/Auth/Signin.dart';
+import 'package:mbm_elearning/Presentation/Screens/Dashboard/Extras/useful_links.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Extras/your_uploaded_material_page.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/material/AddMaterial.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Extras/Bookmark.dart';
@@ -55,7 +56,7 @@ Future<Widget> runMainApp() async {
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent, // status bar color
     systemNavigationBarColor: rPrimaryLiteColor, // status bar color
-    statusBarIconBrightness: Brightness.light, // status bar icons' color
+    statusBarIconBrightness: Brightness.dark, // status bar icons' color
     systemNavigationBarIconBrightness:
         Brightness.dark, //navigation bar icons' color
   ));
@@ -101,6 +102,7 @@ class MyApp extends StatelessWidget {
                     child: SearchPage(),
                   ),
               'profile': (context) => ProfilePage(),
+              'usefullinks': (context) => UsefulLinksPage(),
               'materialPage': (context) => BlocProvider(
                     create: (context) => GetMaterialApiBloc(
                       GetMaterialRepo(),

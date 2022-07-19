@@ -9,7 +9,7 @@ class ExploreModel {
   String? type;
   String? website;
   String? events;
-  int? follow;
+  String? follow;
 
   ExploreModel(
       {this.desc,

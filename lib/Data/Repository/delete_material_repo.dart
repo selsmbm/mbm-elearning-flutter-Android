@@ -19,7 +19,7 @@ class DeleteMaterialRepo {
           ),
         );
         if (response.statusCode == 200) {
-          ScrapTableProvider.scrapMaterial();
+          ScrapTableProvider.updateScrapMaterial();
           return json.decode(response.body)['status'];
         }
       } on Exception catch (e) {

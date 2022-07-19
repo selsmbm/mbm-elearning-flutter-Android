@@ -11,7 +11,16 @@ const String updateMaterialApi =
 const String deleteMaterialApi =
     "https://script.google.com/macros/s/AKfycbxlNiBQOGReRMX2AIUpB_0QQxHKEjPYfPPMrumXdsVxwtkTdG7wTRd5z1-G6jgUHtT4/exec";
 const String getBlogTable =
-    "https://docs.google.com/spreadsheets/d/e/2PACX-1vRkeaR_JfcrXsMLGndnFKscZdBuz5OcLsPVxpiFjIMwiLRLUbtd4BVbUwiznM3UBT2WPetmzJiqjort/pubhtml";    
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vRkeaR_JfcrXsMLGndnFKscZdBuz5OcLsPVxpiFjIMwiLRLUbtd4BVbUwiznM3UBT2WPetmzJiqjort/pubhtml";
+const String getExploreTable =
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vRGkXFR5XPh0OZZ2S59V4m046O-DqxHCbQEcXsq5jEmR6HCR2dn5LuY9wiyZIqKLFTwcZaiAPsrWzFt/pubhtml";
+const String getEventsTable =
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vRG3L745bIvLQy70gC3hkLf8gVWklhUBrAM9lQUx-Eeu3QFBg7HdlFJKf7pKFKvsojwL5jrtJ6BqoCL/pubhtml";
+const String getUsefulLinksTable =
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vR63HgTfZci0afiD0vM2HLI7PQaihT2wiaJoFNZ-ShB-JfgGUSAxh1igrMmkidahZnPjdx8yO3wEwU0/pubhtml";
+
+const String driveImageShowUrl = "https://drive.google.com/uc?export=view&id=";
+const String defaultDriveImageShowUrl = "13iSBQONd0uYpSRbGuITbaWVXxI_xm5JN";
 
 const List<String> mttypes = [
   'notes',

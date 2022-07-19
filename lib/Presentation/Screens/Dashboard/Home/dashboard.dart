@@ -7,6 +7,9 @@ import 'package:mbm_elearning/Data/LocalDbConnect.dart';
 import 'package:mbm_elearning/Data/Repository/sheet_scrap.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/Home.dart';
+import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/events/events_page.dart';
+import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/explore/explore_page.dart';
+import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/feed/feed_page.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/setting_page.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 import 'package:mbm_elearning/flavors.dart';
@@ -29,8 +32,9 @@ class _DashboardPageState extends State<DashboardPage> {
   late FirebaseMessaging messaging;
   final List<Widget> _pages = [
     const HomePage(),
-    Container(),
-    Container(),
+    const FeedsPage(),
+    const ExplorePage(),
+    const EventsPage(),
     const SettingPage(),
   ];
   int _currentIndex = 0;
@@ -141,12 +145,17 @@ class _DashboardPageState extends State<DashboardPage> {
             NavigationDestination(
               icon: Icon(Icons.feed_outlined),
               selectedIcon: Icon(Icons.feed),
-              label: 'Feed',
+              label: 'Feeds',
             ),
             NavigationDestination(
               icon: Icon(Icons.dashboard_outlined),
               selectedIcon: Icon(Icons.dashboard),
               label: 'Explore',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.event_available_outlined),
+              selectedIcon: Icon(Icons.event_available),
+              label: 'Events',
             ),
             NavigationDestination(
               icon: Icon(Icons.settings_outlined),

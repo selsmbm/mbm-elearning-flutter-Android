@@ -3,10 +3,10 @@ class EventsModel {
   String? title;
   int? id;
   String? image;
-  String? adminsMap;
-  String? admins;
-  String? tagline;
-  String? type;
+  String? starttime;
+  String? endtime;
+  String? adminOrg;
+  String? adminOrgIds;
   String? website;
 
   EventsModel(
@@ -14,10 +14,10 @@ class EventsModel {
       this.title,
       this.id,
       this.image,
-      this.adminsMap,
-      this.admins,
-      this.tagline,
-      this.type,
+      this.starttime,
+      this.endtime,
+      this.adminOrg,
+      this.adminOrgIds,
       this.website});
 
   EventsModel.fromJson(Map<String, dynamic> json) {
@@ -25,23 +25,23 @@ class EventsModel {
     title = json['title'];
     id = json['id'];
     image = json['image'];
-    adminsMap = json['admins_map'];
-    admins = json['admins'];
-    tagline = json['tagline'];
-    type = json['type'];
+    starttime = json['starttime'];
+    endtime = json['endtime'];
+    adminOrg = json['admin_org'];
+    adminOrgIds = json['admin_org_ids'];
     website = json['website'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = {};
+    final Map<String, dynamic> data = new Map<String, dynamic>();
     data['desc'] = this.desc;
     data['title'] = this.title;
     data['id'] = this.id;
     data['image'] = this.image;
-    data['admins_map'] = this.adminsMap;
-    data['admins'] = this.admins;
-    data['tagline'] = this.tagline;
-    data['type'] = this.type;
+    data['starttime'] = this.starttime;
+    data['endtime'] = this.endtime;
+    data['admin_org'] = this.adminOrg;
+    data['admin_org_ids'] = this.adminOrgIds;
     data['website'] = this.website;
     return data;
   }

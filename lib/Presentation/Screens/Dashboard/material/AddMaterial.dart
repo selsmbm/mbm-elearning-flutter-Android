@@ -88,7 +88,7 @@ class _AddMaterialPageState extends State<AddMaterialPage> {
                 setState(() {
                   showProgress = false;
                 });
-                scrapTableProvider.scrapMaterial();
+                scrapTableProvider.updateScrapMaterial();
                 ScaffoldMessenger.of(ctx).showSnackBar(
                   const SnackBar(
                     content: Text('Successfully added material.'),

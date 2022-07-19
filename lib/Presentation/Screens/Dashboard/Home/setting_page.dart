@@ -90,6 +90,14 @@ class _SettingPageState extends State<SettingPage> {
                 subtitle: 'All of your uploaded material',
                 icon: Icons.list,
               ),
+              SettingButton(
+                onTap: () {
+                  Navigator.pushNamed(context, 'usefullinks');
+                },
+                title: 'Useful Links',
+                subtitle: 'All useful links',
+                icon: Icons.link,
+              ),
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 18, vertical: 5),

@@ -54,7 +54,7 @@ class _LandingPageState extends State<LandingPage> {
   @override
   Widget build(BuildContext context) {
     scrapTableProvider = Provider.of<ScrapTableProvider>(context);
-    scrapTableProvider.scrapMaterial();
+    scrapTableProvider.scrapAllData();
     return Scaffold(
       body: Center(
         child: Column(
