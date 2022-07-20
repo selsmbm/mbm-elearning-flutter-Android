@@ -17,6 +17,9 @@ class ThemeController with ChangeNotifier {
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(rPrimaryMaterialColor),
+        textStyle: MaterialStateProperty.all(
+          TextStyle(color: Colors.white),
+        ),
       ),
     ),
     appBarTheme: const AppBarTheme(
@@ -45,7 +48,7 @@ class ThemeController with ChangeNotifier {
   );
 
   Future<void> loadSettings() async {
-    themeMode = await themeService.themeMode();
+    themeMode = ThemeMode.light;
     notifyListeners();
   }
 }

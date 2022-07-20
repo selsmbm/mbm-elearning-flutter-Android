@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Data/model/explore_model.dart';
+import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/explore/explore_details_page.dart';
 import 'package:mbm_elearning/Presentation/Widgets/image_cus.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 import 'package:provider/provider.dart';
@@ -42,6 +43,16 @@ class _ExplorePageState extends State<ExplorePage> {
         itemBuilder: (context, index) {
           ExploreModel explore = _scrapTableProvider.explores[index];
           return ListTile(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return ExploreDetailsPage(explore: explore);
+                  },
+                ),
+              );
+            },
             leading: ImageCus(image: explore.image),
             title: Text(explore.title ?? "N/A"),
             subtitle: explore.tagline != null ? Text(explore.tagline!) : null,
@@ -51,5 +62,3 @@ class _ExplorePageState extends State<ExplorePage> {
     );
   }
 }
-
-

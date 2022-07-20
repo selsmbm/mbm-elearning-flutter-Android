@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Data/model/events_model.dart';
+import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/events/event_details_page.dart';
 import 'package:mbm_elearning/Presentation/Widgets/image_cus.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 import 'package:provider/provider.dart';
@@ -47,6 +48,16 @@ class _EventsPageState extends State<EventsPage> {
           DateTime date = DateTime.fromMicrosecondsSinceEpoch(
               int.parse(event.starttime!) * 1000);
           return ListTile(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return EventDetailsPage(event: event);
+                  },
+                ),
+              );
+            },
             leading: ImageCus(image: event.image),
             title: Text(event.title ?? "N/A"),
             subtitle: Text(

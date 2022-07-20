@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Data/model/blog_model.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
+import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/feed/feed_details_page.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -38,12 +39,22 @@ class _FeedsPageState extends State<FeedsPage> {
       //   child: Icon(Icons.arrow_circle_up),
       // ),
       body: ListView.builder(
-        itemCount: _scrapTableProvider.events.length,
+        itemCount: _scrapTableProvider.blogPosts.length,
         itemBuilder: (context, index) {
-          BlogModel event = _scrapTableProvider.blogPosts[index];
+          BlogModel post = _scrapTableProvider.blogPosts[index];
           DateTime date = DateTime.fromMicrosecondsSinceEpoch(
-              int.parse(event.posttime!) * 1000);
+              int.parse(post.posttime!) * 1000);
           return ListTile(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return FeedDetailsPage(feed: post);
+                  },
+                ),
+              );
+            },
             leading: const CircleAvatar(
               radius: 23,
               backgroundColor: rPrimaryLiteColor,
@@ -52,9 +63,9 @@ class _FeedsPageState extends State<FeedsPage> {
                 color: rPrimaryColor,
               ),
             ),
-            title: Text(event.title ?? "N/A"),
+            title: Text(post.title ?? "N/A"),
             subtitle:
-                Text("${date.day}-${date.month}-${date.year} | ${event.org}"),
+                Text("${date.day}-${date.month}-${date.year} | ${post.org}"),
           );
         },
       ),
