@@ -7,7 +7,7 @@ import 'package:mbm_elearning/BLoC/AddDataToApi/add_data_to_api_bloc.dart';
 import 'package:mbm_elearning/BLoC/GetMaterialBloc/get_material_bloc.dart';
 import 'package:mbm_elearning/Data/Repository/get_mterial_repo.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
-import 'package:mbm_elearning/Presentation/Screens/Admin/add_college.dart';
+import 'package:mbm_elearning/Presentation/Screens/Admin/approve_material.dart';
 import 'package:mbm_elearning/Presentation/Screens/Admin/dashboard.dart';
 import 'package:mbm_elearning/Presentation/Screens/Auth/ForgetPassword.dart';
 import 'package:mbm_elearning/Presentation/Screens/Auth/Signin.dart';
@@ -115,11 +115,16 @@ class MyApp extends StatelessWidget {
                     ),
                     child: YourMaterialPage(),
                   ),
+              'approvematerialPage': (context) => BlocProvider(
+                    create: (context) => GetMaterialApiBloc(
+                      GetMaterialRepo(),
+                    ),
+                    child: ApproveMaterialPage(),
+                  ),
               'bookmark': (context) => BookmarkPage(),
               'intro': (context) => OnBoardingPage(),
               'gateMaterial': (context) => GateMaterial(),
               'adminDash': (context) => const AdminDashboard(),
-              'addCollege': (context) => AddCollegePage(),
               'addMaterialPage': (context) => BlocProvider(
                     create: (context) => AddDataToApiBloc(
                       PostMaterialRepo(),

@@ -3,7 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
+import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:share/share.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingPage extends StatefulWidget {
@@ -167,17 +169,26 @@ class _SettingPageState extends State<SettingPage> {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: InkWell(
-                    onTap: () {
-                      FirebaseFirestore.instance
-                          .collection('admins')
-                          .get()
-                          .then((QuerySnapshot querySnapshot) {
-                        for (var doc in querySnapshot.docs) {
-                          if (doc["id"] == user!.uid) {
-                            Navigator.pushNamed(context, 'adminDash');
+                    onTap: () async {
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      if (prefs.getBool(SP.ismeAdmin) == null ||
+                          prefs.getBool(SP.ismeAdmin) == false) {
+                        FirebaseFirestore.instance
+                            .collection('adminids')
+                            .get()
+                            .then((QuerySnapshot querySnapshot) {
+                          for (var doc in querySnapshot.docs) {
+                            if (doc["id"] == user!.uid) {
+                              prefs.setBool(SP.ismeAdmin, true);
+                              Navigator.pushNamed(context, 'adminDash');
+                            }
                           }
-                        }
-                      });
+                        });
+                      } else {
+                        if (!mounted) return;
+                        Navigator.pushNamed(context, 'adminDash');
+                      }
                     },
                     child: const Text(
                       "Made With ❤ by SELS.",

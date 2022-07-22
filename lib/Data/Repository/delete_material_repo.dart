@@ -6,7 +6,7 @@ import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 
 class DeleteMaterialRepo {
-  static post(
+  static Future post(
     int id,
     ScrapTableProvider ScrapTableProvider,
   ) async {

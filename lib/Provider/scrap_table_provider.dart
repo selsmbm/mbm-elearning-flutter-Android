@@ -111,7 +111,7 @@ class ScrapTableProvider with ChangeNotifier {
   List<Map<String, dynamic>> getMaterialsBySemesterAndBranch(
       String semester, String type,
       {String? branch}) {
-    if (branch == null) {
+    if (branch == null || branch == '') {
       return _materials
           .where((element) =>
               getContains(element["mtsem"], semester) &&
@@ -132,6 +132,12 @@ class ScrapTableProvider with ChangeNotifier {
   List<Map<String, dynamic>> getMaterialsByUserid(String uid) {
     return _materials
         .where((element) => element["uploaded_by_user_uid"] == uid)
+        .toList();
+  }
+
+  List<Map<String, dynamic>> getUnapproveMaterials() {
+    return _materials
+        .where((element) => getContains(element["approve"], 'false'))
         .toList();
   }
 

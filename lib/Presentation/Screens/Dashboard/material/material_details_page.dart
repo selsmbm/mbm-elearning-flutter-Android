@@ -6,6 +6,7 @@ import 'package:mbm_elearning/BLoC/GetMaterialBloc/get_material_bloc.dart';
 import 'package:mbm_elearning/Data/LocalDbConnect.dart';
 import 'package:mbm_elearning/Data/Repository/delete_material_repo.dart';
 import 'package:mbm_elearning/Data/Repository/post_material_repo.dart';
+import 'package:mbm_elearning/Data/Repository/update_material_repo.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/dashboard.dart';
@@ -16,10 +17,14 @@ import 'package:url_launcher/url_launcher.dart';
 
 class MaterialDetailsPage extends StatefulWidget {
   const MaterialDetailsPage(
-      {Key? key, required this.material, required this.isMe})
+      {Key? key,
+      required this.material,
+      required this.isMe,
+      required this.ismeSuperAdmin})
       : super(key: key);
   final Map material;
   final bool isMe;
+  final bool ismeSuperAdmin;
 
   @override
   State<MaterialDetailsPage> createState() => _MaterialDetailsPageState();
@@ -29,7 +34,7 @@ class _MaterialDetailsPageState extends State<MaterialDetailsPage> {
   User? user = FirebaseAuth.instance.currentUser;
   ScrapTableProvider? scrapTableProvider;
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext ctx) {
     DateTime time = DateTime.fromMillisecondsSinceEpoch(
         widget.material['time'] is String
             ? int.parse(widget.material['time'])
@@ -88,30 +93,31 @@ class _MaterialDetailsPageState extends State<MaterialDetailsPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                if (widget.isMe)
-                  IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => BlocProvider(
-                            create: (context) => AddDataToApiBloc(
-                              PostMaterialRepo(),
-                            ),
-                            child: AddMaterialPage(
-                              purpose: AddMaterialPagePurpose.update,
-                              materialData: widget.material,
+                if (!widget.ismeSuperAdmin)
+                  if (widget.isMe)
+                    IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BlocProvider(
+                              create: (context) => AddDataToApiBloc(
+                                PostMaterialRepo(),
+                              ),
+                              child: AddMaterialPage(
+                                purpose: AddMaterialPagePurpose.update,
+                                materialData: widget.material,
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    },
-                    icon: Icon(Icons.edit),
-                  ),
+                        );
+                      },
+                      icon: Icon(Icons.edit),
+                    ),
                 if (widget.isMe)
                   IconButton(
-                    onPressed: () {
-                      showDialog(
+                    onPressed: () async {
+                      bool status = await showDialog(
                         context: context,
                         builder: (context) => AlertDialog(
                           title: Text('Delete Material'),
@@ -121,17 +127,28 @@ class _MaterialDetailsPageState extends State<MaterialDetailsPage> {
                             TextButton(
                               child: Text('Cancel'),
                               onPressed: () {
-                                Navigator.pop(context);
+                                Navigator.pop(context, false);
                               },
                             ),
                             TextButton(
                               child: Text('Delete'),
-                              onPressed: () {
-                                DeleteMaterialRepo.post(widget.material['mtid'],
+                              onPressed: () async {
+                                ScaffoldMessenger.of(ctx).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                        'Please wait material deleting...'),
+                                  ),
+                                );
+                                await DeleteMaterialRepo.post(
+                                    widget.material['mtid'],
                                     scrapTableProvider!);
-                                int i = 0;
-                                Navigator.popUntil(
-                                    context, (route) => i++ == 3);
+                                if (widget.ismeSuperAdmin) {
+                                  Navigator.pop(context, true);
+                                } else {
+                                  int i = 0;
+                                  Navigator.popUntil(
+                                      context, (route) => i++ == 3);
+                                }
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                     content:
@@ -144,6 +161,9 @@ class _MaterialDetailsPageState extends State<MaterialDetailsPage> {
                           ],
                         ),
                       );
+                      if (status) {
+                        Navigator.pop(context, true);
+                      }
                     },
                     icon: Icon(Icons.delete),
                   ),
@@ -153,61 +173,99 @@ class _MaterialDetailsPageState extends State<MaterialDetailsPage> {
                   },
                   icon: Icon(Icons.open_in_browser),
                 ),
-                IconButton(
-                  onPressed: () {
-                    localDbConnect.addBookMarkMt(
-                      BookMarkMt(
-                        title: widget.material['mtname'],
-                        url: widget.material['mturl'],
-                        subject: widget.material['mtsub'],
-                        type: widget.material['mttype'],
-                        sem: widget.material['mtsem'],
-                        branch: widget.material['branch'],
-                      ),
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text(
-                              'Material add to bookmark',
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pushNamed(context, 'bookmark');
-                              },
-                              child: const Text(
-                                'check',
-                                style: TextStyle(color: Colors.blueAccent),
-                              ),
-                            ),
-                          ],
+                if (!widget.ismeSuperAdmin)
+                  IconButton(
+                    onPressed: () {
+                      localDbConnect.addBookMarkMt(
+                        BookMarkMt(
+                          title: widget.material['mtname'],
+                          url: widget.material['mturl'],
+                          subject: widget.material['mtsub'],
+                          type: widget.material['mttype'],
+                          sem: widget.material['mtsem'],
+                          branch: widget.material['branch'],
                         ),
-                      ),
-                    );
-                  },
-                  icon: const Icon(
-                    Icons.bookmark_border_outlined,
-                    size: 25,
-                  ),
-                ),
-                if (widget.isMe)
-                  Tooltip(
-                    message:
-                        widget.material['approve'].toString().toLowerCase() ==
-                                'true'
-                            ? "Material is live to everyone"
-                            : "Material is pending for approval",
-                    child: CircleAvatar(
-                      radius: 8,
-                      backgroundColor:
-                          widget.material['approve'].toString().toLowerCase() ==
-                                  'true'
-                              ? Colors.green
-                              : Colors.red,
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                'Material add to bookmark',
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pushNamed(context, 'bookmark');
+                                },
+                                child: const Text(
+                                  'check',
+                                  style: TextStyle(color: Colors.blueAccent),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                    icon: const Icon(
+                      Icons.bookmark_border_outlined,
+                      size: 25,
                     ),
                   ),
+                if (widget.isMe)
+                  widget.ismeSuperAdmin
+                      ? IconButton(
+                          onPressed: () async {
+                            ScaffoldMessenger.of(ctx).showSnackBar(
+                              const SnackBar(
+                                content:
+                                    Text('Please wait material updating...'),
+                              ),
+                            );
+                            var output = await UpdateMaterialRepo.post(
+                                widget.material['mtid'],
+                                '',
+                                '',
+                                '',
+                                '',
+                                '',
+                                '',
+                                'true',
+                                '',
+                                scrapTableProvider!);
+                            if (output == 'SUCCESS') {
+                              Future.delayed(Duration(milliseconds: 300), () {
+                                ScaffoldMessenger.of(ctx).showSnackBar(
+                                  const SnackBar(
+                                    content:
+                                        Text('Material updated successfully'),
+                                    duration: Duration(seconds: 1),
+                                  ),
+                                );
+                                Navigator.pop(context, true);
+                              });
+                            }
+                          },
+                          icon: Icon(Icons.done),
+                        )
+                      : Tooltip(
+                          message: widget.material['approve']
+                                      .toString()
+                                      .toLowerCase() ==
+                                  'true'
+                              ? "Material is live to everyone"
+                              : "Material is pending for approval",
+                          child: CircleAvatar(
+                            radius: 8,
+                            backgroundColor: widget.material['approve']
+                                        .toString()
+                                        .toLowerCase() ==
+                                    'true'
+                                ? Colors.green
+                                : Colors.red,
+                          ),
+                        ),
               ],
             ),
             const SizedBox(height: 10),

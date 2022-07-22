@@ -18,9 +18,10 @@ import 'package:provider/provider.dart';
 
 class AddMaterialPage extends StatefulWidget {
   final AddMaterialPagePurpose purpose;
+  final String? approveStatus;
   final Map<dynamic, dynamic>? materialData;
   const AddMaterialPage(
-      {Key? key, this.purpose = AddMaterialPagePurpose.add, this.materialData})
+      {Key? key, this.purpose = AddMaterialPagePurpose.add, this.materialData, this.approveStatus})
       : super(key: key);
   @override
   _AddMaterialPageState createState() => _AddMaterialPageState();
@@ -302,7 +303,7 @@ class _AddMaterialPageState extends State<AddMaterialPage> {
                                     materialBranch,
                                     materialSem,
                                     materialUrl.text,
-                                    'false',
+                                   widget.approveStatus?? 'false',
                                     materialSubject.text,
                                     file,
                                   ),

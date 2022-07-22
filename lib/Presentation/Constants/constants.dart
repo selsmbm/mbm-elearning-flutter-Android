@@ -50,3 +50,8 @@ const String gDriveUploadClientSecreat = "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";
 const String gDriveFolder = '17RjQvK979j3RjwjtTBP5LtyEQ9Qh8Qdh';
 
 enum AddMaterialPagePurpose { add, update }
+
+//sharedprefrences ids
+class SP {
+  static const String ismeAdmin = "ismeAdmin";
+}

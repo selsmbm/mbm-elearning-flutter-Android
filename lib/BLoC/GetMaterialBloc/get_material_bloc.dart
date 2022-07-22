@@ -23,6 +23,7 @@ class FetchGetMaterialApi extends GetMaterialApiEvent {
   final String approve;
   final bool showProgress;
   final ScrapTableProvider scrapTableProvider;
+  final bool getDataFromLiveSheet;
   FetchGetMaterialApi(
     this.sem,
     this.branch,
@@ -33,8 +34,9 @@ class FetchGetMaterialApi extends GetMaterialApiEvent {
     this.userId,
     this.approve,
     this.showProgress,
-    this.scrapTableProvider,
-  );
+    this.scrapTableProvider, {
+    this.getDataFromLiveSheet = false,
+  });
   @override
   List<Object> get props => [
         branch,
@@ -76,16 +78,16 @@ class GetMaterialApiBloc
   Stream<GetMaterialApiState> mapEventToState(
       GetMaterialApiEvent event) async* {
     if (event is FetchGetMaterialApi) {
-      if (event.scrapTableProvider.checkIsNotEmpty()) {
+      if (event.scrapTableProvider.checkIsNotEmpty() &&
+          !event.getDataFromLiveSheet) {
         if (event.query != '') {
           yield GetMaterialApiIsLoading();
           yield GetMaterialApiIsSuccess(
               event.scrapTableProvider.getMaterialsByQuary(event.query));
         } else if (event.sem != '' && event.type != '') {
           yield GetMaterialApiIsLoading();
-          yield GetMaterialApiIsSuccess(
-              event.scrapTableProvider.getMaterialsBySemesterAndBranch(
-                  event.sem, event.type,
+          yield GetMaterialApiIsSuccess(event.scrapTableProvider
+              .getMaterialsBySemesterAndBranch(event.sem, event.type,
                   branch: event.branch));
         } else if (event.userId != '') {
           yield GetMaterialApiIsSuccess(
