@@ -48,7 +48,7 @@ class _EventsPageState extends State<EventsPage> {
           itemBuilder: (context, index) {
             EventsModel event = _scrapTableProvider.events[index];
             String org = json.decode(event.adminOrg!)['name'];
-            DateTime date = DateTime.fromMicrosecondsSinceEpoch(
+            DateTime date = DateTime.fromMillisecondsSinceEpoch(
                 int.parse(event.starttime!) * 1000);
             return ListTile(
               onTap: () {

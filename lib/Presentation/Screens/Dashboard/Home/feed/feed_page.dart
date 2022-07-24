@@ -45,7 +45,7 @@ class _FeedsPageState extends State<FeedsPage> {
           itemCount: _scrapTableProvider.blogPosts.length,
           itemBuilder: (context, index) {
             BlogModel post = _scrapTableProvider.blogPosts[index];
-            DateTime date = DateTime.fromMicrosecondsSinceEpoch(
+            DateTime date = DateTime.fromMillisecondsSinceEpoch(
                 int.parse(post.posttime!) * 1000);
             return ListTile(
               onTap: () {

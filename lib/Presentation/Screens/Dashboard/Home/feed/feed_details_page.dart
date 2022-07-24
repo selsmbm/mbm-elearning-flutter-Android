@@ -34,7 +34,7 @@ class _FeedDetailsPageState extends State<FeedDetailsPage> {
   @override
   Widget build(BuildContext context) {
     DateTime posttime =
-        DateTime.fromMicrosecondsSinceEpoch(int.parse(feed.posttime!) * 1000);
+        DateTime.fromMillisecondsSinceEpoch(int.parse(feed.posttime!) * 1000);
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {},

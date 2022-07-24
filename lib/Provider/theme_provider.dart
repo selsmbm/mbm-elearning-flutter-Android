@@ -14,6 +14,17 @@ class ThemeController with ChangeNotifier {
   ThemeData litethemeData = ThemeData.light().copyWith(
     primaryColor: rPrimaryMaterialColorLite,
     useMaterial3: true,
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: ButtonStyle(
+        shape: MaterialStateProperty.all(RoundedRectangleBorder(
+          side: BorderSide(color: rPrimaryMaterialColor, width: 1),
+          borderRadius: BorderRadius.circular(30),
+        )),
+        textStyle: MaterialStateProperty.all(
+          TextStyle(color: rPrimaryColor),
+        ),
+      ),
+    ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(rPrimaryMaterialColor),

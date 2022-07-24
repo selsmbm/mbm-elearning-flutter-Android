@@ -66,10 +66,13 @@ class _LandingPageState extends State<LandingPage> {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset(
-                  'assets/images/logo.png',
-                  width: 150,
-                  height: 150,
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(100),
+                  child: Image.asset(
+                    'assets/images/logo.png',
+                    width: 150,
+                    height: 150,
+                  ),
                 ),
                 const SizedBox(
                   height: 10,

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
@@ -8,6 +9,7 @@ import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Widgets/image_cus.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class EventDetailsPage extends StatefulWidget {
@@ -38,9 +40,9 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
   Widget build(BuildContext context) {
     Map org = jsonDecode(event.adminOrg!);
     DateTime startdate =
-        DateTime.fromMicrosecondsSinceEpoch(int.parse(event.starttime!) * 1000);
+        DateTime.fromMillisecondsSinceEpoch(int.parse(event.starttime!) * 1000);
     DateTime enddate =
-        DateTime.fromMicrosecondsSinceEpoch(int.parse(event.endtime!) * 1000);
+        DateTime.fromMillisecondsSinceEpoch(int.parse(event.endtime!) * 1000);
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
@@ -50,13 +52,50 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            ElevatedButton(
-              onPressed: () {},
-              child: Text("Follow",
-                style: TextStyle(
-                  color: Colors.white,
-                ),),
-            ),
+            FutureBuilder<SharedPreferences>(
+                future: SharedPreferences.getInstance(),
+                builder: (context, AsyncSnapshot<SharedPreferences> snapshot) {
+                  String key = "${event.title}-${event.id}";
+                  if (snapshot.hasData) {
+                    if (snapshot.data!.getBool(key) ?? false) {
+                      return OutlinedButton(
+                        onPressed: () async {
+                          await FirebaseMessaging.instance
+                              .unsubscribeFromTopic(key);
+                          await snapshot.data!.setBool(key, false);
+                          setState(() {});
+                        },
+                        child: const Text(
+                          "unFollow",
+                          style: TextStyle(
+                            color: rPrimaryColor,
+                          ),
+                        ),
+                      );
+                    } else {
+                      return ElevatedButton(
+                        onPressed: () async {
+                          await FirebaseMessaging.instance
+                              .subscribeToTopic(key);
+                          await snapshot.data!.setBool(key, true);
+                          setState(() {});
+                        },
+                        child: const Text(
+                          "Follow",
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      );
+                    }
+                  } else {
+                    return SizedBox(
+                      height: 40,
+                      width: 40,
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                }),
             IconButton(
               onPressed: () {
                 launch(event.website!);

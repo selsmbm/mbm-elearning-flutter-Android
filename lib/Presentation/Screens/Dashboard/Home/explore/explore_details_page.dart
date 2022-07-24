@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:googleapis/pubsub/v1.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Data/model/events_model.dart';
 import 'package:mbm_elearning/Data/model/explore_model.dart';
@@ -9,6 +11,7 @@ import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Widgets/image_cus.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ExploreDetailsPage extends StatefulWidget {
@@ -51,13 +54,50 @@ class _ExploreDetailsPageState extends State<ExploreDetailsPage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            ElevatedButton(
-              onPressed: () {},
-              child: Text("Follow",
-                style: TextStyle(
-                  color: Colors.white,
-                ),),
-            ),
+            FutureBuilder<SharedPreferences>(
+                future: SharedPreferences.getInstance(),
+                builder: (context, AsyncSnapshot<SharedPreferences> snapshot) {
+                  String key = "${explore.title}-${explore.id}";
+                  if (snapshot.hasData) {
+                    if (snapshot.data!.getBool(key) ?? false) {
+                      return OutlinedButton(
+                        onPressed: () async {
+                          await FirebaseMessaging.instance
+                              .unsubscribeFromTopic(key);
+                          await snapshot.data!.setBool(key, false);
+                          setState(() {});
+                        },
+                        child: const Text(
+                          "unFollow",
+                          style: TextStyle(
+                            color: rPrimaryColor,
+                          ),
+                        ),
+                      );
+                    } else {
+                      return ElevatedButton(
+                        onPressed: () async {
+                          await FirebaseMessaging.instance
+                              .subscribeToTopic(key);
+                          await snapshot.data!.setBool(key, true);
+                          setState(() {});
+                        },
+                        child: const Text(
+                          "Follow",
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      );
+                    }
+                  } else {
+                    return SizedBox(
+                      height: 40,
+                      width: 40,
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                }),
             IconButton(
               onPressed: () {
                 launch(explore.website!);
@@ -165,7 +205,7 @@ class _ExploreDetailsPageState extends State<ExploreDetailsPage> {
                     itemBuilder: (context, index) {
                       EventsModel event = events[index];
                       String org = json.decode(event.adminOrg!)['name'];
-                      DateTime date = DateTime.fromMicrosecondsSinceEpoch(
+                      DateTime date = DateTime.fromMillisecondsSinceEpoch(
                           int.parse(event.starttime!) * 1000);
                       return ListTile(
                         leading: ImageCus(image: event.image),
