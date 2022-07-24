@@ -15,7 +15,7 @@ import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/Home.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/events/events_page.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/explore/explore_page.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/feed/feed_page.dart';
-import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/setting_page.dart';
+import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/more_page.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 import 'package:mbm_elearning/flavors.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
@@ -40,7 +40,7 @@ class _DashboardPageState extends State<DashboardPage> {
     const FeedsPage(),
     const ExplorePage(),
     const EventsPage(),
-    const SettingPage(),
+    const MorePage(),
   ];
   int _currentIndex = 0;
   @override
@@ -172,9 +172,9 @@ class _DashboardPageState extends State<DashboardPage> {
               label: 'Events',
             ),
             NavigationDestination(
-              icon: Icon(Icons.settings_outlined),
-              selectedIcon: Icon(Icons.settings),
-              label: 'Setting',
+              icon: Icon(Icons.more_horiz_outlined),
+              selectedIcon: Icon(Icons.more_horiz),
+              label: 'More',
             ),
           ]),
       body: ModalProgressHUD(

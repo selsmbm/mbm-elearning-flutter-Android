@@ -8,14 +8,14 @@ import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class SettingPage extends StatefulWidget {
-  const SettingPage({Key? key}) : super(key: key);
+class MorePage extends StatefulWidget {
+  const MorePage({Key? key}) : super(key: key);
 
   @override
-  State<SettingPage> createState() => _SettingPageState();
+  State<MorePage> createState() => _MorePageState();
 }
 
-class _SettingPageState extends State<SettingPage> {
+class _MorePageState extends State<MorePage> {
   User? user = FirebaseAuth.instance.currentUser;
 
   @override
@@ -23,7 +23,7 @@ class _SettingPageState extends State<SettingPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Setting'),
+        title: Text('More'),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -99,6 +99,32 @@ class _SettingPageState extends State<SettingPage> {
                 title: 'Useful Links',
                 subtitle: 'All useful links',
                 icon: Icons.link,
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 18, vertical: 5),
+                child: Text(
+                  "MBMU",
+                  style: TextStyle(
+                    fontSize: 15,
+                  ),
+                ),
+              ),
+              SettingButton(
+                onTap: () {
+                  Navigator.pushNamed(context, 'teachers');
+                },
+                title: 'Teachers',
+                subtitle: 'All teachers of MBMU',
+                icon: Icons.group,
+              ),
+              SettingButton(
+                onTap: () {
+                  Navigator.pushNamed(context, 'mbmstories');
+                },
+                title: 'MBM Stories',
+                subtitle: 'Powered by mbmstories.com',
+                icon: Icons.album,
               ),
               Padding(
                 padding:

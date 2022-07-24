@@ -4,12 +4,12 @@ import 'dart:developer';
 import 'package:connectivity/connectivity.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' as parse;
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 import 'package:mbm_elearning/Data/model/blog_model.dart';
 import 'package:mbm_elearning/Data/model/events_model.dart';
 import 'package:mbm_elearning/Data/model/explore_model.dart';
 import 'package:mbm_elearning/Data/model/useful_links_model.dart';
-import 'package:mbm_elearning/Presentation/Constants/constants.dart';
+import 'package:mbm_elearning/Presentation/Constants/apis.dart';
 
 class Scrap {
   static Future<List<List<dynamic>>> scrapAllData() {
@@ -26,9 +26,8 @@ class Scrap {
     List<Map<String, dynamic>> material = [];
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult != ConnectivityResult.none) {
-      var client = Client();
       try {
-        Response response = await client.get(Uri.parse(getMaterialTable));
+        http.Response response = await http.get(Uri.parse(getMaterialTable));
         if (response.statusCode == 200) {
           Document document = parse.parse(response.body);
           List<Element> trs = document.getElementsByTagName('tr');
@@ -64,9 +63,9 @@ class Scrap {
     List<BlogModel> posts = [];
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult != ConnectivityResult.none) {
-      var client = Client();
+      posts.clear();
       try {
-        Response response = await client.get(Uri.parse(getBlogTable));
+        http.Response response = await http.get(Uri.parse(getBlogTable));
         if (response.statusCode == 200) {
           Document document = parse.parse(response.body);
           List<Element> trs = document.getElementsByTagName('tr');
@@ -94,16 +93,15 @@ class Scrap {
         log(e.toString());
       }
     }
-    return posts;
+    return posts.reversed.toList();
   }
 
   static Future<List<ExploreModel>> scrapExplores() async {
     List<ExploreModel> explore = [];
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult != ConnectivityResult.none) {
-      var client = Client();
       try {
-        Response response = await client.get(Uri.parse(getExploreTable));
+        http.Response response = await http.get(Uri.parse(getExploreTable));
         if (response.statusCode == 200) {
           Document document = parse.parse(response.body);
           List<Element> trs = document.getElementsByTagName('tr');
@@ -131,16 +129,15 @@ class Scrap {
         log(e.toString());
       }
     }
-    return explore;
+    return explore.reversed.toList();
   }
 
   static Future<List<EventsModel>> scrapEvents() async {
     List<EventsModel> events = [];
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult != ConnectivityResult.none) {
-      var client = Client();
       try {
-        Response response = await client.get(Uri.parse(getEventsTable));
+        http.Response response = await http.get(Uri.parse(getEventsTable));
         if (response.statusCode == 200) {
           Document document = parse.parse(response.body);
           List<Element> trs = document.getElementsByTagName('tr');
@@ -166,16 +163,15 @@ class Scrap {
         log(e.toString());
       }
     }
-    return events;
+    return events.reversed.toList();
   }
 
   static Future<List<UsefulLinksModel>> scrapUsefullinks() async {
     List<UsefulLinksModel> links = [];
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult != ConnectivityResult.none) {
-      var client = Client();
       try {
-        Response response = await client.get(Uri.parse(getUsefulLinksTable));
+        http.Response response = await http.get(Uri.parse(getUsefulLinksTable));
         if (response.statusCode == 200) {
           Document document = parse.parse(response.body);
           List<Element> trs = document.getElementsByTagName('tr');
@@ -198,6 +194,6 @@ class Scrap {
         log(e.toString());
       }
     }
-    return links;
+    return links.reversed.toList();
   }
 }

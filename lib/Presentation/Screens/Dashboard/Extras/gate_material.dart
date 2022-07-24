@@ -1,16 +1,17 @@
 import 'dart:convert';
+import 'dart:developer';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:http/http.dart' as http;
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
-import 'package:mbm_elearning/Presentation/Constants/textfieldDeco.dart';
+import 'package:mbm_elearning/Presentation/Constants/apis.dart';
 import 'package:mbm_elearning/Presentation/Constants/unity_ads.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class GateMaterial extends StatefulWidget {
+  const GateMaterial({Key? key}) : super(key: key);
   @override
   _GateMaterialState createState() => _GateMaterialState();
 }
@@ -27,8 +28,7 @@ class _GateMaterialState extends State<GateMaterial> {
     });
     _outPutData.clear();
     try {
-      http.Response response = await http.get(Uri.parse(
-          'https://script.google.com/macros/s/AKfycbyIR0HysY0I91nHAagWsR7G8lz-RwrmL-eM0_0g48tdZqJBIwbl96EtZOWNb4mRuUdJYg/exec'));
+      http.Response response = await http.get(Uri.parse(getGateSSCApi));
       if (response.statusCode == 200) {
         for (var mt in json.decode(response.body)) {
           _outPutData.add({
@@ -40,7 +40,7 @@ class _GateMaterialState extends State<GateMaterial> {
         setState(() {});
       }
     } catch (e) {
-      print(e);
+      log(e.toString());
     }
     setState(() {
       showProgress = false;

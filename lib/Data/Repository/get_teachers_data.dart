@@ -1,31 +1,31 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:connectivity/connectivity.dart';
 import 'package:http/http.dart' as http;
+import 'package:mbm_elearning/Data/model/teachers_model.dart';
 import 'package:mbm_elearning/Presentation/Constants/apis.dart';
-import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 
-class DeleteMaterialRepo {
-  static Future post(
-    int id,
-    ScrapTableProvider scrapTableProvider,
-  ) async {
+class GetTeachersDataRepo {
+  static Future<List<TeachersModel>> get() async {
+    List<TeachersModel> teachers = [];
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult != ConnectivityResult.none) {
       try {
         http.Response response = await http.get(
           Uri.parse(
-            "$deleteMaterialApi?id=$id",
+            getTeachersDataApi,
           ),
         );
         if (response.statusCode == 200) {
-          await scrapTableProvider.updateScrapMaterial();
-          return json.decode(response.body)['status'];
+          for (Map<String, dynamic> teacher in json.decode(response.body)) {
+            teachers.add(TeachersModel.fromJson(teacher));
+          }
         }
       } on Exception catch (e) {
-        print(e);
-        print('network error');
+        log(e.toString());
       }
     }
+    return teachers;
   }
 }

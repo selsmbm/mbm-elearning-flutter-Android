@@ -35,7 +35,7 @@ class _AddNewFeedPageState extends State<AddNewFeedPage> {
       inAsyncCall: showProgress,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Add New post'),
+          title: const Text('Add new post'),
         ),
         bottomNavigationBar: BottomAppBar(
           child: Row(

@@ -23,6 +23,31 @@ class ScrapTableProvider with ChangeNotifier {
   bool isGettingExploreData = false;
   bool isGettingUsefulLinksData = false;
 
+  updateGettingBlogPostsStatus(bool status) {
+    isGettingBlogPostsData = status;
+    notifyListeners();
+  }
+
+  updateGettingEventsStatus(bool status) {
+    isGettingEventsData = status;
+    notifyListeners();
+  }
+
+  updateGettingExploreStatus(bool status) {
+    isGettingExploreData = status;
+    notifyListeners();
+  }
+
+  updateGettingUsefulLinksStatus(bool status) {
+    isGettingUsefulLinksData = status;
+    notifyListeners();
+  }
+
+  updateGettingMaterialStatus(bool status) {
+    isGettingMaterialData = status;
+    notifyListeners();
+  }
+
   bool checkIsNotEmpty() {
     if (_materials.isNotEmpty) {
       return true;
@@ -67,10 +92,10 @@ class ScrapTableProvider with ChangeNotifier {
     if (_materials.isNotEmpty) {
       _materials.clear();
     }
-    isGettingMaterialData = true;
+    updateGettingMaterialStatus(true);
     _materials.addAll(await Scrap.scrapMaterial());
     _materials.toSet().toList();
-    isGettingMaterialData = false;
+    updateGettingMaterialStatus(false);
     notifyListeners();
   }
 
@@ -78,10 +103,11 @@ class ScrapTableProvider with ChangeNotifier {
     if (_blogPosts.isNotEmpty) {
       _blogPosts.clear();
     }
-    isGettingBlogPostsData = true;
-    _blogPosts.addAll(await Scrap.scrapBlogPosts());
+    updateGettingBlogPostsStatus(true);
+    List<BlogModel> data = await Scrap.scrapBlogPosts();
+    _blogPosts.addAll(data);
     _blogPosts.toSet().toList();
-    isGettingBlogPostsData = false;
+    updateGettingBlogPostsStatus(false);
     notifyListeners();
   }
 
@@ -89,10 +115,10 @@ class ScrapTableProvider with ChangeNotifier {
     if (_events.isNotEmpty) {
       _events.clear();
     }
-    isGettingEventsData = true;
+    updateGettingEventsStatus(true);
     _events.addAll(await Scrap.scrapEvents());
     _events.toSet().toList();
-    isGettingEventsData = false;
+    updateGettingEventsStatus(false);
     notifyListeners();
   }
 
@@ -100,10 +126,10 @@ class ScrapTableProvider with ChangeNotifier {
     if (_explores.isNotEmpty) {
       _explores.clear();
     }
-    isGettingExploreData = true;
+    updateGettingExploreStatus(true);
     _explores.addAll(await Scrap.scrapExplores());
     _explores.toSet().toList();
-    isGettingExploreData = false;
+    updateGettingExploreStatus(false);
     notifyListeners();
   }
 
@@ -111,10 +137,10 @@ class ScrapTableProvider with ChangeNotifier {
     if (_usefulLinks.isNotEmpty) {
       _usefulLinks.clear();
     }
-    isGettingUsefulLinksData = true;
+    updateGettingUsefulLinksStatus(true);
     _usefulLinks.addAll(await Scrap.scrapUsefullinks());
     _usefulLinks.toSet().toList();
-    isGettingUsefulLinksData = false;
+    updateGettingUsefulLinksStatus(false);
     notifyListeners();
   }
 

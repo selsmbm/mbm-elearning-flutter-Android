@@ -30,6 +30,39 @@ class ImageCus extends StatelessWidget {
   }
 }
 
+class UserImageCus extends StatelessWidget {
+  const UserImageCus({
+    Key? key,
+    this.image,
+    required this.name,
+  }) : super(key: key);
+
+  final String? image;
+  final String name;
+
+  @override
+  Widget build(BuildContext context) {
+    return CircleAvatar(
+      backgroundColor: rPrimaryLiteColor,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: image != null && image != ''
+            ? Image.network(
+                "$driveImageShowUrl$image",
+                fit: BoxFit.cover,
+              )
+            : Text(
+                name[0].toUpperCase(),
+                style: TextStyle(
+                  fontSize: 20,
+                  color: rPrimaryColor,
+                ),
+              ),
+      ),
+    );
+  }
+}
+
 class BigImageCus extends StatelessWidget {
   const BigImageCus({
     Key? key,
@@ -55,7 +88,6 @@ class BigImageCus extends StatelessWidget {
     );
   }
 }
-
 
 class UserImageByName extends StatelessWidget {
   const UserImageByName({

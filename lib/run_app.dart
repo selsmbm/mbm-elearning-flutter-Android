@@ -14,12 +14,14 @@ import 'package:mbm_elearning/Presentation/Screens/Auth/ForgetPassword.dart';
 import 'package:mbm_elearning/Presentation/Screens/Auth/Signin.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Extras/useful_links.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Extras/your_uploaded_material_page.dart';
+import 'package:mbm_elearning/Presentation/Screens/Dashboard/MBMU/teachers/teacher_details_page.dart';
+import 'package:mbm_elearning/Presentation/Screens/Dashboard/MBMU/teachers/teachers_page.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/SubAdmin/add_new_feed_post.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/material/AddMaterial.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Extras/Bookmark.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/Home.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/dashboard.dart';
-import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/setting_page.dart';
+import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/more_page.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Extras/gate_material.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/profile_page.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/material/search_page.dart';
@@ -133,7 +135,7 @@ class MyApp extends StatelessWidget {
               'forgetPage': (context) => ForgetPasswordPage(),
               'homePage': (context) => DashboardPage(),
               'home': (context) => HomePage(),
-              'setting': (context) => SettingPage(),
+              'more': (context) => MorePage(),
               'search': (context) => BlocProvider(
                     create: (context) => GetMaterialApiBloc(
                       GetMaterialRepo(),
@@ -141,6 +143,8 @@ class MyApp extends StatelessWidget {
                     child: SearchPage(),
                   ),
               'profile': (context) => ProfilePage(),
+              'teachers': (context) => TeachersPage(),
+              'teacherdetails': (context) => TeacherDetails(),
               'usefullinks': (context) => UsefulLinksPage(),
               'materialPage': (context) => BlocProvider(
                     create: (context) => GetMaterialApiBloc(
