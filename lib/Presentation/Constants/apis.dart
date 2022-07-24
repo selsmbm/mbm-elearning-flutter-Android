@@ -26,3 +26,5 @@ const String getUsefulLinksTable =
     "https://docs.google.com/spreadsheets/d/e/2PACX-1vR63HgTfZci0afiD0vM2HLI7PQaihT2wiaJoFNZ-ShB-JfgGUSAxh1igrMmkidahZnPjdx8yO3wEwU0/pubhtml";
 const String getSELSAdminsTable =
     "https://docs.google.com/spreadsheets/d/e/2PACX-1vRKpibLy0uJ9E-iWQ9lOdTD9f2PRjpa7N22-aVczHIHOSkLfDAFDXVoSRe_9-yVjFaSuhqaXjRLOsTc/pubhtml";
+
+const String mbmStoryApi = 'https://mbmstories.com/wp-json/wp/v2/posts';

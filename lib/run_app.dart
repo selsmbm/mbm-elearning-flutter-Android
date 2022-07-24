@@ -14,6 +14,7 @@ import 'package:mbm_elearning/Presentation/Screens/Auth/ForgetPassword.dart';
 import 'package:mbm_elearning/Presentation/Screens/Auth/Signin.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Extras/useful_links.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Extras/your_uploaded_material_page.dart';
+import 'package:mbm_elearning/Presentation/Screens/Dashboard/MBMU/mbm_story/mbm_stories.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/MBMU/teachers/teacher_details_page.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/MBMU/teachers/teachers_page.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/SubAdmin/add_new_feed_post.dart';
@@ -145,6 +146,7 @@ class MyApp extends StatelessWidget {
               'profile': (context) => ProfilePage(),
               'teachers': (context) => TeachersPage(),
               'teacherdetails': (context) => TeacherDetails(),
+              'mbmstory': (context) => MBMStories(),
               'usefullinks': (context) => UsefulLinksPage(),
               'materialPage': (context) => BlocProvider(
                     create: (context) => GetMaterialApiBloc(

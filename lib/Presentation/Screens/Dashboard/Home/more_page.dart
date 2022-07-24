@@ -120,7 +120,7 @@ class _MorePageState extends State<MorePage> {
               ),
               SettingButton(
                 onTap: () {
-                  Navigator.pushNamed(context, 'mbmstories');
+                  Navigator.pushNamed(context, 'mbmstory');
                 },
                 title: 'MBM Stories',
                 subtitle: 'Powered by mbmstories.com',
