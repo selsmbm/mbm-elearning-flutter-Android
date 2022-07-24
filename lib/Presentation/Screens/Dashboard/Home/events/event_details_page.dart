@@ -47,13 +47,15 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
         child: Icon(Icons.share),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: rPrimaryLiteColor,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             ElevatedButton(
               onPressed: () {},
-              child: Text("Follow"),
+              child: Text("Follow",
+                style: TextStyle(
+                  color: Colors.white,
+                ),),
             ),
             IconButton(
               onPressed: () {

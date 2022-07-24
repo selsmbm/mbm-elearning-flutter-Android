@@ -1,11 +1,16 @@
 import 'dart:developer';
+import 'dart:math';
 
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:mbm_elearning/Data/LocalDbConnect.dart';
+import 'package:mbm_elearning/Data/Repository/send_notification.dart';
 import 'package:mbm_elearning/Data/Repository/sheet_scrap.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
+import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
+import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/Home.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/events/events_page.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/explore/explore_page.dart';
@@ -42,39 +47,53 @@ class _DashboardPageState extends State<DashboardPage> {
   void initState() {
     super.initState();
     localDbConnect.asyncInit();
+    setNotifications();
     setCurrentScreenInGoogleAnalytics('Dashboard Page');
-    // try {
-    //   messaging = FirebaseMessaging.instance;
-    //   FirebaseMessaging.onMessage.listen((RemoteMessage event) {
-    //     showDialog(
-    //         context: context,
-    //         builder: (BuildContext context) {
-    //           return AlertDialog(
-    //             title: Text(event.notification.title),
-    //             content: Linkify(
-    //               text: event.notification.body,
-    //               onOpen: (l) {
-    //                 launch(l.url);
-    //               },
-    //             ),
-    //             actions: [
-    //               TextButton(
-    //                 child: const Text("Ok"),
-    //                 onPressed: () {
-    //                   Navigator.of(context).pop();
-    //                 },
-    //               )
-    //             ],
-    //           );
-    //         });
-    //   });
-    //   FirebaseMessaging.onMessageOpenedApp.listen((message) {
-    //     print('Message clicked!');
-    //   });
-    // } on Exception catch (e) {
-    //   print(e);
-    // }
     checkForUpdate();
+  }
+
+  setNotifications() {
+    forgroundNotification();
+    backgroundNotification();
+    terminateNotification();
+  }
+
+  forgroundNotification() {
+    FirebaseMessaging.onMessage.listen(
+      (message) async {
+        notification(message);
+      },
+    );
+  }
+
+  backgroundNotification() {
+    FirebaseMessaging.onMessageOpenedApp.listen(
+      (message) async {
+        notification(message);
+      },
+    );
+  }
+
+  terminateNotification() async {
+    RemoteMessage? message =
+        await FirebaseMessaging.instance.getInitialMessage();
+    if (message != null) {
+      notification(message);
+    }
+  }
+
+  void notification(RemoteMessage message) {
+    AwesomeNotifications().createNotification(
+        content: NotificationContent(
+      id: Random().nextInt(1000),
+      channelKey: feedNotificationChannel,
+      title: message.notification!.title,
+      body: message.notification!.body,
+      roundedLargeIcon: true,
+      backgroundColor: rPrimaryLiteColor,
+      largeIcon: message.data['image'],
+      category: NotificationCategory.Message,
+    ));
   }
 
   checkForUpdate() async {
@@ -84,7 +103,6 @@ class _DashboardPageState extends State<DashboardPage> {
       await getUpdateAvailability().then((value) {
         value.fold(
           available: () {
-            log('update is available for your app.');
             showDialog(
               context: context,
               builder: (context) => AlertDialog(
@@ -109,12 +127,8 @@ class _DashboardPageState extends State<DashboardPage> {
               ),
             );
           },
-          notAvailable: () {
-            log('No update is available for your app.');
-          },
-          unknown: () =>
-              log("It was not possible to determine if there is or not "
-                  "an update for your app."),
+          notAvailable: () {},
+          unknown: () {},
         );
       });
     }

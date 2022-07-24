@@ -16,7 +16,7 @@ class UpdateMaterialRepo {
     String? url,
     String? approve,
     String? subject,
-    ScrapTableProvider ScrapTableProvider,
+    ScrapTableProvider scrapTableProvider,
   ) async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult != ConnectivityResult.none) {
@@ -27,7 +27,7 @@ class UpdateMaterialRepo {
           ),
         );
         if (response.statusCode == 200) {
-          ScrapTableProvider.updateScrapMaterial();
+          await scrapTableProvider.updateScrapMaterial();
           return json.decode(response.body)['status'];
         }
       } on Exception catch (e) {

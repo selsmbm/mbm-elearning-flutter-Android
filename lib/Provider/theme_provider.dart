@@ -22,6 +22,16 @@ class ThemeController with ChangeNotifier {
         ),
       ),
     ),
+    bottomAppBarTheme: const BottomAppBarTheme(
+      color: rPrimaryLiteColor,
+    ),
+    textButtonTheme: TextButtonThemeData(
+      style: ButtonStyle(
+        textStyle: MaterialStateProperty.all(
+          TextStyle(color: rPrimaryMaterialColor),
+        ),
+      ),
+    ),
     appBarTheme: const AppBarTheme(
       elevation: 0.0,
       backgroundColor: rPrimaryLiteColor,

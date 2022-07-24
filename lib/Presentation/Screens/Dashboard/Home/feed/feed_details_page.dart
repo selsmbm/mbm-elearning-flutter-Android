@@ -41,16 +41,16 @@ class _FeedDetailsPageState extends State<FeedDetailsPage> {
         child: Icon(Icons.share),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: rPrimaryLiteColor,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            IconButton(
-              onPressed: () {
-                launch(feed.url!);
-              },
-              icon: Icon(Icons.language),
-            ),
+            if (feed.url != "")
+              IconButton(
+                onPressed: () {
+                  launch(feed.url!);
+                },
+                icon: Icon(Icons.language),
+              ),
             SizedBox(
               width: 10,
             ),
@@ -77,13 +77,14 @@ class _FeedDetailsPageState extends State<FeedDetailsPage> {
                     fontWeight: FontWeight.w300,
                   ),
                 ),
-                Text(
-                  "${feed.org} | ${feed.event ?? ""}",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w300,
+                if (feed.org != "" && feed.event != "")
+                  Text(
+                    "${feed.org} ${feed.event != "" ? "| ${feed.event}" : ""}",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w300,
+                    ),
                   ),
-                ),
                 Text(
                   "${posttime.day}/${posttime.month}/${posttime.year} ${posttime.hour}:${posttime.minute}",
                   style: TextStyle(

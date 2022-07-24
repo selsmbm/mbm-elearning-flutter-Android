@@ -6,6 +6,8 @@ const String getMaterialTable =
     "https://docs.google.com/spreadsheets/d/e/2PACX-1vTGOH3yf_in_iZeit55eYBfwr2TKUQdBNj_PZCISFq6LqEFwXjbEwEYzNFsVX5YAK9SjoJwB5UCRsJs/pubhtml";
 const String addMaterialApi =
     "https://script.google.com/macros/s/AKfycbzsre6Iu4Wu2r9yqE-xuCzVlFl0knMw7lMPx73CEFM5MwZbkCWIU0bA82WhQxn9BIfMaQ/exec";
+const String addBlogPostApi =
+    "https://script.google.com/macros/s/AKfycbzabwvKK225WEzzX5tGRDpYsHYXCGTgsPYhzzcQ-udKf2bz5-o7fzjitsX9h29caKEc0A/exec";
 const String updateMaterialApi =
     "https://script.google.com/macros/s/AKfycbxYaxsj37TceUnPzOzG4IjF37487DfExQgx4mdR59UwiEN3YedTZJISPNb840OZiqiYlA/exec";
 const String deleteMaterialApi =
@@ -18,9 +20,11 @@ const String getEventsTable =
     "https://docs.google.com/spreadsheets/d/e/2PACX-1vRG3L745bIvLQy70gC3hkLf8gVWklhUBrAM9lQUx-Eeu3QFBg7HdlFJKf7pKFKvsojwL5jrtJ6BqoCL/pubhtml";
 const String getUsefulLinksTable =
     "https://docs.google.com/spreadsheets/d/e/2PACX-1vR63HgTfZci0afiD0vM2HLI7PQaihT2wiaJoFNZ-ShB-JfgGUSAxh1igrMmkidahZnPjdx8yO3wEwU0/pubhtml";
+const String getSELSAdminsTable =
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vRKpibLy0uJ9E-iWQ9lOdTD9f2PRjpa7N22-aVczHIHOSkLfDAFDXVoSRe_9-yVjFaSuhqaXjRLOsTc/pubhtml";
 
 const String driveImageShowUrl = "https://drive.google.com/uc?export=view&id=";
-const String defaultDriveImageShowUrl = "13iSBQONd0uYpSRbGuITbaWVXxI_xm5JN";
+const String defaultDriveImageShowUrl = "14HZftHO6_LaoMOdzcE1t5RmrrpQSCGis";
 
 const List<String> mttypes = [
   'notes',
@@ -48,8 +52,14 @@ const String gdriveUploadClientId =
     "304334437374-vmjld7k1vvc234p9loqtu57kv9a7e2qc.apps.googleusercontent.com";
 const String gDriveUploadClientSecreat = "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";
 const String gDriveFolder = '17RjQvK979j3RjwjtTBP5LtyEQ9Qh8Qdh';
+const String firebaseFCMsenderKey =
+    "AAAARtu--_4:APA91bHkPHgeB2vxNtA4T9mYzK6cRWEnl2SAZdtFt6DlXmAK2NEgZ6e6UGPMyqsNcFTUvTGj1YTftdJS8zxE9piJwaohCniPv0pXmYcluDYSIrFEKZPfgYKiQbNN8fXQujypjAGl1c-n";
 
 enum AddMaterialPagePurpose { add, update }
+
+const String feedNotificationChannel = 'feed_notification';
+const String progressNotificationChannel = 'progress_channel';
+const String groupNotificationChannelKey = 'feed_group_channel';
 
 //sharedprefrences ids
 class SP {

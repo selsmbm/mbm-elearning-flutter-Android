@@ -4,6 +4,7 @@ import 'package:mbm_elearning/Data/model/explore_model.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/explore/explore_details_page.dart';
 import 'package:mbm_elearning/Presentation/Widgets/image_cus.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
 
 class ExplorePage extends StatefulWidget {
@@ -29,35 +30,38 @@ class _ExplorePageState extends State<ExplorePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text('Explore'),
-      ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {},
-      //   child: Icon(Icons.arrow_circle_up),
-      // ),
-      body: ListView.builder(
-        itemCount: _scrapTableProvider.explores.length,
-        itemBuilder: (context, index) {
-          ExploreModel explore = _scrapTableProvider.explores[index];
-          return ListTile(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return ExploreDetailsPage(explore: explore);
-                  },
-                ),
-              );
-            },
-            leading: ImageCus(image: explore.image),
-            title: Text(explore.title ?? "N/A"),
-            subtitle: explore.tagline != null ? Text(explore.tagline!) : null,
-          );
-        },
+    return ModalProgressHUD(
+      inAsyncCall: _scrapTableProvider.isGettingExploreData,
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text('Explore'),
+        ),
+        // floatingActionButton: FloatingActionButton(
+        //   onPressed: () {},
+        //   child: Icon(Icons.arrow_circle_up),
+        // ),
+        body: ListView.builder(
+          itemCount: _scrapTableProvider.explores.length,
+          itemBuilder: (context, index) {
+            ExploreModel explore = _scrapTableProvider.explores[index];
+            return ListTile(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return ExploreDetailsPage(explore: explore);
+                    },
+                  ),
+                );
+              },
+              leading: ImageCus(image: explore.image),
+              title: Text(explore.title ?? "N/A"),
+              subtitle: explore.tagline != null ? Text(explore.tagline!) : null,
+            );
+          },
+        ),
       ),
     );
   }

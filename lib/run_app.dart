@@ -7,12 +7,14 @@ import 'package:mbm_elearning/BLoC/AddDataToApi/add_data_to_api_bloc.dart';
 import 'package:mbm_elearning/BLoC/GetMaterialBloc/get_material_bloc.dart';
 import 'package:mbm_elearning/Data/Repository/get_mterial_repo.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
+import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/Presentation/Screens/Admin/approve_material.dart';
 import 'package:mbm_elearning/Presentation/Screens/Admin/dashboard.dart';
 import 'package:mbm_elearning/Presentation/Screens/Auth/ForgetPassword.dart';
 import 'package:mbm_elearning/Presentation/Screens/Auth/Signin.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Extras/useful_links.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Extras/your_uploaded_material_page.dart';
+import 'package:mbm_elearning/Presentation/Screens/Dashboard/SubAdmin/add_new_feed_post.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/material/AddMaterial.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Extras/Bookmark.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/Home.dart';
@@ -22,11 +24,12 @@ import 'package:mbm_elearning/Presentation/Screens/Dashboard/Extras/gate_materia
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/profile_page.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/material/search_page.dart';
 import 'package:mbm_elearning/Presentation/Screens/Splash.dart';
+import 'package:mbm_elearning/Presentation/Widgets/html_editor.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 import 'package:mbm_elearning/Provider/theme_provider.dart';
 import 'package:mbm_elearning/flavors.dart';
 import 'package:provider/provider.dart';
-
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'Data/Repository/post_material_repo.dart';
 import 'Presentation/Screens/Dashboard/material/Material.dart';
 import 'Presentation/Screens/IntroPages.dart';
@@ -51,6 +54,42 @@ Future<Widget> runMainApp() async {
       // ),
       );
   FirebaseMessaging.onBackgroundMessage(_messageHandler);
+  AwesomeNotifications().initialize(
+      'resource://drawable/ic_launcher_icon',
+      [
+        NotificationChannel(
+          channelShowBadge: true,
+          importance: NotificationImportance.Default,
+          channelKey: progressNotificationChannel,
+          vibrationPattern: lowVibrationPattern,
+          channelName: 'Upload notifications',
+          channelDescription:
+              'All upload documents notifications show through this channel',
+          defaultPrivacy: NotificationPrivacy.Private,
+        ),
+        NotificationChannel(
+          channelGroupKey: groupNotificationChannelKey,
+          channelKey: feedNotificationChannel,
+          channelName: 'Feed notifications',
+          channelDescription:
+              'All feed notifications show through this channel',
+          groupKey: feedNotificationChannel,
+          groupSort: GroupSort.Desc,
+          groupAlertBehavior: GroupAlertBehavior.Children,
+          defaultColor: rPrimaryColor,
+          ledColor: rPrimaryColor,
+          vibrationPattern: highVibrationPattern,
+          channelShowBadge: true,
+          importance: NotificationImportance.High,
+        )
+      ],
+      channelGroups: [
+        NotificationChannelGroup(
+          channelGroupKey: groupNotificationChannelKey,
+          channelGroupName: 'Feed notifications',
+        ),
+      ],
+      debug: Flavors.appFlavor == Flavor.MDEV);
   final themeController = ThemeController(ThemeService());
   await themeController.loadSettings();
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -125,6 +164,8 @@ class MyApp extends StatelessWidget {
               'intro': (context) => OnBoardingPage(),
               'gateMaterial': (context) => GateMaterial(),
               'adminDash': (context) => const AdminDashboard(),
+              'html_editor': (context) => HtmlEditorScreen(),
+              'addNewFeed': (context) => AddNewFeedPage(),
               'addMaterialPage': (context) => BlocProvider(
                     create: (context) => AddDataToApiBloc(
                       PostMaterialRepo(),

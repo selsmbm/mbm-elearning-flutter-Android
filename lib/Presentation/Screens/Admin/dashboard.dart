@@ -58,6 +58,39 @@ class _AdminDashboardState extends State<AdminDashboard> {
             ),
             title: const Text('Unapproved Material'),
           ),
+          ListTile(
+            onTap: () {
+              Navigator.pushNamed(context, 'addNewFeed');
+            },
+            leading: const Icon(
+              Icons.arrow_forward_ios,
+              color: Colors.black,
+              size: 20,
+            ),
+            title: const Text('Add new explore'),
+          ),
+          ListTile(
+            onTap: () {
+              Navigator.pushNamed(context, 'addNewFeed');
+            },
+            leading: const Icon(
+              Icons.arrow_forward_ios,
+              color: Colors.black,
+              size: 20,
+            ),
+            title: const Text('Add new event'),
+          ),
+          ListTile(
+            onTap: () {
+              Navigator.pushNamed(context, 'addNewFeed');
+            },
+            leading: const Icon(
+              Icons.arrow_forward_ios,
+              color: Colors.black,
+              size: 20,
+            ),
+            title: const Text('Add new feed post'),
+          ),
         ],
       ),
     );

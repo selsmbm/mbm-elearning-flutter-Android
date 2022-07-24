@@ -10,6 +10,7 @@ import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/dashboard.dart
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/material/material_details_page.dart';
 import 'package:mbm_elearning/Presentation/Widgets/material_data_list_tile.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -70,61 +71,64 @@ class _YourMaterialPageState extends State<YourMaterialPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          Navigator.pushNamed(context, 'addMaterialPage');
-        },
-        icon: Icon(Icons.add),
-        label: Text('Add material'),
-      ),
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text('Your Material'),
-      ),
-      body: SafeArea(
-        child: BlocBuilder<GetMaterialApiBloc, GetMaterialApiState>(
-          builder: (context, state) {
-            if (state is GetMaterialApiIsSuccess) {
-              if (skip == 0) {
-                if (completeMaterial.isNotEmpty) {
-                  completeMaterial.clear();
-                }
-              }
-              completeMaterial.addAll(state.output);
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: completeMaterial.isEmpty
-                    ? const Center(
-                        child: Text(
-                          'Nothing here\nUpload some material',
-                          textAlign: TextAlign.center,
-                        ),
-                      )
-                    : ScrollablePositionedList.builder(
-                        itemPositionsListener: itemPositionsListener,
-                        itemCount: completeMaterial.length,
-                        physics: const ClampingScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          return MaterialListTile(
-                            materialData: completeMaterial[index],
-                            isMe: true,
-                          );
-                        },
-                      ),
-              );
-            } else if (state is GetMaterialApiIsLoading) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (state is GetMaterialApiIsFailed) {
-              return Center(
-                child: Text("Something went wrong"),
-              );
-            } else {
-              return SizedBox();
-            }
+    return ModalProgressHUD(
+      inAsyncCall: scrapTableProvider!.isGettingMaterialData,
+      child: Scaffold(
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {
+            Navigator.pushNamed(context, 'addMaterialPage');
           },
+          icon: Icon(Icons.add),
+          label: Text('Add material'),
+        ),
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text('Your Material'),
+        ),
+        body: SafeArea(
+          child: BlocBuilder<GetMaterialApiBloc, GetMaterialApiState>(
+            builder: (context, state) {
+              if (state is GetMaterialApiIsSuccess) {
+                if (skip == 0) {
+                  if (completeMaterial.isNotEmpty) {
+                    completeMaterial.clear();
+                  }
+                }
+                completeMaterial.addAll(state.output);
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: completeMaterial.isEmpty
+                      ? const Center(
+                          child: Text(
+                            'Nothing here\nUpload some material',
+                            textAlign: TextAlign.center,
+                          ),
+                        )
+                      : ScrollablePositionedList.builder(
+                          itemPositionsListener: itemPositionsListener,
+                          itemCount: completeMaterial.length,
+                          physics: const ClampingScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            return MaterialListTile(
+                              materialData: completeMaterial[index],
+                              isMe: true,
+                            );
+                          },
+                        ),
+                );
+              } else if (state is GetMaterialApiIsLoading) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (state is GetMaterialApiIsFailed) {
+                return Center(
+                  child: Text("Something went wrong"),
+                );
+              } else {
+                return SizedBox();
+              }
+            },
+          ),
         ),
       ),
     );

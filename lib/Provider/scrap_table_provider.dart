@@ -54,6 +54,11 @@ class ScrapTableProvider with ChangeNotifier {
     _explores.addAll(data[2] as List<ExploreModel>);
     _events.addAll(data[3] as List<EventsModel>);
     _usefulLinks.addAll(data[4] as List<UsefulLinksModel>);
+    _materials.toSet().toList();
+    _blogPosts.toSet().toList();
+    _explores.toSet().toList();
+    _events.toSet().toList();
+    _usefulLinks.toSet().toList();
     isGettingData = false;
     notifyListeners();
   }
@@ -64,6 +69,7 @@ class ScrapTableProvider with ChangeNotifier {
     }
     isGettingMaterialData = true;
     _materials.addAll(await Scrap.scrapMaterial());
+    _materials.toSet().toList();
     isGettingMaterialData = false;
     notifyListeners();
   }
@@ -74,6 +80,7 @@ class ScrapTableProvider with ChangeNotifier {
     }
     isGettingBlogPostsData = true;
     _blogPosts.addAll(await Scrap.scrapBlogPosts());
+    _blogPosts.toSet().toList();
     isGettingBlogPostsData = false;
     notifyListeners();
   }
@@ -84,6 +91,7 @@ class ScrapTableProvider with ChangeNotifier {
     }
     isGettingEventsData = true;
     _events.addAll(await Scrap.scrapEvents());
+    _events.toSet().toList();
     isGettingEventsData = false;
     notifyListeners();
   }
@@ -94,6 +102,7 @@ class ScrapTableProvider with ChangeNotifier {
     }
     isGettingExploreData = true;
     _explores.addAll(await Scrap.scrapExplores());
+    _explores.toSet().toList();
     isGettingExploreData = false;
     notifyListeners();
   }
@@ -104,6 +113,7 @@ class ScrapTableProvider with ChangeNotifier {
     }
     isGettingUsefulLinksData = true;
     _usefulLinks.addAll(await Scrap.scrapUsefullinks());
+    _usefulLinks.toSet().toList();
     isGettingUsefulLinksData = false;
     notifyListeners();
   }
@@ -117,6 +127,7 @@ class ScrapTableProvider with ChangeNotifier {
               getContains(element["mtsem"], semester) &&
               getContains(element["mttype"], type) &&
               getContains(element["approve"], 'true'))
+          .toSet()
           .toList();
     } else {
       return _materials
@@ -125,6 +136,7 @@ class ScrapTableProvider with ChangeNotifier {
               getContains(element["mttype"], type) &&
               element["branch"] == branch &&
               getContains(element["approve"], 'true'))
+          .toSet()
           .toList();
     }
   }
@@ -132,12 +144,14 @@ class ScrapTableProvider with ChangeNotifier {
   List<Map<String, dynamic>> getMaterialsByUserid(String uid) {
     return _materials
         .where((element) => element["uploaded_by_user_uid"] == uid)
+        .toSet()
         .toList();
   }
 
   List<Map<String, dynamic>> getUnapproveMaterials() {
     return _materials
         .where((element) => getContains(element["approve"], 'false'))
+        .toSet()
         .toList();
   }
 
@@ -151,6 +165,7 @@ class ScrapTableProvider with ChangeNotifier {
             getContains(element["mttype"], quary) ||
             getContains(element["branch"], quary) &&
                 getContains(element["approve"], 'true'))
+        .toSet()
         .toList();
   }
 }

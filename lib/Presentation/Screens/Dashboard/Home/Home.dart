@@ -14,6 +14,9 @@ import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/Presentation/Screens/Auth/Components/TextFielsContainer.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/material/Material.dart';
 import 'package:mbm_elearning/Presentation/Widgets/carousel.dart';
+import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -30,6 +33,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   String? materialBranch;
   String? materialSem;
+  late ScrapTableProvider _scrapTableProvider;
 
   // getHomePopupCusAdsDataRequest() async {
   //   List outData = [];
@@ -88,170 +92,174 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text('MBM E-Learning'),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, 'addMaterialPage');
-        },
-        child: Icon(Icons.add),
-      ),
-      body: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        color: Colors.white,
-        child: SafeArea(
-          child: SingleChildScrollView(
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  SizedBox(
-                    height: 240,
-                    width: 240,
-                    child: LottieBuilder.asset(
-                      'assets/lottie/concept.json',
+    _scrapTableProvider = Provider.of<ScrapTableProvider>(context);
+    return ModalProgressHUD(
+      inAsyncCall: _scrapTableProvider.isGettingMaterialData,
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text('MBM E-Learning'),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.pushNamed(context, 'addMaterialPage');
+          },
+          child: Icon(Icons.add),
+        ),
+        body: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          color: Colors.white,
+          child: SafeArea(
+            child: SingleChildScrollView(
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    SizedBox(
+                      height: 240,
                       width: 240,
+                      child: LottieBuilder.asset(
+                        'assets/lottie/concept.json',
+                        width: 240,
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  const Text(
-                    "Select respective fields",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
+                    const SizedBox(
+                      height: 5,
                     ),
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    child: TextField(
-                      onTap: () {
-                        Navigator.pushNamed(context, 'search');
-                      },
-                      readOnly: true,
-                      decoration: InputDecoration(
-                        isDense: true,
-                        contentPadding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                        hintText: 'Globel Search',
-                        hintStyle: TextStyle(
-                          color: rTextColor,
-                          fontSize: 16,
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            width: 2,
-                            color: rPrimaryLiteColor,
+                    const Text(
+                      "Select respective fields",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      child: TextField(
+                        onTap: () {
+                          Navigator.pushNamed(context, 'search');
+                        },
+                        readOnly: true,
+                        decoration: InputDecoration(
+                          isDense: true,
+                          contentPadding:
+                              EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                          hintText: 'Globel Search',
+                          hintStyle: TextStyle(
+                            color: rTextColor,
+                            fontSize: 16,
                           ),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            width: 2,
-                            color: rPrimaryLiteColor,
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              width: 2,
+                              color: rPrimaryLiteColor,
+                            ),
+                            borderRadius: BorderRadius.circular(20),
                           ),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        suffixIcon: Icon(
-                          Icons.search,
-                          color: rTextColor,
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              width: 2,
+                              color: rPrimaryLiteColor,
+                            ),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          suffixIcon: Icon(
+                            Icons.search,
+                            color: rTextColor,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 9,
-                  ),
-                  Text(
-                    'or',
-                    style: TextStyle(fontSize: 17),
-                  ),
-                  const SizedBox(
-                    height: 9,
-                  ),
-                  TextFieldContainer(
-                    child: DropdownButtonFormField(
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Material Sem',
-                      ),
-                      value: materialSem,
-                      onChanged: (value) async {
-                        setState(() {
-                          materialSem = value.toString();
-                        });
-                        if (allBranchSemsData.contains(materialSem)) {
-                          goToMaterialPage(context);
-                        } else {
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(
-                            duration: Duration(milliseconds: 500),
-                            content: Text('Now select your branch'),
-                          ));
-                        }
-                      },
-                      items: semsData
-                          .map((subject) => DropdownMenuItem(
-                              value: subject,
-                              child: Text("${subject.toUpperCase()}")))
-                          .toList(),
+                    const SizedBox(
+                      height: 9,
                     ),
-                  ),
-                  const SizedBox(
-                    height: 9,
-                  ),
-                  if (materialSem != null &&
-                      !allBranchSemsData.contains(materialSem))
+                    Text(
+                      'or',
+                      style: TextStyle(fontSize: 17),
+                    ),
+                    const SizedBox(
+                      height: 9,
+                    ),
                     TextFieldContainer(
                       child: DropdownButtonFormField(
                         decoration: const InputDecoration(
                           border: InputBorder.none,
-                          hintText: 'Material Branch',
+                          hintText: 'Material Sem',
                         ),
-                        value: materialBranch,
-                        onChanged: (value) {
+                        value: materialSem,
+                        onChanged: (value) async {
                           setState(() {
-                            materialBranch = value.toString();
+                            materialSem = value.toString();
                           });
-                          if (materialSem != null) {
+                          if (allBranchSemsData.contains(materialSem)) {
                             goToMaterialPage(context);
                           } else {
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(const SnackBar(
                               duration: Duration(milliseconds: 500),
-                              content: Text('Now select your sem'),
+                              content: Text('Now select your branch'),
                             ));
                           }
                         },
-                        items: branches
-                            .map(
-                              (subject) => DropdownMenuItem(
+                        items: semsData
+                            .map((subject) => DropdownMenuItem(
                                 value: subject,
-                                child: Text("${subject.toUpperCase()}"),
-                              ),
-                            )
+                                child: Text("${subject.toUpperCase()}")))
                             .toList(),
                       ),
                     ),
+                    const SizedBox(
+                      height: 9,
+                    ),
+                    if (materialSem != null &&
+                        !allBranchSemsData.contains(materialSem))
+                      TextFieldContainer(
+                        child: DropdownButtonFormField(
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'Material Branch',
+                          ),
+                          value: materialBranch,
+                          onChanged: (value) {
+                            setState(() {
+                              materialBranch = value.toString();
+                            });
+                            if (materialSem != null) {
+                              goToMaterialPage(context);
+                            } else {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                duration: Duration(milliseconds: 500),
+                                content: Text('Now select your sem'),
+                              ));
+                            }
+                          },
+                          items: branches
+                              .map(
+                                (subject) => DropdownMenuItem(
+                                  value: subject,
+                                  child: Text("${subject.toUpperCase()}"),
+                                ),
+                              )
+                              .toList(),
+                        ),
+                      ),
 
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  // CarouselAds(),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                ],
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    // CarouselAds(),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

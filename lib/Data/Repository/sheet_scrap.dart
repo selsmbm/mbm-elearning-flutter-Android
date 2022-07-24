@@ -12,7 +12,7 @@ import 'package:mbm_elearning/Data/model/useful_links_model.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 
 class Scrap {
-  static Future<List<List<dynamic>>> scrapAllData(){
+  static Future<List<List<dynamic>>> scrapAllData() {
     return Future.wait([
       scrapMaterial(),
       scrapBlogPosts(),
