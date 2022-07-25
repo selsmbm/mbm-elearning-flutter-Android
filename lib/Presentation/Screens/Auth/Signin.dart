@@ -6,9 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/Presentation/Screens/Auth/Components/OrDevider.dart';
+import 'package:mbm_elearning/Presentation/Screens/Dashboard/profile_page.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Widgets/Buttons/SigninButton.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'Components/RoundedInputField.dart';
 import 'Components/social_login.dart';
 
@@ -190,7 +192,8 @@ class _SigninPageState extends State<SigninPage> with TickerProviderStateMixin {
                         });
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text('Now verify your email. and then sing in'),
+                            content:
+                                Text('Now verify your email. and then sing in'),
                           ),
                         );
                       }
@@ -316,6 +319,8 @@ class _SigninPageState extends State<SigninPage> with TickerProviderStateMixin {
                 onPressed: () async {
                   if (_password != null && _email != null) {
                     try {
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
                       setState(() {
                         showProgress = true;
                       });
@@ -331,7 +336,18 @@ class _SigninPageState extends State<SigninPage> with TickerProviderStateMixin {
                           showProgress = false;
                         });
                         if (!mounted) return;
-                        Navigator.popAndPushNamed(context, 'homePage');
+                        if (prefs.getBool(SP.initialProfileSaved) != null) {
+                          Navigator.popAndPushNamed(context, 'homePage');
+                        } else {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProfilePage(
+                                isItInitialUpdate: true,
+                              ),
+                            ),
+                          );
+                        }
                       } else if (!FirebaseAuth
                           .instance.currentUser!.emailVerified) {
                         await FirebaseAuth.instance.currentUser!

@@ -15,11 +15,12 @@ const List<String> mttypes = [
   'video',
 ];
 
-List branches = "CE,CH,MI,EE,CSE,ECE,EEE,ECC,ME,P&I,BCT,IT,PE,AE,AI".split(',');
-List semsData =
+List<String> branches = "CE,CH,MI,EE,CSE,ECE,EEE,ECC,ME,P&I,BCT,IT,PE,AE,AI".split(',');
+List<String> semsData =
     "civilsem,mechanicalsem,3sem,4sem,5sem,6sem,7sem,8sem,M1,M2,M3,M4"
         .split(',');
-List allBranchSemsData = "civilsem,mechanicalsem,M1,M2,M3,M4".split(',');
+List<String> allBranchSemsData = "civilsem,mechanicalsem,M1,M2,M3,M4".split(',');
+List<String> userTypes = "Teacher,Student,Alumni".split(',');
 
 Map<String, IconData> typeIcon = {
   'notes': Icons.note,
@@ -45,4 +46,5 @@ const String groupNotificationChannelKey = 'feed_group_channel';
 //sharedprefrences ids
 class SP {
   static const String ismeAdmin = "ismeAdmin";
+  static const String initialProfileSaved = "initialProfileSaved";
 }

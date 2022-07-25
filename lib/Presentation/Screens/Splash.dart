@@ -4,10 +4,13 @@ import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
+import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/dashboard.dart';
+import 'package:mbm_elearning/Presentation/Screens/Dashboard/profile_page.dart';
 import 'package:mbm_elearning/Presentation/Screens/IntroPages.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LandingPage extends StatefulWidget {
   const LandingPage({Key? key}) : super(key: key);
@@ -20,6 +23,7 @@ class _LandingPageState extends State<LandingPage> {
   late ScrapTableProvider scrapTableProvider;
 
   checkUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult != ConnectivityResult.none) {
       if (_auth == null) {
@@ -28,12 +32,25 @@ class _LandingPageState extends State<LandingPage> {
               MaterialPageRoute(builder: (context) => OnBoardingPage()));
         });
       } else {
-        Timer(const Duration(seconds: 1), () async {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const DashboardPage()),
-          );
-        });
+        if (prefs.getBool(SP.initialProfileSaved) != null) {
+          Timer(const Duration(seconds: 1), () async {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const DashboardPage()),
+            );
+          });
+        } else {
+          Timer(const Duration(seconds: 1), () async {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ProfilePage(
+                  isItInitialUpdate: true,
+                ),
+              ),
+            );
+          });
+        }
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

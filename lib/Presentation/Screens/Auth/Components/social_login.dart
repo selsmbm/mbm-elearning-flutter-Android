@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mbm_elearning/Data/AuthFunc/Google.dart';
+import 'package:mbm_elearning/Presentation/Constants/constants.dart';
+import 'package:mbm_elearning/Presentation/Screens/Dashboard/profile_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SocialSigninButton extends StatelessWidget {
   const SocialSigninButton({
@@ -20,9 +23,21 @@ class SocialSigninButton extends StatelessWidget {
           ),
           child: TextButton(
             onPressed: () async {
+              SharedPreferences prefs = await SharedPreferences.getInstance();
               var credential = await googleSignIn(context);
               if (credential != null) {
-                Navigator.pushNamed(context, 'homePage');
+                if (prefs.getBool(SP.initialProfileSaved) != null) {
+                  Navigator.popAndPushNamed(context, 'homePage');
+                } else {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProfilePage(
+                        isItInitialUpdate: true,
+                      ),
+                    ),
+                  );
+                }
               }
             },
             child: Padding(
