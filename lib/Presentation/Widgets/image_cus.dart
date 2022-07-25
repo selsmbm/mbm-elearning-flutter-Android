@@ -34,30 +34,24 @@ class UserImageCus extends StatelessWidget {
   const UserImageCus({
     Key? key,
     this.image,
-    required this.name,
   }) : super(key: key);
 
   final String? image;
-  final String name;
 
   @override
   Widget build(BuildContext context) {
     return CircleAvatar(
-      backgroundColor: rPrimaryLiteColor,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
-        child: image != null && image != ''
-            ? Image.network(
-                "$driveImageShowUrl$image",
-                fit: BoxFit.cover,
-              )
-            : Text(
-                name[0].toUpperCase(),
-                style: TextStyle(
-                  fontSize: 20,
-                  color: rPrimaryColor,
-                ),
-              ),
+      radius: 22,
+      backgroundColor: rPrimaryMaterialColorLite,
+      child: Padding(
+        padding: const EdgeInsets.all(2.0),
+        child: CircleAvatar(
+          backgroundColor: Colors.white,
+          radius: 20,
+          backgroundImage: NetworkImage(
+            "$driveImageShowUrl${image != null && image != "" ? image : defaultUserDriveImageShowUrl}",
+          ),
+        ),
       ),
     );
   }

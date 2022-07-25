@@ -117,6 +117,14 @@ class _MorePageState extends State<MorePage> {
               ),
               SettingButton(
                 onTap: () {
+                  launch('https://mbmec.weebly.com/t--p-cell.html');
+                },
+                title: 'TPO',
+                subtitle: 'Placement, training, and other related',
+                icon: Icons.public,
+              ),
+              SettingButton(
+                onTap: () {
                   Navigator.pushNamed(context, 'teachers');
                 },
                 title: 'Teachers',
@@ -130,6 +138,24 @@ class _MorePageState extends State<MorePage> {
                 title: 'MBM Stories',
                 subtitle: 'Powered by mbmstories.com',
                 icon: Icons.album,
+              ),
+              SettingButton(
+                onTap: () {
+                  launch(
+                      "https://docs.google.com/document/d/1g5F57sM9eEUwFX41JVfKFDQ1iWykeK0AeHauL60lCh8/edit?usp=sharing");
+                },
+                title: 'Admission processes',
+                subtitle: 'Admission processes in MBMU',
+                icon: Icons.admin_panel_settings,
+              ),
+              SettingButton(
+                onTap: () {
+                  launch(
+                      "https://docs.google.com/document/d/1l2KAa2ZPhDJjmMA-uDwi__GHPUyc5zm6ApXB3nNs_xA/edit?usp=sharing");
+                },
+                title: 'Freshers Guide',
+                subtitle: 'Freshers Guide in MBMU',
+                icon: Icons.integration_instructions,
               ),
               Padding(
                 padding:

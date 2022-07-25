@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -68,7 +70,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                                     const SnackBar(
                                         content: Text(
                                             'Successfully send reset password email')));
-                              });
+                              }).catchError((e) => log("Error: $e"));
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(

@@ -26,7 +26,7 @@ class _TeacherDetailsState extends State<TeacherDetails> {
       backgroundColor: Colors.transparent,
       body: Center(
         child: Stack(
-          alignment: Alignment.topLeft,
+          alignment: Alignment.topRight,
           children: [
             Column(
               mainAxisSize: MainAxisSize.min,
@@ -43,10 +43,10 @@ class _TeacherDetailsState extends State<TeacherDetails> {
                     child: Column(
                       children: [
                         Align(
-                          alignment: Alignment.topRight,
+                          alignment: Alignment.topLeft,
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 teacher.name!,
@@ -215,9 +215,17 @@ class _TeacherDetailsState extends State<TeacherDetails> {
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: CircleAvatar(
-                radius: 50,
-                backgroundImage: NetworkImage(
-                  "$driveImageShowUrl${teacher.image ?? defaultUserDriveImageShowUrl}",
+                radius: 54,
+                backgroundColor: rPrimaryMaterialColorLite,
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: CircleAvatar(
+                    backgroundColor: Colors.white,
+                    radius: 50,
+                    backgroundImage: NetworkImage(
+                      "$driveImageShowUrl${teacher.image != null && teacher.image != "" ? teacher.image : defaultUserDriveImageShowUrl}",
+                    ),
+                  ),
                 ),
               ),
             ),

@@ -151,7 +151,6 @@ class _TeachersPageState extends State<TeachersPage> {
       title: Text(model.name!),
       subtitle: Text(model.department!),
       leading: UserImageCus(
-        name: model.name!,
         image: model.image,
       ),
       onTap: () {
