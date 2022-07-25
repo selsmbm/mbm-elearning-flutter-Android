@@ -11,7 +11,6 @@ import 'package:provider/provider.dart';
 
 class LandingPage extends StatefulWidget {
   const LandingPage({Key? key}) : super(key: key);
-
   @override
   _LandingPageState createState() => _LandingPageState();
 }

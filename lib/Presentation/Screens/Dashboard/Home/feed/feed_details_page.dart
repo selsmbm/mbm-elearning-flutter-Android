@@ -36,10 +36,10 @@ class _FeedDetailsPageState extends State<FeedDetailsPage> {
     DateTime posttime =
         DateTime.fromMillisecondsSinceEpoch(int.parse(feed.posttime!) * 1000);
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: Icon(Icons.share),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {},
+      //   child: Icon(Icons.share),
+      // ),
       bottomNavigationBar: BottomAppBar(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,

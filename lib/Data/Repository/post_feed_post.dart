@@ -34,17 +34,30 @@ class PostFeedPostRepo {
             "time": time,
           },
         );
-        if (response.statusCode == 200) {
-          await scrapTableProvider.updateScrapBlogPosts();
+        if (response.statusCode == 200 || response.statusCode == 302) {
           if (data['org'] != "") {
             FirebaseNotiSender.send(
               iconImageCompleteUrl: data['image'],
-                topic: "${data['org']}-${data['orgid']}",
-                title: data['title'],
-                desc:
-                    "By ${data['uploaded_by_user']}, Time: ${dateTime.day}/${dateTime.month} ${dateTime.hour}:${dateTime.minute}");
+              topic: "O-${data['orgid']}",
+              title: data['title'],
+              desc:
+                  "In ${data['org']} By ${data['uploaded_by_user']}, Time: ${dateTime.day}/${dateTime.month} ${dateTime.hour}:${dateTime.minute}",
+            );
           }
-          return json.decode(response.body)['status'];
+          if (data['event'] != "") {
+            FirebaseNotiSender.send(
+              topic: "E-${data['eventid']}",
+              title: data['title'],
+              desc:
+                  "In ${data['event']} By ${data['uploaded_by_user']}, Time: ${dateTime.day}/${dateTime.month} ${dateTime.hour}:${dateTime.minute}",
+            );
+          }
+          scrapTableProvider.updateScrapBlogPosts();
+          try {
+            return json.decode(response.body)['status'];
+          } on Exception catch (e) {
+            print(e);
+          }
         }
       } on Exception catch (e) {
         print(e);

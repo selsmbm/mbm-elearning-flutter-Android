@@ -44,10 +44,10 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
     DateTime enddate =
         DateTime.fromMillisecondsSinceEpoch(int.parse(event.endtime!) * 1000);
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: Icon(Icons.share),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {},
+      //   child: Icon(Icons.share),
+      // ),
       bottomNavigationBar: BottomAppBar(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -55,7 +55,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
             FutureBuilder<SharedPreferences>(
                 future: SharedPreferences.getInstance(),
                 builder: (context, AsyncSnapshot<SharedPreferences> snapshot) {
-                  String key = "${event.title}-${event.id}";
+                  String key = "E-${event.id}";
                   if (snapshot.hasData) {
                     if (snapshot.data!.getBool(key) ?? false) {
                       return OutlinedButton(

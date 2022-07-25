@@ -91,6 +91,17 @@ class _AdminDashboardState extends State<AdminDashboard> {
             ),
             title: const Text('Add new feed post'),
           ),
+          ListTile(
+            onTap: () {
+              Navigator.pushNamed(context, 'sendnotitoall');
+            },
+            leading: const Icon(
+              Icons.arrow_forward_ios,
+              color: Colors.black,
+              size: 20,
+            ),
+            title: const Text('Send notification to all'),
+          ),
         ],
       ),
     );

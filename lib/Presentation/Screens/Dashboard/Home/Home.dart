@@ -15,6 +15,7 @@ import 'package:mbm_elearning/Presentation/Screens/Auth/Components/TextFielsCont
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/material/Material.dart';
 import 'package:mbm_elearning/Presentation/Widgets/carousel.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
+import 'package:mbm_elearning/run_app.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+const String mbmEleFcmChannel = "mbm_ele_fcm_channel";
+
 // const String driveImageShowUrl = "https://drive.google.com/uc?export=view&id=";
 const String driveImageShowUrl = "https://lh3.googleusercontent.com/d/";
 const String defaultDriveImageShowUrl = "14HZftHO6_LaoMOdzcE1t5RmrrpQSCGis";

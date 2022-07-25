@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -10,10 +12,13 @@ import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/Presentation/Screens/Admin/approve_material.dart';
 import 'package:mbm_elearning/Presentation/Screens/Admin/dashboard.dart';
+import 'package:mbm_elearning/Presentation/Screens/Admin/send_only_notification.dart';
 import 'package:mbm_elearning/Presentation/Screens/Auth/ForgetPassword.dart';
 import 'package:mbm_elearning/Presentation/Screens/Auth/Signin.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Extras/useful_links.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Extras/your_uploaded_material_page.dart';
+import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/events/events_page.dart';
+import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/feed/feed_page.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/MBMU/mbm_story/mbm_stories.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/MBMU/teachers/teacher_details_page.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/MBMU/teachers/teachers_page.dart';
@@ -33,12 +38,15 @@ import 'package:mbm_elearning/Provider/theme_provider.dart';
 import 'package:mbm_elearning/flavors.dart';
 import 'package:provider/provider.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import 'Data/Repository/post_material_repo.dart';
 import 'Presentation/Screens/Dashboard/material/Material.dart';
 import 'Presentation/Screens/IntroPages.dart';
 
 Future<void> _messageHandler(RemoteMessage message) async {
-  print('background message ${message.notification!.body}');
+  await Firebase.initializeApp();
+  AwesomeNotifications().createNotificationFromJsonData(message.data);
 }
 
 Future<Widget> runMainApp() async {
@@ -107,18 +115,36 @@ Future<Widget> runMainApp() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({
     Key? key,
     required this.theme,
   }) : super(key: key);
-
+  static final GlobalKey<NavigatorState> navigatorKey =
+      GlobalKey<NavigatorState>();
   final ThemeController theme;
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    AwesomeNotifications().setListeners(
+        onActionReceivedMethod: NotificationController.onActionReceivedMethod,
+        onNotificationCreatedMethod:
+            NotificationController.onNotificationCreatedMethod,
+        onNotificationDisplayedMethod:
+            NotificationController.onNotificationDisplayedMethod,
+        onDismissActionReceivedMethod:
+            NotificationController.onDismissActionReceivedMethod);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: theme,
+      animation: widget.theme,
       builder: (BuildContext context, Widget? child) {
         return MultiProvider(
           providers: [
@@ -126,63 +152,165 @@ class MyApp extends StatelessWidget {
           ],
           child: MaterialApp(
             title: Flavors.title,
+            navigatorKey: MyApp.navigatorKey,
             debugShowCheckedModeBanner: false,
-            theme: theme.litethemeData,
-            darkTheme: theme.darkthemeData,
-            themeMode: theme.themeMode,
-            routes: {
-              '/': (context) => LandingPage(),
-              'signInPage': (context) => SigninPage(),
-              'forgetPage': (context) => ForgetPasswordPage(),
-              'homePage': (context) => DashboardPage(),
-              'home': (context) => HomePage(),
-              'more': (context) => MorePage(),
-              'search': (context) => BlocProvider(
-                    create: (context) => GetMaterialApiBloc(
-                      GetMaterialRepo(),
-                    ),
-                    child: SearchPage(),
-                  ),
-              'profile': (context) => ProfilePage(),
-              'teachers': (context) => TeachersPage(),
-              'teacherdetails': (context) => TeacherDetails(),
-              'mbmstory': (context) => MBMStories(),
-              'usefullinks': (context) => UsefulLinksPage(),
-              'materialPage': (context) => BlocProvider(
-                    create: (context) => GetMaterialApiBloc(
-                      GetMaterialRepo(),
-                    ),
-                    child: MaterialsPage(),
-                  ),
-              'yourmaterialPage': (context) => BlocProvider(
-                    create: (context) => GetMaterialApiBloc(
-                      GetMaterialRepo(),
-                    ),
-                    child: YourMaterialPage(),
-                  ),
-              'approvematerialPage': (context) => BlocProvider(
-                    create: (context) => GetMaterialApiBloc(
-                      GetMaterialRepo(),
-                    ),
-                    child: ApproveMaterialPage(),
-                  ),
-              'bookmark': (context) => BookmarkPage(),
-              'intro': (context) => OnBoardingPage(),
-              'gateMaterial': (context) => GateMaterial(),
-              'adminDash': (context) => const AdminDashboard(),
-              'html_editor': (context) => HtmlEditorScreen(),
-              'addNewFeed': (context) => AddNewFeedPage(),
-              'addMaterialPage': (context) => BlocProvider(
-                    create: (context) => AddDataToApiBloc(
-                      PostMaterialRepo(),
-                    ),
-                    child: AddMaterialPage(),
-                  ),
-            },
+            theme: widget.theme.litethemeData,
+            darkTheme: widget.theme.darkthemeData,
+            themeMode: widget.theme.themeMode,
             initialRoute: '/',
+            onGenerateRoute: (settings) {
+              final args = settings.arguments;
+              switch (settings.name) {
+                case '/':
+                  return MaterialPageRoute(builder: (context) => LandingPage());
+                case 'signInPage':
+                  return MaterialPageRoute(builder: (context) => SigninPage());
+                case 'forgetPage':
+                  return MaterialPageRoute(
+                      builder: (context) => ForgetPasswordPage());
+                case 'homePage':
+                  return MaterialPageRoute(
+                      builder: (context) => DashboardPage());
+                case 'home':
+                  return MaterialPageRoute(builder: (context) => HomePage());
+                case 'feeds':
+                  return MaterialPageRoute(builder: (context) => FeedsPage());
+                case 'events':
+                  return MaterialPageRoute(builder: (context) => EventsPage());
+                case 'more':
+                  return MaterialPageRoute(builder: (context) => MorePage());
+                case 'search':
+                  return MaterialPageRoute(
+                      builder: (context) => BlocProvider(
+                            create: (context) => GetMaterialApiBloc(
+                              GetMaterialRepo(),
+                            ),
+                            child: SearchPage(),
+                          ));
+                case 'profile':
+                  return MaterialPageRoute(builder: (context) => ProfilePage());
+                case 'teachers':
+                  return MaterialPageRoute(
+                      builder: (context) => TeachersPage());
+                case 'teacherdetails':
+                  return MaterialPageRoute(
+                      builder: (context) => TeacherDetails());
+                case 'mbmstory':
+                  return MaterialPageRoute(builder: (context) => MBMStories());
+                case 'usefullinks':
+                  return MaterialPageRoute(
+                      builder: (context) => UsefulLinksPage());
+                case 'materialPage':
+                  return MaterialPageRoute(
+                      builder: (context) => BlocProvider(
+                            create: (context) => GetMaterialApiBloc(
+                              GetMaterialRepo(),
+                            ),
+                            child: MaterialsPage(),
+                          ));
+                case 'yourmaterialPage':
+                  return MaterialPageRoute(
+                      builder: (context) => BlocProvider(
+                            create: (context) => GetMaterialApiBloc(
+                              GetMaterialRepo(),
+                            ),
+                            child: YourMaterialPage(),
+                          ));
+                case 'approvematerialPage':
+                  return MaterialPageRoute(
+                      builder: (context) => BlocProvider(
+                            create: (context) => GetMaterialApiBloc(
+                              GetMaterialRepo(),
+                            ),
+                            child: ApproveMaterialPage(),
+                          ));
+                case 'bookmark':
+                  return MaterialPageRoute(
+                      builder: (context) => BookmarkPage());
+                case 'intro':
+                  return MaterialPageRoute(
+                      builder: (context) => OnBoardingPage());
+                case 'gateMaterial':
+                  return MaterialPageRoute(
+                      builder: (context) => GateMaterial());
+                case 'adminDash':
+                  return MaterialPageRoute(
+                      builder: (context) => const AdminDashboard());
+                case 'sendnotitoall':
+                  return MaterialPageRoute(
+                      builder: (context) => const SendNotificationToAllPage());
+                case 'html_editor':
+                  return MaterialPageRoute(
+                      builder: (context) => HtmlEditorScreen());
+                case 'addNewFeed':
+                  return MaterialPageRoute(
+                      builder: (context) => AddNewFeedPage());
+                case 'addMaterialPage':
+                  return MaterialPageRoute(
+                      builder: (context) => BlocProvider(
+                            create: (context) => AddDataToApiBloc(
+                              PostMaterialRepo(),
+                            ),
+                            child: AddMaterialPage(),
+                          ));
+                default:
+                  return MaterialPageRoute(
+                      builder: (context) => DashboardPage());
+              }
+            },
           ),
         );
       },
     );
+  }
+}
+
+class NotificationController {
+  /// Use this method to detect when a new notification or a schedule is created
+  static Future<void> onNotificationCreatedMethod(
+      ReceivedNotification receivedNotification) async {
+    // Your code goes here
+  }
+
+  /// Use this method to detect every time that a new notification is displayed
+  static Future<void> onNotificationDisplayedMethod(
+      ReceivedNotification receivedNotification) async {
+    // Your code goes here
+  }
+
+  /// Use this method to detect if the user dismissed a notification
+  static Future<void> onDismissActionReceivedMethod(
+      ReceivedAction receivedAction) async {
+    // Your code goes here
+  }
+
+  /// Use this method to detect when the user taps on a notification or action button
+  static Future<void> onActionReceivedMethod(
+      ReceivedAction receivedAction) async {
+    Map<String, String?> data = receivedAction.payload!;
+
+    // Navigate into pages, avoiding to open the notification details page over another details page already opened
+    if (data['redirectPage']! == "launchUrl") {
+      if (data['url']!.contains("http")) {
+        launchUrl(Uri.parse(data['url']!),
+            mode: LaunchMode.externalApplication);
+      }
+    } else if (data['redirectPage']! == "feeds") {
+      MyApp.navigatorKey.currentState!.pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (context) => DashboardPage(
+            initialRout: 1,
+          ),
+        ),
+        (route) =>
+            route ==
+            MaterialPageRoute(
+              builder: (context) => LandingPage(),
+            ),
+      );
+    } else {
+      MyApp.navigatorKey.currentState!
+          .pushNamed(data['redirectPage']!, arguments: receivedAction);
+    }
   }
 }

@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/Presentation/Screens/Auth/Components/OrDevider.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
@@ -188,7 +190,7 @@ class _SigninPageState extends State<SigninPage> with TickerProviderStateMixin {
                         });
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text('Now verify your email.'),
+                            content: Text('Now verify your email. and then sing in'),
                           ),
                         );
                       }
@@ -323,6 +325,8 @@ class _SigninPageState extends State<SigninPage> with TickerProviderStateMixin {
                               email: _email!, password: _password!);
                       if (FirebaseAuth.instance.currentUser != null &&
                           FirebaseAuth.instance.currentUser!.emailVerified) {
+                        await FirebaseMessaging.instance
+                            .subscribeToTopic(mbmEleFcmChannel);
                         setState(() {
                           showProgress = false;
                         });

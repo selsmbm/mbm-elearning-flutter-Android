@@ -46,10 +46,10 @@ class _ExploreDetailsPageState extends State<ExploreDetailsPage> {
             element.adminOrgIds!.contains(explore.id.toString()))
         .toList();
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: Icon(Icons.share),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {},
+      //   child: Icon(Icons.share),
+      // ),
       bottomNavigationBar: BottomAppBar(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -57,7 +57,7 @@ class _ExploreDetailsPageState extends State<ExploreDetailsPage> {
             FutureBuilder<SharedPreferences>(
                 future: SharedPreferences.getInstance(),
                 builder: (context, AsyncSnapshot<SharedPreferences> snapshot) {
-                  String key = "${explore.title}-${explore.id}";
+                  String key = "O-${explore.id}";
                   if (snapshot.hasData) {
                     if (snapshot.data!.getBool(key) ?? false) {
                       return OutlinedButton(
