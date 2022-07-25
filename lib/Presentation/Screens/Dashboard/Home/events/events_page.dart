@@ -56,7 +56,7 @@ class _EventsPageState extends State<EventsPage> {
                   context,
                   MaterialPageRoute(
                     builder: (context) {
-                      return EventDetailsPage(event: event);
+                      return EventDetailsPage(event: event, eventId: event.id!);
                     },
                   ),
                 );

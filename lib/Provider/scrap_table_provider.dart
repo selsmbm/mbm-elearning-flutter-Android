@@ -135,6 +135,10 @@ class ScrapTableProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  EventsModel getEventById(int id) {
+    return _events.firstWhere((element) => element.id == id);
+  }
+
   Future<void> updateScrapExplore() async {
     if (_explores.isNotEmpty) {
       _explores.clear();
@@ -144,6 +148,10 @@ class ScrapTableProvider with ChangeNotifier {
     _explores.toSet().toList();
     updateGettingExploreStatus(false);
     notifyListeners();
+  }
+
+  ExploreModel getExploreById(int id) {
+    return _explores.firstWhere((element) => element.id == id);
   }
 
   Future<void> updateScrapUsefulLinks() async {

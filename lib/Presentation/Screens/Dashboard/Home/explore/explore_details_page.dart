@@ -8,6 +8,7 @@ import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Data/model/events_model.dart';
 import 'package:mbm_elearning/Data/model/explore_model.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
+import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/events/event_details_page.dart';
 import 'package:mbm_elearning/Presentation/Widgets/image_cus.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 import 'package:provider/provider.dart';
@@ -15,8 +16,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ExploreDetailsPage extends StatefulWidget {
-  const ExploreDetailsPage({Key? key, required this.explore}) : super(key: key);
-  final ExploreModel explore;
+  const ExploreDetailsPage({Key? key, this.explore, required this.exploreId})
+      : super(key: key);
+  final ExploreModel? explore;
+  final int exploreId;
   @override
   _ExploreDetailsPageState createState() => _ExploreDetailsPageState();
 }
@@ -26,20 +29,19 @@ class _ExploreDetailsPageState extends State<ExploreDetailsPage> {
   late ExploreModel explore;
 
   @override
-  void didChangeDependencies() {
-    _scrapTableProvider = Provider.of<ScrapTableProvider>(context);
-    super.didChangeDependencies();
-  }
-
-  @override
   void initState() {
     super.initState();
-    explore = widget.explore;
     setCurrentScreenInGoogleAnalytics('Explore Details Page');
   }
 
   @override
   Widget build(BuildContext context) {
+    _scrapTableProvider = Provider.of<ScrapTableProvider>(context);
+    if (widget.explore != null) {
+      explore = widget.explore!;
+    } else {
+      explore = _scrapTableProvider.getExploreById(widget.exploreId);
+    }
     List admins = jsonDecode(explore.adminsMap!);
     List<EventsModel> events = _scrapTableProvider.events
         .where((EventsModel element) =>
@@ -208,6 +210,17 @@ class _ExploreDetailsPageState extends State<ExploreDetailsPage> {
                       DateTime date = DateTime.fromMillisecondsSinceEpoch(
                           int.parse(event.starttime!) * 1000);
                       return ListTile(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return EventDetailsPage(
+                                    event: event, eventId: event.id!);
+                              },
+                            ),
+                          );
+                        },
                         leading: ImageCus(image: event.image),
                         title: Text(event.title ?? "N/A"),
                         subtitle: Text(

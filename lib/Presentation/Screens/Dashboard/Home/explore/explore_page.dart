@@ -51,7 +51,7 @@ class _ExplorePageState extends State<ExplorePage> {
                   context,
                   MaterialPageRoute(
                     builder: (context) {
-                      return ExploreDetailsPage(explore: explore);
+                      return ExploreDetailsPage(explore: explore, exploreId: explore.id!);
                     },
                   ),
                 );

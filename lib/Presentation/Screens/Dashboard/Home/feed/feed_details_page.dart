@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Data/model/blog_model.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
+import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/explore/explore_details_page.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_html/flutter_html.dart';
+
+import '../events/event_details_page.dart';
 
 class FeedDetailsPage extends StatefulWidget {
   const FeedDetailsPage({Key? key, required this.feed}) : super(key: key);
@@ -77,14 +80,61 @@ class _FeedDetailsPageState extends State<FeedDetailsPage> {
                     fontWeight: FontWeight.w300,
                   ),
                 ),
-                if (feed.org != "" && feed.event != "")
-                  Text(
-                    "${feed.org} ${feed.event != "" ? "| ${feed.event}" : ""}",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w300,
-                    ),
-                  ),
+                Row(
+                  children: [
+                    if (feed.org != "")
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return ExploreDetailsPage(
+                                    exploreId: int.parse(feed.orgid!));
+                              },
+                            ),
+                          );
+                        },
+                        child: Text(
+                          "${feed.org}",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w300,
+                          ),
+                        ),
+                      ),
+                    if (feed.event != "")
+                      const Text(
+                        " | ",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w300,
+                        ),
+                      ),
+                    if (feed.event != "")
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return EventDetailsPage(
+                                  eventId: int.parse(feed.eventid!),
+                                );
+                              },
+                            ),
+                          );
+                        },
+                        child: Text(
+                          "${feed.event}",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w300,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
                 Text(
                   "${posttime.day}/${posttime.month}/${posttime.year} ${posttime.hour}:${posttime.minute}",
                   style: TextStyle(

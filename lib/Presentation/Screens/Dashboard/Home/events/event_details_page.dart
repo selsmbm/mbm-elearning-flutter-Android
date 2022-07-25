@@ -6,6 +6,7 @@ import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Data/model/events_model.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
+import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/explore/explore_details_page.dart';
 import 'package:mbm_elearning/Presentation/Widgets/image_cus.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 import 'package:provider/provider.dart';
@@ -13,8 +14,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class EventDetailsPage extends StatefulWidget {
-  const EventDetailsPage({Key? key, required this.event}) : super(key: key);
-  final EventsModel event;
+  const EventDetailsPage({Key? key, this.event, required this.eventId, }) : super(key: key);
+  final EventsModel? event;
+  final int eventId;
   @override
   _EventDetailsPageState createState() => _EventDetailsPageState();
 }
@@ -26,13 +28,14 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
   @override
   void didChangeDependencies() {
     _scrapTableProvider = Provider.of<ScrapTableProvider>(context);
+    event = widget.event ?? _scrapTableProvider.getEventById(widget.eventId);
     super.didChangeDependencies();
   }
 
   @override
   void initState() {
     super.initState();
-    event = widget.event;
+    
     setCurrentScreenInGoogleAnalytics('Event Details Page');
   }
 
@@ -163,7 +166,18 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                   ),
                 if (org.isNotEmpty)
                   ListTile(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return ExploreDetailsPage(
+                              exploreId: int.parse(org['id']),
+                            );
+                          },
+                        ),
+                      );
+                    },
                     leading: ImageCus(image: org['image']),
                     title: Text(org['name'] ?? "N/A"),
                     subtitle:
