@@ -337,17 +337,18 @@ class _SigninPageState extends State<SigninPage> with TickerProviderStateMixin {
                         });
                         if (!mounted) return;
                         if (prefs.getBool(SP.initialProfileSaved) != null) {
-                          Navigator.popAndPushNamed(context, 'homePage');
+                          Navigator.popAndPushNamed(context, 'dashboard');
                         } else {
                           if (FirebaseAuth.instance.currentUser!.photoURL !=
                                       null &&
                                   FirebaseAuth.instance.currentUser!.photoURL!
-                                      .contains("Student") ||
+                                      .contains(student) ||
                               FirebaseAuth.instance.currentUser!.photoURL!
-                                  .contains("Teacher") ||
+                                  .contains(teacher) ||
                               FirebaseAuth.instance.currentUser!.photoURL!
-                                  .contains("Alumni")) {
-                            Navigator.popAndPushNamed(context, 'homePage');
+                                  .contains(alumni)) {
+                            prefs.setBool(SP.initialProfileSaved, true);
+                            Navigator.popAndPushNamed(context, 'dashboard');
                           } else {
                             Navigator.pushReplacement(
                               context,

@@ -44,7 +44,8 @@ class _ProfilePageState extends State<ProfilePage> {
     _phoneController.text = userData['mobileNo'] ?? '';
     _registrationController.text = userData['registrationNo'] ?? '';
     _branchController.text = userData['branch'] ?? '';
-    _passoutyearController.text = userData['year'].length != 4 ?"": userData['year'];
+    _passoutyearController.text =
+        userData['year'].length != 4 ? "" : userData['year'];
     _typeController.text = userData['type'] ?? '';
     _rollnoController.text = userData['rollNo'] ?? '';
     setState(() {
@@ -80,7 +81,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           _phoneController.text.isNotEmpty ||
                           _emailController.text.isNotEmpty ||
                           _nameController.text.isNotEmpty) {
-                        if (_typeController.text.contains("Student")) {
+                        if (_typeController.text.contains(student)) {
                           if (_registrationController.text == "" ||
                               _branchController.text == "" ||
                               _passoutyearController.text.length != 4) {
@@ -90,7 +91,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             ));
                             return;
                           }
-                        } else if (_typeController.text == "Alumni") {
+                        } else if (_typeController.text == alumni) {
                           if (_branchController.text == "" ||
                               _passoutyearController.text.length != 4) {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -122,8 +123,11 @@ class _ProfilePageState extends State<ProfilePage> {
                         await SharedPreferences.getInstance()
                           ..setBool(SP.initialProfileSaved, true);
                         setState(() {
-                          showProgress = true;
+                          showProgress = false;
                         });
+                        if (widget.isItInitialUpdate)
+                          Navigator.pushReplacementNamed(context, 'dashboard');
+
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: Text('Profile updated successfully'),
                         ));
@@ -220,25 +224,25 @@ class _ProfilePageState extends State<ProfilePage> {
                     const SizedBox(
                       height: 10,
                     ),
-                    if (_typeController.text == "Student")
+                    if (_typeController.text == student)
                       TextFormField(
                         controller: _registrationController,
                         decoration: InputDecoration(
                           labelText: 'Registration number (Ex. J19U444444) *',
                         ),
                       ),
-                    if (_typeController.text == "Student")
+                    if (_typeController.text == student)
                       const SizedBox(
                         height: 10,
                       ),
-                    if (_typeController.text == "Student")
+                    if (_typeController.text == student)
                       TextFormField(
                         controller: _rollnoController,
                         decoration: InputDecoration(
                           labelText: 'Roll number (optional)',
                         ),
                       ),
-                    if (_typeController.text == "Student")
+                    if (_typeController.text == student)
                       const SizedBox(
                         height: 10,
                       ),
@@ -267,8 +271,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     const SizedBox(
                       height: 10,
                     ),
-                    if (_typeController.text == "Student" ||
-                        _typeController.text == "Alumni")
+                    if (_typeController.text == student ||
+                        _typeController.text == alumni)
                       TextFormField(
                         readOnly: true,
                         controller: _passoutyearController,

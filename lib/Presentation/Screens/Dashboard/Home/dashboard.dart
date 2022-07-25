@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -32,19 +33,23 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
+  final User? user = FirebaseAuth.instance.currentUser;
   late ScrapTableProvider scrapTableProvider;
   late FirebaseMessaging messaging;
-  final List<Widget> _pages = [
-    const HomePage(),
-    const FeedsPage(),
-    const ExplorePage(),
-    const EventsPage(),
-    const MorePage(),
-  ];
+  late List<Widget> _pages;
   int currentIndex = 0;
   @override
   void initState() {
     super.initState();
+    _pages = [
+      if (user!.photoURL!.contains(student) ||
+          user!.photoURL!.contains(teacher))
+        const HomePage(),
+      const FeedsPage(),
+      const ExplorePage(),
+      const EventsPage(),
+      const MorePage(),
+    ];
     currentIndex = widget.initialRout ?? 0;
     localDbConnect.asyncInit();
     setNotifications();
@@ -158,28 +163,30 @@ class _DashboardPageState extends State<DashboardPage> {
                 currentIndex = value;
               });
             },
-            destinations: const [
-              NavigationDestination(
-                icon: Icon(Icons.home_outlined),
-                selectedIcon: Icon(Icons.home),
-                label: 'Home',
-              ),
-              NavigationDestination(
+            destinations: [
+              if (user!.photoURL!.contains(student) ||
+                  user!.photoURL!.contains(teacher))
+                const NavigationDestination(
+                  icon: Icon(Icons.home_outlined),
+                  selectedIcon: Icon(Icons.home),
+                  label: 'Home',
+                ),
+              const NavigationDestination(
                 icon: Icon(Icons.feed_outlined),
                 selectedIcon: Icon(Icons.feed),
                 label: 'Feeds',
               ),
-              NavigationDestination(
+              const NavigationDestination(
                 icon: Icon(Icons.dashboard_outlined),
                 selectedIcon: Icon(Icons.dashboard),
                 label: 'Explore',
               ),
-              NavigationDestination(
+              const NavigationDestination(
                 icon: Icon(Icons.event_available_outlined),
                 selectedIcon: Icon(Icons.event_available),
                 label: 'Events',
               ),
-              NavigationDestination(
+              const NavigationDestination(
                 icon: Icon(Icons.more_horiz_outlined),
                 selectedIcon: Icon(Icons.more_horiz),
                 label: 'More',

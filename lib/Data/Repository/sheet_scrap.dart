@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:connectivity/connectivity.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' as parse;
 import 'package:http/http.dart' as http;
@@ -12,9 +13,9 @@ import 'package:mbm_elearning/Data/model/useful_links_model.dart';
 import 'package:mbm_elearning/Presentation/Constants/apis.dart';
 
 class Scrap {
-  static Future<List<List<dynamic>>> scrapAllData() {
+  static Future<List<List<dynamic>>> scrapAllData({bool scrapMt = true}) async {
     return Future.wait([
-      scrapMaterial(),
+      scrapMt ? scrapMaterial() : Future.value([]),
       scrapBlogPosts(),
       scrapExplores(),
       scrapEvents(),

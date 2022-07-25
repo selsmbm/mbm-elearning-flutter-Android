@@ -1,9 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mbm_elearning/Data/Repository/sheet_scrap.dart';
 import 'package:mbm_elearning/Data/model/blog_model.dart';
 import 'package:mbm_elearning/Data/model/events_model.dart';
 import 'package:mbm_elearning/Data/model/explore_model.dart';
 import 'package:mbm_elearning/Data/model/useful_links_model.dart';
+import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 
 class ScrapTableProvider with ChangeNotifier {
   final List<Map<String, dynamic>> _materials = [];
@@ -72,8 +74,18 @@ class ScrapTableProvider with ChangeNotifier {
     if (_usefulLinks.isNotEmpty) {
       _usefulLinks.clear();
     }
+    bool scrapMt = true;
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      if (user.photoURL!.contains(student) ||
+          user.photoURL!.contains(teacher)) {
+        scrapMt = true;
+      } else {
+        scrapMt = false;
+      }
+    }
     isGettingData = true;
-    List data = await Scrap.scrapAllData();
+    List data = await Scrap.scrapAllData(scrapMt: scrapMt);
     _materials.addAll(data[0] as List<Map<String, dynamic>>);
     _blogPosts.addAll(data[1] as List<BlogModel>);
     _explores.addAll(data[2] as List<ExploreModel>);

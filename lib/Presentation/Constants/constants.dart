@@ -15,12 +15,17 @@ const List<String> mttypes = [
   'video',
 ];
 
-List<String> branches = "CE,CH,MI,EE,CSE,ECE,EEE,ECC,ME,P&I,BCT,IT,PE,AE,AI".split(',');
+List<String> branches =
+    "CE,CH,MI,EE,CSE,ECE,EEE,ECC,ME,P&I,BCT,IT,PE,AE,AI".split(',');
 List<String> semsData =
     "civilsem,mechanicalsem,3sem,4sem,5sem,6sem,7sem,8sem,M1,M2,M3,M4"
         .split(',');
-List<String> allBranchSemsData = "civilsem,mechanicalsem,M1,M2,M3,M4".split(',');
+List<String> allBranchSemsData =
+    "civilsem,mechanicalsem,M1,M2,M3,M4".split(',');
 List<String> userTypes = "Teacher,Student,Alumni".split(',');
+const String teacher = "Teacher";
+const String student = "Student";
+const String alumni = "Alumni";
 
 Map<String, IconData> typeIcon = {
   'notes': Icons.note,

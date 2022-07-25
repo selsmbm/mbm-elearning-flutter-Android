@@ -68,30 +68,35 @@ class _MorePageState extends State<MorePage> {
                   ),
                 ),
               ),
-              SettingButton(
-                onTap: () {
-                  Navigator.pushNamed(context, 'bookmark');
-                },
-                title: 'Bookmark',
-                subtitle: 'Manage your bookmarked',
-                icon: Icons.bookmark,
-              ),
-              SettingButton(
-                onTap: () {
-                  Navigator.pushNamed(context, 'gateMaterial');
-                },
-                title: 'GATE SSC Prep.',
-                subtitle: 'All type of exam material',
-                icon: Icons.book,
-              ),
-              SettingButton(
-                onTap: () {
-                  Navigator.pushNamed(context, 'yourmaterialPage');
-                },
-                title: 'Your Material',
-                subtitle: 'All of your uploaded material',
-                icon: Icons.list,
-              ),
+              if (user!.photoURL!.contains(student) ||
+                  user!.photoURL!.contains(teacher))
+                SettingButton(
+                  onTap: () {
+                    Navigator.pushNamed(context, 'bookmark');
+                  },
+                  title: 'Bookmark',
+                  subtitle: 'Manage your bookmarked',
+                  icon: Icons.bookmark,
+                ),
+              if (user!.photoURL!.contains(student))
+                SettingButton(
+                  onTap: () {
+                    Navigator.pushNamed(context, 'gateMaterial');
+                  },
+                  title: 'GATE SSC Prep.',
+                  subtitle: 'All type of exam material',
+                  icon: Icons.book,
+                ),
+              if (user!.photoURL!.contains(student) ||
+                  user!.photoURL!.contains(teacher))
+                SettingButton(
+                  onTap: () {
+                    Navigator.pushNamed(context, 'yourmaterialPage');
+                  },
+                  title: 'Your Material',
+                  subtitle: 'All of your uploaded material',
+                  icon: Icons.list,
+                ),
               SettingButton(
                 onTap: () {
                   Navigator.pushNamed(context, 'usefullinks');

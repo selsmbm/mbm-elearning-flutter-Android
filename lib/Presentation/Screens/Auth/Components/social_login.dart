@@ -30,13 +30,14 @@ class SocialSigninButton extends StatelessWidget {
               if (credential != null) {
                 User? user = FirebaseAuth.instance.currentUser;
                 if (prefs.getBool(SP.initialProfileSaved) != null) {
-                  Navigator.popAndPushNamed(context, 'homePage');
+                  Navigator.popAndPushNamed(context, 'dashboard');
                 } else {
                   if (user!.photoURL != null &&
-                          user.photoURL!.contains("Student") ||
-                      user.photoURL!.contains("Teacher") ||
-                      user.photoURL!.contains("Alumni")) {
-                    Navigator.popAndPushNamed(context, 'homePage');
+                          user.photoURL!.contains(student) ||
+                      user.photoURL!.contains(teacher) ||
+                      user.photoURL!.contains(alumni)) {
+                    prefs.setBool(SP.initialProfileSaved, true);
+                    Navigator.popAndPushNamed(context, 'dashboard');
                   } else {
                     var userd = await FirebaseFirestore.instance
                         .collection('users')
@@ -53,8 +54,9 @@ class SocialSigninButton extends StatelessWidget {
                         ),
                       );
                     } else {
+                      prefs.setBool(SP.initialProfileSaved, true);
                       await user.updatePhotoURL(userInitData['type']);
-                      Navigator.popAndPushNamed(context, 'homePage');
+                      Navigator.popAndPushNamed(context, 'dashboard');
                     }
                   }
                 }

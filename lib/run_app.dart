@@ -168,7 +168,7 @@ class _MyAppState extends State<MyApp> {
                 case 'forgetPage':
                   return MaterialPageRoute(
                       builder: (context) => ForgetPasswordPage());
-                case 'homePage':
+                case 'dashboard':
                   return MaterialPageRoute(
                       builder: (context) => DashboardPage());
                 case 'home':

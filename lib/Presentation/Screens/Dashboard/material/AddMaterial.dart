@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mbm_elearning/Data/Repository/GDrive/upload_to_drive.dart';
@@ -21,13 +22,17 @@ class AddMaterialPage extends StatefulWidget {
   final String? approveStatus;
   final Map<dynamic, dynamic>? materialData;
   const AddMaterialPage(
-      {Key? key, this.purpose = AddMaterialPagePurpose.add, this.materialData, this.approveStatus})
+      {Key? key,
+      this.purpose = AddMaterialPagePurpose.add,
+      this.materialData,
+      this.approveStatus})
       : super(key: key);
   @override
   _AddMaterialPageState createState() => _AddMaterialPageState();
 }
 
 class _AddMaterialPageState extends State<AddMaterialPage> {
+  User? user = FirebaseAuth.instance.currentUser;
   late ScrapTableProvider scrapTableProvider;
   TextEditingController materialName = TextEditingController();
   TextEditingController materialDesc = TextEditingController();
@@ -38,9 +43,13 @@ class _AddMaterialPageState extends State<AddMaterialPage> {
   String? materialType;
   File? file;
   bool showProgress = false;
+  String approveStatus = "false";
   @override
   void initState() {
     super.initState();
+    approveStatus = user!.photoURL!.contains(teacher)
+        ? "true"
+        : widget.approveStatus ?? "false";
     setCurrentScreenInGoogleAnalytics('Add material Page');
   }
 
@@ -303,7 +312,7 @@ class _AddMaterialPageState extends State<AddMaterialPage> {
                                     materialBranch,
                                     materialSem,
                                     materialUrl.text,
-                                   widget.approveStatus?? 'false',
+                                    approveStatus,
                                     materialSubject.text,
                                     file,
                                   ),
