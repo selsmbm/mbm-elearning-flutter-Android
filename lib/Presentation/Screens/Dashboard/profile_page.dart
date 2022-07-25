@@ -44,7 +44,7 @@ class _ProfilePageState extends State<ProfilePage> {
     _phoneController.text = userData['mobileNo'] ?? '';
     _registrationController.text = userData['registrationNo'] ?? '';
     _branchController.text = userData['branch'] ?? '';
-    _passoutyearController.text = userData['year'] ?? '';
+    _passoutyearController.text = userData['year'].length != 4 ?"": userData['year'];
     _typeController.text = userData['type'] ?? '';
     _rollnoController.text = userData['rollNo'] ?? '';
     setState(() {
@@ -85,7 +85,8 @@ class _ProfilePageState extends State<ProfilePage> {
                               _branchController.text == "" ||
                               _passoutyearController.text.length != 4) {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text('Please fill all the details'),
+                              content:
+                                  Text('Please fill all the details validly'),
                             ));
                             return;
                           }
@@ -93,7 +94,8 @@ class _ProfilePageState extends State<ProfilePage> {
                           if (_branchController.text == "" ||
                               _passoutyearController.text.length != 4) {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text('Please fill all the details'),
+                              content:
+                                  Text('Please fill all the details validly'),
                             ));
                             return;
                           }
