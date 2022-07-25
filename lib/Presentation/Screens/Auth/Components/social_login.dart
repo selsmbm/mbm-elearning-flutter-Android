@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mbm_elearning/Data/AuthFunc/Google.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
@@ -26,17 +28,35 @@ class SocialSigninButton extends StatelessWidget {
               SharedPreferences prefs = await SharedPreferences.getInstance();
               var credential = await googleSignIn(context);
               if (credential != null) {
+                User? user = FirebaseAuth.instance.currentUser;
                 if (prefs.getBool(SP.initialProfileSaved) != null) {
                   Navigator.popAndPushNamed(context, 'homePage');
                 } else {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ProfilePage(
-                        isItInitialUpdate: true,
-                      ),
-                    ),
-                  );
+                  if (user!.photoURL != null &&
+                          user.photoURL!.contains("Student") ||
+                      user.photoURL!.contains("Teacher") ||
+                      user.photoURL!.contains("Alumni")) {
+                    Navigator.popAndPushNamed(context, 'homePage');
+                  } else {
+                    var userd = await FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(user.uid)
+                        .get();
+                    Map? userInitData = userd.data();
+                    if (userInitData == null) {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProfilePage(
+                            isItInitialUpdate: true,
+                          ),
+                        ),
+                      );
+                    } else {
+                      await user.updatePhotoURL(userInitData['type']);
+                      Navigator.popAndPushNamed(context, 'homePage');
+                    }
+                  }
                 }
               }
             },

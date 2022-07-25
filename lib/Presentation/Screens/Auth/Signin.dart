@@ -339,14 +339,25 @@ class _SigninPageState extends State<SigninPage> with TickerProviderStateMixin {
                         if (prefs.getBool(SP.initialProfileSaved) != null) {
                           Navigator.popAndPushNamed(context, 'homePage');
                         } else {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ProfilePage(
-                                isItInitialUpdate: true,
+                          if (FirebaseAuth.instance.currentUser!.photoURL !=
+                                      null &&
+                                  FirebaseAuth.instance.currentUser!.photoURL!
+                                      .contains("Student") ||
+                              FirebaseAuth.instance.currentUser!.photoURL!
+                                  .contains("Teacher") ||
+                              FirebaseAuth.instance.currentUser!.photoURL!
+                                  .contains("Alumni")) {
+                            Navigator.popAndPushNamed(context, 'homePage');
+                          } else {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ProfilePage(
+                                  isItInitialUpdate: true,
+                                ),
                               ),
-                            ),
-                          );
+                            );
+                          }
                         }
                       } else if (!FirebaseAuth
                           .instance.currentUser!.emailVerified) {
