@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' as parse;
 import 'package:http/http.dart' as http;
+import 'package:mbm_elearning/Data/model/admins_model.dart';
 import 'package:mbm_elearning/Data/model/blog_model.dart';
 import 'package:mbm_elearning/Data/model/events_model.dart';
 import 'package:mbm_elearning/Data/model/explore_model.dart';
@@ -20,6 +21,7 @@ class Scrap {
       scrapExplores(),
       scrapEvents(),
       scrapUsefullinks(),
+      scrapAdminsList(),
     ]);
   }
 
@@ -196,5 +198,39 @@ class Scrap {
       }
     }
     return links.reversed.toList();
+  }
+
+  static Future<List<AdminsModel>> scrapAdminsList() async {
+    List<AdminsModel> links = [];
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult != ConnectivityResult.none) {
+      try {
+        http.Response response = await http.get(Uri.parse(getSELSAdminsTable));
+        if (response.statusCode == 200) {
+          Document document = parse.parse(response.body);
+          List<Element> trs = document.getElementsByTagName('tr');
+          int i = 3;
+          int j = trs.length;
+          while (i < j) {
+            List<Element> tds = trs[i].querySelectorAll('td');
+            links.add(AdminsModel(
+              uid: tds[0].text,
+              name: tds[1].text,
+              branch: tds[2].text,
+              year: tds[3].text,
+              image: tds[4].text,
+              linkedin: tds[5].text,
+              position: tds[6].text,
+              email: tds[7].text,
+              status: tds[8].text,
+            ));
+            i++;
+          }
+        }
+      } catch (e) {
+        log(e.toString());
+      }
+    }
+    return links;
   }
 }

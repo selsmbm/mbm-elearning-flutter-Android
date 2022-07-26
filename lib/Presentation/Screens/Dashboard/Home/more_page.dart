@@ -169,6 +169,14 @@ class _MorePageState extends State<MorePage> {
               ),
               SettingButton(
                 onTap: () {
+                  Navigator.pushNamed(context, 'selsAdmins');
+                },
+                title: 'SELS',
+                subtitle: 'All sels mbmbers',
+                icon: Icons.supervised_user_circle,
+              ),
+              SettingButton(
+                onTap: () {
                   Share.share(
                       'MBM UNIVERSITY Jodhpur   MBM E-learning <SELS>  Hello MBMites,🙋‍♂️ You are Informed that an App is developed for help of our collegeous. In this, you are provided the regular updates  related to University and all type of Notes,Books,Lab files, previous papers etc for every year.  Here is the link :-👇\nhttps://play.google.com/store/apps/details?id=com.mbm.elereaning.mbmecj');
                 },

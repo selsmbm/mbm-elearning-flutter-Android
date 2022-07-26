@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mbm_elearning/Data/Repository/sheet_scrap.dart';
+import 'package:mbm_elearning/Data/model/admins_model.dart';
 import 'package:mbm_elearning/Data/model/blog_model.dart';
 import 'package:mbm_elearning/Data/model/events_model.dart';
 import 'package:mbm_elearning/Data/model/explore_model.dart';
@@ -18,12 +19,15 @@ class ScrapTableProvider with ChangeNotifier {
   List<ExploreModel> get explores => _explores;
   final List<UsefulLinksModel> _usefulLinks = [];
   List<UsefulLinksModel> get usefulLinks => _usefulLinks;
+  final List<AdminsModel> _admins = [];
+  List<AdminsModel> get admins => _admins;
   bool isGettingData = false;
   bool isGettingMaterialData = false;
   bool isGettingBlogPostsData = false;
   bool isGettingEventsData = false;
   bool isGettingExploreData = false;
   bool isGettingUsefulLinksData = false;
+  bool isGettingAdminsData = false;
 
   updateGettingBlogPostsStatus(bool status) {
     isGettingBlogPostsData = status;
@@ -74,6 +78,9 @@ class ScrapTableProvider with ChangeNotifier {
     if (_usefulLinks.isNotEmpty) {
       _usefulLinks.clear();
     }
+    if (_admins.isNotEmpty) {
+      _admins.clear();
+    }
     bool scrapMt = true;
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
@@ -91,11 +98,13 @@ class ScrapTableProvider with ChangeNotifier {
     _explores.addAll(data[2] as List<ExploreModel>);
     _events.addAll(data[3] as List<EventsModel>);
     _usefulLinks.addAll(data[4] as List<UsefulLinksModel>);
+    _admins.addAll(data[5] as List<AdminsModel>);
     _materials.toSet().toList();
     _blogPosts.toSet().toList();
     _explores.toSet().toList();
     _events.toSet().toList();
     _usefulLinks.toSet().toList();
+    _admins.toSet().toList();
     isGettingData = false;
     notifyListeners();
   }
