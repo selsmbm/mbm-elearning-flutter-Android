@@ -41,26 +41,29 @@ class _ExplorePageState extends State<ExplorePage> {
         //   onPressed: () {},
         //   child: Icon(Icons.arrow_circle_up),
         // ),
-        body: ListView.builder(
-          itemCount: _scrapTableProvider.explores.length,
-          itemBuilder: (context, index) {
-            ExploreModel explore = _scrapTableProvider.explores[index];
-            return ListTile(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return ExploreDetailsPage(explore: explore, exploreId: explore.id!);
-                    },
-                  ),
-                );
-              },
-              leading: ImageCus(image: explore.image),
-              title: Text(explore.title ?? "N/A"),
-              subtitle: explore.tagline != null ? Text(explore.tagline!) : null,
-            );
-          },
+        body: RefreshIndicator(
+          onRefresh: () => _scrapTableProvider.updateScrapExplore(),
+          child: ListView.builder(
+            itemCount: _scrapTableProvider.explores.length,
+            itemBuilder: (context, index) {
+              ExploreModel explore = _scrapTableProvider.explores[index];
+              return ListTile(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return ExploreDetailsPage(explore: explore, exploreId: explore.id!);
+                      },
+                    ),
+                  );
+                },
+                leading: ImageCus(image: explore.image),
+                title: Text(explore.title ?? "N/A"),
+                subtitle: explore.tagline != null ? Text(explore.tagline!) : null,
+              );
+            },
+          ),
         ),
       ),
     );

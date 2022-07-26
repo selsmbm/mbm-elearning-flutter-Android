@@ -43,30 +43,34 @@ class _EventsPageState extends State<EventsPage> {
         //   onPressed: () {},
         //   child: Icon(Icons.arrow_circle_up),
         // ),
-        body: ListView.builder(
-          itemCount: _scrapTableProvider.events.length,
-          itemBuilder: (context, index) {
-            EventsModel event = _scrapTableProvider.events[index];
-            String org = json.decode(event.adminOrg!)['name'];
-            DateTime date = DateTime.fromMillisecondsSinceEpoch(
-                int.parse(event.starttime!) * 1000);
-            return ListTile(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return EventDetailsPage(event: event, eventId: event.id!);
-                    },
-                  ),
-                );
-              },
-              leading: ImageCus(image: event.image),
-              title: Text(event.title ?? "N/A"),
-              subtitle: Text(
-                  "$org | Start from: ${date.day}-${date.month}-${date.year}"),
-            );
-          },
+        body: RefreshIndicator(
+          onRefresh: () => _scrapTableProvider.updateScrapEvents(),
+          child: ListView.builder(
+            itemCount: _scrapTableProvider.events.length,
+            itemBuilder: (context, index) {
+              EventsModel event = _scrapTableProvider.events[index];
+              String org = json.decode(event.adminOrg!)['name'];
+              DateTime date = DateTime.fromMillisecondsSinceEpoch(
+                  int.parse(event.starttime!) * 1000);
+              return ListTile(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return EventDetailsPage(
+                            event: event, eventId: event.id!);
+                      },
+                    ),
+                  );
+                },
+                leading: ImageCus(image: event.image),
+                title: Text(event.title ?? "N/A"),
+                subtitle: Text(
+                    "$org | Start from: ${date.day}-${date.month}-${date.year}"),
+              );
+            },
+          ),
         ),
       ),
     );

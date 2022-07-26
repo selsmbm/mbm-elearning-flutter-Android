@@ -1,3 +1,5 @@
+import 'dart:isolate';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mbm_elearning/Data/Repository/sheet_scrap.dart';
@@ -28,6 +30,15 @@ class ScrapTableProvider with ChangeNotifier {
   bool isGettingExploreData = false;
   bool isGettingUsefulLinksData = false;
   bool isGettingAdminsData = false;
+
+  bool checkIsMeSuperAdmin() {
+    return _admins
+        .where((AdminsModel element) =>
+            getContains(element.uid!, FirebaseAuth.instance.currentUser!.uid) &&
+            getContains(element.status!, 'true'))
+        .toSet()
+        .isNotEmpty;
+  }
 
   updateGettingBlogPostsStatus(bool status) {
     isGettingBlogPostsData = status;

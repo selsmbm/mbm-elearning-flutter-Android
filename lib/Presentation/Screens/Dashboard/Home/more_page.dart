@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
+import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -17,9 +19,11 @@ class MorePage extends StatefulWidget {
 
 class _MorePageState extends State<MorePage> {
   User? user = FirebaseAuth.instance.currentUser;
+  late ScrapTableProvider scrapTableProvider;
 
   @override
   Widget build(BuildContext context) {
+    scrapTableProvider = Provider.of<ScrapTableProvider>(context);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -230,30 +234,39 @@ class _MorePageState extends State<MorePage> {
                 subtitle: 'Logout from this app',
                 icon: Icons.logout,
               ),
+              if (scrapTableProvider.checkIsMeSuperAdmin())
+                SettingButton(
+                  onTap: () {
+                    Navigator.pushNamed(context, 'adminDash');
+                  },
+                  title: 'Admin Dashboard',
+                  subtitle: 'Admin dashboard for super admins',
+                  icon: Icons.web_sharp,
+                ),
               Center(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: InkWell(
                     onTap: () async {
-                      SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      if (prefs.getBool(SP.ismeAdmin) == null ||
-                          prefs.getBool(SP.ismeAdmin) == false) {
-                        FirebaseFirestore.instance
-                            .collection('adminids')
-                            .get()
-                            .then((QuerySnapshot querySnapshot) {
-                          for (var doc in querySnapshot.docs) {
-                            if (doc["id"] == user!.uid) {
-                              prefs.setBool(SP.ismeAdmin, true);
-                              Navigator.pushNamed(context, 'adminDash');
-                            }
-                          }
-                        });
-                      } else {
-                        if (!mounted) return;
-                        Navigator.pushNamed(context, 'adminDash');
-                      }
+                      // SharedPreferences prefs =
+                      //     await SharedPreferences.getInstance();
+                      // if (prefs.getBool(SP.ismeAdmin) == null ||
+                      //     prefs.getBool(SP.ismeAdmin) == false) {
+                      //   FirebaseFirestore.instance
+                      //       .collection('adminids')
+                      //       .get()
+                      //       .then((QuerySnapshot querySnapshot) {
+                      //     for (var doc in querySnapshot.docs) {
+                      //       if (doc["id"] == user!.uid) {
+                      //         prefs.setBool(SP.ismeAdmin, true);
+                      //         Navigator.pushNamed(context, 'adminDash');
+                      //       }
+                      //     }
+                      //   });
+                      // } else {
+                      //   if (!mounted) return;
+                      //   Navigator.pushNamed(context, 'adminDash');
+                      // }
                     },
                     child: const Text(
                       "Made With ❤ by SELS.",

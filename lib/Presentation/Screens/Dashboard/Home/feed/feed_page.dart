@@ -41,36 +41,39 @@ class _FeedsPageState extends State<FeedsPage> {
         //   onPressed: () {},
         //   child: Icon(Icons.arrow_circle_up),
         // ),
-        body: ListView.builder(
-          itemCount: _scrapTableProvider.blogPosts.length,
-          itemBuilder: (context, index) {
-            BlogModel post = _scrapTableProvider.blogPosts[index];
-            DateTime date = DateTime.fromMillisecondsSinceEpoch(
-                int.parse(post.posttime!) * 1000);
-            return ListTile(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return FeedDetailsPage(feed: post);
-                    },
+        body: RefreshIndicator(
+          onRefresh: () => _scrapTableProvider.updateScrapBlogPosts(),
+          child: ListView.builder(
+            itemCount: _scrapTableProvider.blogPosts.length,
+            itemBuilder: (context, index) {
+              BlogModel post = _scrapTableProvider.blogPosts[index];
+              DateTime date = DateTime.fromMillisecondsSinceEpoch(
+                  int.parse(post.posttime!) * 1000);
+              return ListTile(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return FeedDetailsPage(feed: post);
+                      },
+                    ),
+                  );
+                },
+                leading: const CircleAvatar(
+                  radius: 23,
+                  backgroundColor: rPrimaryLiteColor,
+                  child: Icon(
+                    Icons.feed_outlined,
+                    color: rPrimaryColor,
                   ),
-                );
-              },
-              leading: const CircleAvatar(
-                radius: 23,
-                backgroundColor: rPrimaryLiteColor,
-                child: Icon(
-                  Icons.feed_outlined,
-                  color: rPrimaryColor,
                 ),
-              ),
-              title: Text(post.title ?? "N/A"),
-              subtitle: Text(
-                  "${date.day}-${date.month}-${date.year} ${post.org != "" ? "| ${post.org}" : ""}"),
-            );
-          },
+                title: Text(post.title ?? "N/A"),
+                subtitle: Text(
+                    "${date.day}-${date.month}-${date.year} ${post.org != "" ? "| ${post.org}" : ""}"),
+              );
+            },
+          ),
         ),
       ),
     );
