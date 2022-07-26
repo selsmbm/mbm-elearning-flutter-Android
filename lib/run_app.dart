@@ -22,6 +22,7 @@ import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/feed/feed_page
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/MBMU/mbm_story/mbm_stories.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/MBMU/teachers/teacher_details_page.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/MBMU/teachers/teachers_page.dart';
+import 'package:mbm_elearning/Presentation/Screens/Dashboard/SubAdmin/add_new_explore.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/SubAdmin/add_new_feed_post.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/material/AddMaterial.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Extras/Bookmark.dart';
@@ -245,6 +246,9 @@ class _MyAppState extends State<MyApp> {
                 case 'addNewFeed':
                   return MaterialPageRoute(
                       builder: (context) => AddNewFeedPage());
+                case 'addNewExplore':
+                  return MaterialPageRoute(
+                      builder: (context) => AddNewExplorePage());
                 case 'addMaterialPage':
                   return MaterialPageRoute(
                       builder: (context) => BlocProvider(

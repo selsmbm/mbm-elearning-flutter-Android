@@ -83,6 +83,106 @@ class _AddMaterialPageState extends State<AddMaterialPage> {
                 : 'Add Material',
           ),
         ),
+        bottomNavigationBar: BottomAppBar(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('Cancel'),
+              ),
+              const SizedBox(width: 10),
+              ElevatedButton(
+                onPressed: () async {
+                  if (materialName.text != '' &&
+                      materialSubject.text != '' &&
+                      materialSem != '' &&
+                      materialType != '') {
+                    if (!allBranchSemsData.contains(materialSem)) {
+                      if (materialBranch != '') {
+                        ScaffoldMessenger.of(ctx).showSnackBar(
+                          const SnackBar(
+                            content: Text('Please select branch'),
+                          ),
+                        );
+                        return;
+                      }
+                    }
+                    if (widget.purpose == AddMaterialPagePurpose.update) {
+                      setState(() {
+                        showProgress = true;
+                      });
+                      var output = await UpdateMaterialRepo.post(
+                          widget.materialData!['mtid'],
+                          materialName.text,
+                          materialDesc.text,
+                          materialType,
+                          materialBranch,
+                          materialSem,
+                          materialUrl.text,
+                          'false',
+                          materialSubject.text,
+                          scrapTableProvider);
+                      if (output == 'SUCCESS') {
+                        Future.delayed(Duration(milliseconds: 300), () {
+                          ScaffoldMessenger.of(ctx).showSnackBar(
+                            const SnackBar(
+                              content: Text('Material updated successfully'),
+                              duration: Duration(seconds: 1),
+                            ),
+                          );
+                          int i = 0;
+                          Navigator.popUntil(ctx, (route) => i++ == 3);
+                        });
+                      }
+                    } else {
+                      if (file == null && materialUrl == null) {
+                        ScaffoldMessenger.of(ctx).showSnackBar(
+                          const SnackBar(
+                            content: Text('Please add a material or url'),
+                          ),
+                        );
+                        return;
+                      }
+                      BlocProvider.of<AddDataToApiBloc>(context).add(
+                        FetchAddDataToApi(
+                          materialName.text,
+                          materialDesc.text,
+                          materialType,
+                          materialBranch,
+                          materialSem,
+                          materialUrl.text,
+                          approveStatus,
+                          materialSubject.text,
+                          file,
+                          context,
+                        ),
+                      );
+                    }
+                  } else {
+                    ScaffoldMessenger.of(ctx).showSnackBar(
+                      const SnackBar(
+                        content: Text('Please fill all details'),
+                      ),
+                    );
+                  }
+                },
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Text(
+                    'Submit',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+            ],
+          ),
+        ),
         body: SafeArea(
           child: BlocConsumer<AddDataToApiBloc, AddDataToApiState>(
             listener: (context, state) {
@@ -114,17 +214,14 @@ class _AddMaterialPageState extends State<AddMaterialPage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        RoundedInputField(
+                        NormalInputField(
                           controller: materialName,
                           hintText: 'Material Name',
                         ),
                         const SizedBox(
                           height: 9,
                         ),
-                        RoundedInputField(
+                        NormalInputField(
                           hintText: 'Description',
                           controller: materialDesc,
                           maxLines: 3,
@@ -132,75 +229,81 @@ class _AddMaterialPageState extends State<AddMaterialPage> {
                         const SizedBox(
                           height: 9,
                         ),
-                        RoundedInputField(
+                        NormalInputField(
                           hintText: 'Subject',
                           controller: materialSubject,
                         ),
                         const SizedBox(
                           height: 9,
                         ),
-                        TextFieldContainer(
-                          child: DropdownButtonFormField(
-                            decoration: const InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'Material Type'),
-                            value: materialType,
-                            onChanged: (value) {
-                              setState(() {
-                                materialType = value.toString();
-                              });
-                            },
-                            items: mttypes
-                                .map((subject) => DropdownMenuItem(
-                                    value: subject, child: Text(subject)))
-                                .toList(),
-                          ),
+                        DropdownButtonFormField(
+                          decoration:
+                              const InputDecoration(hintText: 'Material Type'),
+                          value: materialType,
+                          onChanged: (value) {
+                            setState(() {
+                              materialType = value.toString();
+                            });
+                          },
+                          items: mttypes
+                              .map((subject) => DropdownMenuItem(
+                                  value: subject, child: Text(subject)))
+                              .toList(),
                         ),
                         const SizedBox(
                           height: 9,
                         ),
-                        TextFieldContainer(
-                          child: DropdownButtonFormField(
-                            decoration: const InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'Material Sem'),
-                            value: materialSem,
-                            onChanged: (value) {
-                              setState(() {
-                                materialSem = value.toString();
-                              });
-                            },
-                            items: semsData
-                                .map((subject) => DropdownMenuItem(
-                                    value: subject, child: Text("$subject")))
-                                .toList(),
-                          ),
+                        DropdownButtonFormField(
+                          decoration:
+                              const InputDecoration(hintText: 'Material Sem'),
+                          value: materialSem,
+                          onChanged: (value) {
+                            setState(() {
+                              materialSem = value.toString();
+                            });
+                          },
+                          items: semsData
+                              .map((subject) => DropdownMenuItem(
+                                  value: subject, child: Text("$subject")))
+                              .toList(),
                         ),
                         const SizedBox(
                           height: 9,
                         ),
                         if (materialSem != null &&
                             !allBranchSemsData.contains(materialSem))
-                          TextFieldContainer(
-                            child: DropdownButtonFormField(
-                              decoration: const InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: 'Material Branch'),
-                              value: materialBranch,
-                              onChanged: (value) {
-                                setState(() {
-                                  materialBranch = value.toString();
-                                });
-                              },
-                              items: branches
-                                  .map((subject) => DropdownMenuItem(
-                                      value: subject, child: Text("$subject")))
-                                  .toList(),
-                            ),
+                          DropdownButtonFormField(
+                            decoration: const InputDecoration(
+                                hintText: 'Material Branch'),
+                            value: materialBranch,
+                            onChanged: (value) {
+                              setState(() {
+                                materialBranch = value.toString();
+                              });
+                            },
+                            items: branches
+                                .map((subject) => DropdownMenuItem(
+                                    value: subject, child: Text("$subject")))
+                                .toList(),
                           ),
                         const SizedBox(
                           height: 9,
                         ),
+                        if (file == null)
+                          NormalInputField(
+                            hintText: 'Material url',
+                            controller: materialUrl,
+                          ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        if (widget.purpose != AddMaterialPagePurpose.update)
+                          if (file == null) Text("AND"),
+                        if (widget.purpose != AddMaterialPagePurpose.update)
+                          if (file == null)
+                            const SizedBox(
+                              height: 10,
+                            ),
                         if (widget.purpose != AddMaterialPagePurpose.update)
                           InkWell(
                             onTap: () async {
@@ -219,137 +322,35 @@ class _AddMaterialPageState extends State<AddMaterialPage> {
                                 });
                               }
                             },
-                            child: TextFieldContainer(
-                              height: 100,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.attach_file),
-                                  Text(
-                                    file != null
-                                        ? p.basename(file!.path)
-                                        : "Choose a material",
-                                    style: TextStyle(
-                                      fontSize: 16,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.grey,
+                                  width: 1,
+                                ),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(20.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.attach_file),
+                                    Text(
+                                      file != null
+                                          ? p.basename(file!.path)
+                                          : "Choose a material",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        if (widget.purpose != AddMaterialPagePurpose.update)
-                          if (file == null) Text("AND"),
-                        if (file == null)
-                          RoundedInputField(
-                            hintText: 'Material url',
-                            controller: materialUrl,
                           ),
                         const SizedBox(
                           height: 14,
-                        ),
-                        TextButton(
-                          onPressed: () async {
-                            if (materialName.text != '' &&
-                                materialSubject.text != '' &&
-                                materialSem != '' &&
-                                materialType != '') {
-                              if (!allBranchSemsData.contains(materialSem)) {
-                                if (materialBranch != '') {
-                                  ScaffoldMessenger.of(ctx).showSnackBar(
-                                    const SnackBar(
-                                      content: Text('Please select branch'),
-                                    ),
-                                  );
-                                  return;
-                                }
-                              }
-                              if (widget.purpose ==
-                                  AddMaterialPagePurpose.update) {
-                                setState(() {
-                                  showProgress = true;
-                                });
-                                var output = await UpdateMaterialRepo.post(
-                                    widget.materialData!['mtid'],
-                                    materialName.text,
-                                    materialDesc.text,
-                                    materialType,
-                                    materialBranch,
-                                    materialSem,
-                                    materialUrl.text,
-                                    '',
-                                    materialSubject.text,
-                                    scrapTableProvider);
-                                if (output == 'SUCCESS') {
-                                  Future.delayed(Duration(milliseconds: 300),
-                                      () {
-                                    ScaffoldMessenger.of(ctx).showSnackBar(
-                                      const SnackBar(
-                                        content: Text(
-                                            'Material updated successfully'),
-                                        duration: Duration(seconds: 1),
-                                      ),
-                                    );
-                                    int i = 0;
-                                    Navigator.popUntil(
-                                        ctx, (route) => i++ == 3);
-                                  });
-                                }
-                              } else {
-                                if (file == null && materialUrl == null) {
-                                  ScaffoldMessenger.of(ctx).showSnackBar(
-                                    const SnackBar(
-                                      content:
-                                          Text('Please add a material or url'),
-                                    ),
-                                  );
-                                  return;
-                                }
-                                BlocProvider.of<AddDataToApiBloc>(context).add(
-                                  FetchAddDataToApi(
-                                    materialName.text,
-                                    materialDesc.text,
-                                    materialType,
-                                    materialBranch,
-                                    materialSem,
-                                    materialUrl.text,
-                                    approveStatus,
-                                    materialSubject.text,
-                                    file,
-                                  ),
-                                );
-                              }
-                            } else {
-                              ScaffoldMessenger.of(ctx).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Please fill all details'),
-                                ),
-                              );
-                            }
-                          },
-                          child: Container(
-                            width: 200,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(30),
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: Color(0x66000429),
-                                  blurRadius: 20.27,
-                                  offset: Offset(-0.18, 2),
-                                ),
-                              ],
-                              color: rPrimaryColor,
-                            ),
-                            child: const Center(
-                              child: Text(
-                                'Submit',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                ),
-                              ),
-                            ),
-                          ),
                         ),
                       ],
                     ),

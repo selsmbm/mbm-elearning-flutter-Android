@@ -1,6 +1,12 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:mbm_elearning/Data/Repository/add_new_explore_repo.dart';
+import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
+import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
@@ -16,11 +22,10 @@ class _AddNewExplorePageState extends State<AddNewExplorePage> {
   late ScrapTableProvider _scrapTableProvider;
   String? title;
   String? url;
-  String? org;
-  String? orgid;
-  String? event;
-  String? eventid;
-  String? image;
+  String? tagline;
+  String? desc;
+  String? type;
+  File? file;
   bool showProgress = false;
   @override
   Widget build(BuildContext context) {
@@ -44,50 +49,35 @@ class _AddNewExplorePageState extends State<AddNewExplorePage> {
               const SizedBox(width: 10),
               ElevatedButton(
                 onPressed: () async {
-                  // if (title != null) {
-                  //   String? output = await Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //       builder: (context) => HtmlEditorScreen(
-                  //         showdesc: true,
-                  //       ),
-                  //     ),
-                  //   );
-                  //   if (output != null) {
-                  //     setState(() {
-                  //       showProgress = true;
-                  //     });
-                  //     var outputData = await PostFeedPostRepo.post(
-                  //       {
-                  //         "title": title,
-                  //         "event": event ?? '',
-                  //         "image": image,
-                  //         "org": org ?? '',
-                  //         "url": url ?? '',
-                  //         "orgid": orgid ?? '',
-                  //         "eventid": eventid ?? '',
-                  //         "uploaded_by_user": user!.displayName,
-                  //         "uploaded_by_user_uid": user!.uid,
-                  //         "description": output
-                  //       },
-                  //       _scrapTableProvider,
-                  //     );
-                  //     setState(() {
-                  //       showProgress = false;
-                  //     });
-                  //     // if (outputData['status'] == "SUCCESS") {
-                  //     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  //         content: Text("Post Uploaded Scuccessfilly.")));
-                  //     Navigator.pop(context);
-                  //     // }
-                  //   }
-                  // } else {
-                  //   ScaffoldMessenger.of(context).showSnackBar(
-                  //     const SnackBar(
-                  //       content: const Text('Please fill all required fields'),
-                  //     ),
-                  //   );
-                  // }
+                  if (title != null && desc != null && type != null) {
+                    setState(() {
+                      showProgress = true;
+                    });
+                    var outputData = await AddNewExploreRepo.post(
+                      {
+                        "title": title,
+                        "website": url ?? '',
+                        "tagline": tagline ?? '',
+                        "type": type,
+                        "desc": desc,
+                      },
+                      file,
+                      _scrapTableProvider,
+                      context,
+                    );
+                    setState(() {
+                      showProgress = false;
+                    });
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text("Post Uploaded Scuccessfilly.")));
+                    Navigator.pop(context);
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: const Text('Please fill all required fields'),
+                      ),
+                    );
+                  }
                 },
                 child: const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10),
@@ -109,6 +99,39 @@ class _AddNewExplorePageState extends State<AddNewExplorePage> {
               padding: const EdgeInsets.all(10.0),
               child: Column(
                 children: [
+                  GestureDetector(
+                    onTap: () async {
+                      var selectFile = (await FilePicker.platform.pickFiles(
+                        type: FileType.image,
+                        allowMultiple: false,
+                        onFileLoading: (FilePickerStatus status) =>
+                            print(status),
+                      ))
+                          ?.files
+                          .first;
+                      if (selectFile != null) {
+                        setState(() {
+                          file = File(selectFile.path!);
+                        });
+                      }
+                    },
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child: CircleAvatar(
+                        backgroundColor: rPrimaryLiteColor,
+                        radius: 50,
+                        child: file != null
+                            ? Image.file(
+                                file!,
+                                fit: BoxFit.cover,
+                              )
+                            : Icon(Icons.add_a_photo),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
                   TextField(
                     decoration: InputDecoration(
                       labelText: 'What is the name of explore? *',
@@ -136,7 +159,7 @@ class _AddNewExplorePageState extends State<AddNewExplorePage> {
                       labelText: 'Tagline (optional)',
                     ),
                     onChanged: (value) {
-                      url = value;
+                      tagline = value;
                     },
                   ),
                   const SizedBox(
@@ -144,10 +167,11 @@ class _AddNewExplorePageState extends State<AddNewExplorePage> {
                   ),
                   TextField(
                     decoration: InputDecoration(
-                      labelText: 'Description',
+                      labelText: 'Description *',
                     ),
+                    maxLines: 2,
                     onChanged: (value) {
-                      url = value;
+                      desc = value;
                     },
                   ),
                   const SizedBox(
@@ -164,12 +188,14 @@ class _AddNewExplorePageState extends State<AddNewExplorePage> {
                     ),
                     dropdownDecoratorProps: const DropDownDecoratorProps(
                         dropdownSearchDecoration: InputDecoration(
-                      labelText: 'Select a type',
+                      labelText: 'Select a type *',
                     )),
-                    items: [],
+                    items: exploreType,
                     itemAsString: (String u) => u,
                     onChanged: (String? data) {
-                      if (data != null) {}
+                      if (data != null) {
+                        type = data;
+                      }
                     },
                   ),
                   const SizedBox(

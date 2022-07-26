@@ -42,6 +42,7 @@ class _GateMaterialState extends State<GateMaterial> {
     } catch (e) {
       log(e.toString());
     }
+    if (!mounted) return;
     setState(() {
       showProgress = false;
     });

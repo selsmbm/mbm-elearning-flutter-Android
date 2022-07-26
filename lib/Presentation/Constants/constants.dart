@@ -15,6 +15,10 @@ const List<String> mttypes = [
   'video',
 ];
 
+List<String> exploreType =
+    "Departmemt,Scholarship,Club,Hostel,Blog,Fest,Organization,Business"
+        .split(',');
+
 List<String> branches =
     "CE,CH,MI,EE,CSE,ECE,EEE,ECC,ME,P&I,BCT,IT,PE,AE,AI".split(',');
 List<String> semsData =
@@ -53,3 +57,4 @@ class SP {
   static const String ismeAdmin = "ismeAdmin";
   static const String initialProfileSaved = "initialProfileSaved";
 }
+

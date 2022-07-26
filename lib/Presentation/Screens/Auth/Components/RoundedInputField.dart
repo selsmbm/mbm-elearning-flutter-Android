@@ -35,6 +35,28 @@ class RoundedInputField extends StatelessWidget {
   }
 }
 
+class NormalInputField extends StatelessWidget {
+  final String? hintText;
+  final int maxLines;
+  final TextEditingController? controller;
+  const NormalInputField({
+    Key? key,
+    this.hintText,
+    this.maxLines = 1, this.controller,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: controller,
+      maxLines: maxLines,
+      decoration: InputDecoration(
+        hintText: hintText,
+      ),
+    );
+  }
+}
+
 typedef CaretMoved = void Function(Offset globalCaretPosition);
 typedef TextChanged = void Function(String text);
 

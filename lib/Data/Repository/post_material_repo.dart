@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:mbm_elearning/Data/Repository/GDrive/upload_to_drive.dart';
 import 'package:mbm_elearning/Presentation/Constants/apis.dart';
@@ -18,6 +19,7 @@ class PostMaterialRepo {
     String? approve,
     String? subject,
     File? file,
+    BuildContext context,
   ) async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult != ConnectivityResult.none) {
@@ -26,7 +28,7 @@ class PostMaterialRepo {
         var time = DateTime.now().millisecondsSinceEpoch / 1000;
         if (file != null) {
           GoogleDrive googleDrive = GoogleDrive();
-          url = await googleDrive.upload(file);
+          url = await googleDrive.upload(context, file);
         }
         http.Response response = await http.get(
           Uri.parse(

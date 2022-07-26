@@ -15,7 +15,7 @@ const String updateMaterialApi =
 const String deleteMaterialApi =
     "https://script.google.com/macros/s/AKfycbxlNiBQOGReRMX2AIUpB_0QQxHKEjPYfPPMrumXdsVxwtkTdG7wTRd5z1-G6jgUHtT4/exec";
 const String addExploreApi =
-    "https://script.google.com/macros/s/AKfycbzVpk69KnjuDTr7qSFyBqcTx7NgmpcwJXhPtitwz4lwYzCnfPHP2nA_s-gXTMDRv2H1qg/exec";
+    "https://script.google.com/macros/s/AKfycbweXaC6jkLy6I847bNvOrEs7WYUTXzlYa_CjYw89Ul-EHtovFlRO-45mdhIkJGB1u0nSg/exec";
 const String getBlogTable =
     "https://docs.google.com/spreadsheets/d/e/2PACX-1vRkeaR_JfcrXsMLGndnFKscZdBuz5OcLsPVxpiFjIMwiLRLUbtd4BVbUwiznM3UBT2WPetmzJiqjort/pubhtml";
 const String getExploreTable =

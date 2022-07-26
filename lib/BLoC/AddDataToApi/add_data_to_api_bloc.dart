@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:mbm_elearning/Data/Repository/post_material_repo.dart';
 
 class AddDataToApiEvent extends Equatable {
@@ -20,6 +21,7 @@ class FetchAddDataToApi extends AddDataToApiEvent {
   final String? approve;
   final String? subject;
   final File? file;
+  final BuildContext context;
   FetchAddDataToApi(
     this.name,
     this.desc,
@@ -29,7 +31,7 @@ class FetchAddDataToApi extends AddDataToApiEvent {
     this.url,
     this.approve,
     this.subject,
-    this.file,
+    this.file, this.context,
   );
 }
 
@@ -77,6 +79,7 @@ class AddDataToApiBloc extends Bloc<AddDataToApiEvent, AddDataToApiState> {
           event.approve,
           event.subject,
           event.file,
+          event.context,
         );
         yield AddDataToApiIsSuccess(addDataToApiOut);
       } catch (_) {
