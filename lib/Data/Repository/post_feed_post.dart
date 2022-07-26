@@ -54,7 +54,7 @@ class PostFeedPostRepo {
           }
           scrapTableProvider.updateScrapBlogPosts();
           try {
-            return json.decode(response.body)['status'];
+            return true;
           } on Exception catch (e) {
             print(e);
           }

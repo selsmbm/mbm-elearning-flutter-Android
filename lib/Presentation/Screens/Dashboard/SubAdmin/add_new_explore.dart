@@ -68,9 +68,11 @@ class _AddNewExplorePageState extends State<AddNewExplorePage> {
                     setState(() {
                       showProgress = false;
                     });
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text("Post Uploaded Scuccessfilly.")));
-                    Navigator.pop(context);
+                    if (outputData != null) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text("Post Uploaded Scuccessfilly.")));
+                      Navigator.pop(context);
+                    }
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(

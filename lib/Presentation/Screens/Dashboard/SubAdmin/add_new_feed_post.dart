@@ -81,11 +81,12 @@ class _AddNewFeedPageState extends State<AddNewFeedPage> {
                       setState(() {
                         showProgress = false;
                       });
-                      // if (outputData['status'] == "SUCCESS") {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text("Post Uploaded Scuccessfilly.")));
-                      Navigator.pop(context);
-                      // }
+                      if (outputData != null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text("Post Uploaded Scuccessfilly.")));
+                        Navigator.pop(context);
+                      }
                     }
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(

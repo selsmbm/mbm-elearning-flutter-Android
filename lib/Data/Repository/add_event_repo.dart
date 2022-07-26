@@ -8,7 +8,7 @@ import 'package:mbm_elearning/Data/Repository/GDrive/upload_to_drive.dart';
 import 'package:mbm_elearning/Presentation/Constants/apis.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 
-class AddNewExploreRepo {
+class AddNewEventRepo {
   static Future post(
     Map data,
     File? file,
@@ -21,23 +21,19 @@ class AddNewExploreRepo {
         String? url;
         if (file != null) {
           GoogleDrive googleDrive = GoogleDrive();
-          url = await googleDrive.upload(context, file,
-              isId: true, isImage: true);
+          url = await googleDrive.upload(context, file, isId: true, isImage: true);
         }
         Map finalData = data;
-        String time =
-            (DateTime.now().millisecondsSinceEpoch / 1000).toStringAsFixed(0);
-        finalData['time'] = time;
         finalData['image'] = url ?? "";
         print(finalData);
         http.Response response = await http.post(
           Uri.parse(
-            addExploreApi,
+            addEventApi,
           ),
           body: finalData,
         );
         if (response.statusCode == 200 || response.statusCode == 302) {
-          scrapTableProvider.updateScrapExplore();
+          scrapTableProvider.updateScrapEvents();
           try {
             return true;
           } on Exception catch (e) {

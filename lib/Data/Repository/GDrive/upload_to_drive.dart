@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:js';
 import 'package:flutter/material.dart';
 import 'package:googleapis/drive/v3.dart' as ga;
 import 'package:googleapis_auth/auth_io.dart';
@@ -68,13 +67,19 @@ class GoogleDrive {
   }
 
   //Upload File
-  Future<String?> upload(BuildContext context, File file,
-      {bool isId = false}) async {
+  Future<String?> upload(
+    BuildContext context,
+    File file, {
+    bool isId = false,
+    bool isImage = false,
+  }) async {
     http.Client? client = await getHttpClient(context);
     if (client != null) {
       var drive = ga.DriveApi(client);
       ga.File fileToUpload = ga.File();
-      fileToUpload.parents = [gDriveFolder];
+      fileToUpload.parents = [
+        isImage ? gDriveImageFolder : gDriveMaterialFolder
+      ];
       fileToUpload.name = p.basename(file.absolute.path);
       var response = await drive.files.create(fileToUpload,
           uploadMedia: ga.Media(file.openRead(), file.lengthSync()));
