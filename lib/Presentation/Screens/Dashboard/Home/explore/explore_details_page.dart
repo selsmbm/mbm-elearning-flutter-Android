@@ -8,6 +8,8 @@ import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Data/model/events_model.dart';
 import 'package:mbm_elearning/Data/model/explore_model.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
+import 'package:mbm_elearning/Presentation/Constants/constants.dart';
+import 'package:mbm_elearning/Presentation/Constants/utills.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/events/event_details_page.dart';
 import 'package:mbm_elearning/Presentation/Widgets/image_cus.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
@@ -48,10 +50,22 @@ class _ExploreDetailsPageState extends State<ExploreDetailsPage> {
             element.adminOrgIds!.contains(explore.id.toString()))
         .toList();
     return Scaffold(
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {},
-      //   child: Icon(Icons.share),
-      // ),
+       floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Please wait...'),
+                duration: Duration(seconds: 1),
+              ),
+            );
+            shareDynamicLink(
+              id: explore.id.toString(),
+              title: explore.title!,
+              purpose: DL.explore,
+            );
+          },
+          child: Icon(Icons.share),
+        ),
       bottomNavigationBar: BottomAppBar(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,

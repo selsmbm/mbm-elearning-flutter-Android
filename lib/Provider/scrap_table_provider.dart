@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:isolate';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,6 +10,7 @@ import 'package:mbm_elearning/Data/model/events_model.dart';
 import 'package:mbm_elearning/Data/model/explore_model.dart';
 import 'package:mbm_elearning/Data/model/useful_links_model.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
+import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/dashboard.dart';
 
 class ScrapTableProvider with ChangeNotifier {
   final List<Map<String, dynamic>> _materials = [];
@@ -30,6 +32,10 @@ class ScrapTableProvider with ChangeNotifier {
   bool isGettingExploreData = false;
   bool isGettingUsefulLinksData = false;
   bool isGettingAdminsData = false;
+
+  void clearAll() {
+    scrapSubscriptionIsGettingData.close();
+  }
 
   bool checkIsMeSuperAdmin() {
     return _admins
@@ -74,6 +80,7 @@ class ScrapTableProvider with ChangeNotifier {
   }
 
   Future<void> scrapAllData() async {
+    scrapSubscriptionIsGettingData.sink.add(true);
     if (_materials.isNotEmpty) {
       _materials.clear();
     }
@@ -117,6 +124,7 @@ class ScrapTableProvider with ChangeNotifier {
     _usefulLinks.toSet().toList();
     _admins.toSet().toList();
     isGettingData = false;
+    scrapSubscriptionIsGettingData.sink.add(false);
     notifyListeners();
   }
 

@@ -6,6 +6,8 @@ import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Data/model/events_model.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
+import 'package:mbm_elearning/Presentation/Constants/constants.dart';
+import 'package:mbm_elearning/Presentation/Constants/utills.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/explore/explore_details_page.dart';
 import 'package:mbm_elearning/Presentation/Widgets/image_cus.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
@@ -14,7 +16,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class EventDetailsPage extends StatefulWidget {
-  const EventDetailsPage({Key? key, this.event, required this.eventId, }) : super(key: key);
+  const EventDetailsPage({
+    Key? key,
+    this.event,
+    required this.eventId,
+  }) : super(key: key);
   final EventsModel? event;
   final int eventId;
   @override
@@ -35,7 +41,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
   @override
   void initState() {
     super.initState();
-    
+
     setCurrentScreenInGoogleAnalytics('Event Details Page');
   }
 
@@ -47,10 +53,22 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
     DateTime enddate =
         DateTime.fromMillisecondsSinceEpoch(int.parse(event.endtime!) * 1000);
     return Scaffold(
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {},
-      //   child: Icon(Icons.share),
-      // ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Please wait...'),
+              duration: Duration(seconds: 1),
+            ),
+          );
+          shareDynamicLink(
+            id: event.id.toString(),
+            title: event.title!,
+            purpose: DL.event,
+          );
+        },
+        child: Icon(Icons.share),
+      ),
       bottomNavigationBar: BottomAppBar(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,

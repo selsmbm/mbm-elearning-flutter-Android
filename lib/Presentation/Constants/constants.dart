@@ -39,6 +39,8 @@ Map<String, IconData> typeIcon = {
   'video': Icons.videocam,
 };
 
+const String dynamicLinkBaseUrl = "https://mbmelearning.page.link/";
+
 const String gdriveUploadClientId =
     "304334437374-vmjld7k1vvc234p9loqtu57kv9a7e2qc.apps.googleusercontent.com";
 const String gDriveUploadClientSecreat = "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";
@@ -57,4 +59,11 @@ const String groupNotificationChannelKey = 'feed_group_channel';
 class SP {
   static const String ismeAdmin = "ismeAdmin";
   static const String initialProfileSaved = "initialProfileSaved";
+}
+
+//Dynamic links purposes
+class DL {
+  static const String feeds = "feeds";
+  static const String explore = "explore";
+  static const String event = "event";
 }
