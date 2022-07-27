@@ -55,7 +55,7 @@ class _FeedsPageState extends State<FeedsPage> {
                     context,
                     MaterialPageRoute(
                       builder: (context) {
-                        return FeedDetailsPage(feed: post);
+                        return FeedDetailsPage(feed: post, FeedId: post.id!);
                       },
                     ),
                   );

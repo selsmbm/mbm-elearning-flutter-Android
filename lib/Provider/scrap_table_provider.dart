@@ -144,6 +144,10 @@ class ScrapTableProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  BlogModel getBlogPostById(int id) {
+    return _blogPosts.firstWhere((BlogModel element) => element.id == id);
+  }
+
   Future<void> updateScrapEvents() async {
     if (_events.isNotEmpty) {
       _events.clear();

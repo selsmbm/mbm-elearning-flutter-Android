@@ -11,8 +11,10 @@ import 'package:flutter_html/flutter_html.dart';
 import '../events/event_details_page.dart';
 
 class FeedDetailsPage extends StatefulWidget {
-  const FeedDetailsPage({Key? key, required this.feed}) : super(key: key);
-  final BlogModel feed;
+  const FeedDetailsPage({Key? key, this.feed, required this.FeedId})
+      : super(key: key);
+  final BlogModel? feed;
+  final int FeedId;
   @override
   _FeedDetailsPageState createState() => _FeedDetailsPageState();
 }
@@ -24,13 +26,17 @@ class _FeedDetailsPageState extends State<FeedDetailsPage> {
   @override
   void didChangeDependencies() {
     _scrapTableProvider = Provider.of<ScrapTableProvider>(context);
+    if (widget.feed != null) {
+      feed = widget.feed!;
+    } else {
+      feed = _scrapTableProvider.getBlogPostById(widget.FeedId);
+    }
     super.didChangeDependencies();
   }
 
   @override
   void initState() {
     super.initState();
-    feed = widget.feed;
     setCurrentScreenInGoogleAnalytics('Feed Details Page');
   }
 
@@ -39,10 +45,10 @@ class _FeedDetailsPageState extends State<FeedDetailsPage> {
     DateTime posttime =
         DateTime.fromMillisecondsSinceEpoch(int.parse(feed.posttime!) * 1000);
     return Scaffold(
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {},
-      //   child: Icon(Icons.share),
-      // ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: Icon(Icons.share),
+      ),
       bottomNavigationBar: BottomAppBar(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
