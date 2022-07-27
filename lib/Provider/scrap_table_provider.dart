@@ -152,8 +152,12 @@ class ScrapTableProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  BlogModel getBlogPostById(int id) {
-    return _blogPosts.firstWhere((BlogModel element) => element.id == id);
+  BlogModel? getBlogPostById(int id) {
+    Iterable<BlogModel> out = _blogPosts.where((element) => element.id == id);
+    if (out.isNotEmpty) {
+      return out.first;
+    }
+    return null;
   }
 
   Future<void> updateScrapEvents() async {
@@ -167,8 +171,12 @@ class ScrapTableProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  EventsModel getEventById(int id) {
-    return _events.firstWhere((element) => element.id == id);
+  EventsModel? getEventById(int id) {
+    Iterable<EventsModel> out = _events.where((element) => element.id == id);
+    if (out.isNotEmpty) {
+      return out.first;
+    }
+    return null;
   }
 
   Future<void> updateScrapExplore() async {
@@ -182,8 +190,12 @@ class ScrapTableProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  ExploreModel getExploreById(int id) {
-    return _explores.firstWhere((element) => element.id == id);
+  ExploreModel? getExploreById(int id) {
+    Iterable<ExploreModel> out = _explores.where((element) => element.id == id);
+    if (out.isNotEmpty) {
+      return out.first;
+    }
+    return null;
   }
 
   Future<void> updateScrapUsefulLinks() async {

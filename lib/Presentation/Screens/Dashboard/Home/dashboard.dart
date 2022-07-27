@@ -88,11 +88,11 @@ class _DashboardPageState extends State<DashboardPage> {
             context,
             MaterialPageRoute(
               builder: (context) {
-                return FeedDetailsPage(FeedId: int.parse(params['id']!));
+                return FeedDetailsPage(feedId: int.parse(params['id']!));
               },
             ),
           );
-        } else if(purpose == DL.event){
+        } else if (purpose == DL.event) {
           Navigator.push(
             context,
             MaterialPageRoute(
