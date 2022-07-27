@@ -14,7 +14,8 @@ class RoundedInputField extends StatelessWidget {
     this.hintText,
     this.onChanged,
     this.errorText,
-    this.maxLines = 1, this.controller,
+    this.maxLines = 1,
+    this.controller,
   }) : super(key: key);
 
   @override
@@ -42,7 +43,8 @@ class NormalInputField extends StatelessWidget {
   const NormalInputField({
     Key? key,
     this.hintText,
-    this.maxLines = 1, this.controller,
+    this.maxLines = 1,
+    this.controller,
   }) : super(key: key);
 
   @override
@@ -92,27 +94,29 @@ class _TrackingTextInputState extends State<TrackingTextInput> {
       padding: const EdgeInsets.symmetric(horizontal: 5),
       width: MediaQuery.of(context).size.width * 0.8,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).primaryColor == rPrimaryMaterialColorLite
+            ? rPrimaryLiteColor
+            : Colors.white30,
         borderRadius: BorderRadius.circular(20),
       ),
       child: TextFormField(
-          decoration: InputDecoration(
-            prefixIcon: Icon(
-              widget.icon,
-              color: Colors.black,
-            ),
-            suffixIcon: widget.suffixIcon,
-            hintText: widget.hint,
-            border: InputBorder.none,
+        decoration: InputDecoration(
+          prefixIcon: Icon(
+            widget.icon,
           ),
-          onChanged: widget.onTextChanged,
-          cursorColor: rPrimaryColor,
-          key: _fieldKey,
-          controller: _textController,
-          obscureText: widget.isObscured,
-          validator: (value) {
-            return null;
-          }),
+          suffixIcon: widget.suffixIcon,
+          hintText: widget.hint,
+          border: InputBorder.none,
+        ),
+        onChanged: widget.onTextChanged,
+        cursorColor: rPrimaryColor,
+        key: _fieldKey,
+        controller: _textController,
+        obscureText: widget.isObscured,
+        validator: (value) {
+          return null;
+        },
+      ),
     );
   }
 }

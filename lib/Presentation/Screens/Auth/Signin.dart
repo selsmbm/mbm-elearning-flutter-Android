@@ -59,7 +59,10 @@ class _SigninPageState extends State<SigninPage> with TickerProviderStateMixin {
                       height: 450,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(15),
-                        color: rPrimaryColor,
+                        color: Theme.of(context).primaryColor ==
+                                rPrimaryMaterialColorLite
+                            ? rPrimaryColor
+                            : rPrimaryDarkLiteColor,
                       ),
                       child: Column(
                         children: [

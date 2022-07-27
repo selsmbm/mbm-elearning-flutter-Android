@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:lottie/lottie.dart';
+import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Screens/Auth/Signin.dart';
 
 class OnBoardingPage extends StatefulWidget {
@@ -24,16 +25,22 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
   Widget build(BuildContext context) {
     const bodyStyle = TextStyle(fontSize: 19.0);
 
-    const pageDecoration = PageDecoration(
-      titleTextStyle: TextStyle(fontSize: 28.0, fontWeight: FontWeight.w700),
+    var pageDecoration = PageDecoration(
+      titleTextStyle:
+          const TextStyle(fontSize: 28.0, fontWeight: FontWeight.w700),
       bodyTextStyle: bodyStyle,
-      pageColor: Colors.white,
+      pageColor: Theme.of(context).primaryColor == rPrimaryMaterialColorLite
+          ? Colors.white
+          : rPrimaryDarkLiteColor,
       imagePadding: EdgeInsets.zero,
     );
 
     return IntroductionScreen(
       key: introKey,
-      globalBackgroundColor: Colors.white,
+      globalBackgroundColor:
+          Theme.of(context).primaryColor == rPrimaryMaterialColorLite
+              ? Colors.white
+              : rPrimaryDarkLiteColor,
       pages: [
         PageViewModel(
           title: "No need to worry",
@@ -58,9 +65,11 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
       curve: Curves.fastLinearToSlowEaseIn,
       controlsMargin: const EdgeInsets.all(16),
       controlsPadding: const EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
-      dotsDecorator: const DotsDecorator(
+      dotsDecorator: DotsDecorator(
         size: Size(10.0, 10.0),
-        color: Color(0xFFBDBDBD),
+        color: Theme.of(context).primaryColor == rPrimaryMaterialColorLite
+            ? Color(0xFFBDBDBD)
+            : rPrimaryDarkLiteColor.withOpacity(0.2),
         activeSize: Size(22.0, 10.0),
         activeShape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(25.0)),
