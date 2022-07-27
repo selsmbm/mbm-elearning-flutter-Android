@@ -33,6 +33,7 @@ import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/more_page.dart
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Extras/gate_material.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/profile_page.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/material/search_page.dart';
+import 'package:mbm_elearning/Presentation/Screens/Dashboard/utilities/mbm_map.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/utilities/sels_admins/sels_admins_page.dart';
 import 'package:mbm_elearning/Presentation/Screens/Splash.dart';
 import 'package:mbm_elearning/Presentation/Widgets/html_editor.dart';
@@ -182,6 +183,8 @@ class _MyAppState extends State<MyApp> {
                   return MaterialPageRoute(builder: (context) => EventsPage());
                 case 'more':
                   return MaterialPageRoute(builder: (context) => MorePage());
+                case 'map':
+                  return MaterialPageRoute(builder: (context) => MBMMap());
                 case 'search':
                   return MaterialPageRoute(
                       builder: (context) => BlocProvider(

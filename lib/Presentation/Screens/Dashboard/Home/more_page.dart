@@ -145,6 +145,14 @@ class _MorePageState extends State<MorePage> {
               ),
               SettingButton(
                 onTap: () {
+                  Navigator.pushNamed(context, 'map');
+                },
+                title: 'MBMU Map',
+                subtitle: 'Visit college map',
+                icon: Icons.map,
+              ),
+              SettingButton(
+                onTap: () {
                   launch(
                       "https://docs.google.com/document/d/1g5F57sM9eEUwFX41JVfKFDQ1iWykeK0AeHauL60lCh8/edit?usp=sharing");
                 },
