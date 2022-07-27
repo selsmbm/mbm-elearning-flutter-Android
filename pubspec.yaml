@@ -50,6 +50,7 @@ dependencies:
   html_editor_enhanced: ^2.5.0
   awesome_notifications: ^0.7.0-beta.5
   date_time_picker: ^2.1.0
+  firebase_in_app_messaging: ^0.6.0+20
   
 
 

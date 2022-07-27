@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mbm_elearning/Data/model/admins_model.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
+import 'package:mbm_elearning/Presentation/Screens/Dashboard/utilities/sels_admins/sels_admin_details_page.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -29,6 +30,14 @@ class _SELSAdminsPageState extends State<SELSAdminsPage> {
         itemBuilder: (context, index) {
           AdminsModel admin = scrapTableProvider.admins[index];
           return ListTile(
+            onTap: () {
+              showGeneralDialog(
+                context: context,
+                pageBuilder: (ctx, a1, a2) => SELSAdminDetails(
+                  admin: admin,
+                ),
+              );
+            },
             leading: CircleAvatar(
               radius: 27,
               backgroundColor: rPrimaryMaterialColorLite,
@@ -46,54 +55,7 @@ class _SELSAdminsPageState extends State<SELSAdminsPage> {
               ),
             ),
             title: Text(admin.name!),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(admin.position!),
-                if (admin.branch != null && admin.branch != "")
-                  Text(admin.branch!),
-              ],
-            ),
-            trailing: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                if (admin.year != null && admin.year != "")
-                  Text(
-                    "Batch: ${admin.year}",
-                    style: TextStyle(
-                      fontSize: 12,
-                    ),
-                  ),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if (admin.email != null && admin.email != "")
-                      InkWell(
-                        child: Icon(
-                          Icons.email,
-                          color: rPrimaryMaterialColor,
-                        ),
-                        onTap: () {
-                          launch("mailto:${admin.email}");
-                        },
-                      ),
-                    const SizedBox(width: 10),
-                    if (admin.linkedin != null && admin.linkedin != "")
-                      InkWell(
-                        onTap: () {
-                          launch(admin.linkedin!);
-                        },
-                        child: SvgPicture.asset(
-                          'assets/icons/linkedin.svg',
-                          height: 20,
-                          width: 20,
-                          color: rPrimaryMaterialColor,
-                        ),
-                      ),
-                  ],
-                )
-              ],
-            ),
+            subtitle: Text(admin.position!),
           );
         },
       ),

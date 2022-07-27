@@ -33,7 +33,7 @@ import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/more_page.dart
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Extras/gate_material.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/profile_page.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/material/search_page.dart';
-import 'package:mbm_elearning/Presentation/Screens/Dashboard/utilities/sels_admins_page.dart';
+import 'package:mbm_elearning/Presentation/Screens/Dashboard/utilities/sels_admins/sels_admins_page.dart';
 import 'package:mbm_elearning/Presentation/Screens/Splash.dart';
 import 'package:mbm_elearning/Presentation/Widgets/html_editor.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
