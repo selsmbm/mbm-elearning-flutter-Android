@@ -32,7 +32,7 @@ class _MaterialListTileState extends State<MaterialListTile> {
     scrapTableProvider = Provider.of<ScrapTableProvider>(
       context,
     );
-    return InkWell(
+    return ListTile(
       onTap: () async {
         bool? status = await showDialog(
           context: context,
@@ -65,54 +65,24 @@ class _MaterialListTileState extends State<MaterialListTile> {
           );
         }
       },
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: rPrimaryLiteColor,
-              ),
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                child: Icon(
-                  typeIcon[widget.materialData['mttype']],
-                  color: rPrimaryColor,
-                ),
-              ),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    widget.materialData['mtname'],
-                    textAlign: TextAlign.start,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    widget.materialData['mtsub'].toUpperCase(),
-                    style: const TextStyle(color: Colors.black54),
-                  ),
-                ],
-              ),
-            ),
-          ],
+      leading: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: rPrimaryLiteColor,
         ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+          child: Icon(
+            typeIcon[widget.materialData['mttype']],
+            color: rPrimaryColor,
+          ),
+        ),
+      ),
+      title: Text(
+        widget.materialData['mtname'],
+      ),
+      subtitle: Text(
+        widget.materialData['mtsub'].toUpperCase(),
       ),
     );
   }

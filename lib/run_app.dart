@@ -35,6 +35,7 @@ import 'package:mbm_elearning/Presentation/Screens/Dashboard/profile_page.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/material/search_page.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/utilities/mbm_map.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/utilities/sels_admins/sels_admins_page.dart';
+import 'package:mbm_elearning/Presentation/Screens/Dashboard/utilities/settings_page.dart';
 import 'package:mbm_elearning/Presentation/Screens/Splash.dart';
 import 'package:mbm_elearning/Presentation/Widgets/html_editor.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
@@ -105,11 +106,13 @@ Future<Widget> runMainApp() async {
         ),
       ],
       debug: Flavors.appFlavor == Flavor.MDEV);
-  final themeController = ThemeController(ThemeService());
+  final themeController = ThemeController();
   await themeController.loadSettings();
-  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     statusBarColor: Colors.transparent, // status bar color
-    systemNavigationBarColor: rPrimaryLiteColor, // status bar color
+    systemNavigationBarColor: themeController.themeMode == ThemeMode.dark
+        ? rPrimaryDarkLiteColor
+        : rPrimaryLiteColor, // status bar color
     statusBarIconBrightness: Brightness.dark, // status bar icons' color
     systemNavigationBarIconBrightness:
         Brightness.dark, //navigation bar icons' color
@@ -260,6 +263,11 @@ class _MyAppState extends State<MyApp> {
                 case 'selsAdmins':
                   return MaterialPageRoute(
                       builder: (context) => SELSAdminsPage());
+                case 'settings':
+                  return MaterialPageRoute(
+                      builder: (context) => SettingsPage(
+                            theme: widget.theme,
+                          ));
                 case 'addMaterialPage':
                   return MaterialPageRoute(
                       builder: (context) => BlocProvider(

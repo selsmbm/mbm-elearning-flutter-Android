@@ -70,6 +70,7 @@ class _MaterialDetailsPageState extends State<MaterialDetailsPage> {
                       widget.material['mttype'],
                       style: TextStyle(
                         fontSize: 15,
+                        color: rPrimaryColor,
                       ),
                     ),
                   ],

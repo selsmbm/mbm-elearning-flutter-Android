@@ -107,160 +107,160 @@ class _HomePageState extends State<HomePage> {
           },
           child: Icon(Icons.add),
         ),
-        body: Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          color: Colors.white,
-          child: SafeArea(
-            child: SingleChildScrollView(
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    SizedBox(
-                      height: 240,
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(
+                    height: 240,
+                    width: 240,
+                    child: LottieBuilder.asset(
+                      'assets/lottie/concept.json',
                       width: 240,
-                      child: LottieBuilder.asset(
-                        'assets/lottie/concept.json',
-                        width: 240,
-                      ),
                     ),
-                    const SizedBox(
-                      height: 5,
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  const Text(
+                    "Select respective fields",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
                     ),
-                    const Text(
-                      "Select respective fields",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      child: TextField(
-                        onTap: () {
-                          Navigator.pushNamed(context, 'search');
-                        },
-                        readOnly: true,
-                        decoration: InputDecoration(
-                          isDense: true,
-                          contentPadding:
-                              EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                          hintText: 'Globel Search',
-                          hintStyle: TextStyle(
-                            color: rTextColor,
-                            fontSize: 16,
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    child: TextField(
+                      onTap: () {
+                        Navigator.pushNamed(context, 'search');
+                      },
+                      readOnly: true,
+                      decoration: InputDecoration(
+                        isDense: true,
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                        hintText: 'Globel Search',
+                        hintStyle: TextStyle(
+                          color: Theme.of(context).primaryColor ==
+                                  rPrimaryMaterialColorLite
+                              ? rTextColor
+                              : Colors.white,
+                          fontSize: 16,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            width: 2,
+                            color: rPrimaryLiteColor,
                           ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              width: 2,
-                              color: rPrimaryLiteColor,
-                            ),
-                            borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            width: 2,
+                            color: rPrimaryLiteColor,
                           ),
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              width: 2,
-                              color: rPrimaryLiteColor,
-                            ),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          suffixIcon: Icon(
-                            Icons.search,
-                            color: rTextColor,
-                          ),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        suffixIcon: Icon(
+                          Icons.search,
+                          color: Theme.of(context).primaryColor ==
+                                  rPrimaryMaterialColorLite
+                              ? rTextColor
+                              : Colors.white,
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 9,
+                  ),
+                  const SizedBox(
+                    height: 9,
+                  ),
+                  Text(
+                    'or',
+                    style: TextStyle(fontSize: 17),
+                  ),
+                  const SizedBox(
+                    height: 9,
+                  ),
+                  TextFieldContainer(
+                    child: DropdownButtonFormField(
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Material Sem',
+                      ),
+                      value: materialSem,
+                      onChanged: (value) async {
+                        setState(() {
+                          materialSem = value.toString();
+                        });
+                        if (allBranchSemsData.contains(materialSem)) {
+                          goToMaterialPage(context);
+                        } else {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            duration: Duration(milliseconds: 500),
+                            content: Text('Now select your branch'),
+                          ));
+                        }
+                      },
+                      items: semsData
+                          .map((subject) => DropdownMenuItem(
+                              value: subject,
+                              child: Text("${subject.toUpperCase()}")))
+                          .toList(),
                     ),
-                    Text(
-                      'or',
-                      style: TextStyle(fontSize: 17),
-                    ),
-                    const SizedBox(
-                      height: 9,
-                    ),
+                  ),
+                  const SizedBox(
+                    height: 9,
+                  ),
+                  if (materialSem != null &&
+                      !allBranchSemsData.contains(materialSem))
                     TextFieldContainer(
                       child: DropdownButtonFormField(
                         decoration: const InputDecoration(
                           border: InputBorder.none,
-                          hintText: 'Material Sem',
+                          hintText: 'Material Branch',
                         ),
-                        value: materialSem,
-                        onChanged: (value) async {
+                        value: materialBranch,
+                        onChanged: (value) {
                           setState(() {
-                            materialSem = value.toString();
+                            materialBranch = value.toString();
                           });
-                          if (allBranchSemsData.contains(materialSem)) {
+                          if (materialSem != null) {
                             goToMaterialPage(context);
                           } else {
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(const SnackBar(
                               duration: Duration(milliseconds: 500),
-                              content: Text('Now select your branch'),
+                              content: Text('Now select your sem'),
                             ));
                           }
                         },
-                        items: semsData
-                            .map((subject) => DropdownMenuItem(
+                        items: branches
+                            .map(
+                              (subject) => DropdownMenuItem(
                                 value: subject,
-                                child: Text("${subject.toUpperCase()}")))
+                                child: Text("${subject.toUpperCase()}"),
+                              ),
+                            )
                             .toList(),
                       ),
                     ),
-                    const SizedBox(
-                      height: 9,
-                    ),
-                    if (materialSem != null &&
-                        !allBranchSemsData.contains(materialSem))
-                      TextFieldContainer(
-                        child: DropdownButtonFormField(
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'Material Branch',
-                          ),
-                          value: materialBranch,
-                          onChanged: (value) {
-                            setState(() {
-                              materialBranch = value.toString();
-                            });
-                            if (materialSem != null) {
-                              goToMaterialPage(context);
-                            } else {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(const SnackBar(
-                                duration: Duration(milliseconds: 500),
-                                content: Text('Now select your sem'),
-                              ));
-                            }
-                          },
-                          items: branches
-                              .map(
-                                (subject) => DropdownMenuItem(
-                                  value: subject,
-                                  child: Text("${subject.toUpperCase()}"),
-                                ),
-                              )
-                              .toList(),
-                        ),
-                      ),
 
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    // CarouselAds(),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                  ],
-                ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  // CarouselAds(),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                ],
               ),
             ),
           ),

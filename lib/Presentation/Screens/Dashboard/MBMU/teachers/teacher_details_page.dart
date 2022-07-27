@@ -35,7 +35,9 @@ class _TeacherDetailsState extends State<TeacherDetails> {
                 Container(
                   width: MediaQuery.of(context).size.width * 0.9,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).primaryColor == rPrimaryMaterialColorLite
+                        ? Colors.white
+                        : rPrimaryDarkLiteColor,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Padding(

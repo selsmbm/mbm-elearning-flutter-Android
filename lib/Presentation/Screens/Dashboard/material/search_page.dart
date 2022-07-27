@@ -135,6 +135,7 @@ class _SearchPageState extends State<SearchPage> {
               const SizedBox(width: 5),
               const Icon(
                 Icons.search,
+                color: Colors.black,
               ),
               const SizedBox(width: 10),
             ],

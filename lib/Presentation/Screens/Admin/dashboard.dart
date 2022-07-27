@@ -42,7 +42,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
             },
             leading: const Icon(
               Icons.arrow_forward_ios,
-              color: Colors.black,
               size: 20,
             ),
             title: const Text('Add new material'),
@@ -53,7 +52,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
             },
             leading: const Icon(
               Icons.arrow_forward_ios,
-              color: Colors.black,
               size: 20,
             ),
             title: const Text('Unapproved Material'),
@@ -64,7 +62,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
             },
             leading: const Icon(
               Icons.arrow_forward_ios,
-              color: Colors.black,
               size: 20,
             ),
             title: const Text('Add new explore'),
@@ -75,7 +72,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
             },
             leading: const Icon(
               Icons.arrow_forward_ios,
-              color: Colors.black,
               size: 20,
             ),
             title: const Text('Add new event'),
@@ -86,7 +82,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
             },
             leading: const Icon(
               Icons.arrow_forward_ios,
-              color: Colors.black,
               size: 20,
             ),
             title: const Text('Add new feed post'),
@@ -97,7 +92,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
             },
             leading: const Icon(
               Icons.arrow_forward_ios,
-              color: Colors.black,
               size: 20,
             ),
             title: const Text('Send notification to all'),

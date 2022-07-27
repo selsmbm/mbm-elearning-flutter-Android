@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
-
-class ThemeService {
-  Future<ThemeMode> themeMode() async => ThemeMode.system;
-  Future<void> updateThemeMode(ThemeMode theme) async {}
-}
+import 'package:mbm_elearning/Presentation/Constants/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeController with ChangeNotifier {
-  ThemeController(this.themeService);
-  final ThemeService themeService;
   late ThemeMode themeMode;
 
   ThemeData litethemeData = ThemeData.light().copyWith(
@@ -65,11 +61,82 @@ class ThemeController with ChangeNotifier {
     ),
   );
   ThemeData darkthemeData = ThemeData.dark().copyWith(
+    primaryColor: rPrimaryDarkLiteColor,
     useMaterial3: true,
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(rPrimaryDarkLiteColor),
+        shape: MaterialStateProperty.all(RoundedRectangleBorder(
+          side: BorderSide(color: Colors.tealAccent, width: 1),
+          borderRadius: BorderRadius.circular(30),
+        )),
+        textStyle: MaterialStateProperty.all(
+          TextStyle(color: Colors.white),
+        ),
+      ),
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(Colors.tealAccent),
+        textStyle: MaterialStateProperty.all(
+          TextStyle(color: rPrimaryDarkLiteColor),
+        ),
+      ),
+    ),
+    bottomAppBarTheme: const BottomAppBarTheme(
+      color: rPrimaryDarkLiteColor,
+    ),
+    textButtonTheme: TextButtonThemeData(
+      style: ButtonStyle(
+        textStyle: MaterialStateProperty.all(
+          TextStyle(color: rPrimaryMaterialColor),
+        ),
+      ),
+    ),
+    appBarTheme: const AppBarTheme(
+      elevation: 0.0,
+      backgroundColor: rPrimaryDarkLiteColor,
+      titleTextStyle: TextStyle(
+        fontSize: 23,
+        color: Colors.white,
+        fontWeight: FontWeight.bold,
+        fontFamily: 'Righteous',
+      ),
+      iconTheme: IconThemeData(
+        color: Colors.white,
+      ),
+    ),
+    navigationBarTheme: const NavigationBarThemeData(
+      backgroundColor: rPrimaryDarkLiteColor,
+      indicatorColor: Colors.tealAccent,
+    ),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: Colors.teal,
+    ),
   );
 
   Future<void> loadSettings() async {
-    themeMode = ThemeMode.light;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getBool(SP.darkMode) == null ||
+        prefs.getBool(SP.darkMode) == false) {
+      themeMode = ThemeMode.light;
+    } else {
+      themeMode = ThemeMode.dark;
+    }
+    notifyListeners();
+  }
+
+  updateThemeMode(ThemeMode theme) async {
+    themeMode = theme;
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent, // status bar color
+      systemNavigationBarColor: themeMode == ThemeMode.dark
+          ? rPrimaryDarkLiteColor
+          : rPrimaryLiteColor, // status bar color
+      statusBarIconBrightness: Brightness.dark, // status bar icons' color
+      systemNavigationBarIconBrightness:
+          Brightness.dark, //navigation bar icons' color
+    ));
     notifyListeners();
   }
 }

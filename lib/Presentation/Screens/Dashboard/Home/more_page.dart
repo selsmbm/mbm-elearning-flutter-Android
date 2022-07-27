@@ -189,24 +189,6 @@ class _MorePageState extends State<MorePage> {
               ),
               SettingButton(
                 onTap: () {
-                  Share.share(
-                      'MBM UNIVERSITY Jodhpur   MBM E-learning <SELS>  Hello MBMites,🙋‍♂️ You are Informed that an App is developed for help of our collegeous. In this, you are provided the regular updates  related to University and all type of Notes,Books,Lab files, previous papers etc for every year.  Here is the link :-👇\nhttps://play.google.com/store/apps/details?id=com.mbm.elereaning.mbmecj');
-                },
-                title: 'Share',
-                subtitle: 'Share this app with your friends',
-                icon: Icons.share,
-              ),
-              SettingButton(
-                onTap: () {
-                  launch(
-                      'https://play.google.com/store/apps/details?id=com.mbm.elereaning.mbmecj');
-                },
-                title: 'Rate this app',
-                subtitle: 'Rate this app on playstore',
-                icon: Icons.rate_review,
-              ),
-              SettingButton(
-                onTap: () {
                   launch('https://mbmec.weebly.com/');
                 },
                 title: 'Website',
@@ -215,42 +197,12 @@ class _MorePageState extends State<MorePage> {
               ),
               SettingButton(
                 onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: Text('Are you sure?'),
-                      content: Text('Do you want to logout?'),
-                      actions: [
-                        TextButton(
-                          child: Text('No'),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-                        TextButton(
-                          child: Text('Yes'),
-                          onPressed: () async {
-                            await FirebaseAuth.instance.signOut();
-                            SystemNavigator.pop();
-                          },
-                        ),
-                      ],
-                    ),
-                  );
+                  Navigator.pushNamed(context, 'settings');
                 },
-                title: 'Logout',
-                subtitle: 'Logout from this app',
-                icon: Icons.logout,
+                title: 'Settings',
+                subtitle: 'Theme, shere, rate us, etc.',
+                icon: Icons.settings,
               ),
-              if (scrapTableProvider.checkIsMeSuperAdmin())
-                SettingButton(
-                  onTap: () {
-                    Navigator.pushNamed(context, 'adminDash');
-                  },
-                  title: 'Admin Dashboard',
-                  subtitle: 'Admin dashboard for super admins',
-                  icon: Icons.web_sharp,
-                ),
               Center(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -301,12 +253,13 @@ class SettingButton extends StatelessWidget {
   final IconData icon;
   final String title;
   final String subtitle;
+  final Widget? child;
   const SettingButton({
     Key? key,
     this.onTap,
     required this.icon,
     required this.title,
-    required this.subtitle,
+    required this.subtitle, this.child,
   }) : super(key: key);
 
   @override
@@ -334,7 +287,7 @@ class SettingButton extends StatelessWidget {
           fontSize: 11,
         ),
       ),
-      trailing: Icon(
+      trailing:child?? Icon(
         Icons.keyboard_arrow_right,
       ),
     );

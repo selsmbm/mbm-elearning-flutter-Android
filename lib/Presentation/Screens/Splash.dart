@@ -4,6 +4,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
+import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/dashboard.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/profile_page.dart';
@@ -93,13 +94,16 @@ class _LandingPageState extends State<LandingPage> {
                 const SizedBox(
                   height: 10,
                 ),
-                const Text(
+                Text(
                   'MBM E-Learning',
                   style: TextStyle(
                     fontSize: 23,
                     fontWeight: FontWeight.bold,
                     fontFamily: 'Righteous',
-                    color: Color(0xff150B6F),
+                    color: Theme.of(context).primaryColor ==
+                            rPrimaryMaterialColorLite
+                        ? rPrimaryColor
+                        : Colors.white,
                   ),
                 ),
               ],

@@ -58,6 +58,7 @@ const String groupNotificationChannelKey = 'feed_group_channel';
 //sharedprefrences ids
 class SP {
   static const String ismeAdmin = "ismeAdmin";
+  static const String darkMode = "darkMode";
   static const String initialProfileSaved = "initialProfileSaved";
 }
 

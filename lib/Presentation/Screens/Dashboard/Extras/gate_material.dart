@@ -108,6 +108,7 @@ class _GateMaterialState extends State<GateMaterial> {
                       },
                       icon: Icon(
                         Icons.close,
+                        color: Colors.black,
                       ),
                     ),
                   ],

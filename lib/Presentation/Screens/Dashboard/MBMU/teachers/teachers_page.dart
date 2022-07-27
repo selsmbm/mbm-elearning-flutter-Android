@@ -88,6 +88,7 @@ class _TeachersPageState extends State<TeachersPage> {
                       },
                       icon: Icon(
                         Icons.close,
+                        color: Colors.black,
                       ),
                     ),
                   ],

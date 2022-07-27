@@ -32,8 +32,10 @@ class _BookmarkPageState extends State<BookmarkPage>
   @override
   Widget build(BuildContext context) {
     var tabPadding = const EdgeInsets.symmetric(horizontal: 0, vertical: 5);
-    var tabTextStyle = const TextStyle(
-      color: rTextColor,
+    var tabTextStyle = TextStyle(
+      color: Theme.of(context).primaryColor == rPrimaryMaterialColorLite
+          ? rTextColor
+          : Colors.white,
       fontSize: 12,
     );
     return Scaffold(
