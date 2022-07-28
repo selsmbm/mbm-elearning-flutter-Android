@@ -36,7 +36,7 @@ class _MaterialsPageState extends State<MaterialsPage> {
     } else {
       branch = widget.branch;
     }
-    setCurrentScreenInGoogleAnalytics('material Page');
+    setCurrentScreenInGoogleAnalytics('Sem:$sem branch:$branch material Page');
   }
 
   @override
@@ -72,10 +72,10 @@ class _MaterialsPageState extends State<MaterialsPage> {
             preferredSize: const Size.fromHeight(25),
             child: TabBar(
               unselectedLabelColor: Colors.grey,
-              labelColor: rPrimaryColor,
+              labelColor: rPrimaryMaterialColor,
               indicator: const BoxDecoration(
                 border: Border(
-                  bottom: BorderSide(color: Colors.white, width: 3.0),
+                  bottom: BorderSide(color: rPrimaryMaterialColor, width: 3.0),
                 ),
               ),
               tabs: [

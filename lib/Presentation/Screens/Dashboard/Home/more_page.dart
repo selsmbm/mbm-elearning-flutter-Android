@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
@@ -20,6 +21,11 @@ class MorePage extends StatefulWidget {
 class _MorePageState extends State<MorePage> {
   User? user = FirebaseAuth.instance.currentUser;
   late ScrapTableProvider scrapTableProvider;
+  @override
+  void initState() {
+    setCurrentScreenInGoogleAnalytics("More Page");
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -139,7 +145,7 @@ class _MorePageState extends State<MorePage> {
                 onTap: () {
                   Navigator.pushNamed(context, 'mbmstory');
                 },
-                title: 'MBM Stories',
+                title: 'MBM stories',
                 subtitle: 'Powered by mbmstories.com',
                 icon: Icons.album,
               ),
@@ -147,8 +153,8 @@ class _MorePageState extends State<MorePage> {
                 onTap: () {
                   Navigator.pushNamed(context, 'map');
                 },
-                title: 'MBMU Map',
-                subtitle: 'Visit college map',
+                title: 'MBMU campus',
+                subtitle: 'Visit college campus',
                 icon: Icons.map,
               ),
               SettingButton(
@@ -165,7 +171,7 @@ class _MorePageState extends State<MorePage> {
                   launch(
                       "https://docs.google.com/document/d/1l2KAa2ZPhDJjmMA-uDwi__GHPUyc5zm6ApXB3nNs_xA/edit?usp=sharing");
                 },
-                title: 'Freshers Guide',
+                title: 'Freshers guide',
                 subtitle: 'Freshers Guide in MBMU',
                 icon: Icons.integration_instructions,
               ),

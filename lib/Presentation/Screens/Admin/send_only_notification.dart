@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mbm_elearning/Data/Repository/send_notification.dart';
+import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
@@ -16,7 +17,13 @@ class _SendNotificationToAllPageState extends State<SendNotificationToAllPage> {
   String? title;
   String? desc;
   String? url;
+  String? image;
   bool showProgress = false;
+  @override
+  void initState() {
+    setCurrentScreenInGoogleAnalytics("Send Notification To All");
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return ModalProgressHUD(
@@ -38,7 +45,7 @@ class _SendNotificationToAllPageState extends State<SendNotificationToAllPage> {
               const SizedBox(width: 10),
               ElevatedButton(
                 onPressed: () async {
-                  if (title != null && desc != null && url != null) {
+                  if (title != null && desc != null) {
                     setState(() {
                       showProgress = true;
                     });
@@ -48,6 +55,7 @@ class _SendNotificationToAllPageState extends State<SendNotificationToAllPage> {
                       desc: desc,
                       clickActionPage: "launchUrl",
                       url: url,
+                      bigImage: image,
                     );
                     setState(() {
                       showProgress = false;
@@ -111,6 +119,18 @@ class _SendNotificationToAllPageState extends State<SendNotificationToAllPage> {
                     ),
                     onChanged: (value) {
                       url = value;
+                    },
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  TextField(
+                    decoration: InputDecoration(
+                      labelText:
+                          'Image url {Don\'t use drive image directly} (optional)',
+                    ),
+                    onChanged: (value) {
+                      image = value;
                     },
                   ),
                   const SizedBox(

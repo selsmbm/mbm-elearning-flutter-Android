@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Data/model/teachers_model.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
+import 'package:mbm_elearning/Presentation/Constants/utills.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class TeacherDetails extends StatefulWidget {
@@ -17,6 +19,7 @@ class _TeacherDetailsState extends State<TeacherDetails> {
   @override
   void initState() {
     teacher = widget.teacherData!;
+    setCurrentScreenInGoogleAnalytics("Teacher Details");
     super.initState();
   }
 
@@ -35,7 +38,8 @@ class _TeacherDetailsState extends State<TeacherDetails> {
                 Container(
                   width: MediaQuery.of(context).size.width * 0.9,
                   decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor == rPrimaryMaterialColorLite
+                    color: Theme.of(context).primaryColor ==
+                            rPrimaryMaterialColorLite
                         ? Colors.white
                         : rPrimaryDarkLiteColor,
                     borderRadius: BorderRadius.circular(10),
@@ -216,16 +220,22 @@ class _TeacherDetailsState extends State<TeacherDetails> {
             ),
             Padding(
               padding: const EdgeInsets.all(10.0),
-              child: CircleAvatar(
-                radius: 54,
-                backgroundColor: rPrimaryMaterialColorLite,
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: CircleAvatar(
-                    backgroundColor: Colors.white,
-                    radius: 50,
-                    backgroundImage: NetworkImage(
-                      "$driveImageShowUrl${teacher.image != null && teacher.image != "" ? teacher.image : defaultUserDriveImageShowUrl}",
+              child: GestureDetector(
+                onTap: () {
+                  bigImageShower(context,
+                      "$driveImageShowUrl${teacher.image != null && teacher.image != "" ? teacher.image : defaultUserDriveImageShowUrl}");
+                },
+                child: CircleAvatar(
+                  radius: 54,
+                  backgroundColor: rPrimaryMaterialColorLite,
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: CircleAvatar(
+                      backgroundColor: Colors.white,
+                      radius: 50,
+                      backgroundImage: NetworkImage(
+                        "$driveImageShowUrl${teacher.image != null && teacher.image != "" ? teacher.image : defaultUserDriveImageShowUrl}",
+                      ),
                     ),
                   ),
                 ),

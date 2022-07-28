@@ -185,8 +185,16 @@ class _ExploreDetailsPageState extends State<ExploreDetailsPage> {
                   SizedBox(
                     height: 20,
                   ),
-                  BigImageCus(
-                    image: explore!.image,
+                  GestureDetector(
+                    onTap: () {
+                      bigImageShower(
+                        context,
+                        "$driveImageShowUrl${explore!.image != null && explore!.image != '' ? explore!.image : defaultDriveImageShowUrl}",
+                      );
+                    },
+                    child: BigImageCus(
+                      image: explore!.image,
+                    ),
                   ),
                   SizedBox(
                     height: 20,

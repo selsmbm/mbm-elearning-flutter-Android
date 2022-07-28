@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Data/model/events_model.dart';
+import 'package:mbm_elearning/Presentation/Constants/constants.dart';
+import 'package:mbm_elearning/Presentation/Constants/utills.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/events/event_details_page.dart';
 import 'package:mbm_elearning/Presentation/Widgets/image_cus.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
@@ -64,7 +66,14 @@ class _EventsPageState extends State<EventsPage> {
                     ),
                   );
                 },
-                leading: ImageCus(image: event.image),
+                leading: GestureDetector(
+                    onTap: () {
+                      bigImageShower(
+                        context,
+                        "$driveImageShowUrl${event.image != null && event.image != '' ? event.image : defaultDriveImageShowUrl}",
+                      );
+                    },
+                    child: ImageCus(image: event.image)),
                 title: Text(event.title ?? "N/A"),
                 subtitle: Text(
                     "$org | Start from: ${date.day}-${date.month}-${date.year}"),

@@ -163,8 +163,16 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                       SizedBox(
                         height: 20,
                       ),
-                      BigImageCus(
-                        image: event!.image,
+                      GestureDetector(
+                        onTap: () {
+                          bigImageShower(
+                            context,
+                            "$driveImageShowUrl${event!.image != null && event!.image != '' ? event!.image : defaultDriveImageShowUrl}",
+                          );
+                        },
+                        child: BigImageCus(
+                          image: event!.image,
+                        ),
                       ),
                       SizedBox(
                         height: 20,

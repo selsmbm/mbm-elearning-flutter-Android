@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Data/model/explore_model.dart';
+import 'package:mbm_elearning/Presentation/Constants/constants.dart';
+import 'package:mbm_elearning/Presentation/Constants/utills.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/explore/explore_details_page.dart';
 import 'package:mbm_elearning/Presentation/Widgets/image_cus.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
@@ -53,14 +55,23 @@ class _ExplorePageState extends State<ExplorePage> {
                     context,
                     MaterialPageRoute(
                       builder: (context) {
-                        return ExploreDetailsPage(explore: explore, exploreId: explore.id!);
+                        return ExploreDetailsPage(
+                            explore: explore, exploreId: explore.id!);
                       },
                     ),
                   );
                 },
-                leading: ImageCus(image: explore.image),
+                leading: GestureDetector(
+                    onTap: () {
+                      bigImageShower(
+                        context,
+                        "$driveImageShowUrl${explore.image != null && explore.image != '' ? explore.image : defaultDriveImageShowUrl}",
+                      );
+                    },
+                    child: ImageCus(image: explore.image)),
                 title: Text(explore.title ?? "N/A"),
-                subtitle: explore.tagline != null ? Text(explore.tagline!) : null,
+                subtitle:
+                    explore.tagline != null ? Text(explore.tagline!) : null,
               );
             },
           ),

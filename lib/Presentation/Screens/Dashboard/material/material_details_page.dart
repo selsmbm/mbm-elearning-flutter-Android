@@ -7,6 +7,7 @@ import 'package:mbm_elearning/Data/LocalDbConnect.dart';
 import 'package:mbm_elearning/Data/Repository/delete_material_repo.dart';
 import 'package:mbm_elearning/Data/Repository/post_material_repo.dart';
 import 'package:mbm_elearning/Data/Repository/update_material_repo.dart';
+import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/dashboard.dart';
@@ -33,6 +34,12 @@ class MaterialDetailsPage extends StatefulWidget {
 class _MaterialDetailsPageState extends State<MaterialDetailsPage> {
   User? user = FirebaseAuth.instance.currentUser;
   ScrapTableProvider? scrapTableProvider;
+  @override
+  void initState() {
+    setCurrentScreenInGoogleAnalytics("Material Details");
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext ctx) {
     DateTime time = DateTime.fromMillisecondsSinceEpoch(
@@ -188,23 +195,9 @@ class _MaterialDetailsPageState extends State<MaterialDetailsPage> {
                         ),
                       );
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text(
-                                'Material add to bookmark',
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pushNamed(context, 'bookmark');
-                                },
-                                child: const Text(
-                                  'check',
-                                  style: TextStyle(color: Colors.blueAccent),
-                                ),
-                              ),
-                            ],
+                        const SnackBar(
+                          content: Text(
+                            'Material add to bookmark',
                           ),
                         ),
                       );

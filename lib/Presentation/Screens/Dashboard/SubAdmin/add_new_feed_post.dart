@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:mbm_elearning/Data/Repository/post_feed_post.dart';
+import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Data/model/events_model.dart';
 import 'package:mbm_elearning/Data/model/explore_model.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
@@ -28,6 +29,11 @@ class _AddNewFeedPageState extends State<AddNewFeedPage> {
   String? eventid;
   String? image;
   bool showProgress = false;
+  @override
+  void initState() {
+    setCurrentScreenInGoogleAnalytics("Add New Feed");
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     _scrapTableProvider = Provider.of<ScrapTableProvider>(context);

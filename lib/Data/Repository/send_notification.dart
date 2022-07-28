@@ -14,9 +14,25 @@ class FirebaseNotiSender {
     String? iconImageCompleteUrl,
     String? clickActionPage,
     String? url,
+    String? bigImage,
   }) async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult != ConnectivityResult.none) {
+      Map content = {
+        "id": Random().nextInt(10000),
+        "channelKey": "feed_notification",
+        "title": title,
+        "body": desc,
+        "largeIcon": iconImageCompleteUrl ??
+            "http://mbm.ac.in/wp-content/uploads/2022/03/MBMU-Logo-150x150.png",
+        "showWhen": true,
+        "autoDismissible": true,
+        "payload": {"redirectPage": clickActionPage ?? "feeds", "url": url}
+      };
+      if (bigImage != null) {
+        content["notificationLayout"] = "BigPicture";
+        content["bigPicture"] = bigImage;
+      }
       try {
         var headers = {
           'Content-Type': 'application/json',
@@ -30,20 +46,7 @@ class FirebaseNotiSender {
           "content_available": true,
           "priority": "high",
           "data": {
-            "content": {
-              "id": Random().nextInt(10000),
-              "channelKey": "feed_notification",
-              "title": title,
-              "body": desc,
-              "largeIcon": iconImageCompleteUrl ??
-                  "http://mbm.ac.in/wp-content/uploads/2022/03/MBMU-Logo-150x150.png",
-              "showWhen": true,
-              "autoDismissible": true,
-              "payload": {
-                "redirectPage": clickActionPage ?? "feeds",
-                "url": url
-              }
-            }
+            "content": content,
           }
         });
         request.headers.addAll(headers);

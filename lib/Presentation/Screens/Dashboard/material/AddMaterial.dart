@@ -47,9 +47,7 @@ class _AddMaterialPageState extends State<AddMaterialPage> {
   @override
   void initState() {
     super.initState();
-    approveStatus = user!.photoURL!.contains(teacher)
-        ? "true"
-        : widget.approveStatus ?? "false";
+    approveStatus = widget.approveStatus ?? "false";
     setCurrentScreenInGoogleAnalytics('Add material Page');
   }
 

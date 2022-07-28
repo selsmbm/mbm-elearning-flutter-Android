@@ -4,6 +4,7 @@ import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/Presentation/Screens/Auth/Components/OrDevider.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/profile_page.dart';
@@ -33,6 +34,7 @@ class _SigninPageState extends State<SigninPage> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     tabController = TabController(initialIndex: 0, length: 2, vsync: this);
+    setCurrentScreenInGoogleAnalytics("Signin");
   }
 
   @override

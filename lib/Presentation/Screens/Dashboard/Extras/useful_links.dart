@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Data/model/useful_links_model.dart';
+import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Widgets/image_cus.dart';
 import 'package:mbm_elearning/Presentation/Widgets/sticky_group_listview.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
@@ -46,13 +47,22 @@ class _UsefulLinksPageState extends State<UsefulLinksPage> {
         groupBy: (UsefulLinksModel element) => element.type!,
         itemComparator: (UsefulLinksModel e1, UsefulLinksModel e2) =>
             e1.type!.compareTo(e2.type!),
-        groupSeparatorBuilder: (UsefulLinksModel element) => Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-          child: Text(
-            element.type!,
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
+        groupSeparatorBuilder: (UsefulLinksModel element) => Container(
+          color: Theme.of(context).primaryColor == rPrimaryMaterialColorLite
+              ? rTextColor
+              : Colors.white,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+            child: Text(
+              element.type!,
+              style: TextStyle(
+                fontSize: 20,
+                color:
+                    Theme.of(context).primaryColor == rPrimaryMaterialColorLite
+                        ? Colors.white
+                        : rTextColor,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ),

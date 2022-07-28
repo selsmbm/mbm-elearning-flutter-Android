@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mbm_elearning/Data/Repository/get_teachers_data.dart';
+import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Data/model/teachers_model.dart';
+import 'package:mbm_elearning/Presentation/Constants/constants.dart';
+import 'package:mbm_elearning/Presentation/Constants/utills.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/MBMU/teachers/teacher_details_page.dart';
 import 'package:mbm_elearning/Presentation/Widgets/image_cus.dart';
 
@@ -19,6 +22,7 @@ class _TeachersPageState extends State<TeachersPage> {
   @override
   void initState() {
     getTeachers();
+    setCurrentScreenInGoogleAnalytics("Teachers");
     super.initState();
   }
 
@@ -151,8 +155,14 @@ class _TeachersPageState extends State<TeachersPage> {
     return ListTile(
       title: Text(model.name!),
       subtitle: Text(model.department!),
-      leading: UserImageCus(
-        image: model.image,
+      leading: GestureDetector(
+        onTap: () {
+          bigImageShower(context,
+              "$driveImageShowUrl${model.image != null && model.image != "" ? model.image : defaultUserDriveImageShowUrl}");
+        },
+        child: UserImageCus(
+          image: model.image,
+        ),
       ),
       onTap: () {
         showGeneralDialog(

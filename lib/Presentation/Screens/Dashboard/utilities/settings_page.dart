@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/more_page.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
@@ -20,6 +21,12 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   late ScrapTableProvider scrapTableProvider;
+  @override
+  void initState() {
+    setCurrentScreenInGoogleAnalytics("Settings");
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     scrapTableProvider = Provider.of<ScrapTableProvider>(context);
@@ -88,9 +95,13 @@ class _SettingsPageState extends State<SettingsPage> {
                 context: context,
                 applicationName: 'MBM E-Learning',
                 applicationVersion: 'v3.0.0',
-                applicationIcon: Image.asset(
-                  'assets/images/logo.png',
-                  height: size.height * 0.1,
+                applicationIcon: ClipRRect(
+                  borderRadius: BorderRadius.circular(100),
+                  child: Image.asset(
+                    'assets/images/logo.png',
+                    width: 100,
+                    height: 100,
+                  ),
                 ),
                 applicationLegalese: 'Copyright © 2020 MBM E-Learning',
                 children: [

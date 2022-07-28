@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:mbm_elearning/Data/Repository/add_event_repo.dart';
 import 'package:mbm_elearning/Data/Repository/add_new_explore_repo.dart';
+import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Data/model/explore_model.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
@@ -39,6 +40,11 @@ class _AddNewEventPageState extends State<AddNewEventPage> {
   final TextEditingController endTimeController =
       TextEditingController(text: DateTime.now().toString());
   bool showProgress = false;
+  @override
+  void initState() {
+    setCurrentScreenInGoogleAnalytics("Add New Event");
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     _scrapTableProvider = Provider.of<ScrapTableProvider>(context);

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Data/model/admins_model.dart';
 import 'package:mbm_elearning/Data/model/teachers_model.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
+import 'package:mbm_elearning/Presentation/Constants/utills.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SELSAdminDetails extends StatefulWidget {
@@ -19,6 +21,7 @@ class _SELSAdminDetailsState extends State<SELSAdminDetails> {
   @override
   void initState() {
     admin = widget.admin!;
+    setCurrentScreenInGoogleAnalytics("SELS Admin Details");
     super.initState();
   }
 
@@ -37,7 +40,10 @@ class _SELSAdminDetailsState extends State<SELSAdminDetails> {
                 Container(
                   width: MediaQuery.of(context).size.width * 0.9,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).primaryColor ==
+                            rPrimaryMaterialColorLite
+                        ? Colors.white
+                        : rPrimaryDarkLiteColor,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Padding(
@@ -175,18 +181,28 @@ class _SELSAdminDetailsState extends State<SELSAdminDetails> {
             ),
             Padding(
               padding: const EdgeInsets.all(10.0),
-              child: CircleAvatar(
-                radius: 54,
-                backgroundColor: rPrimaryMaterialColorLite,
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: CircleAvatar(
-                    backgroundColor: Colors.white,
-                    radius: 50,
-                    backgroundImage: NetworkImage(
-                      admin.image != null && admin.image != ""
-                          ? admin.image!
-                          : "$driveImageShowUrl$defaultUserDriveImageShowUrl",
+              child: GestureDetector(
+                onTap: () {
+                  bigImageShower(
+                    context,
+                    admin.image != null && admin.image != ""
+                        ? admin.image!
+                        : "$driveImageShowUrl$defaultUserDriveImageShowUrl",
+                  );
+                },
+                child: CircleAvatar(
+                  radius: 54,
+                  backgroundColor: rPrimaryMaterialColorLite,
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: CircleAvatar(
+                      backgroundColor: Colors.white,
+                      radius: 50,
+                      backgroundImage: NetworkImage(
+                        admin.image != null && admin.image != ""
+                            ? admin.image!
+                            : "$driveImageShowUrl$defaultUserDriveImageShowUrl",
+                      ),
                     ),
                   ),
                 ),

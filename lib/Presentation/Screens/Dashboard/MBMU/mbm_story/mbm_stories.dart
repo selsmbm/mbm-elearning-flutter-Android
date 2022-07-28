@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mbm_elearning/Data/Repository/get_mbm_story.dart';
+import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Data/model/mbm_story_model.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -13,6 +14,7 @@ class MBMStories extends StatefulWidget {
 class _MBMStoriesState extends State<MBMStories> {
   @override
   void initState() {
+    setCurrentScreenInGoogleAnalytics("MBM Stories");
     super.initState();
   }
 
