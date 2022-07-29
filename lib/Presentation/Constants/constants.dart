@@ -59,6 +59,9 @@ const String groupNotificationChannelKey = 'feed_group_channel';
 class SP {
   static const String ismeAdmin = "ismeAdmin";
   static const String darkMode = "darkMode";
+  static const String exploreDetailsPageTutorial = "exploreDetailsPageTutorial";
+  static const String mapPageTutorial = "mapPageTutorial";
+  static const String materialDetailsPageTutorial = "materialDetailsPageTutorial";
   static const String initialProfileSaved = "initialProfileSaved";
 }
 

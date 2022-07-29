@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/flavors.dart';
 import 'package:share/share.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 String getDriveImageWithSize(String imageurl, {int? width, int? height}) {
   return "$driveImageShowUrl$imageurl=${width != null && height != null ? "w$width-h$height" : ""}";
@@ -39,5 +40,41 @@ Future<dynamic> bigImageShower(BuildContext context, String imageUrl) async {
         imageUrl,
       ),
     ),
+  );
+}
+
+targetFocus(String text, IconData icon, GlobalKey key, String identify,
+    {bool isTop = true}) {
+  return TargetFocus(
+    identify: identify,
+    keyTarget: key,
+    alignSkip: Alignment.topRight,
+    contents: [
+      TargetContent(
+        align: isTop ? ContentAlign.top : ContentAlign.bottom,
+        builder: (context, controller) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Icon(
+                icon,
+                color: Colors.tealAccent,
+                size: 40,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                text,
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    ],
   );
 }

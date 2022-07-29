@@ -203,6 +203,21 @@ class _MorePageState extends State<MorePage> {
               ),
               SettingButton(
                 onTap: () {
+                  launch('https://sels-mbm.blogspot.com/');
+                },
+                title: 'Feed dump',
+                subtitle: 'All feed post dump database',
+                icon: Icons.feed,
+              ),
+              SettingButton(
+                  onTap: () {
+                    launch('https://www.buymeacoffee.com/mbmec');
+                  },
+                  title: 'Donate',
+                  subtitle: 'Donate to team sels',
+                  icon: Icons.money),
+              SettingButton(
+                onTap: () {
                   Navigator.pushNamed(context, 'settings');
                 },
                 title: 'Settings',
@@ -265,7 +280,8 @@ class SettingButton extends StatelessWidget {
     this.onTap,
     required this.icon,
     required this.title,
-    required this.subtitle, this.child,
+    required this.subtitle,
+    this.child,
   }) : super(key: key);
 
   @override
@@ -293,9 +309,10 @@ class SettingButton extends StatelessWidget {
           fontSize: 11,
         ),
       ),
-      trailing:child?? Icon(
-        Icons.keyboard_arrow_right,
-      ),
+      trailing: child ??
+          Icon(
+            Icons.keyboard_arrow_right,
+          ),
     );
   }
 }

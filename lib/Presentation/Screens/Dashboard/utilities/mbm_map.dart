@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
+import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
+import 'package:mbm_elearning/Presentation/Constants/constants.dart';
+import 'package:mbm_elearning/Presentation/Constants/utills.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MBMMap extends StatefulWidget {
-  const MBMMap({Key? key}) : super(key: key);
-
+  const MBMMap({Key? key, this.url, this.title}) : super(key: key);
+  final String? url;
+  final String? title;
   @override
   State<MBMMap> createState() => _MBMMapState();
 }
@@ -13,20 +19,28 @@ class MBMMap extends StatefulWidget {
 class _MBMMapState extends State<MBMMap> {
   @override
   void initState() {
-    setCurrentScreenInGoogleAnalytics("MBM Map");
+    setCurrentScreenInGoogleAnalytics(widget.title ?? "MBM Map");
     super.initState();
   }
+
+  @override
+  void didChangeDependencies() {
+    showTutorial();
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text('MBM campus'),
+        title: Text(widget.title ?? 'MBM campus'),
         actions: [
           IconButton(
+            key: openInBrowser,
             onPressed: () {
               launch(
-                  'https://www.google.com/maps/d/u/0/viewer?mid=1_Wg8w4EujrRyn9PHpoZdT1pvy73Pwvc&ll=26.264812241713493%2C73.03188249999998&z=15');
+                  'https://www.google.com/maps/d/u/0/viewer?mid=1_Wg8w4EujrRyn9PHpoZdT1pvy73Pwvc');
             },
             icon: const Icon(Icons.open_in_browser),
           ),
@@ -34,8 +48,41 @@ class _MBMMapState extends State<MBMMap> {
       ),
       body: Html(
         data: """
-<iframe src="https://www.google.com/maps/d/embed?mid=1_Wg8w4EujrRyn9PHpoZdT1pvy73Pwvc&ehbc=2E312F&z=15" width="${size.width}" height="${size.height * 0.90}">Loading...</iframe>""",
+<iframe src="${widget.url ?? "https://www.google.com/maps/d/embed?mid=1_Wg8w4EujrRyn9PHpoZdT1pvy73Pwvc&ehbc=2E312F&z=15"}" width="${size.width}" height="${size.height * 0.90}">Loading...</iframe>""",
       ),
     );
+  }
+
+  late TutorialCoachMark tutorialCoachMark;
+  List<TargetFocus> targets = <TargetFocus>[];
+
+  GlobalKey openInBrowser = GlobalKey();
+
+  void showTutorial() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    if (pref.getBool(SP.mapPageTutorial) == null) {
+      initTargets();
+      tutorialCoachMark = TutorialCoachMark(context,
+          targets: targets,
+          colorShadow: rPrimaryDarkLiteColor,
+          textSkip: "SKIP",
+          alignSkip: Alignment.bottomRight,
+          paddingFocus: 10,
+          hideSkip: true,
+          opacityShadow: 0.8, onSkip: () {
+        targets.clear();
+        pref.setBool(SP.mapPageTutorial, true);
+      }, onFinish: () {
+        pref.setBool(SP.mapPageTutorial, true);
+      })
+        ..show();
+    }
+  }
+
+  void initTargets() {
+    targets.clear();
+    targets.add(targetFocus("Click here to open this map in browser",
+        Icons.share, openInBrowser, "openInBrowser",
+        isTop: false));
   }
 }

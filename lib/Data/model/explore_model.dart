@@ -4,7 +4,7 @@ class ExploreModel {
   int? id;
   String? image;
   String? adminsMap;
-  String? admins;
+  String? map;
   String? tagline;
   String? type;
   String? website;
@@ -17,7 +17,7 @@ class ExploreModel {
       this.id,
       this.image,
       this.adminsMap,
-      this.admins,
+      this.map,
       this.tagline,
       this.type,
       this.website,
@@ -30,7 +30,7 @@ class ExploreModel {
     id = json['id'];
     image = json['image'];
     adminsMap = json['admins_map'];
-    admins = json['admins'];
+    map = json['map'];
     tagline = json['tagline'];
     type = json['type'];
     website = json['website'];
@@ -45,7 +45,7 @@ class ExploreModel {
     data['id'] = this.id;
     data['image'] = this.image;
     data['admins_map'] = this.adminsMap;
-    data['admins'] = this.admins;
+    data['map'] = this.map;
     data['tagline'] = this.tagline;
     data['type'] = this.type;
     data['website'] = this.website;

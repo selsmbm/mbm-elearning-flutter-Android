@@ -43,9 +43,6 @@ class _SettingsPageState extends State<SettingsPage> {
                 if (snapshot.hasData) {
                   SharedPreferences prefs = snapshot.data;
                   return SettingButton(
-                    onTap: () {
-                      Navigator.pushNamed(context, 'more');
-                    },
                     title: 'Dark Mode',
                     subtitle: 'Change theme',
                     icon: Icons.color_lens,

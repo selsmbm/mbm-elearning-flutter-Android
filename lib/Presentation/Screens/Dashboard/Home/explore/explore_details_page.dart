@@ -11,10 +11,12 @@ import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/Presentation/Constants/utills.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/events/event_details_page.dart';
+import 'package:mbm_elearning/Presentation/Screens/Dashboard/utilities/mbm_map.dart';
 import 'package:mbm_elearning/Presentation/Widgets/image_cus.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ExploreDetailsPage extends StatefulWidget {
@@ -37,6 +39,12 @@ class _ExploreDetailsPageState extends State<ExploreDetailsPage> {
   }
 
   @override
+  void didChangeDependencies() {
+    showTutorial();
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
     _scrapTableProvider = Provider.of<ScrapTableProvider>(context);
     if (widget.explore != null) {
@@ -52,6 +60,7 @@ class _ExploreDetailsPageState extends State<ExploreDetailsPage> {
           .toList();
       return Scaffold(
         floatingActionButton: FloatingActionButton(
+          key: shareButtonKey,
           onPressed: () {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
@@ -71,6 +80,28 @@ class _ExploreDetailsPageState extends State<ExploreDetailsPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
+              if (explore!.map != null && explore!.map != "")
+                ElevatedButton(
+                  key: mapShareKey,
+                  onPressed: () async {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return MBMMap(
+                        url: explore!.map,
+                        title: explore!.title!,
+                      );
+                    }));
+                  },
+                  child: const Text(
+                    "Map",
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              const SizedBox(
+                width: 10,
+              ),
               FutureBuilder<SharedPreferences>(
                   future: SharedPreferences.getInstance(),
                   builder:
@@ -94,6 +125,7 @@ class _ExploreDetailsPageState extends State<ExploreDetailsPage> {
                         );
                       } else {
                         return ElevatedButton(
+                          key: followButtonKey,
                           onPressed: () async {
                             await FirebaseMessaging.instance
                                 .subscribeToTopic(key);
@@ -287,5 +319,43 @@ class _ExploreDetailsPageState extends State<ExploreDetailsPage> {
         ),
       );
     }
+  }
+
+  late TutorialCoachMark tutorialCoachMark;
+  List<TargetFocus> targets = <TargetFocus>[];
+
+  GlobalKey shareButtonKey = GlobalKey();
+  GlobalKey mapShareKey = GlobalKey();
+  GlobalKey followButtonKey = GlobalKey();
+
+  void showTutorial() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    if (pref.getBool(SP.exploreDetailsPageTutorial) == null) {
+      initTargets();
+      tutorialCoachMark = TutorialCoachMark(context,
+          targets: targets,
+          colorShadow: rPrimaryDarkLiteColor,
+          textSkip: "SKIP",
+          paddingFocus: 10,
+          opacityShadow: 0.8, onSkip: () {
+        targets.clear();
+        pref.setBool(SP.exploreDetailsPageTutorial, true);
+      }, onFinish: () {
+        pref.setBool(SP.exploreDetailsPageTutorial, true);
+      })
+        ..show();
+    }
+  }
+
+  void initTargets() {
+    targets.clear();
+    targets.add(targetFocus("Share this explore with your friends", Icons.share,
+        shareButtonKey, "Share"));
+    if (explore!.map != null && explore!.map != "") {
+      targets.add(targetFocus(
+          "Visit the map of this explore", Icons.map, mapShareKey, "map"));
+    }
+    targets.add(targetFocus("Follow this explore to get notifications",
+        Icons.wifi, followButtonKey, "follow"));
   }
 }

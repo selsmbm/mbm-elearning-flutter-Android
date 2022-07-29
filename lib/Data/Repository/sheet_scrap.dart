@@ -118,7 +118,7 @@ class Scrap {
               "image": tds[3].text,
               "desc": tds[2].text,
               "admins_map": tds[4].text,
-              "admins": tds[5].text,
+              "map": tds[5].text,
               "tagline": tds[6].text,
               "type": tds[7].text,
               "website": tds[8].text,
@@ -132,7 +132,7 @@ class Scrap {
         log(e.toString());
       }
     }
-    return explore.reversed.toList();
+    return explore;
   }
 
   static Future<List<EventsModel>> scrapEvents() async {

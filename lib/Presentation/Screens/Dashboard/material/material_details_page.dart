@@ -10,10 +10,13 @@ import 'package:mbm_elearning/Data/Repository/update_material_repo.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
+import 'package:mbm_elearning/Presentation/Constants/utills.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/dashboard.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/material/AddMaterial.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MaterialDetailsPage extends StatefulWidget {
@@ -38,6 +41,12 @@ class _MaterialDetailsPageState extends State<MaterialDetailsPage> {
   void initState() {
     setCurrentScreenInGoogleAnalytics("Material Details");
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    showTutorial();
+    super.didChangeDependencies();
   }
 
   @override
@@ -176,6 +185,7 @@ class _MaterialDetailsPageState extends State<MaterialDetailsPage> {
                     icon: Icon(Icons.delete),
                   ),
                 IconButton(
+                  key: openInBrowserKey,
                   onPressed: () {
                     launch(widget.material['mturl']);
                   },
@@ -183,6 +193,7 @@ class _MaterialDetailsPageState extends State<MaterialDetailsPage> {
                 ),
                 if (!widget.ismeSuperAdmin)
                   IconButton(
+                    key: addBookMarkKey,
                     onPressed: () {
                       localDbConnect.addBookMarkMt(
                         BookMarkMt(
@@ -355,5 +366,38 @@ class _MaterialDetailsPageState extends State<MaterialDetailsPage> {
         ),
       ),
     );
+  }
+
+  late TutorialCoachMark tutorialCoachMark;
+  List<TargetFocus> targets = <TargetFocus>[];
+
+  GlobalKey addBookMarkKey = GlobalKey();
+  GlobalKey openInBrowserKey = GlobalKey();
+
+  void showTutorial() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    if (pref.getBool(SP.materialDetailsPageTutorial) == null) {
+      initTargets();
+      tutorialCoachMark = TutorialCoachMark(context,
+          targets: targets,
+          colorShadow: rPrimaryDarkLiteColor,
+          textSkip: "SKIP",
+          paddingFocus: 10,
+          opacityShadow: 0.8, onSkip: () {
+        targets.clear();
+        pref.setBool(SP.materialDetailsPageTutorial, true);
+      }, onFinish: () {
+        pref.setBool(SP.materialDetailsPageTutorial, true);
+      })
+        ..show();
+    }
+  }
+
+  void initTargets() {
+    targets.clear();
+    targets.add(targetFocus("Add this material to bookmark", Icons.bookmark,
+        addBookMarkKey, "bookmark"));
+    targets.add(targetFocus("Click here to open this material in browser",
+        Icons.open_in_browser, openInBrowserKey, "browser"));
   }
 }
