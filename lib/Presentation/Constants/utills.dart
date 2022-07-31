@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
@@ -36,9 +38,11 @@ Future<dynamic> bigImageShower(BuildContext context, String imageUrl) async {
   return showDialog(
     context: context,
     builder: (ctx) => InteractiveViewer(
-      child: Image.network(
-        imageUrl,
-      ),
+      child: imageUrl.contains(";base64")
+          ? Image.memory(base64Decode(imageUrl.split(',').last))
+          : Image.network(
+              imageUrl,
+            ),
     ),
   );
 }

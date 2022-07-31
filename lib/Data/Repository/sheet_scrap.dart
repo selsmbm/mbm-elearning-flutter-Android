@@ -11,6 +11,7 @@ import 'package:mbm_elearning/Data/model/blog_model.dart';
 import 'package:mbm_elearning/Data/model/events_model.dart';
 import 'package:mbm_elearning/Data/model/explore_model.dart';
 import 'package:mbm_elearning/Data/model/useful_links_model.dart';
+import 'package:mbm_elearning/Data/model/verification_user_model.dart';
 import 'package:mbm_elearning/Presentation/Constants/apis.dart';
 
 class Scrap {
@@ -232,5 +233,42 @@ class Scrap {
       }
     }
     return links;
+  }
+
+  static Future<List<VerificationUserModel>>
+      scrapVerificationUsersList() async {
+    List<VerificationUserModel> users = [];
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult != ConnectivityResult.none) {
+      try {
+        http.Response response =
+            await http.get(Uri.parse(getVerificationUsers));
+        if (response.statusCode == 200) {
+          Document document = parse.parse(response.body);
+          List<Element> trs = document.getElementsByTagName('tr');
+          int i = 3;
+          int j = trs.length;
+          while (i < j) {
+            List<Element> tds = trs[i].querySelectorAll('td');
+            users.add(VerificationUserModel(
+              id: int.parse(tds[0].text),
+              userId: tds[1].text,
+              name: tds[2].text,
+              email: tds[3].text,
+              mobile: tds[4].text,
+              orgName: tds[5].text,
+              orgId: tds[6].text,
+              position: tds[7].text,
+              status: tds[8].text,
+              time: tds[9].text,
+            ));
+            i++;
+          }
+        }
+      } catch (e) {
+        log(e.toString());
+      }
+    }
+    return users;
   }
 }

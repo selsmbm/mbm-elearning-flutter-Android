@@ -7,7 +7,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:mbm_elearning/Data/Repository/add_event_repo.dart';
-import 'package:mbm_elearning/Data/Repository/add_new_explore_repo.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Data/model/explore_model.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
@@ -17,7 +16,8 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
 
 class AddNewEventPage extends StatefulWidget {
-  const AddNewEventPage({Key? key}) : super(key: key);
+  final int? orgId;
+  const AddNewEventPage({Key? key, this.orgId}) : super(key: key);
   @override
   State<AddNewEventPage> createState() => _AddNewEventPageState();
 }
@@ -45,9 +45,16 @@ class _AddNewEventPageState extends State<AddNewEventPage> {
     setCurrentScreenInGoogleAnalytics("Add New Event");
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     _scrapTableProvider = Provider.of<ScrapTableProvider>(context);
+    ExploreModel? selectedExplore;
+    _scrapTableProvider = Provider.of<ScrapTableProvider>(context);
+    if (widget.orgId != null) {
+      selectedExplore = _scrapTableProvider.explores
+          .firstWhere((element) => element.id == widget.orgId);
+    }
     return ModalProgressHUD(
       inAsyncCall: showProgress,
       child: Scaffold(
@@ -103,7 +110,7 @@ class _AddNewEventPageState extends State<AddNewEventPage> {
                     });
                     if (outputData != null) {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text("Post Uploaded Scuccessfilly.")));
+                          content: Text("Event added Scuccessfilly.")));
                       Navigator.pop(context);
                     }
                   } else {
@@ -234,6 +241,8 @@ class _AddNewEventPageState extends State<AddNewEventPage> {
                         ),
                       ),
                     ),
+                    enabled: selectedExplore == null,
+                    selectedItem: selectedExplore,
                     dropdownDecoratorProps: const DropDownDecoratorProps(
                         dropdownSearchDecoration: InputDecoration(
                       labelText: 'Select a explore *',

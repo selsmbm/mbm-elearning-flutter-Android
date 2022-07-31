@@ -28,7 +28,7 @@ class _GateMaterialState extends State<GateMaterial> {
     });
     _outPutData.clear();
     try {
-      http.Response response = await http.get(Uri.parse(getGateSSCApi));
+      http.Response response = await http.get(Uri.parse(requestAchievementApi));
       if (response.statusCode == 200) {
         for (var mt in json.decode(response.body)) {
           _outPutData.add({

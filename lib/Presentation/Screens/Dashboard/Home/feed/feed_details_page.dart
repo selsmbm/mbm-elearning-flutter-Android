@@ -176,7 +176,15 @@ class _FeedDetailsPageState extends State<FeedDetailsPage> {
                       height: 20,
                     ),
                     Html(
+                      shrinkWrap: true,
                       data: feed!.description ?? "N/A",
+                      onLinkTap: (url, ctx, attributes, element) =>
+                          launch(url!),
+                      onImageTap: (url, ctx, attributes, element) =>
+                          bigImageShower(
+                        context,
+                        url!,
+                      ),
                     ),
                   ],
                 ),

@@ -12,7 +12,8 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
 
 class AddNewFeedPage extends StatefulWidget {
-  const AddNewFeedPage({Key? key}) : super(key: key);
+  final int? orgId;
+  const AddNewFeedPage({Key? key, this.orgId}) : super(key: key);
 
   @override
   State<AddNewFeedPage> createState() => _AddNewFeedPageState();
@@ -34,9 +35,20 @@ class _AddNewFeedPageState extends State<AddNewFeedPage> {
     setCurrentScreenInGoogleAnalytics("Add New Feed");
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
+    ExploreModel? selectedExplore;
+    List<EventsModel> events = [];
     _scrapTableProvider = Provider.of<ScrapTableProvider>(context);
+    if (widget.orgId != null) {
+      selectedExplore = _scrapTableProvider.explores
+          .firstWhere((element) => element.id == widget.orgId);
+      events.addAll(_scrapTableProvider.events.where(
+          (element) => element.adminOrgIds!.contains(widget.orgId.toString())));
+    } else {
+      events.addAll(_scrapTableProvider.events);
+    }
     return ModalProgressHUD(
       inAsyncCall: showProgress,
       child: Scaffold(
@@ -90,7 +102,7 @@ class _AddNewFeedPageState extends State<AddNewFeedPage> {
                       if (outputData != null) {
                         ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
-                                content: Text("Post Uploaded Scuccessfilly.")));
+                                content: Text("Post added Scuccessfilly.")));
                         Navigator.pop(context);
                       }
                     }
@@ -153,6 +165,8 @@ class _AddNewFeedPageState extends State<AddNewFeedPage> {
                         ),
                       ),
                     ),
+                    enabled: selectedExplore == null,
+                    selectedItem: selectedExplore,
                     dropdownDecoratorProps: const DropDownDecoratorProps(
                         dropdownSearchDecoration: InputDecoration(
                       labelText: 'Select a explore (optional)',
@@ -185,7 +199,7 @@ class _AddNewFeedPageState extends State<AddNewFeedPage> {
                         dropdownSearchDecoration: InputDecoration(
                       labelText: 'Select a event (optional)',
                     )),
-                    items: _scrapTableProvider.events,
+                    items: events,
                     itemAsString: (EventsModel u) => u.title!,
                     onChanged: (EventsModel? data) {
                       if (data != null) {

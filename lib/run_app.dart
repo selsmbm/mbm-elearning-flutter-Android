@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,6 +14,7 @@ import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/Presentation/Screens/Admin/approve_material.dart';
 import 'package:mbm_elearning/Presentation/Screens/Admin/dashboard.dart';
 import 'package:mbm_elearning/Presentation/Screens/Admin/send_only_notification.dart';
+import 'package:mbm_elearning/Presentation/Screens/Admin/verified_users.dart';
 import 'package:mbm_elearning/Presentation/Screens/Auth/ForgetPassword.dart';
 import 'package:mbm_elearning/Presentation/Screens/Auth/Signin.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Extras/useful_links.dart';
@@ -22,9 +24,11 @@ import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/feed/feed_page
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/MBMU/mbm_story/mbm_stories.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/MBMU/teachers/teacher_details_page.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/MBMU/teachers/teachers_page.dart';
+import 'package:mbm_elearning/Presentation/Screens/Dashboard/SubAdmin/achievements/achievements_page.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/SubAdmin/add_new_event.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/SubAdmin/add_new_explore.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/SubAdmin/add_new_feed_post.dart';
+import 'package:mbm_elearning/Presentation/Screens/Dashboard/SubAdmin/achievements/request_achievements_page.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/material/AddMaterial.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Extras/Bookmark.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/Home.dart';
@@ -44,7 +48,6 @@ import 'package:mbm_elearning/flavors.dart';
 import 'package:provider/provider.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 import 'Data/Repository/post_material_repo.dart';
 import 'Presentation/Screens/Dashboard/material/Material.dart';
 import 'Presentation/Screens/IntroPages.dart';
@@ -57,18 +60,20 @@ Future<void> _messageHandler(RemoteMessage message) async {
 Future<Widget> runMainApp() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-      // name: 'mbmecj',
-      // options: const FirebaseOptions(
-      //   apiKey: 'AIzaSyDAJoQfqX7XVEShds_pw-mBLx3uOo2yldM',
-      //   authDomain: 'mbmecj.firebaseapp.com',
-      //   databaseURL: 'https://mbmecj.firebaseio.com',
-      //   projectId: 'mbmecj',
-      //   storageBucket: 'mbmecj.appspot.com',
-      //   messagingSenderId: '304334437374',
-      //   appId: '1:304334437374:web:2cd637b99eb3c8d8f29eaf',
-      //   measurementId: 'G-MGLBGX8E73',
-      // ),
-      );
+    name: kIsWeb ? 'mbmecj' : null,
+    options: kIsWeb
+        ? const FirebaseOptions(
+            apiKey: 'AIzaSyDAJoQfqX7XVEShds_pw-mBLx3uOo2yldM',
+            authDomain: 'mbmecj.firebaseapp.com',
+            databaseURL: 'https://mbmecj.firebaseio.com',
+            projectId: 'mbmecj',
+            storageBucket: 'mbmecj.appspot.com',
+            messagingSenderId: '304334437374',
+            appId: '1:304334437374:web:2cd637b99eb3c8d8f29eaf',
+            measurementId: 'G-MGLBGX8E73',
+          )
+        : null,
+  );
   FirebaseMessaging.onBackgroundMessage(_messageHandler);
   AwesomeNotifications().initialize(
       'resource://drawable/ic_launcher_icon',
@@ -184,6 +189,12 @@ class _MyAppState extends State<MyApp> {
                   return MaterialPageRoute(builder: (context) => FeedsPage());
                 case 'events':
                   return MaterialPageRoute(builder: (context) => EventsPage());
+                case 'achievementPage':
+                  return MaterialPageRoute(builder: (context) => AchievementsPage());
+                case 'VerifiedUsers':
+                  return MaterialPageRoute(builder: (context) => VerifiedUsers());
+                case 'request_achievement_page':
+                  return MaterialPageRoute(builder: (context) => RequestAchievementPage());
                 case 'more':
                   return MaterialPageRoute(builder: (context) => MorePage());
                 case 'map':

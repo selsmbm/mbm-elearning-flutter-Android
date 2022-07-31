@@ -109,6 +109,14 @@ class _MorePageState extends State<MorePage> {
                 ),
               SettingButton(
                 onTap: () {
+                  Navigator.pushNamed(context, 'achievementPage');
+                },
+                title: 'Achievements',
+                subtitle: 'Explore admin',
+                icon: Icons.privacy_tip,
+              ),
+              SettingButton(
+                onTap: () {
                   Navigator.pushNamed(context, 'usefullinks');
                 },
                 title: 'Useful Links',

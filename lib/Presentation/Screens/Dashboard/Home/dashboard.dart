@@ -159,26 +159,27 @@ class _DashboardPageState extends State<DashboardPage> {
         value.fold(
           available: () {
             showDialog(
+              barrierDismissible: false,
               context: context,
-              builder: (context) => AlertDialog(
-                title: Text('Update available!'),
-                content: Text('Please update this app for new features.'),
-                actions: [
-                  TextButton(
-                    child: Text('Later'),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  TextButton(
-                    child: Text('OK'),
-                    onPressed: () async {
-                      launch(
-                          'https://play.google.com/store/apps/details?id=${Flavors.package}');
-                      Navigator.pop(context);
-                    },
-                  ),
-                ],
+              builder: (context) => WillPopScope(
+                onWillPop: () async {
+                  return false;
+                },
+                child: AlertDialog(
+                  title: const Text('Update available!'),
+                  content:
+                      const Text('Please update this app for new features.'),
+                  actions: [
+                    TextButton(
+                      child: Text('OK'),
+                      onPressed: () async {
+                        launch(
+                            'https://play.google.com/store/apps/details?id=${Flavors.package}');
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
+                ),
               ),
             );
           },

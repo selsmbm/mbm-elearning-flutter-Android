@@ -1,38 +1,28 @@
-import 'dart:io';
-
-import 'package:file_picker/file_picker.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:dropdown_search/dropdown_search.dart';
-import 'package:mbm_elearning/Data/Repository/add_new_explore_repo.dart';
-import 'package:mbm_elearning/Data/googleAnalytics.dart';
-import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
-import 'package:mbm_elearning/Presentation/Constants/constants.dart';
+import 'package:mbm_elearning/Data/Repository/request_acievement_repo.dart';
+import 'package:mbm_elearning/Data/model/explore_model.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
 
-class AddNewExplorePage extends StatefulWidget {
-  const AddNewExplorePage({Key? key}) : super(key: key);
+class RequestAchievementPage extends StatefulWidget {
+  const RequestAchievementPage({Key? key}) : super(key: key);
+
   @override
-  State<AddNewExplorePage> createState() => _AddNewExplorePageState();
+  State<RequestAchievementPage> createState() => _RequestAchievementPageState();
 }
 
-class _AddNewExplorePageState extends State<AddNewExplorePage> {
+class _RequestAchievementPageState extends State<RequestAchievementPage> {
   final User? user = FirebaseAuth.instance.currentUser;
   late ScrapTableProvider _scrapTableProvider;
   String? title;
-  String? url;
-  String? tagline;
-  String? desc;
-  String? type;
-  File? file;
+  String? mobile;
+  String? position;
+  String? org;
+  String? orgid;
   bool showProgress = false;
-  @override
-  void initState() {
-    setCurrentScreenInGoogleAnalytics("Add New Explore");
-    super.initState();
-  }
   @override
   Widget build(BuildContext context) {
     _scrapTableProvider = Provider.of<ScrapTableProvider>(context);
@@ -40,7 +30,7 @@ class _AddNewExplorePageState extends State<AddNewExplorePage> {
       inAsyncCall: showProgress,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Add new explore'),
+          title: const Text('Request Achievement'),
         ),
         bottomNavigationBar: BottomAppBar(
           child: Row(
@@ -55,28 +45,29 @@ class _AddNewExplorePageState extends State<AddNewExplorePage> {
               const SizedBox(width: 10),
               ElevatedButton(
                 onPressed: () async {
-                  if (title != null && desc != null && type != null) {
+                  if (title != null &&
+                      mobile != null &&
+                      orgid != null &&
+                      position != null) {
                     setState(() {
                       showProgress = true;
                     });
-                    var outputData = await AddNewExploreRepo.post(
-                      {
-                        "title": title,
-                        "website": url ?? '',
-                        "tagline": tagline ?? '',
-                        "type": type,
-                        "desc": desc,
-                      },
-                      file,
-                      _scrapTableProvider,
-                      context,
+                    var outputData = await RequestAchievementRepo.post(
+                      title,
+                      user!.uid,
+                      user!.email,
+                      mobile,
+                      position,
+                      org,
+                      orgid,
                     );
+                    print(outputData);
                     setState(() {
                       showProgress = false;
                     });
                     if (outputData != null) {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text("Explore added Scuccessfilly.")));
+                          content: Text("Requested successfully.")));
                       Navigator.pop(context);
                     }
                   } else {
@@ -107,42 +98,9 @@ class _AddNewExplorePageState extends State<AddNewExplorePage> {
               padding: const EdgeInsets.all(10.0),
               child: Column(
                 children: [
-                  GestureDetector(
-                    onTap: () async {
-                      var selectFile = (await FilePicker.platform.pickFiles(
-                        type: FileType.image,
-                        allowMultiple: false,
-                        onFileLoading: (FilePickerStatus status) =>
-                            print(status),
-                      ))
-                          ?.files
-                          .first;
-                      if (selectFile != null) {
-                        setState(() {
-                          file = File(selectFile.path!);
-                        });
-                      }
-                    },
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(100),
-                      child: CircleAvatar(
-                        backgroundColor: rPrimaryLiteColor,
-                        radius: 50,
-                        child: file != null
-                            ? Image.file(
-                                file!,
-                                fit: BoxFit.cover,
-                              )
-                            : Icon(Icons.add_a_photo),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
                   TextField(
                     decoration: InputDecoration(
-                      labelText: 'What is the name of explore? *',
+                      labelText: 'Name *',
                     ),
                     onChanged: (value) {
                       title = value;
@@ -153,10 +111,11 @@ class _AddNewExplorePageState extends State<AddNewExplorePage> {
                   ),
                   TextField(
                     decoration: InputDecoration(
-                      labelText: 'Website (optional)',
+                      labelText: 'Mobile No *',
                     ),
+                    keyboardType: TextInputType.number,
                     onChanged: (value) {
-                      url = value;
+                      mobile = value;
                     },
                   ),
                   const SizedBox(
@@ -164,45 +123,35 @@ class _AddNewExplorePageState extends State<AddNewExplorePage> {
                   ),
                   TextField(
                     decoration: InputDecoration(
-                      labelText: 'Tagline (optional)',
+                      labelText: 'Your position (like: Member or lead)*',
                     ),
+                    maxLines: 1,
                     onChanged: (value) {
-                      tagline = value;
+                      position = value;
                     },
                   ),
                   const SizedBox(
                     height: 10,
                   ),
-                  TextField(
-                    decoration: InputDecoration(
-                      labelText: 'Description *',
-                    ),
-                    maxLines: 2,
-                    onChanged: (value) {
-                      desc = value;
-                    },
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  DropdownSearch<String>(
+                  DropdownSearch<ExploreModel>(
                     popupProps: const PopupProps.dialog(
                       showSearchBox: true,
                       searchFieldProps: TextFieldProps(
                         decoration: InputDecoration(
-                          labelText: 'Type',
+                          labelText: 'Search explore',
                         ),
                       ),
                     ),
                     dropdownDecoratorProps: const DropDownDecoratorProps(
                         dropdownSearchDecoration: InputDecoration(
-                      labelText: 'Select a type *',
+                      labelText: 'Select a explore *',
                     )),
-                    items: exploreType,
-                    itemAsString: (String u) => u,
-                    onChanged: (String? data) {
+                    items: _scrapTableProvider.explores,
+                    itemAsString: (ExploreModel u) => u.title!,
+                    onChanged: (ExploreModel? data) {
                       if (data != null) {
-                        type = data;
+                        org = data.title;
+                        orgid = data.id.toString();
                       }
                     },
                   ),
