@@ -73,8 +73,9 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                                   .then((value) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
+                                        duration: Duration(seconds: 3),
                                         content: Text(
-                                            'Successfully send reset password email')));
+                                            'Successfully send reset password email, also check mail in spam box.')));
                               }).catchError((e) => log("Error: $e"));
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(

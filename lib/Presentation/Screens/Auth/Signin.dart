@@ -197,8 +197,8 @@ class _SigninPageState extends State<SigninPage> with TickerProviderStateMixin {
                         });
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content:
-                                Text('Now verify your email. and then sing in'),
+                            content: Text(
+                                'Now verify your email. and then sing in, also check mail in spam box'),
                           ),
                         );
                       }
@@ -376,7 +376,7 @@ class _SigninPageState extends State<SigninPage> with TickerProviderStateMixin {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text(
-                                'Please verify your email. and retry login'),
+                                'Please verify your email. and retry login, also check mail in spam box'),
                           ),
                         );
                       }
