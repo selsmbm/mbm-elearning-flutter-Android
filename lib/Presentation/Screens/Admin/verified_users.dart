@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mbm_elearning/Data/Repository/add_new_admin.dart';
+import 'package:mbm_elearning/Data/Repository/get_verification_users_repo.dart';
 import 'package:mbm_elearning/Data/Repository/request_acievement_repo.dart';
 import 'package:mbm_elearning/Data/Repository/sheet_scrap.dart';
 import 'package:mbm_elearning/Data/model/verification_user_model.dart';
@@ -26,12 +27,10 @@ class _VerifiedUsersState extends State<VerifiedUsers> {
           title: const Text('Request Verified Users'),
         ),
         body: FutureBuilder<List<VerificationUserModel>>(
-          future: Scrap.scrapVerificationUsersList(),
+          future: GetVerificationUsersListRepo.get(),
           builder: (context, AsyncSnapshot snapshot) {
             if (snapshot.hasData) {
-              List<VerificationUserModel> data = snapshot.data
-                  .where((element) => element.status.toLowerCase() == 'false')
-                  .toList();
+              List<VerificationUserModel> data = snapshot.data;
               return ListView.builder(
                 itemCount: data.length,
                 itemBuilder: (context, index) {
