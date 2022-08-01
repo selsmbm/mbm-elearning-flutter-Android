@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:googleapis/pubsub/v1.dart';
@@ -102,52 +103,53 @@ class _ExploreDetailsPageState extends State<ExploreDetailsPage> {
               const SizedBox(
                 width: 10,
               ),
-              FutureBuilder<SharedPreferences>(
-                  future: SharedPreferences.getInstance(),
-                  builder:
-                      (context, AsyncSnapshot<SharedPreferences> snapshot) {
-                    String key = "O-${explore!.id}";
-                    if (snapshot.hasData) {
-                      if (snapshot.data!.getBool(key) ?? false) {
-                        return OutlinedButton(
-                          onPressed: () async {
-                            await FirebaseMessaging.instance
-                                .unsubscribeFromTopic(key);
-                            await snapshot.data!.setBool(key, false);
-                            setState(() {});
-                          },
-                          child: const Text(
-                            "unFollow",
-                            style: TextStyle(
-                              color: rPrimaryColor,
+              if (!kIsWeb)
+                FutureBuilder<SharedPreferences>(
+                    future: SharedPreferences.getInstance(),
+                    builder:
+                        (context, AsyncSnapshot<SharedPreferences> snapshot) {
+                      String key = "O-${explore!.id}";
+                      if (snapshot.hasData) {
+                        if (snapshot.data!.getBool(key) ?? false) {
+                          return OutlinedButton(
+                            onPressed: () async {
+                              await FirebaseMessaging.instance
+                                  .unsubscribeFromTopic(key);
+                              await snapshot.data!.setBool(key, false);
+                              setState(() {});
+                            },
+                            child: const Text(
+                              "unFollow",
+                              style: TextStyle(
+                                color: rPrimaryColor,
+                              ),
                             ),
-                          ),
-                        );
+                          );
+                        } else {
+                          return ElevatedButton(
+                            key: followButtonKey,
+                            onPressed: () async {
+                              await FirebaseMessaging.instance
+                                  .subscribeToTopic(key);
+                              await snapshot.data!.setBool(key, true);
+                              setState(() {});
+                            },
+                            child: const Text(
+                              "Follow",
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                          );
+                        }
                       } else {
-                        return ElevatedButton(
-                          key: followButtonKey,
-                          onPressed: () async {
-                            await FirebaseMessaging.instance
-                                .subscribeToTopic(key);
-                            await snapshot.data!.setBool(key, true);
-                            setState(() {});
-                          },
-                          child: const Text(
-                            "Follow",
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
+                        return SizedBox(
+                          height: 40,
+                          width: 40,
+                          child: CircularProgressIndicator(),
                         );
                       }
-                    } else {
-                      return SizedBox(
-                        height: 40,
-                        width: 40,
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                  }),
+                    }),
               IconButton(
                 onPressed: () {
                   launch(explore!.website!);

@@ -1,11 +1,13 @@
 import 'dart:async';
 
-import 'package:connectivity/connectivity.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
+import 'package:mbm_elearning/Presentation/Screens/Auth/Signin.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/dashboard.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/profile_page.dart';
 import 'package:mbm_elearning/Presentation/Screens/IntroPages.dart';
@@ -28,10 +30,17 @@ class _LandingPageState extends State<LandingPage> {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult != ConnectivityResult.none) {
       if (_auth == null) {
-        Timer(const Duration(seconds: 1), () {
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => OnBoardingPage()));
-        });
+        if (kIsWeb) {
+          Timer(const Duration(seconds: 1), () {
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (context) => SigninPage()));
+          });
+        } else {
+          Timer(const Duration(seconds: 1), () {
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => OnBoardingPage()));
+          });
+        }
       } else {
         if (prefs.getBool(SP.initialProfileSaved) != null) {
           Timer(const Duration(seconds: 1), () async {

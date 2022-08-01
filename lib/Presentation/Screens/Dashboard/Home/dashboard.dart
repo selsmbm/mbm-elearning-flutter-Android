@@ -2,10 +2,11 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:connectivity/connectivity.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mbm_elearning/Data/LocalDbConnect.dart';
@@ -22,7 +23,7 @@ import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/feed/feed_page
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/more_page.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 import 'package:mbm_elearning/flavors.dart';
-import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:mbm_elearning/Presentation/Widgets/model_progress.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:update_available/update_available.dart';
@@ -57,7 +58,9 @@ class _DashboardPageState extends State<DashboardPage> {
       const MorePage(),
     ];
     currentIndex = widget.initialRout ?? 0;
-    localDbConnect.asyncInit();
+    if (!kIsWeb) {
+      localDbConnect.asyncInit();
+    }
     setNotifications();
     setCurrentScreenInGoogleAnalytics('Dashboard Page');
     checkForUpdate();
@@ -148,45 +151,54 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   void notification(RemoteMessage message) {
-    AwesomeNotifications().createNotificationFromJsonData(message.data);
+    if (!kIsWeb) {
+      AwesomeNotifications().createNotificationFromJsonData(message.data);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        backgroundColor: Colors.green,
+        content: Text("${message.data['title']}: ${message.data['body']}"),
+      ));
+    }
   }
 
   checkForUpdate() async {
-    ConnectivityResult connectivityResult =
-        await (Connectivity().checkConnectivity());
-    if (connectivityResult != ConnectivityResult.none) {
-      await getUpdateAvailability().then((value) {
-        value.fold(
-          available: () {
-            showDialog(
-              barrierDismissible: false,
-              context: context,
-              builder: (context) => WillPopScope(
-                onWillPop: () async {
-                  return false;
-                },
-                child: AlertDialog(
-                  title: const Text('Update available!'),
-                  content:
-                      const Text('Please update this app for new features.'),
-                  actions: [
-                    TextButton(
-                      child: Text('OK'),
-                      onPressed: () async {
-                        launch(
-                            'https://play.google.com/store/apps/details?id=${Flavors.package}');
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ],
+    if (!kIsWeb) {
+      ConnectivityResult connectivityResult =
+          await (Connectivity().checkConnectivity());
+      if (connectivityResult != ConnectivityResult.none) {
+        await getUpdateAvailability().then((value) {
+          value.fold(
+            available: () {
+              showDialog(
+                barrierDismissible: false,
+                context: context,
+                builder: (context) => WillPopScope(
+                  onWillPop: () async {
+                    return false;
+                  },
+                  child: AlertDialog(
+                    title: const Text('Update available!'),
+                    content:
+                        const Text('Please update this app for new features.'),
+                    actions: [
+                      TextButton(
+                        child: Text('OK'),
+                        onPressed: () async {
+                          launch(
+                              'https://play.google.com/store/apps/details?id=${Flavors.package}');
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            );
-          },
-          notAvailable: () {},
-          unknown: () {},
-        );
-      });
+              );
+            },
+            notAvailable: () {},
+            unknown: () {},
+          );
+        });
+      }
     }
   }
 

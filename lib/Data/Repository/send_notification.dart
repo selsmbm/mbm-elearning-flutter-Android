@@ -1,6 +1,6 @@
 import 'dart:developer';
 import 'dart:math';
-import 'package:connectivity/connectivity.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 

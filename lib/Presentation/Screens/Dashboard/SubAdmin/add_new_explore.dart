@@ -9,7 +9,7 @@ import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
-import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:mbm_elearning/Presentation/Widgets/model_progress.dart';
 import 'package:provider/provider.dart';
 
 class AddNewExplorePage extends StatefulWidget {
@@ -33,6 +33,7 @@ class _AddNewExplorePageState extends State<AddNewExplorePage> {
     setCurrentScreenInGoogleAnalytics("Add New Explore");
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     _scrapTableProvider = Provider.of<ScrapTableProvider>(context);

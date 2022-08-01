@@ -3,21 +3,28 @@ import 'package:flutter/material.dart';
 import 'package:googleapis/drive/v3.dart' as ga;
 import 'package:googleapis_auth/auth_io.dart';
 import 'package:http/http.dart' as http;
-import 'package:mbm_elearning/Data/Repository/GDrive/secure_storage.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
-import 'package:mbm_elearning/run_app.dart';
 import 'package:path/path.dart' as p;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 const List<String> _scopes = [ga.DriveApi.driveFileScope];
 
 class GoogleDrive {
-  final storage = SecureStorage();
+  Future saveCredentials(AccessToken token, String refreshToken) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    print(token.expiry.toIso8601String());
+    await prefs.setString("d_type", token.type);
+    await prefs.setString("d_data", token.data);
+    await prefs.setString("d_expiry", token.expiry.toString());
+    await prefs.setString("d_refreshToken", refreshToken);
+  }
+
   //Get Authenticated Http Client
   Future<http.Client?> getHttpClient(BuildContext context) async {
     //Get Credentials
-    var credentials = await storage.getCredentials();
-    if (credentials["type"] == null) {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getString("d_type") == null) {
       bool out = await showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -48,7 +55,7 @@ class GoogleDrive {
           launch(url);
         });
         //Save Credentials
-        await storage.saveCredentials(authClient.credentials.accessToken,
+        await saveCredentials(authClient.credentials.accessToken,
             authClient.credentials.refreshToken!);
         return authClient;
       } else {
@@ -59,9 +66,11 @@ class GoogleDrive {
       return authenticatedClient(
           http.Client(),
           AccessCredentials(
-              AccessToken(credentials["type"], credentials["data"],
-                  DateTime.tryParse(credentials["expiry"])!),
-              credentials["refreshToken"],
+              AccessToken(
+                  prefs.getString("d_type")!,
+                  prefs.getString("d_data")!,
+                  DateTime.tryParse(prefs.getString("d_expiry")!)!),
+              prefs.getString("d_refreshToken")!,
               _scopes));
     }
   }

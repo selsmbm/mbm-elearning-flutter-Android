@@ -1,21 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
-
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
-
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
   <base href="$FLUTTER_BASE_HREF">
-
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
   <meta name="description" content="A new Flutter project.">
@@ -29,30 +15,136 @@
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
 
-  <title>mbm_elearning</title>
+  <title>MBM E-learning</title>
   <link rel="manifest" href="manifest.json">
-
-  <script>
-    // The value below is injected by flutter build, do not touch.
-    var serviceWorkerVersion = null;
-  </script>
-  <!-- This script adds the flutter initialization JS code -->
-  <script src="flutter.js" defer></script>
+  <meta name="google-signin-client_id" content="304334437374-1sal5n4gjdqbq84163hj2nq8i6ci94eb.apps.googleusercontent.com">
 </head>
 <body>
-  <script>
-    window.addEventListener('load', function(ev) {
-      // Download main.dart.js
-      _flutter.loader.loadEntrypoint({
-        serviceWorker: {
-          serviceWorkerVersion: serviceWorkerVersion,
-        }
-      }).then(function(engineInitializer) {
-        return engineInitializer.initializeEngine();
-      }).then(function(appRunner) {
-        return appRunner.runApp();
-      });
-    });
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.9.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.9.1/firebase-analytics.js"></script>
+  <script type="module">
+    const firebaseConfig = {
+      apiKey: "AIzaSyDAJoQfqX7XVEShds_pw-mBLx3uOo2yldM",
+      authDomain: "mbmecj.firebaseapp.com",
+      databaseURL: "https://mbmecj.firebaseio.com",
+      projectId: "mbmecj",
+      storageBucket: "mbmecj.appspot.com",
+      messagingSenderId: "304334437374",
+      appId: "1:304334437374:web:2cd637b99eb3c8d8f29eaf",
+      measurementId: "G-MGLBGX8E73"
+    };
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
   </script>
-</body>
+
+   <div class="loading"><img src="http://mbm.ac.in/wp-content/uploads/2022/03/MBMU-Logo-150x150.png"class="shimmer" /></div>
+   <style>
+   .shimmer {
+     color: grey;
+     display:inline-block;
+     -webkit-mask:linear-gradient(-60deg,#000 30%,#0005,#000 70%) right/300% 100%;
+     background-repeat: no-repeat;
+     animation: shimmer 2.5s infinite;
+     font-size: 50px;
+     max-width:200px;
+   }
+   
+   @keyframes shimmer {
+     100% {-webkit-mask-position:left}
+   }
+   
+     .loading {
+       display: flex;
+       justify-content: center;
+       align-items: center;
+       margin: 0;
+       position: absolute;
+       top: 50%;
+       left: 50%;
+       -ms-transform: translate(-50%, -50%);
+       transform: translate(-50%, -50%);
+     }
+     .loader{
+       width: 200px;
+       height: 200px;
+     }
+     .flutter-loader{
+       visibility: hidden;
+     }
+     
+   </style>
+   </script>
+   <script type="text/javascript">
+     let useHtml = true;
+     if(useHtml) {
+       window.flutterWebRenderer = "html";
+     } else {
+       window.flutterWebRenderer = "canvaskit";
+     }
+   </script>
+ <script>
+   var serviceWorkerVersion = null;
+   var scriptLoaded = false;
+   function loadMainDartJs() {
+     if (scriptLoaded) {
+       return;
+     }
+     scriptLoaded = true;
+     var scriptTag = document.createElement('script');
+     scriptTag.src = 'main.dart.js';
+     scriptTag.type = 'application/javascript';
+     document.body.append(scriptTag);
+   }
+
+   if ('serviceWorker' in navigator) {
+     // Service workers are supported. Use them.
+     window.addEventListener('load', function () {
+       // Wait for registration to finish before dropping the <script> tag.
+       // Otherwise, the browser will load the script multiple times,
+       // potentially different versions.
+       var serviceWorkerUrl = 'flutter_service_worker.js?v=' + serviceWorkerVersion;
+       navigator.serviceWorker.register(serviceWorkerUrl)
+         .then((reg) => {
+           function waitForActivation(serviceWorker) {
+             serviceWorker.addEventListener('statechange', () => {
+               if (serviceWorker.state == 'activated') {
+                 console.log('Installed new service worker.');
+                 loadMainDartJs();
+               }
+             });
+           }
+           if (!reg.active && (reg.installing || reg.waiting)) {
+             // No active web worker and we have installed or are installing
+             // one for the first time. Simply wait for it to activate.
+             waitForActivation(reg.installing || reg.waiting);
+           } else if (!reg.active.scriptURL.endsWith(serviceWorkerVersion)) {
+             // When the app updates the serviceWorkerVersion changes, so we
+             // need to ask the service worker to update.
+             console.log('New service worker available.');
+             reg.update();
+             waitForActivation(reg.installing);
+           } else {
+             // Existing service worker is still good.
+             console.log('Loading app from service worker.');
+             loadMainDartJs();
+           }
+         });
+
+       // If service worker doesn't succeed in a reasonable amount of time,
+       // fallback to plaint <script> tag.
+       setTimeout(() => {
+         if (!scriptLoaded) {
+           console.warn(
+             'Failed to load app from service worker. Falling back to plain <script> tag.',
+           );
+           loadMainDartJs();
+         }
+       }, 4000);
+     });
+   } else {
+     // Service workers not supported. Just drop the <script> tag.
+     loadMainDartJs();
+   }
+ </script>
 </html>

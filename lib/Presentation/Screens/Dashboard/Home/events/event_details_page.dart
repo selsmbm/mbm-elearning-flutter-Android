@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
@@ -81,7 +82,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  FutureBuilder<SharedPreferences>(
+                if (!kIsWeb)  FutureBuilder<SharedPreferences>(
                       future: SharedPreferences.getInstance(),
                       builder:
                           (context, AsyncSnapshot<SharedPreferences> snapshot) {

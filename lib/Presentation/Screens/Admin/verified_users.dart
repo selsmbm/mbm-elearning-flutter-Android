@@ -6,7 +6,7 @@ import 'package:mbm_elearning/Data/Repository/get_verification_users_repo.dart';
 import 'package:mbm_elearning/Data/Repository/request_acievement_repo.dart';
 import 'package:mbm_elearning/Data/Repository/sheet_scrap.dart';
 import 'package:mbm_elearning/Data/model/verification_user_model.dart';
-import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:mbm_elearning/Presentation/Widgets/model_progress.dart';
 
 class VerifiedUsers extends StatefulWidget {
   const VerifiedUsers({Key? key}) : super(key: key);

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:connectivity/connectivity.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:http/http.dart' as http;
 import 'package:mbm_elearning/Data/Repository/send_notification.dart';
 import 'package:mbm_elearning/Presentation/Constants/apis.dart';

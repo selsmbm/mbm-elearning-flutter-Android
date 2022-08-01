@@ -10,7 +10,7 @@ import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/dashboard.dart
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/material/material_details_page.dart';
 import 'package:mbm_elearning/Presentation/Widgets/material_data_list_tile.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
-import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:mbm_elearning/Presentation/Widgets/model_progress.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
@@ -7,7 +8,7 @@ import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -78,16 +79,17 @@ class _MorePageState extends State<MorePage> {
                   ),
                 ),
               ),
-              if (user!.photoURL!.contains(student) ||
-                  user!.photoURL!.contains(teacher))
-                SettingButton(
-                  onTap: () {
-                    Navigator.pushNamed(context, 'bookmark');
-                  },
-                  title: 'Bookmark',
-                  subtitle: 'Manage your bookmarked',
-                  icon: Icons.bookmark,
-                ),
+              if (!kIsWeb)
+                if (user!.photoURL!.contains(student) ||
+                    user!.photoURL!.contains(teacher))
+                  SettingButton(
+                    onTap: () {
+                      Navigator.pushNamed(context, 'bookmark');
+                    },
+                    title: 'Bookmark',
+                    subtitle: 'Manage your bookmarked',
+                    icon: Icons.bookmark,
+                  ),
               if (user!.photoURL!.contains(student))
                 SettingButton(
                   onTap: () {

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mbm_elearning/Data/Repository/send_notification.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
-import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:mbm_elearning/Presentation/Widgets/model_progress.dart';
 
 class SendNotificationToAllPage extends StatefulWidget {
   const SendNotificationToAllPage({Key? key}) : super(key: key);
@@ -24,6 +24,7 @@ class _SendNotificationToAllPageState extends State<SendNotificationToAllPage> {
     setCurrentScreenInGoogleAnalytics("Send Notification To All");
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return ModalProgressHUD(

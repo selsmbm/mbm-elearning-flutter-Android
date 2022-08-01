@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mbm_elearning/BLoC/AddDataToApi/add_data_to_api_bloc.dart';
@@ -191,33 +192,34 @@ class _MaterialDetailsPageState extends State<MaterialDetailsPage> {
                   },
                   icon: Icon(Icons.open_in_browser),
                 ),
-                if (!widget.ismeSuperAdmin)
-                  IconButton(
-                    key: addBookMarkKey,
-                    onPressed: () {
-                      localDbConnect.addBookMarkMt(
-                        BookMarkMt(
-                          title: widget.material['mtname'],
-                          url: widget.material['mturl'],
-                          subject: widget.material['mtsub'],
-                          type: widget.material['mttype'],
-                          sem: widget.material['mtsem'],
-                          branch: widget.material['branch'],
-                        ),
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text(
-                            'Material add to bookmark',
+                if (!kIsWeb)
+                  if (!widget.ismeSuperAdmin)
+                    IconButton(
+                      key: addBookMarkKey,
+                      onPressed: () {
+                        localDbConnect.addBookMarkMt(
+                          BookMarkMt(
+                            title: widget.material['mtname'],
+                            url: widget.material['mturl'],
+                            subject: widget.material['mtsub'],
+                            type: widget.material['mttype'],
+                            sem: widget.material['mtsem'],
+                            branch: widget.material['branch'],
                           ),
-                        ),
-                      );
-                    },
-                    icon: const Icon(
-                      Icons.bookmark_border_outlined,
-                      size: 25,
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              'Material add to bookmark',
+                            ),
+                          ),
+                        );
+                      },
+                      icon: const Icon(
+                        Icons.bookmark_border_outlined,
+                        size: 25,
+                      ),
                     ),
-                  ),
                 if (widget.isMe)
                   widget.ismeSuperAdmin
                       ? IconButton(

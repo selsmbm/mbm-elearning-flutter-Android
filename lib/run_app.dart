@@ -54,13 +54,14 @@ import 'Presentation/Screens/IntroPages.dart';
 
 Future<void> _messageHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
-  AwesomeNotifications().createNotificationFromJsonData(message.data);
+  if (!kIsWeb) {
+    AwesomeNotifications().createNotificationFromJsonData(message.data);
+  }
 }
 
 Future<Widget> runMainApp() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    name: kIsWeb ? 'mbmecj' : null,
     options: kIsWeb
         ? const FirebaseOptions(
             apiKey: 'AIzaSyDAJoQfqX7XVEShds_pw-mBLx3uOo2yldM',
@@ -75,42 +76,44 @@ Future<Widget> runMainApp() async {
         : null,
   );
   FirebaseMessaging.onBackgroundMessage(_messageHandler);
-  AwesomeNotifications().initialize(
-      'resource://drawable/ic_launcher_icon',
-      [
-        NotificationChannel(
-          channelShowBadge: true,
-          importance: NotificationImportance.Default,
-          channelKey: progressNotificationChannel,
-          vibrationPattern: lowVibrationPattern,
-          channelName: 'Upload notifications',
-          channelDescription:
-              'All upload documents notifications show through this channel',
-          defaultPrivacy: NotificationPrivacy.Private,
-        ),
-        NotificationChannel(
-          channelGroupKey: groupNotificationChannelKey,
-          channelKey: feedNotificationChannel,
-          channelName: 'Feed notifications',
-          channelDescription:
-              'All feed notifications show through this channel',
-          groupKey: feedNotificationChannel,
-          groupSort: GroupSort.Desc,
-          groupAlertBehavior: GroupAlertBehavior.Children,
-          defaultColor: rPrimaryColor,
-          ledColor: rPrimaryColor,
-          vibrationPattern: highVibrationPattern,
-          channelShowBadge: true,
-          importance: NotificationImportance.High,
-        )
-      ],
-      channelGroups: [
-        NotificationChannelGroup(
-          channelGroupKey: groupNotificationChannelKey,
-          channelGroupName: 'Feed notifications',
-        ),
-      ],
-      debug: Flavors.appFlavor == Flavor.MDEV);
+  if (!kIsWeb) {
+    AwesomeNotifications().initialize(
+        'resource://drawable/ic_launcher_icon',
+        [
+          NotificationChannel(
+            channelShowBadge: true,
+            importance: NotificationImportance.Default,
+            channelKey: progressNotificationChannel,
+            vibrationPattern: lowVibrationPattern,
+            channelName: 'Upload notifications',
+            channelDescription:
+                'All upload documents notifications show through this channel',
+            defaultPrivacy: NotificationPrivacy.Private,
+          ),
+          NotificationChannel(
+            channelGroupKey: groupNotificationChannelKey,
+            channelKey: feedNotificationChannel,
+            channelName: 'Feed notifications',
+            channelDescription:
+                'All feed notifications show through this channel',
+            groupKey: feedNotificationChannel,
+            groupSort: GroupSort.Desc,
+            groupAlertBehavior: GroupAlertBehavior.Children,
+            defaultColor: rPrimaryColor,
+            ledColor: rPrimaryColor,
+            vibrationPattern: highVibrationPattern,
+            channelShowBadge: true,
+            importance: NotificationImportance.High,
+          )
+        ],
+        channelGroups: [
+          NotificationChannelGroup(
+            channelGroupKey: groupNotificationChannelKey,
+            channelGroupName: 'Feed notifications',
+          ),
+        ],
+        debug: Flavors.appFlavor == Flavor.MDEV);
+  }
   final themeController = ThemeController();
   await themeController.loadSettings();
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -142,14 +145,16 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
-    AwesomeNotifications().setListeners(
-        onActionReceivedMethod: NotificationController.onActionReceivedMethod,
-        onNotificationCreatedMethod:
-            NotificationController.onNotificationCreatedMethod,
-        onNotificationDisplayedMethod:
-            NotificationController.onNotificationDisplayedMethod,
-        onDismissActionReceivedMethod:
-            NotificationController.onDismissActionReceivedMethod);
+    if (!kIsWeb) {
+      AwesomeNotifications().setListeners(
+          onActionReceivedMethod: NotificationController.onActionReceivedMethod,
+          onNotificationCreatedMethod:
+              NotificationController.onNotificationCreatedMethod,
+          onNotificationDisplayedMethod:
+              NotificationController.onNotificationDisplayedMethod,
+          onDismissActionReceivedMethod:
+              NotificationController.onDismissActionReceivedMethod);
+    }
     super.initState();
   }
 
@@ -190,11 +195,14 @@ class _MyAppState extends State<MyApp> {
                 case 'events':
                   return MaterialPageRoute(builder: (context) => EventsPage());
                 case 'achievementPage':
-                  return MaterialPageRoute(builder: (context) => AchievementsPage());
+                  return MaterialPageRoute(
+                      builder: (context) => AchievementsPage());
                 case 'VerifiedUsers':
-                  return MaterialPageRoute(builder: (context) => VerifiedUsers());
+                  return MaterialPageRoute(
+                      builder: (context) => VerifiedUsers());
                 case 'request_achievement_page':
-                  return MaterialPageRoute(builder: (context) => RequestAchievementPage());
+                  return MaterialPageRoute(
+                      builder: (context) => RequestAchievementPage());
                 case 'more':
                   return MaterialPageRoute(builder: (context) => MorePage());
                 case 'map':
