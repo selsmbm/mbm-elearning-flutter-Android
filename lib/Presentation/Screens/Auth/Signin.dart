@@ -4,7 +4,7 @@ import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
+
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/Presentation/Screens/Auth/Components/OrDevider.dart';
@@ -55,11 +55,12 @@ class _SigninPageState extends State<SigninPage> with TickerProviderStateMixin {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Lottie.asset('assets/lottie/sign-in-yellow.json', width: 300),
+                  Image.asset('assets/lottie/sign-in-yellow.gif', width: 300),
                   Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Container(
                       height: 450,
+                      width: kIsWeb ? 400 : double.infinity,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(15),
                         color: Theme.of(context).primaryColor ==

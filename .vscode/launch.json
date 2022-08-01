@@ -27,6 +27,15 @@
             ]
         },
         // {
+        //     "name": "MBM Elearning",
+        //     "request": "launch",
+        //     "type": "dart",
+        //     "args": ["-d", "chrome","--web-port", "8000", "--web-renderer", "html", "--flavor", 
+        //     "mdev",
+        //     "-t", 
+        //     "lib/main_mdev.dart" ],
+        // }
+        // {
         //     "name": "studyem",
         //     "request": "launch",
         //     "type": "dart",

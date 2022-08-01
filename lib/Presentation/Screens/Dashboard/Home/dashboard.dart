@@ -64,7 +64,7 @@ class _DashboardPageState extends State<DashboardPage> {
     setNotifications();
     setCurrentScreenInGoogleAnalytics('Dashboard Page');
     checkForUpdate();
-    initDynamicLinks();
+    if (!kIsWeb) initDynamicLinks();
   }
 
   Future initDynamicLinks() async {

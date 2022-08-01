@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Data/model/blog_model.dart';
@@ -176,16 +177,18 @@ class _FeedDetailsPageState extends State<FeedDetailsPage> {
                       height: 20,
                     ),
                     Html(
-                      shrinkWrap: true,
-                      data: feed!.description ?? "N/A",
-                      onLinkTap: (url, ctx, attributes, element) =>
-                          launch(url!),
-                      onImageTap: (url, ctx, attributes, element) =>
-                          bigImageShower(
-                        context,
-                        url!,
-                      ),
-                    ),
+                        shrinkWrap: true,
+                        data: feed!.description ?? "N/A",
+                        onLinkTap: (url, ctx, attributes, element) =>
+                            launch(url!),
+                        onImageTap: (url, ctx, attributes, element) {
+                          if (!kIsWeb) {
+                            bigImageShower(
+                              context,
+                              url!,
+                            );
+                          }
+                        }),
                   ],
                 ),
               ),

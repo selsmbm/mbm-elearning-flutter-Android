@@ -26,7 +26,6 @@ dependencies:
   flutter_linkify: ^5.0.2
   introduction_screen: ^3.0.2
   sqflite: ^2.0.0+4 # android ios
-  lottie: ^1.4.0
   connectivity_plus: ^2.3.6
   cloud_firestore: ^3.4.2
   shared_preferences: ^2.0.15
