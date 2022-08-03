@@ -38,7 +38,7 @@ Future<dynamic> bigImageShower(BuildContext context, String imageUrl) async {
   return showDialog(
     context: context,
     builder: (ctx) => InteractiveViewer(
-      child: imageUrl.contains(";base64")
+      child: !imageUrl.contains("http")
           ? Image.memory(base64Decode(imageUrl.split(',').last))
           : Image.network(
               imageUrl,

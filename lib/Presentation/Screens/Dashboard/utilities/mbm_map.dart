@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_html_all/flutter_html_all.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
@@ -49,6 +50,9 @@ class _MBMMapState extends State<MBMMap> {
       body: Html(
         data: """
 <iframe src="${widget.url ?? "https://www.google.com/maps/d/embed?mid=1_Wg8w4EujrRyn9PHpoZdT1pvy73Pwvc&ehbc=2E312F&z=15"}" width="${size.width}" height="${size.height * 0.90}">Loading...</iframe>""",
+        customRenders: {
+          iframeMatcher(): iframeRender(),
+        },
       ),
     );
   }

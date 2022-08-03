@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html_all/flutter_html_all.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Data/model/blog_model.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
@@ -194,6 +195,14 @@ class _FeedDetailsPageState extends State<FeedDetailsPage> {
                     Html(
                         shrinkWrap: true,
                         data: feed!.description ?? "N/A",
+                        customRenders: {
+                          iframeMatcher(): iframeRender(),
+                          svgTagMatcher(): svgTagRender(),
+                          svgDataUriMatcher(): svgDataImageRender(),
+                          svgAssetUriMatcher(): svgAssetImageRender(),
+                          svgNetworkSourceMatcher(): svgNetworkImageRender(),
+                          videoMatcher(): videoRender(),
+                        },
                         onLinkTap: (url, ctx, attributes, element) =>
                             launch(url!),
                         onImageTap: (url, ctx, attributes, element) {
