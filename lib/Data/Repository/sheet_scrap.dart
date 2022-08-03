@@ -234,4 +234,32 @@ class Scrap {
     }
     return links;
   }
+
+  static Future<List<Map>> getCustomAds() async {
+    List<Map> links = [];
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult != ConnectivityResult.none) {
+      try {
+        http.Response response = await http.get(Uri.parse(getCustomAdsApi));
+        if (response.statusCode == 200) {
+          Document document = parse.parse(response.body);
+          List<Element> trs = document.getElementsByTagName('tr');
+          int i = 3;
+          int j = trs.length;
+          while (i < j) {
+            List<Element> tds = trs[i].querySelectorAll('td');
+            links.add({
+              "banner1": tds[0].text,
+              "banner2": tds[1].text,
+              "banner3": tds[2].text,
+            });
+            i++;
+          }
+        }
+      } catch (e) {
+        log(e.toString());
+      }
+    }
+    return links;
+  }
 }

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:isolate';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,6 +14,9 @@ import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/dashboard.dart';
 
 class ScrapTableProvider with ChangeNotifier {
+  Map? banner1;
+  Map? banner2;
+  Map? banner3;
   final List<Map<String, dynamic>> _materials = [];
   List<Map<String, dynamic>> get materials => _materials;
   final List<BlogModel> _blogPosts = [];
@@ -258,6 +262,15 @@ class ScrapTableProvider with ChangeNotifier {
                 getContains(element["approve"], 'true'))
         .toSet()
         .toList();
+  }
+
+  getCustomAds() async {
+    List<Map<dynamic, dynamic>> data = await Scrap.getCustomAds();
+    Map ads = data[0];
+    banner1 = jsonDecode(ads['banner1']);
+    banner2 = jsonDecode(ads['banner2']);
+    banner3 = jsonDecode(ads['banner3']);
+    notifyListeners();
   }
 }
 

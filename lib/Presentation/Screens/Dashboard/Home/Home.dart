@@ -4,26 +4,18 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 
 import 'package:mbm_elearning/BLoC/GetMaterialBloc/get_material_bloc.dart';
-import 'package:mbm_elearning/Data/LocalDbConnect.dart';
 import 'package:mbm_elearning/Data/Repository/get_mterial_repo.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/Presentation/Screens/Auth/Components/TextFielsContainer.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/material/Material.dart';
-import 'package:mbm_elearning/Presentation/Widgets/carousel.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
-import 'package:mbm_elearning/run_app.dart';
 import 'package:mbm_elearning/Presentation/Widgets/model_progress.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_linkify/flutter_linkify.dart';
-import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -36,59 +28,11 @@ class _HomePageState extends State<HomePage> {
   String? materialBranch;
   String? materialSem;
   late ScrapTableProvider _scrapTableProvider;
-
-  // getHomePopupCusAdsDataRequest() async {
-  //   List outData = [];
-  //   try {
-  //     http.Response response = await http.get(Uri.parse(
-  //         'https://script.google.com/macros/s/AKfycbwydcWE04dLME_lqt9Bx347XK_589yRkVsQuk9xG6h3SOqH1xXIHYcNVZfeXIi6iM25/exec'));
-  //     if (response.statusCode == 200) {
-  //       for (var d in json.decode(response.body)) {
-  //         if (d['image'] != 'imageUrl') {
-  //           print(d);
-  //           if (d['showstatus'] == true) {
-  //             showDialog(
-  //               context: context,
-  //               builder: (context) => Dialog(
-  //                 child: SizedBox(
-  //                   height: 300,
-  //                   width: 300,
-  //                   child: Column(
-  //                     children: [
-  //                       Expanded(
-  //                           child: TextButton(
-  //                               onPressed: () {
-  //                                 launch(d['url']);
-  //                               },
-  //                               child: Image.network(
-  //                                 d['image'],
-  //                               ))),
-  //                       ElevatedButton(
-  //                         child: const Text('Close'),
-  //                         onPressed: () {
-  //                           Navigator.pop(context);
-  //                         },
-  //                       )
-  //                     ],
-  //                   ),
-  //                 ),
-  //               ),
-  //             );
-  //           }
-  //         }
-  //       }
-  //     }
-  //   } on Exception catch (e) {
-  //     print(e);
-  //     print('network error');
-  //   }
-  // }
-
   late FirebaseMessaging messaging;
+  
   @override
   void initState() {
     super.initState();
-    // getHomePopupCusAdsDataRequest();
     setCurrentScreenInGoogleAnalytics('Home Page');
   }
 

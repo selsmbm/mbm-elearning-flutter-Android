@@ -36,5 +36,7 @@ const String getSELSAdminsTable =
     "https://docs.google.com/spreadsheets/d/e/2PACX-1vRKpibLy0uJ9E-iWQ9lOdTD9f2PRjpa7N22-aVczHIHOSkLfDAFDXVoSRe_9-yVjFaSuhqaXjRLOsTc/pubhtml";
 const String getVerificationUsers =
     "https://docs.google.com/spreadsheets/d/e/2PACX-1vRIYVKNh0DSlVFO8k-g74OE4S_CANIoK4NMLnDQ4GStlXtA0UixCtzj3_9k4Vi7kCf_npZDF1usKUjZ/pubhtml";
+const String getCustomAdsApi =
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vSqJJ3iTf-n9Onljxfw59zF3UcoOUtoNVEGpppnpz1pvXNGv-HPTLL6m3Y4FWvOWy3uDKTj5Gg_OrcY/pubhtml";
 
 const String mbmStoryApi = 'https://mbmstories.com/wp-json/wp/v2/posts';

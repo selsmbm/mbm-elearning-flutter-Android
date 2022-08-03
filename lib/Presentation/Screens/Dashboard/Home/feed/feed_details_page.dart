@@ -74,22 +74,37 @@ class _FeedDetailsPageState extends State<FeedDetailsPage> {
             },
             child: Icon(Icons.share),
           ),
-          bottomNavigationBar: BottomAppBar(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                if (feed!.url != "")
-                  IconButton(
-                    onPressed: () {
-                      launch(feed!.url!);
+          bottomNavigationBar: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (_scrapTableProvider.banner2 != null)
+                if (_scrapTableProvider.banner2!['status'] == true)
+                  InkWell(
+                    onTap: () {
+                      launch(_scrapTableProvider.banner2!['url']);
                     },
-                    icon: Icon(Icons.language),
+                    child: Image.network(
+                      _scrapTableProvider.banner2!['image'],
+                    ),
                   ),
-                SizedBox(
-                  width: 10,
+              BottomAppBar(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    if (feed!.url != "")
+                      IconButton(
+                        onPressed: () {
+                          launch(feed!.url!);
+                        },
+                        icon: Icon(Icons.language),
+                      ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
           body: SafeArea(
             child: SingleChildScrollView(

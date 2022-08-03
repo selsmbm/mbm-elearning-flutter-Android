@@ -81,6 +81,7 @@ class _LandingPageState extends State<LandingPage> {
   Widget build(BuildContext context) {
     scrapTableProvider = Provider.of<ScrapTableProvider>(context);
     scrapTableProvider.scrapAllData();
+    scrapTableProvider.getCustomAds();
     return Scaffold(
       body: Center(
         child: Column(

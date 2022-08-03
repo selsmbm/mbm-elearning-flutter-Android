@@ -7,6 +7,7 @@ import 'package:mbm_elearning/Presentation/Widgets/material_data_list_tile.dart'
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -83,6 +84,17 @@ class _SearchPageState extends State<SearchPage> {
         icon: Icon(Icons.add),
         label: Text('Add material'),
       ),
+      bottomNavigationBar: scrapTableProvider!.banner3 != null &&
+              scrapTableProvider!.banner2!['status'] == true
+          ? InkWell(
+              onTap: () {
+                launch(scrapTableProvider!.banner2!['url']);
+              },
+              child: Image.network(
+                scrapTableProvider!.banner2!['image'],
+              ),
+            )
+          : null,
       appBar: AppBar(
         centerTitle: true,
         title: Container(

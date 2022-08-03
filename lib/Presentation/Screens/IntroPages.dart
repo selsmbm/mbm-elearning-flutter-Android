@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
-
+import 'package:lottie/lottie.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Screens/Auth/Signin.dart';
 
@@ -18,7 +18,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
   }
 
   Widget _buildImage(String assetName, [double width = 350]) {
-    return Image.asset('assets/lottie/$assetName.gif', width: width);
+    return LottieBuilder.asset('assets/lottie/$assetName.json', width: width);
   }
 
   @override

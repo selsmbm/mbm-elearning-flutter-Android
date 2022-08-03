@@ -27,6 +27,7 @@ import 'package:mbm_elearning/Presentation/Widgets/model_progress.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:update_available/update_available.dart';
+import 'package:update_available_platform_interface/update_available_platform_interface.dart';
 
 LocalDbConnect localDbConnect = LocalDbConnect();
 final StreamController<bool> scrapSubscriptionIsGettingData =
@@ -166,38 +167,43 @@ class _DashboardPageState extends State<DashboardPage> {
       ConnectivityResult connectivityResult =
           await (Connectivity().checkConnectivity());
       if (connectivityResult != ConnectivityResult.none) {
-        await getUpdateAvailability().then((value) {
-          value.fold(
-            available: () {
-              showDialog(
-                barrierDismissible: false,
-                context: context,
-                builder: (context) => WillPopScope(
-                  onWillPop: () async {
-                    return false;
-                  },
-                  child: AlertDialog(
-                    title: const Text('Update available!'),
-                    content:
-                        const Text('Please update this app for new features.'),
-                    actions: [
-                      TextButton(
-                        child: Text('OK'),
-                        onPressed: () async {
-                          launch(
-                              'https://play.google.com/store/apps/details?id=${Flavors.package}');
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ],
+        try {
+          await getUpdateAvailability().then((value) {
+            value.fold(
+              available: () {
+                showDialog(
+                  barrierDismissible: false,
+                  context: context,
+                  builder: (context) => WillPopScope(
+                    onWillPop: () async {
+                      return false;
+                    },
+                    child: AlertDialog(
+                      title: const Text('Update available!'),
+                      content: const Text(
+                          'Please update this app for new features.'),
+                      actions: [
+                        TextButton(
+                          child: Text('OK'),
+                          onPressed: () async {
+                            launch(
+                                'https://play.google.com/store/apps/details?id=${Flavors.package}');
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              );
-            },
-            notAvailable: () {},
-            unknown: () {},
-          );
-        });
+                );
+              },
+              notAvailable: () {},
+              unknown: () {},
+            );
+          });
+        } catch (e) {
+          print("Error");
+          print(e);
+        }
       }
     }
   }
@@ -222,42 +228,57 @@ class _DashboardPageState extends State<DashboardPage> {
         return false;
       },
       child: Scaffold(
-        bottomNavigationBar: NavigationBar(
-            selectedIndex: currentIndex,
-            onDestinationSelected: (value) {
-              setState(() {
-                currentIndex = value;
-              });
-            },
-            destinations: [
-              if (user!.photoURL!.contains(student) ||
-                  user!.photoURL!.contains(teacher))
-                const NavigationDestination(
-                  icon: Icon(Icons.home_outlined),
-                  selectedIcon: Icon(Icons.home),
-                  label: 'Home',
+        bottomNavigationBar: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (scrapTableProvider.banner1 != null)
+              if (scrapTableProvider.banner1!['status'] == true)
+                InkWell(
+                  onTap: () {
+                    launch(scrapTableProvider.banner1!['url']);
+                  },
+                  child: Image.network(
+                    scrapTableProvider.banner1!['image'],
+                  ),
                 ),
-              const NavigationDestination(
-                icon: Icon(Icons.feed_outlined),
-                selectedIcon: Icon(Icons.feed),
-                label: 'Feeds',
-              ),
-              const NavigationDestination(
-                icon: Icon(Icons.dashboard_outlined),
-                selectedIcon: Icon(Icons.dashboard),
-                label: 'Explore',
-              ),
-              const NavigationDestination(
-                icon: Icon(Icons.event_available_outlined),
-                selectedIcon: Icon(Icons.event_available),
-                label: 'Events',
-              ),
-              const NavigationDestination(
-                icon: Icon(Icons.more_horiz_outlined),
-                selectedIcon: Icon(Icons.more_horiz),
-                label: 'More',
-              ),
-            ]),
+            NavigationBar(
+                selectedIndex: currentIndex,
+                onDestinationSelected: (value) {
+                  setState(() {
+                    currentIndex = value;
+                  });
+                },
+                destinations: [
+                  if (user!.photoURL!.contains(student) ||
+                      user!.photoURL!.contains(teacher))
+                    const NavigationDestination(
+                      icon: Icon(Icons.home_outlined),
+                      selectedIcon: Icon(Icons.home),
+                      label: 'Home',
+                    ),
+                  const NavigationDestination(
+                    icon: Icon(Icons.feed_outlined),
+                    selectedIcon: Icon(Icons.feed),
+                    label: 'Feeds',
+                  ),
+                  const NavigationDestination(
+                    icon: Icon(Icons.dashboard_outlined),
+                    selectedIcon: Icon(Icons.dashboard),
+                    label: 'Explore',
+                  ),
+                  const NavigationDestination(
+                    icon: Icon(Icons.event_available_outlined),
+                    selectedIcon: Icon(Icons.event_available),
+                    label: 'Events',
+                  ),
+                  const NavigationDestination(
+                    icon: Icon(Icons.more_horiz_outlined),
+                    selectedIcon: Icon(Icons.more_horiz),
+                    label: 'More',
+                  ),
+                ]),
+          ],
+        ),
         body: ModalProgressHUD(
           inAsyncCall: scrapTableProvider.isGettingData,
           progressIndicator: Column(
@@ -277,5 +298,16 @@ class _DashboardPageState extends State<DashboardPage> {
         ),
       ),
     );
+  }
+}
+
+const platform = MethodChannel('me.mateusfccp/update_available');
+
+Future<Availability> getUpdateAvailability() async {
+  try {
+    final available = await platform.invokeMethod('getUpdateAvailability');
+    return available ? UpdateAvailable : NoUpdateAvailable;
+  } on PlatformException {
+    return UnknownAvailability;
   }
 }
