@@ -16,7 +16,7 @@ const List<String> mttypes = [
 ];
 
 List<String> exploreType =
-    "Departmemt,Scholarship,Club,Hostel,Blog,Fest,Organization,Business"
+    "Department,Scholarship,Club,Hostel,Blog,Fest,Organization,Business"
         .split(',');
 
 List<String> branches =

@@ -17,6 +17,8 @@ class ExplorePage extends StatefulWidget {
 
 class _ExplorePageState extends State<ExplorePage> {
   late ScrapTableProvider _scrapTableProvider;
+  late List<ExploreModel> explores;
+  List<ExploreModel>? filterExplores;
 
   @override
   void didChangeDependencies() {
@@ -32,6 +34,7 @@ class _ExplorePageState extends State<ExplorePage> {
 
   @override
   Widget build(BuildContext context) {
+    explores = _scrapTableProvider.explores;
     return ModalProgressHUD(
       inAsyncCall: _scrapTableProvider.isGettingExploreData,
       child: Scaffold(
@@ -40,15 +43,69 @@ class _ExplorePageState extends State<ExplorePage> {
           title: Text('Explore'),
         ),
         // floatingActionButton: FloatingActionButton(
-        //   onPressed: () {},
-        //   child: Icon(Icons.arrow_circle_up),
+        //   onPressed: () {
+        //     showModalBottomSheet(
+        //       context: context,
+        //       builder: (context) => Container(
+        //         child: Column(
+        //           mainAxisSize: MainAxisSize.min,
+        //           children: [
+        //             SizedBox(
+        //               height: 10,
+        //             ),
+        //             Text(
+        //               'Select Category',
+        //               style: TextStyle(
+        //                 fontSize: 20,
+        //                 fontWeight: FontWeight.bold,
+        //               ),
+        //             ),
+        //             SizedBox(
+        //               height: 10,
+        //             ),
+        //             Wrap(
+        //               children: [
+        //                 for (String type in exploreType)
+        //                   Padding(
+        //                     padding: const EdgeInsets.symmetric(
+        //                       horizontal: 5,
+        //                     ),
+        //                     child: ElevatedButton(
+        //                       onPressed: () {
+        //                         setState(() {
+        //                           filterExplores = _scrapTableProvider.explores
+        //                               .where((element) => element.type == type)
+        //                               .toList();
+        //                           Navigator.pop(context);
+        //                         });
+        //                       },
+        //                       child: Text(
+        //                         type,
+        //                         style: TextStyle(
+        //                           color: Colors.white,
+        //                         ),
+        //                       ),
+        //                     ),
+        //                   ),
+        //               ],
+        //             ),
+        //           ],
+        //         ),
+        //       ),
+        //     );
+        //   },
+        //   child: const Icon(Icons.filter_list),
         // ),
         body: RefreshIndicator(
           onRefresh: () => _scrapTableProvider.updateScrapExplore(),
           child: ListView.builder(
-            itemCount: _scrapTableProvider.explores.length,
+            itemCount: filterExplores != null
+                ? filterExplores!.length
+                : explores.length,
             itemBuilder: (context, index) {
-              ExploreModel explore = _scrapTableProvider.explores[index];
+              ExploreModel explore = filterExplores != null
+                  ? filterExplores![index]
+                  : explores[index];
               return ListTile(
                 onTap: () {
                   Navigator.push(
