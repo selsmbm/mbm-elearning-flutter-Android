@@ -31,7 +31,6 @@ class _MorePageState extends State<MorePage> {
   @override
   Widget build(BuildContext context) {
     scrapTableProvider = Provider.of<ScrapTableProvider>(context);
-    print(user!.photoURL);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
