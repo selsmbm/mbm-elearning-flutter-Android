@@ -247,7 +247,7 @@ class _AddNewEventPageState extends State<AddNewEventPage> {
                         dropdownSearchDecoration: InputDecoration(
                       labelText: 'Select a explore *',
                     )),
-                    items: _scrapTableProvider.explores,
+                    items: _scrapTableProvider.explores.toSet().toList(),
                     itemAsString: (ExploreModel u) => u.title!,
                     onChanged: (ExploreModel? data) {
                       if (data != null) {

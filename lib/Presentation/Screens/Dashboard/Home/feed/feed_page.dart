@@ -30,6 +30,7 @@ class _FeedsPageState extends State<FeedsPage> {
 
   @override
   Widget build(BuildContext context) {
+    List blogPosts = _scrapTableProvider.blogPosts.toSet().toList();
     return ModalProgressHUD(
       inAsyncCall: _scrapTableProvider.isGettingBlogPostsData,
       child: Scaffold(
@@ -44,9 +45,9 @@ class _FeedsPageState extends State<FeedsPage> {
         body: RefreshIndicator(
           onRefresh: () => _scrapTableProvider.updateScrapBlogPosts(),
           child: ListView.builder(
-            itemCount: _scrapTableProvider.blogPosts.length,
+            itemCount: blogPosts.length,
             itemBuilder: (context, index) {
-              BlogModel post = _scrapTableProvider.blogPosts[index];
+              BlogModel post = blogPosts[index];
               DateTime date = DateTime.fromMillisecondsSinceEpoch(
                   int.parse(post.posttime!) * 1000);
               return ListTile(

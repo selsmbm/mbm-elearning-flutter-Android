@@ -121,14 +121,14 @@ class ScrapTableProvider with ChangeNotifier {
     _events.addAll(data[3] as List<EventsModel>);
     _usefulLinks.addAll(data[4] as List<UsefulLinksModel>);
     _admins.addAll(data[5] as List<AdminsModel>);
+    isGettingData = false;
+    scrapSubscriptionIsGettingData.sink.add(false);
     _materials.toSet().toList();
     _blogPosts.toSet().toList();
     _explores.toSet().toList();
     _events.toSet().toList();
     _usefulLinks.toSet().toList();
     _admins.toSet().toList();
-    isGettingData = false;
-    scrapSubscriptionIsGettingData.sink.add(false);
     notifyListeners();
   }
 

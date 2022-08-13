@@ -179,7 +179,7 @@ class _MorePageState extends State<MorePage> {
               SettingButton(
                 onTap: () {
                   launch(
-                      "https://docs.google.com/document/d/1l2KAa2ZPhDJjmMA-uDwi__GHPUyc5zm6ApXB3nNs_xA/edit?usp=sharing");
+                      "https://docs.google.com/document/d/1l2KAa2ZPhDJjmMA-uDwi__GHPUyc5zm6ApXB3nNs_xA/edit");
                 },
                 title: 'Freshers guide',
                 subtitle: 'Freshers Guide in MBMU',

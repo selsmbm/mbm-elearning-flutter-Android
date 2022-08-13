@@ -44,10 +44,10 @@ class _AddNewFeedPageState extends State<AddNewFeedPage> {
     if (widget.orgId != null) {
       selectedExplore = _scrapTableProvider.explores
           .firstWhere((element) => element.id == widget.orgId);
-      events.addAll(_scrapTableProvider.events.where(
+      events.addAll(_scrapTableProvider.events.toSet().where(
           (element) => element.adminOrgIds!.contains(widget.orgId.toString())));
     } else {
-      events.addAll(_scrapTableProvider.events);
+      events.addAll(_scrapTableProvider.events.toSet().toList());
     }
     return ModalProgressHUD(
       inAsyncCall: showProgress,

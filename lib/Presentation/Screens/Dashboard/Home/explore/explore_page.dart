@@ -34,7 +34,7 @@ class _ExplorePageState extends State<ExplorePage> {
 
   @override
   Widget build(BuildContext context) {
-    explores = _scrapTableProvider.explores;
+    explores = _scrapTableProvider.explores.toSet().toList();
     return ModalProgressHUD(
       inAsyncCall: _scrapTableProvider.isGettingExploreData,
       child: Scaffold(

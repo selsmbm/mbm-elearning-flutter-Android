@@ -57,7 +57,7 @@ class _ExploreDetailsPageState extends State<ExploreDetailsPage> {
       List admins = jsonDecode(explore!.adminsMap!);
       List<EventsModel> events = _scrapTableProvider.events
           .where((EventsModel element) =>
-              element.adminOrgIds!.contains(explore!.id.toString()))
+              element.adminOrgIds!.contains(explore!.id.toString())).toSet()
           .toList();
       return Scaffold(
         floatingActionButton: FloatingActionButton(
