@@ -17,18 +17,18 @@ class ScrapTableProvider with ChangeNotifier {
   Map? banner1;
   Map? banner2;
   Map? banner3;
-  final List<Map<String, dynamic>> _materials = [];
-  List<Map<String, dynamic>> get materials => _materials;
-  final List<BlogModel> _blogPosts = [];
-  List<BlogModel> get blogPosts => _blogPosts;
-  final List<EventsModel> _events = [];
-  List<EventsModel> get events => _events;
-  final List<ExploreModel> _explores = [];
-  List<ExploreModel> get explores => _explores;
-  final List<UsefulLinksModel> _usefulLinks = [];
-  List<UsefulLinksModel> get usefulLinks => _usefulLinks;
-  final List<AdminsModel> _admins = [];
-  List<AdminsModel> get admins => _admins;
+  final Set<Map<String, dynamic>> _materials = {};
+  Set<Map<String, dynamic>> get materials => _materials;
+  final Set<BlogModel> _blogPosts = {};
+  Set<BlogModel> get blogPosts => _blogPosts;
+  final Set<EventsModel> _events = {};
+  Set<EventsModel> get events => _events;
+  final Set<ExploreModel> _explores = {};
+  Set<ExploreModel> get explores => _explores;
+  final Set<UsefulLinksModel> _usefulLinks = {};
+  Set<UsefulLinksModel> get usefulLinks => _usefulLinks;
+  final Set<AdminsModel> _admins = {};
+  Set<AdminsModel> get admins => _admins;
   bool isGettingData = false;
   bool isGettingMaterialData = false;
   bool isGettingBlogPostsData = false;
@@ -115,20 +115,16 @@ class ScrapTableProvider with ChangeNotifier {
     }
     isGettingData = true;
     List data = await Scrap.scrapAllData(scrapMt: scrapMt);
-    _materials.addAll(data[0] as List<Map<String, dynamic>>);
-    _blogPosts.addAll(data[1] as List<BlogModel>);
-    _explores.addAll(data[2] as List<ExploreModel>);
-    _events.addAll(data[3] as List<EventsModel>);
-    _usefulLinks.addAll(data[4] as List<UsefulLinksModel>);
-    _admins.addAll(data[5] as List<AdminsModel>);
+    if (scrapMt) {
+      _materials.addAll(data[0] as Set<Map<String, dynamic>>);
+    }
+    _blogPosts.addAll(data[1] as Set<BlogModel>);
+    _explores.addAll(data[2] as Set<ExploreModel>);
+    _events.addAll(data[3] as Set<EventsModel>);
+    _usefulLinks.addAll(data[4] as Set<UsefulLinksModel>);
+    _admins.addAll(data[5] as Set<AdminsModel>);
     isGettingData = false;
     scrapSubscriptionIsGettingData.sink.add(false);
-    _materials.toSet().toList();
-    _blogPosts.toSet().toList();
-    _explores.toSet().toList();
-    _events.toSet().toList();
-    _usefulLinks.toSet().toList();
-    _admins.toSet().toList();
     notifyListeners();
   }
 
@@ -138,7 +134,7 @@ class ScrapTableProvider with ChangeNotifier {
     }
     updateGettingMaterialStatus(true);
     _materials.addAll(await Scrap.scrapMaterial());
-    _materials.toSet().toList();
+    _materials.toSet();
     updateGettingMaterialStatus(false);
     notifyListeners();
   }
@@ -149,9 +145,9 @@ class ScrapTableProvider with ChangeNotifier {
       _blogPosts.clear();
     }
     updateGettingBlogPostsStatus(true);
-    List<BlogModel> data = await Scrap.scrapBlogPosts();
+    Set<BlogModel> data = await Scrap.scrapBlogPosts();
     _blogPosts.addAll(data);
-    _blogPosts.toSet().toList();
+    _blogPosts.toSet();
     updateGettingBlogPostsStatus(false);
     notifyListeners();
   }
@@ -170,7 +166,7 @@ class ScrapTableProvider with ChangeNotifier {
     }
     updateGettingEventsStatus(true);
     _events.addAll(await Scrap.scrapEvents());
-    _events.toSet().toList();
+    _events.toSet();
     updateGettingEventsStatus(false);
     notifyListeners();
   }
@@ -189,7 +185,7 @@ class ScrapTableProvider with ChangeNotifier {
     }
     updateGettingExploreStatus(true);
     _explores.addAll(await Scrap.scrapExplores());
-    _explores.toSet().toList();
+    _explores.toSet();
     updateGettingExploreStatus(false);
     notifyListeners();
   }
@@ -208,12 +204,12 @@ class ScrapTableProvider with ChangeNotifier {
     }
     updateGettingUsefulLinksStatus(true);
     _usefulLinks.addAll(await Scrap.scrapUsefullinks());
-    _usefulLinks.toSet().toList();
+    _usefulLinks.toSet();
     updateGettingUsefulLinksStatus(false);
     notifyListeners();
   }
 
-  List<Map<String, dynamic>> getMaterialsBySemesterAndBranch(
+  Set<Map<String, dynamic>> getMaterialsBySemesterAndBranch(
       String semester, String type,
       {String? branch}) {
     if (branch == null || branch == '') {
@@ -222,8 +218,7 @@ class ScrapTableProvider with ChangeNotifier {
               getContains(element["mtsem"], semester) &&
               getContains(element["mttype"], type) &&
               getContains(element["approve"], 'true'))
-          .toSet()
-          .toList();
+          .toSet();
     } else {
       return _materials
           .where((element) =>
@@ -231,26 +226,23 @@ class ScrapTableProvider with ChangeNotifier {
               getContains(element["mttype"], type) &&
               element["branch"] == branch &&
               getContains(element["approve"], 'true'))
-          .toSet()
-          .toList();
+          .toSet();
     }
   }
 
-  List<Map<String, dynamic>> getMaterialsByUserid(String uid) {
+  Set<Map<String, dynamic>> getMaterialsByUserid(String uid) {
     return _materials
         .where((element) => element["uploaded_by_user_uid"] == uid)
-        .toSet()
-        .toList();
+        .toSet();
   }
 
-  List<Map<String, dynamic>> getUnapproveMaterials() {
+  Set<Map<String, dynamic>> getUnapproveMaterials() {
     return _materials
         .where((element) => getContains(element["approve"], 'false'))
-        .toSet()
-        .toList();
+        .toSet();
   }
 
-  List<Map<String, dynamic>> getMaterialsByQuary(String quary) {
+  Set<Map<String, dynamic>> getMaterialsByQuary(String quary) {
     return _materials
         .where((element) =>
             getContains(element["mtname"], quary) ||
@@ -260,8 +252,7 @@ class ScrapTableProvider with ChangeNotifier {
             getContains(element["mttype"], quary) ||
             getContains(element["branch"], quary) &&
                 getContains(element["approve"], 'true'))
-        .toSet()
-        .toList();
+        .toSet();
   }
 
   getCustomAds() async {

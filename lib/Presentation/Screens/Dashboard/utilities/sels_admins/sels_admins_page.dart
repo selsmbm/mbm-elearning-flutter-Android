@@ -29,14 +29,15 @@ class _SELSAdminsPageState extends State<SELSAdminsPage> {
   @override
   Widget build(BuildContext context) {
     scrapTableProvider = Provider.of<ScrapTableProvider>(context);
+    List<AdminsModel> admins = scrapTableProvider.admins.toList();
     return Scaffold(
       appBar: AppBar(
         title: Text('SELS'),
       ),
       body: ListView.builder(
-        itemCount: scrapTableProvider.admins.length,
+        itemCount: admins.length,
         itemBuilder: (context, index) {
-          AdminsModel admin = scrapTableProvider.admins[index];
+          AdminsModel admin = admins.toList()[index];
           return ListTile(
             onTap: () {
               showGeneralDialog(

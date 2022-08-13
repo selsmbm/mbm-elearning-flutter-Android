@@ -43,7 +43,7 @@ class _UsefulLinksPageState extends State<UsefulLinksPage> {
       //   child: Icon(Icons.arrow_circle_up),
       // ),
       body: StickyGroupedListView<UsefulLinksModel, String>(
-        elements: _scrapTableProvider.usefulLinks.toSet().toList(),
+        elements: _scrapTableProvider.usefulLinks.toList(),
         groupBy: (UsefulLinksModel element) => element.type!,
         itemComparator: (UsefulLinksModel e1, UsefulLinksModel e2) =>
             e1.type!.compareTo(e2.type!),

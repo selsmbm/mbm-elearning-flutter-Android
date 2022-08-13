@@ -30,7 +30,7 @@ class _FeedsPageState extends State<FeedsPage> {
 
   @override
   Widget build(BuildContext context) {
-    List blogPosts = _scrapTableProvider.blogPosts.toSet().toList();
+    List blogPosts = _scrapTableProvider.blogPosts.toList();
     return ModalProgressHUD(
       inAsyncCall: _scrapTableProvider.isGettingBlogPostsData,
       child: Scaffold(

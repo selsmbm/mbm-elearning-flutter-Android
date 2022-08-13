@@ -36,7 +36,7 @@ class _EventsPageState extends State<EventsPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<EventsModel> events = _scrapTableProvider.events.toSet().toList();
+    List<EventsModel> events = _scrapTableProvider.events.toList();
     events.sort((a, b) {
       return b.starttime!.compareTo(a.starttime!);
     });

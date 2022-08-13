@@ -47,7 +47,7 @@ class _AddNewFeedPageState extends State<AddNewFeedPage> {
       events.addAll(_scrapTableProvider.events.toSet().where(
           (element) => element.adminOrgIds!.contains(widget.orgId.toString())));
     } else {
-      events.addAll(_scrapTableProvider.events.toSet().toList());
+      events.addAll(_scrapTableProvider.events);
     }
     return ModalProgressHUD(
       inAsyncCall: showProgress,
@@ -171,7 +171,7 @@ class _AddNewFeedPageState extends State<AddNewFeedPage> {
                         dropdownSearchDecoration: InputDecoration(
                       labelText: 'Select a explore (optional)',
                     )),
-                    items: _scrapTableProvider.explores,
+                    items: _scrapTableProvider.explores.toList(),
                     itemAsString: (ExploreModel u) => u.title!,
                     onChanged: (ExploreModel? data) {
                       if (data != null) {

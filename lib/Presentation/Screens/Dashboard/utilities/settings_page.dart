@@ -33,7 +33,7 @@ class _SettingsPageState extends State<SettingsPage> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings'),
+        title:const Text('Settings'),
       ),
       body: Column(
         children: [
@@ -83,7 +83,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   'https://play.google.com/store/apps/details?id=com.mbm.elereaning.mbmecj');
             },
             title: 'Rate this app',
-            subtitle: 'Rate this app on playstore',
+            subtitle: 'Rate this app on play store',
             icon: Icons.rate_review,
           ),
           SettingButton(
@@ -96,11 +96,12 @@ class _SettingsPageState extends State<SettingsPage> {
                   borderRadius: BorderRadius.circular(100),
                   child: Image.asset(
                     'assets/images/logo.png',
-                    width: 100,
-                    height: 100,
+                    width: 70,
+                    height: 70,
                   ),
                 ),
-                applicationLegalese: 'Copyright © 2020 MBM E-Learning',
+                applicationLegalese:
+                    'Copyright © ${DateTime.now().year} MBM E-Learning',
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -127,17 +128,17 @@ class _SettingsPageState extends State<SettingsPage> {
               showDialog(
                 context: context,
                 builder: (context) => AlertDialog(
-                  title: Text('Are you sure?'),
-                  content: Text('Do you want to logout?'),
+                  title: const Text('Are you sure?'),
+                  content: const Text('Do you want to logout?'),
                   actions: [
                     TextButton(
-                      child: Text('No'),
+                      child: const Text('No'),
                       onPressed: () {
                         Navigator.pop(context);
                       },
                     ),
                     TextButton(
-                      child: Text('Yes'),
+                      child: const Text('Yes'),
                       onPressed: () async {
                         await FirebaseAuth.instance.signOut();
                         SystemNavigator.pop();

@@ -31,6 +31,7 @@ class _MorePageState extends State<MorePage> {
   @override
   Widget build(BuildContext context) {
     scrapTableProvider = Provider.of<ScrapTableProvider>(context);
+    print(user!.photoURL);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -167,24 +168,26 @@ class _MorePageState extends State<MorePage> {
                 subtitle: 'Visit college campus',
                 icon: Icons.map,
               ),
-              SettingButton(
-                onTap: () {
-                  launch(
-                      "https://docs.google.com/document/d/1g5F57sM9eEUwFX41JVfKFDQ1iWykeK0AeHauL60lCh8/edit?usp=sharing");
-                },
-                title: 'Admission processes',
-                subtitle: 'Admission processes in MBMU',
-                icon: Icons.admin_panel_settings,
-              ),
-              SettingButton(
-                onTap: () {
-                  launch(
-                      "https://docs.google.com/document/d/1l2KAa2ZPhDJjmMA-uDwi__GHPUyc5zm6ApXB3nNs_xA/edit");
-                },
-                title: 'Freshers guide',
-                subtitle: 'Freshers Guide in MBMU',
-                icon: Icons.integration_instructions,
-              ),
+              if (user!.photoURL!.contains(student))
+                SettingButton(
+                  onTap: () {
+                    launch(
+                        "https://docs.google.com/document/d/1g5F57sM9eEUwFX41JVfKFDQ1iWykeK0AeHauL60lCh8/edit?usp=sharing");
+                  },
+                  title: 'Admission processes',
+                  subtitle: 'Admission processes in MBMU',
+                  icon: Icons.admin_panel_settings,
+                ),
+              if (user!.photoURL!.contains(student))
+                SettingButton(
+                  onTap: () {
+                    launch(
+                        "https://docs.google.com/document/d/1l2KAa2ZPhDJjmMA-uDwi__GHPUyc5zm6ApXB3nNs_xA/edit");
+                  },
+                  title: 'Freshers guide',
+                  subtitle: 'Freshers Guide in MBMU',
+                  icon: Icons.integration_instructions,
+                ),
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 18, vertical: 5),
@@ -234,39 +237,16 @@ class _MorePageState extends State<MorePage> {
                 subtitle: 'Theme, shere, rate us, etc.',
                 icon: Icons.settings,
               ),
-              Center(
+              const Center(
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: InkWell(
-                    onTap: () async {
-                      // SharedPreferences prefs =
-                      //     await SharedPreferences.getInstance();
-                      // if (prefs.getBool(SP.ismeAdmin) == null ||
-                      //     prefs.getBool(SP.ismeAdmin) == false) {
-                      //   FirebaseFirestore.instance
-                      //       .collection('adminids')
-                      //       .get()
-                      //       .then((QuerySnapshot querySnapshot) {
-                      //     for (var doc in querySnapshot.docs) {
-                      //       if (doc["id"] == user!.uid) {
-                      //         prefs.setBool(SP.ismeAdmin, true);
-                      //         Navigator.pushNamed(context, 'adminDash');
-                      //       }
-                      //     }
-                      //   });
-                      // } else {
-                      //   if (!mounted) return;
-                      //   Navigator.pushNamed(context, 'adminDash');
-                      // }
-                    },
-                    child: const Text(
-                      "Made With ❤ by SELS.",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Color(0xff9c9191),
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                      ),
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                    "Made With ❤ by SELS.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Color(0xff9c9191),
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ),

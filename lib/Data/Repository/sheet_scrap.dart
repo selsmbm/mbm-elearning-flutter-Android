@@ -11,13 +11,12 @@ import 'package:mbm_elearning/Data/model/blog_model.dart';
 import 'package:mbm_elearning/Data/model/events_model.dart';
 import 'package:mbm_elearning/Data/model/explore_model.dart';
 import 'package:mbm_elearning/Data/model/useful_links_model.dart';
-import 'package:mbm_elearning/Data/model/verification_user_model.dart';
 import 'package:mbm_elearning/Presentation/Constants/apis.dart';
 
 class Scrap {
-  static Future<List<List<dynamic>>> scrapAllData({bool scrapMt = true}) async {
+  static Future<List<Set<dynamic>>> scrapAllData({bool scrapMt = true}) async {
     return Future.wait([
-      scrapMt ? scrapMaterial() : Future.value([]),
+      scrapMt ? scrapMaterial() : Future.value({}),
       scrapBlogPosts(),
       scrapExplores(),
       scrapEvents(),
@@ -26,8 +25,8 @@ class Scrap {
     ]);
   }
 
-  static Future<List<Map<String, dynamic>>> scrapMaterial() async {
-    List<Map<String, dynamic>> material = [];
+  static Future<Set<Map<String, dynamic>>> scrapMaterial() async {
+    Set<Map<String, dynamic>> material = {};
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult != ConnectivityResult.none) {
       try {
@@ -63,8 +62,8 @@ class Scrap {
     return material;
   }
 
-  static Future<List<BlogModel>> scrapBlogPosts() async {
-    List<BlogModel> posts = [];
+  static Future<Set<BlogModel>> scrapBlogPosts() async {
+    Set<BlogModel> posts = {};
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult != ConnectivityResult.none) {
       posts.clear();
@@ -97,11 +96,11 @@ class Scrap {
         log(e.toString());
       }
     }
-    return posts.reversed.toList();
+    return posts.toList().reversed.toSet();
   }
 
-  static Future<List<ExploreModel>> scrapExplores() async {
-    List<ExploreModel> explore = [];
+  static Future<Set<ExploreModel>> scrapExplores() async {
+    Set<ExploreModel> explore = {};
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult != ConnectivityResult.none) {
       try {
@@ -136,8 +135,8 @@ class Scrap {
     return explore;
   }
 
-  static Future<List<EventsModel>> scrapEvents() async {
-    List<EventsModel> events = [];
+  static Future<Set<EventsModel>> scrapEvents() async {
+    Set<EventsModel> events = {};
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult != ConnectivityResult.none) {
       try {
@@ -167,11 +166,11 @@ class Scrap {
         log(e.toString());
       }
     }
-    return events.reversed.toList();
+    return events.toList().reversed.toSet();
   }
 
-  static Future<List<UsefulLinksModel>> scrapUsefullinks() async {
-    List<UsefulLinksModel> links = [];
+  static Future<Set<UsefulLinksModel>> scrapUsefullinks() async {
+    Set<UsefulLinksModel> links = {};
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult != ConnectivityResult.none) {
       try {
@@ -198,11 +197,11 @@ class Scrap {
         log(e.toString());
       }
     }
-    return links.reversed.toList();
+    return links;
   }
 
-  static Future<List<AdminsModel>> scrapAdminsList() async {
-    List<AdminsModel> links = [];
+  static Future<Set<AdminsModel>> scrapAdminsList() async {
+    Set<AdminsModel> links = {};
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult != ConnectivityResult.none) {
       try {
