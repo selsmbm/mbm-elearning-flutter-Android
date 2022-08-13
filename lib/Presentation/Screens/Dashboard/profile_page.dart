@@ -162,6 +162,13 @@ class _ProfilePageState extends State<ProfilePage> {
                 padding: const EdgeInsets.all(10.0),
                 child: Column(
                   children: [
+                    const Text(
+                      "Please provide your original details. Because teachers will be able to see your details.",
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.red,
+                      ),
+                    ),
                     DropdownSearch<String>(
                       enabled: _typeController.text == '',
                       popupProps: const PopupProps.dialog(
