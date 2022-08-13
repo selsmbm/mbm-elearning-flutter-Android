@@ -97,7 +97,7 @@ class UserImageByName extends StatelessWidget {
       backgroundColor: rPrimaryLiteColor,
       child: Text(
         name[0].toUpperCase(),
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 20,
           color: rPrimaryColor,
         ),

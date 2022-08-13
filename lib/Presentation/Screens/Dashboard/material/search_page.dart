@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mbm_elearning/BLoC/GetMaterialBloc/get_material_bloc.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
-import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Widgets/material_data_list_tile.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 import 'package:provider/provider.dart';
@@ -81,8 +80,8 @@ class _SearchPageState extends State<SearchPage> {
         onPressed: () {
           Navigator.pushNamed(context, 'addMaterialPage');
         },
-        icon: Icon(Icons.add),
-        label: Text('Add material'),
+        icon: const Icon(Icons.add),
+        label: const Text('Add material'),
       ),
       bottomNavigationBar: scrapTableProvider!.banner3 != null &&
               scrapTableProvider!.banner2!['status'] == true
@@ -181,19 +180,19 @@ class _SearchPageState extends State<SearchPage> {
                       ),
               );
             } else if (state is GetMaterialApiIsLoading) {
-              return Center(
+              return const Center(
                 child: CircularProgressIndicator(),
               );
             } else if (state is GetMaterialApiIsFailed) {
-              return Center(
+              return const Center(
                 child: Text("Something went wrong"),
               );
             } else if (state is GetMaterialApiNotCall) {
-              return Center(
+              return const Center(
                 child: Text("Search anything in any sem and any branch"),
               );
             } else {
-              return SizedBox();
+              return const SizedBox();
             }
           },
         ),

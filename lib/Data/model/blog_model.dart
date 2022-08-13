@@ -40,17 +40,17 @@ class BlogModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
-    data['id'] = this.id;
-    data['title'] = this.title;
-    data['posttime'] = this.posttime;
-    data['description'] = this.description;
-    data['event'] = this.event;
-    data['org'] = this.org;
-    data['url'] = this.url;
-    data['orgid'] = this.orgid;
-    data['eventid'] = this.eventid;
-    data['uploaded_by_user'] = this.uploadedByUser;
-    data['uploaded_by_user_uid'] = this.uploadedByUserUid;
+    data['id'] = id;
+    data['title'] = title;
+    data['posttime'] = posttime;
+    data['description'] = description;
+    data['event'] = event;
+    data['org'] = org;
+    data['url'] = url;
+    data['orgid'] = orgid;
+    data['eventid'] = eventid;
+    data['uploaded_by_user'] = uploadedByUser;
+    data['uploaded_by_user_uid'] = uploadedByUserUid;
     return data;
   }
 }

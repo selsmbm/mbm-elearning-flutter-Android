@@ -1,15 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:share_plus/share_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MorePage extends StatefulWidget {
@@ -34,7 +30,7 @@ class _MorePageState extends State<MorePage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('More'),
+        title: const Text('More'),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -42,36 +38,41 @@ class _MorePageState extends State<MorePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ListTile(
-                onTap: () {
-                  Navigator.pushNamed(context, 'profile');
+                onTap: () async {
+                  var out = await Navigator.pushNamed(context, 'profile');
+                  if (out != null) {
+                    setState(() {});
+                  }
                 },
                 leading: CircleAvatar(
                   backgroundColor: rPrimaryLiteColor,
                   child: Text(
-                    user?.displayName?.substring(0, 1) ?? 'U',
-                    style: TextStyle(
+                    FirebaseAuth.instance.currentUser?.displayName
+                            ?.substring(0, 1) ??
+                        'U',
+                    style: const TextStyle(
                       fontSize: 25,
                       color: rTextColor,
                     ),
                   ),
                 ),
                 title: Text(
-                  '${user?.displayName ?? 'Unknown'}',
-                  style: TextStyle(
+                  FirebaseAuth.instance.currentUser?.displayName ?? 'Unknown',
+                  style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 subtitle: Text(
-                  '${user?.uid ?? 'N/A'}',
-                  style: TextStyle(
+                  user?.uid ?? 'N/A',
+                  style: const TextStyle(
                     fontSize: 11,
                   ),
                 ),
               ),
-              Padding(
+              const Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 18, vertical: 5),
+                    EdgeInsets.symmetric(horizontal: 18, vertical: 5),
                 child: Text(
                   "Extras",
                   style: TextStyle(
@@ -125,9 +126,9 @@ class _MorePageState extends State<MorePage> {
                 subtitle: 'All useful links',
                 icon: Icons.link,
               ),
-              Padding(
+              const Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 18, vertical: 5),
+                    EdgeInsets.symmetric(horizontal: 18, vertical: 5),
                 child: Text(
                   "MBMU",
                   style: TextStyle(
@@ -187,9 +188,9 @@ class _MorePageState extends State<MorePage> {
                   subtitle: 'Freshers Guide in MBMU',
                   icon: Icons.integration_instructions,
                 ),
-              Padding(
+              const Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 18, vertical: 5),
+                    EdgeInsets.symmetric(horizontal: 18, vertical: 5),
                 child: Text(
                   "Utilities",
                   style: TextStyle(
@@ -202,7 +203,7 @@ class _MorePageState extends State<MorePage> {
                   Navigator.pushNamed(context, 'selsAdmins');
                 },
                 title: 'SELS',
-                subtitle: 'All sels mbmbers',
+                subtitle: 'All SELS members',
                 icon: Icons.supervised_user_circle,
               ),
               SettingButton(
@@ -226,14 +227,14 @@ class _MorePageState extends State<MorePage> {
                     launch('https://www.buymeacoffee.com/mbmec');
                   },
                   title: 'Donate',
-                  subtitle: 'Donate to team sels',
+                  subtitle: 'Donate to keep it alive',
                   icon: Icons.money),
               SettingButton(
                 onTap: () {
                   Navigator.pushNamed(context, 'settings');
                 },
                 title: 'Settings',
-                subtitle: 'Theme, shere, rate us, etc.',
+                subtitle: 'Theme, share, rate us, etc.',
                 icon: Icons.settings,
               ),
               const Center(
@@ -287,19 +288,19 @@ class SettingButton extends StatelessWidget {
       ),
       title: Text(
         title,
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.bold,
         ),
       ),
       subtitle: Text(
         subtitle,
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 11,
         ),
       ),
       trailing: child ??
-          Icon(
+          const Icon(
             Icons.keyboard_arrow_right,
           ),
     );

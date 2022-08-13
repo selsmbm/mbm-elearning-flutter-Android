@@ -36,7 +36,7 @@ class _FeedsPageState extends State<FeedsPage> {
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text('Feeds'),
+          title: const Text('Feeds'),
         ),
         // floatingActionButton: FloatingActionButton(
         //   onPressed: () {},

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html_all/flutter_html_all.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Data/model/blog_model.dart';
-import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/Presentation/Constants/utills.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/explore/explore_details_page.dart';
@@ -73,7 +72,7 @@ class _FeedDetailsPageState extends State<FeedDetailsPage> {
                 purpose: DL.feeds,
               );
             },
-            child: Icon(Icons.share),
+            child: const Icon(Icons.share),
           ),
           bottomNavigationBar: Column(
             mainAxisSize: MainAxisSize.min,
@@ -97,9 +96,9 @@ class _FeedDetailsPageState extends State<FeedDetailsPage> {
                         onPressed: () {
                           launch(feed!.url!);
                         },
-                        icon: Icon(Icons.language),
+                        icon: const Icon(Icons.language),
                       ),
-                    SizedBox(
+                    const SizedBox(
                       width: 10,
                     ),
                   ],
@@ -116,13 +115,13 @@ class _FeedDetailsPageState extends State<FeedDetailsPage> {
                   children: [
                     Text(
                       feed!.title ?? "N/A",
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 50,
                       ),
                     ),
                     Text(
                       "By ${feed!.uploadedByUser}",
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.w300,
                       ),
@@ -144,7 +143,7 @@ class _FeedDetailsPageState extends State<FeedDetailsPage> {
                             },
                             child: Text(
                               "${feed!.org}",
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w300,
                               ),
@@ -174,7 +173,7 @@ class _FeedDetailsPageState extends State<FeedDetailsPage> {
                             },
                             child: Text(
                               "${feed!.event}",
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w300,
                               ),
@@ -184,12 +183,12 @@ class _FeedDetailsPageState extends State<FeedDetailsPage> {
                     ),
                     Text(
                       "${posttime.day}/${posttime.month}/${posttime.year} ${posttime.hour}:${posttime.minute}",
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w300,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     Html(

@@ -4,16 +4,13 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mbm_elearning/Data/Repository/GDrive/upload_to_drive.dart';
 import 'package:mbm_elearning/Data/Repository/update_material_repo.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 import 'package:mbm_elearning/Presentation/Widgets/model_progress.dart';
 import 'package:mbm_elearning/BLoC/AddDataToApi/add_data_to_api_bloc.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
-import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Screens/Auth/Components/RoundedInputField.dart';
-import 'package:mbm_elearning/Presentation/Screens/Auth/Components/TextFielsContainer.dart';
 import 'package:path/path.dart' as p;
 import 'package:provider/provider.dart';
 
@@ -124,7 +121,7 @@ class _AddMaterialPageState extends State<AddMaterialPage> {
                           materialSubject.text,
                           scrapTableProvider);
                       if (output == 'SUCCESS') {
-                        Future.delayed(Duration(milliseconds: 300), () {
+                        Future.delayed(const Duration(milliseconds: 300), () {
                           ScaffoldMessenger.of(ctx).showSnackBar(
                             const SnackBar(
                               content: Text('Material updated successfully'),
@@ -262,7 +259,7 @@ class _AddMaterialPageState extends State<AddMaterialPage> {
                           },
                           items: semsData
                               .map((subject) => DropdownMenuItem(
-                                  value: subject, child: Text("$subject")))
+                                  value: subject, child: Text(subject)))
                               .toList(),
                         ),
                         const SizedBox(
@@ -281,7 +278,7 @@ class _AddMaterialPageState extends State<AddMaterialPage> {
                             },
                             items: branches
                                 .map((subject) => DropdownMenuItem(
-                                    value: subject, child: Text("$subject")))
+                                    value: subject, child: Text(subject)))
                                 .toList(),
                           ),
                         const SizedBox(
@@ -296,7 +293,7 @@ class _AddMaterialPageState extends State<AddMaterialPage> {
                           height: 10,
                         ),
                         if (widget.purpose != AddMaterialPagePurpose.update)
-                          if (file == null) Text("AND"),
+                          if (file == null) const Text("AND"),
                         if (widget.purpose != AddMaterialPagePurpose.update)
                           if (file == null)
                             const SizedBox(
@@ -333,12 +330,12 @@ class _AddMaterialPageState extends State<AddMaterialPage> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Icon(Icons.attach_file),
+                                    const Icon(Icons.attach_file),
                                     Text(
                                       file != null
                                           ? p.basename(file!.path)
                                           : "Choose a material",
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 16,
                                       ),
                                     ),

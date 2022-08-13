@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
-import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/dashboard.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -110,7 +109,7 @@ class _BookmarkPageState extends State<BookmarkPage> {
               );
             }
           } else {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           }

@@ -33,16 +33,16 @@ class VerificationUserModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['userId'] = this.userId;
-    data['name'] = this.name;
-    data['email'] = this.email;
-    data['mobile'] = this.mobile;
-    data['orgName'] = this.orgName;
-    data['orgId'] = this.orgId;
-    data['position'] = this.position;
-    data['time'] = this.time;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['userId'] = userId;
+    data['name'] = name;
+    data['email'] = email;
+    data['mobile'] = mobile;
+    data['orgName'] = orgName;
+    data['orgId'] = orgId;
+    data['position'] = position;
+    data['time'] = time;
     return data;
   }
 }

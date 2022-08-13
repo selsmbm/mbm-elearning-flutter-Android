@@ -83,7 +83,7 @@ class _AddNewExplorePageState extends State<AddNewExplorePage> {
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: const Text('Please fill all required fields'),
+                        content: Text('Please fill all required fields'),
                       ),
                     );
                   }
@@ -134,7 +134,7 @@ class _AddNewExplorePageState extends State<AddNewExplorePage> {
                                 file!,
                                 fit: BoxFit.cover,
                               )
-                            : Icon(Icons.add_a_photo),
+                            : const Icon(Icons.add_a_photo),
                       ),
                     ),
                   ),
@@ -142,7 +142,7 @@ class _AddNewExplorePageState extends State<AddNewExplorePage> {
                     height: 10,
                   ),
                   TextField(
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'What is the name of explore? *',
                     ),
                     onChanged: (value) {
@@ -153,7 +153,7 @@ class _AddNewExplorePageState extends State<AddNewExplorePage> {
                     height: 10,
                   ),
                   TextField(
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Website (optional)',
                     ),
                     onChanged: (value) {
@@ -164,7 +164,7 @@ class _AddNewExplorePageState extends State<AddNewExplorePage> {
                     height: 10,
                   ),
                   TextField(
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Tagline (optional)',
                     ),
                     onChanged: (value) {
@@ -175,7 +175,7 @@ class _AddNewExplorePageState extends State<AddNewExplorePage> {
                     height: 10,
                   ),
                   TextField(
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Description *',
                     ),
                     maxLines: 2,

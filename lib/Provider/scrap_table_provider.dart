@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:isolate';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
@@ -125,6 +124,7 @@ class ScrapTableProvider with ChangeNotifier {
     _admins.addAll(data[5] as Set<AdminsModel>);
     isGettingData = false;
     scrapSubscriptionIsGettingData.sink.add(false);
+    // getCustomAds();
     notifyListeners();
   }
 
@@ -140,7 +140,7 @@ class ScrapTableProvider with ChangeNotifier {
   }
 
   Future<void> updateScrapBlogPosts() async {
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 1));
     if (_blogPosts.isNotEmpty) {
       _blogPosts.clear();
     }

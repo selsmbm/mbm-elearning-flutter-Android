@@ -106,7 +106,7 @@ class _GateMaterialState extends State<GateMaterial> {
                           showSearchBar = false;
                         });
                       },
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.close,
                         color: Colors.black,
                       ),
@@ -181,9 +181,9 @@ class _GateMaterialState extends State<GateMaterial> {
                 borderRadius: BorderRadius.circular(10),
                 color: rPrimaryLiteColor,
               ),
-              child: Padding(
+              child: const Padding(
                 padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                    EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                 child: Icon(
                   Icons.assessment_outlined,
                   color: rPrimaryColor,

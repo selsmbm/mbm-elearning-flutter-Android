@@ -88,7 +88,7 @@ class _TeacherDetailsState extends State<TeacherDetails> {
                               if (teacher.dOB != null && teacher.dOB != '')
                                 Row(
                                   children: [
-                                    Icon(Icons.cake_outlined),
+                                    const Icon(Icons.cake_outlined),
                                     const SizedBox(width: 5),
                                     Text(
                                       teacher.dOB!,
@@ -112,7 +112,7 @@ class _TeacherDetailsState extends State<TeacherDetails> {
                                         },
                                         child: Row(
                                           children: [
-                                            Icon(
+                                            const Icon(
                                               Icons.email_outlined,
                                             ),
                                             const SizedBox(width: 5),
@@ -138,7 +138,7 @@ class _TeacherDetailsState extends State<TeacherDetails> {
                                         },
                                         child: Row(
                                           children: [
-                                            Icon(
+                                            const Icon(
                                               Icons.phone_outlined,
                                             ),
                                             const SizedBox(width: 5),

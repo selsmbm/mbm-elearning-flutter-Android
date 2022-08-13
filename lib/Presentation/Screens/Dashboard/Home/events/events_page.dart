@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:calendar_timeline/calendar_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Data/model/events_model.dart';
@@ -45,7 +44,7 @@ class _EventsPageState extends State<EventsPage> {
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text('Events'),
+          title: const Text('Events'),
         ),
         // floatingActionButton: FloatingActionButton(
         //   onPressed: () {

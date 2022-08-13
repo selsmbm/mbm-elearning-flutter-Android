@@ -90,7 +90,7 @@ class _TeachersPageState extends State<TeachersPage> {
                           showSearchBar = false;
                         });
                       },
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.close,
                         color: Colors.black,
                       ),

@@ -93,7 +93,7 @@ class _SendNotificationToAllPageState extends State<SendNotificationToAllPage> {
               child: Column(
                 children: [
                   TextField(
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'What is the title of the notification? *',
                     ),
                     onChanged: (value) {
@@ -104,7 +104,7 @@ class _SendNotificationToAllPageState extends State<SendNotificationToAllPage> {
                     height: 10,
                   ),
                   TextField(
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Description *',
                     ),
                     onChanged: (value) {
@@ -115,7 +115,7 @@ class _SendNotificationToAllPageState extends State<SendNotificationToAllPage> {
                     height: 10,
                   ),
                   TextField(
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Url (optional)',
                     ),
                     onChanged: (value) {
@@ -126,7 +126,7 @@ class _SendNotificationToAllPageState extends State<SendNotificationToAllPage> {
                     height: 10,
                   ),
                   TextField(
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText:
                           'Image url {Don\'t use drive image directly} (optional)',
                     ),

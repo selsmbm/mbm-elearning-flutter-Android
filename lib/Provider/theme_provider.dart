@@ -13,11 +13,11 @@ class ThemeController with ChangeNotifier {
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: ButtonStyle(
         shape: MaterialStateProperty.all(RoundedRectangleBorder(
-          side: BorderSide(color: rPrimaryMaterialColor, width: 1),
+          side: const BorderSide(color: rPrimaryMaterialColor, width: 1),
           borderRadius: BorderRadius.circular(30),
         )),
         textStyle: MaterialStateProperty.all(
-          TextStyle(color: rPrimaryColor),
+          const TextStyle(color: rPrimaryColor),
         ),
       ),
     ),
@@ -25,7 +25,7 @@ class ThemeController with ChangeNotifier {
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(rPrimaryMaterialColor),
         textStyle: MaterialStateProperty.all(
-          TextStyle(color: Colors.white),
+          const TextStyle(color: Colors.white),
         ),
       ),
     ),
@@ -35,7 +35,7 @@ class ThemeController with ChangeNotifier {
     textButtonTheme: TextButtonThemeData(
       style: ButtonStyle(
         textStyle: MaterialStateProperty.all(
-          TextStyle(color: rPrimaryMaterialColor),
+          const TextStyle(color: rPrimaryMaterialColor),
         ),
       ),
     ),
@@ -56,7 +56,7 @@ class ThemeController with ChangeNotifier {
       backgroundColor: rPrimaryLiteColor,
       indicatorColor: rPrimaryMaterialColor,
     ),
-    floatingActionButtonTheme: FloatingActionButtonThemeData(
+    floatingActionButtonTheme: const FloatingActionButtonThemeData(
       backgroundColor: rPrimaryColor,
     ),
   );
@@ -67,11 +67,11 @@ class ThemeController with ChangeNotifier {
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(rPrimaryDarkLiteColor),
         shape: MaterialStateProperty.all(RoundedRectangleBorder(
-          side: BorderSide(color: Colors.tealAccent, width: 1),
+          side: const BorderSide(color: Colors.tealAccent, width: 1),
           borderRadius: BorderRadius.circular(30),
         )),
         textStyle: MaterialStateProperty.all(
-          TextStyle(color: Colors.white),
+          const TextStyle(color: Colors.white),
         ),
       ),
     ),
@@ -79,7 +79,7 @@ class ThemeController with ChangeNotifier {
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(Colors.tealAccent),
         textStyle: MaterialStateProperty.all(
-          TextStyle(color: rPrimaryDarkLiteColor),
+          const TextStyle(color: rPrimaryDarkLiteColor),
         ),
       ),
     ),
@@ -89,7 +89,7 @@ class ThemeController with ChangeNotifier {
     textButtonTheme: TextButtonThemeData(
       style: ButtonStyle(
         textStyle: MaterialStateProperty.all(
-          TextStyle(color: rPrimaryMaterialColor),
+          const TextStyle(color: rPrimaryMaterialColor),
         ),
       ),
     ),
@@ -110,7 +110,7 @@ class ThemeController with ChangeNotifier {
       backgroundColor: rPrimaryDarkLiteColor,
       indicatorColor: Colors.tealAccent,
     ),
-    floatingActionButtonTheme: FloatingActionButtonThemeData(
+    floatingActionButtonTheme: const FloatingActionButtonThemeData(
       backgroundColor: Colors.teal,
     ),
   );

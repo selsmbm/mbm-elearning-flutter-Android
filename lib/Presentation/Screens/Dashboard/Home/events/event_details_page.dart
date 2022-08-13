@@ -74,7 +74,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                   purpose: DL.event,
                 );
               },
-              child: Icon(Icons.share),
+              child: const Icon(Icons.share),
             )
           : null,
       bottomNavigationBar: event != null
@@ -120,7 +120,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                             );
                           }
                         } else {
-                          return SizedBox(
+                          return const SizedBox(
                             height: 40,
                             width: 40,
                             child: CircularProgressIndicator(),
@@ -131,9 +131,9 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                     onPressed: () {
                       launch(event!.website!);
                     },
-                    icon: Icon(Icons.language),
+                    icon: const Icon(Icons.language),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
                 ],
@@ -150,18 +150,18 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                     children: [
                       Text(
                         event!.title ?? "N/A",
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 50,
                         ),
                       ),
                       Text(
                         "${startdate!.day}/${startdate!.month}/${startdate!.year} ${startdate!.hour}:${startdate!.minute} - ${enddate!.day}/${enddate!.month}/${enddate!.year} ${enddate!.hour}:${enddate!.minute}",
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w300,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       GestureDetector(
@@ -175,27 +175,27 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                           image: event!.image,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       Linkify(
                         text: event!.desc ?? "N/A",
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 15,
                         ),
                         onOpen: (link) {
                           launch(link.url);
                         },
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
-                      Divider(),
-                      SizedBox(
+                      const Divider(),
+                      const SizedBox(
                         height: 10,
                       ),
                       if (org!.isNotEmpty)
-                        Text(
+                        const Text(
                           "Organizer",
                           style: TextStyle(
                             fontSize: 20,

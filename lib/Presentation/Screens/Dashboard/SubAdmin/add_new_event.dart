@@ -10,7 +10,6 @@ import 'package:mbm_elearning/Data/Repository/add_event_repo.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Data/model/explore_model.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
-import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 import 'package:mbm_elearning/Presentation/Widgets/model_progress.dart';
 import 'package:provider/provider.dart';
@@ -116,7 +115,7 @@ class _AddNewEventPageState extends State<AddNewEventPage> {
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: const Text('Please fill all required fields'),
+                        content: Text('Please fill all required fields'),
                       ),
                     );
                   }
@@ -167,7 +166,7 @@ class _AddNewEventPageState extends State<AddNewEventPage> {
                                 file!,
                                 fit: BoxFit.cover,
                               )
-                            : Icon(Icons.add_a_photo),
+                            : const Icon(Icons.add_a_photo),
                       ),
                     ),
                   ),
@@ -175,7 +174,7 @@ class _AddNewEventPageState extends State<AddNewEventPage> {
                     height: 10,
                   ),
                   TextField(
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'What is the name of event? *',
                     ),
                     onChanged: (value) {
@@ -186,7 +185,7 @@ class _AddNewEventPageState extends State<AddNewEventPage> {
                     height: 10,
                   ),
                   TextField(
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Website (optional)',
                     ),
                     onChanged: (value) {
@@ -221,7 +220,7 @@ class _AddNewEventPageState extends State<AddNewEventPage> {
                     height: 10,
                   ),
                   TextField(
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Description *',
                     ),
                     maxLines: 2,

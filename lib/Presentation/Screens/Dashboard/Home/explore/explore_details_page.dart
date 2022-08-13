@@ -4,7 +4,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
-import 'package:googleapis/pubsub/v1.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Data/model/events_model.dart';
 import 'package:mbm_elearning/Data/model/explore_model.dart';
@@ -75,7 +74,7 @@ class _ExploreDetailsPageState extends State<ExploreDetailsPage> {
               purpose: DL.explore,
             );
           },
-          child: Icon(Icons.share),
+          child: const Icon(Icons.share),
         ),
         bottomNavigationBar: BottomAppBar(
           child: Row(
@@ -143,7 +142,7 @@ class _ExploreDetailsPageState extends State<ExploreDetailsPage> {
                           );
                         }
                       } else {
-                        return SizedBox(
+                        return const SizedBox(
                           height: 40,
                           width: 40,
                           child: CircularProgressIndicator(),
@@ -154,9 +153,9 @@ class _ExploreDetailsPageState extends State<ExploreDetailsPage> {
                 onPressed: () {
                   launch(explore!.website!);
                 },
-                icon: Icon(Icons.language),
+                icon: const Icon(Icons.language),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 10,
               ),
             ],
@@ -171,18 +170,18 @@ class _ExploreDetailsPageState extends State<ExploreDetailsPage> {
                 children: [
                   Text(
                     explore!.title ?? "N/A",
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 50,
                     ),
                   ),
                   Text(
                     explore!.tagline ?? "N/A",
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 25,
                       fontWeight: FontWeight.w300,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Container(
@@ -198,16 +197,16 @@ class _ExploreDetailsPageState extends State<ExploreDetailsPage> {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.star,
                             color: rPrimaryColor,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 5,
                           ),
                           Text(
                             explore!.type!,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 16,
                               color: rPrimaryColor,
                             ),
@@ -216,7 +215,7 @@ class _ExploreDetailsPageState extends State<ExploreDetailsPage> {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   GestureDetector(
@@ -230,27 +229,27 @@ class _ExploreDetailsPageState extends State<ExploreDetailsPage> {
                       image: explore!.image,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Linkify(
                     text: explore!.desc ?? "N/A",
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 15,
                     ),
                     onOpen: (link) {
                       launch(link.url);
                     },
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
-                  Divider(),
-                  SizedBox(
+                  const Divider(),
+                  const SizedBox(
                     height: 10,
                   ),
                   if (events.isNotEmpty)
-                    Text(
+                    const Text(
                       "Events",
                       style: TextStyle(
                         fontSize: 20,
@@ -260,7 +259,7 @@ class _ExploreDetailsPageState extends State<ExploreDetailsPage> {
                   if (events.isNotEmpty)
                     ListView.builder(
                       shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       itemCount: events.length,
                       itemBuilder: (context, index) {
                         EventsModel event = events[index];
@@ -287,7 +286,7 @@ class _ExploreDetailsPageState extends State<ExploreDetailsPage> {
                       },
                     ),
                   if (admins.isNotEmpty)
-                    Text(
+                    const Text(
                       "People",
                       style: TextStyle(
                         fontSize: 20,
@@ -297,7 +296,7 @@ class _ExploreDetailsPageState extends State<ExploreDetailsPage> {
                   if (admins.isNotEmpty)
                     ListView.builder(
                       shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       itemCount: admins.length,
                       itemBuilder: (context, index) {
                         return ListTile(

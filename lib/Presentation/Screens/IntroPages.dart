@@ -14,7 +14,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
 
   void _onIntroEnd(context) {
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => SigninPage()));
+        context, MaterialPageRoute(builder: (context) => const SigninPage()));
   }
 
   Widget _buildImage(String assetName, [double width = 350]) {
@@ -66,12 +66,12 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
       controlsMargin: const EdgeInsets.all(16),
       controlsPadding: const EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
       dotsDecorator: DotsDecorator(
-        size: Size(10.0, 10.0),
+        size: const Size(10.0, 10.0),
         color: Theme.of(context).primaryColor == rPrimaryMaterialColorLite
-            ? Color(0xFFBDBDBD)
+            ? const Color(0xFFBDBDBD)
             : rPrimaryDarkLiteColor.withOpacity(0.2),
-        activeSize: Size(22.0, 10.0),
-        activeShape: RoundedRectangleBorder(
+        activeSize: const Size(22.0, 10.0),
+        activeShape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(25.0)),
         ),
       ),

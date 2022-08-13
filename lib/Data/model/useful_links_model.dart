@@ -19,13 +19,13 @@ class UsefulLinksModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['desc'] = this.desc;
-    data['title'] = this.title;
-    data['id'] = this.id;
-    data['url'] = this.url;
-    data['image'] = this.image;
-    data['type'] = this.type;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['desc'] = desc;
+    data['title'] = title;
+    data['id'] = id;
+    data['url'] = url;
+    data['image'] = image;
+    data['type'] = type;
     return data;
   }
 }

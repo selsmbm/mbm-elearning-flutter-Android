@@ -4,7 +4,6 @@ import 'dart:developer';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:mbm_elearning/Data/Repository/get_mterial_repo.dart';
-import 'package:mbm_elearning/Data/Repository/post_material_repo.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 
 class GetMaterialApiEvent extends Equatable {

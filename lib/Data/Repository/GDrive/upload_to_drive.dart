@@ -203,18 +203,18 @@ class GoogleDrive {
       bool out = await showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text("Alert"),
-          content: Text(
+          title: const Text("Alert"),
+          content: const Text(
               "We need to authenticate to upload this file to our Google Drive. Are you want to authenticate?"),
           actions: <Widget>[
             TextButton(
-              child: Text("Yes"),
+              child: const Text("Yes"),
               onPressed: () {
                 Navigator.pop(context, true);
               },
             ),
             TextButton(
-              child: Text("No"),
+              child: const Text("No"),
               onPressed: () {
                 Navigator.pop(context, false);
               },

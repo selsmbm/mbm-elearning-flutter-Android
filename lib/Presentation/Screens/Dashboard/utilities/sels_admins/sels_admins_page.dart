@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Data/model/admins_model.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
@@ -9,7 +7,6 @@ import 'package:mbm_elearning/Presentation/Constants/utills.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/utilities/sels_admins/sels_admin_details_page.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class SELSAdminsPage extends StatefulWidget {
   const SELSAdminsPage({Key? key}) : super(key: key);
@@ -32,7 +29,7 @@ class _SELSAdminsPageState extends State<SELSAdminsPage> {
     List<AdminsModel> admins = scrapTableProvider.admins.toList();
     return Scaffold(
       appBar: AppBar(
-        title: Text('SELS'),
+        title: const Text('SELS'),
       ),
       body: ListView.builder(
         itemCount: admins.length,

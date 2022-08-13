@@ -50,11 +50,11 @@ class _AchievementsPageState extends State<AchievementsPage> {
           onPressed: () {
             Navigator.pushNamed(context, 'request_achievement_page');
           },
-          icon: Icon(Icons.add),
-          label: Text('Request achievements'),
+          icon: const Icon(Icons.add),
+          label: const Text('Request achievements'),
         ),
         body: !_isLoading
-            ? orgsData.length > 0
+            ? orgsData.isNotEmpty
                 ? ListView.builder(
                     itemCount: orgsData.length,
                     itemBuilder: (context, index) {
@@ -70,15 +70,15 @@ class _AchievementsPageState extends State<AchievementsPage> {
                             ),
                           );
                         },
-                        leading: Icon(Icons.arrow_forward_ios),
+                        leading: const Icon(Icons.arrow_forward_ios),
                         title: Text(orgsData[index]['orgName']),
                       );
                     },
                   )
-                : Center(
+                : const Center(
                     child: Text("You are not admin of any explore"),
                   )
-            : SizedBox(),
+            : const SizedBox(),
       ),
     );
   }

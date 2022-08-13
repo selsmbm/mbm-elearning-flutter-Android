@@ -11,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mbm_elearning/Data/LocalDbConnect.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
-import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/Home.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/events/event_details_page.dart';
@@ -184,7 +183,7 @@ class _DashboardPageState extends State<DashboardPage> {
                           'Please update this app for new features.'),
                       actions: [
                         TextButton(
-                          child: Text('OK'),
+                          child: const Text('OK'),
                           onPressed: () async {
                             launch(
                                 'https://play.google.com/store/apps/details?id=${Flavors.package}');

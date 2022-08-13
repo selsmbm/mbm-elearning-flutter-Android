@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
@@ -36,7 +35,7 @@ class _UsefulLinksPageState extends State<UsefulLinksPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Useful Links'),
+        title: const Text('Useful Links'),
       ),
       // floatingActionButton: FloatingActionButton(
       //   onPressed: () {},

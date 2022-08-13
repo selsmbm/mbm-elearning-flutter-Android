@@ -73,7 +73,7 @@ class _RequestAchievementPageState extends State<RequestAchievementPage> {
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: const Text('Please fill all required fields'),
+                        content: Text('Please fill all required fields'),
                       ),
                     );
                   }
@@ -99,7 +99,7 @@ class _RequestAchievementPageState extends State<RequestAchievementPage> {
               child: Column(
                 children: [
                   TextField(
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Name *',
                     ),
                     onChanged: (value) {
@@ -110,7 +110,7 @@ class _RequestAchievementPageState extends State<RequestAchievementPage> {
                     height: 10,
                   ),
                   TextField(
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Mobile No *',
                     ),
                     keyboardType: TextInputType.number,
@@ -122,7 +122,7 @@ class _RequestAchievementPageState extends State<RequestAchievementPage> {
                     height: 10,
                   ),
                   TextField(
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Your position (like: Member or lead)*',
                     ),
                     maxLines: 1,

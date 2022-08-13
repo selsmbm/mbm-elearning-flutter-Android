@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Data/model/admins_model.dart';
-import 'package:mbm_elearning/Data/model/teachers_model.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/Presentation/Constants/utills.dart';
@@ -123,7 +122,7 @@ class _SELSAdminDetailsState extends State<SELSAdminDetails> {
                                   },
                                   child: Row(
                                     children: [
-                                      Icon(
+                                      const Icon(
                                         Icons.email,
                                         color: rPrimaryMaterialColor,
                                       ),

@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -179,62 +178,62 @@ class _MyAppState extends State<MyApp> {
               final args = settings.arguments;
               switch (settings.name) {
                 case '/':
-                  return MaterialPageRoute(builder: (context) => LandingPage());
+                  return MaterialPageRoute(builder: (context) => const LandingPage());
                 case 'signInPage':
-                  return MaterialPageRoute(builder: (context) => SigninPage());
+                  return MaterialPageRoute(builder: (context) => const SigninPage());
                 case 'forgetPage':
                   return MaterialPageRoute(
                       builder: (context) => ForgetPasswordPage());
                 case 'dashboard':
                   return MaterialPageRoute(
-                      builder: (context) => DashboardPage());
+                      builder: (context) => const DashboardPage());
                 case 'home':
-                  return MaterialPageRoute(builder: (context) => HomePage());
+                  return MaterialPageRoute(builder: (context) => const HomePage());
                 case 'feeds':
-                  return MaterialPageRoute(builder: (context) => FeedsPage());
+                  return MaterialPageRoute(builder: (context) => const FeedsPage());
                 case 'events':
-                  return MaterialPageRoute(builder: (context) => EventsPage());
+                  return MaterialPageRoute(builder: (context) => const EventsPage());
                 case 'achievementPage':
                   return MaterialPageRoute(
-                      builder: (context) => AchievementsPage());
+                      builder: (context) => const AchievementsPage());
                 case 'VerifiedUsers':
                   return MaterialPageRoute(
-                      builder: (context) => VerifiedUsers());
+                      builder: (context) => const VerifiedUsers());
                 case 'request_achievement_page':
                   return MaterialPageRoute(
-                      builder: (context) => RequestAchievementPage());
+                      builder: (context) => const RequestAchievementPage());
                 case 'more':
-                  return MaterialPageRoute(builder: (context) => MorePage());
+                  return MaterialPageRoute(builder: (context) => const MorePage());
                 case 'map':
-                  return MaterialPageRoute(builder: (context) => MBMMap());
+                  return MaterialPageRoute(builder: (context) => const MBMMap());
                 case 'search':
                   return MaterialPageRoute(
                       builder: (context) => BlocProvider(
                             create: (context) => GetMaterialApiBloc(
                               GetMaterialRepo(),
                             ),
-                            child: SearchPage(),
+                            child: const SearchPage(),
                           ));
                 case 'profile':
-                  return MaterialPageRoute(builder: (context) => ProfilePage());
+                  return MaterialPageRoute(builder: (context) => const ProfilePage());
                 case 'teachers':
                   return MaterialPageRoute(
-                      builder: (context) => TeachersPage());
+                      builder: (context) => const TeachersPage());
                 case 'teacherdetails':
                   return MaterialPageRoute(
-                      builder: (context) => TeacherDetails());
+                      builder: (context) => const TeacherDetails());
                 case 'mbmstory':
-                  return MaterialPageRoute(builder: (context) => MBMStories());
+                  return MaterialPageRoute(builder: (context) => const MBMStories());
                 case 'usefullinks':
                   return MaterialPageRoute(
-                      builder: (context) => UsefulLinksPage());
+                      builder: (context) => const UsefulLinksPage());
                 case 'materialPage':
                   return MaterialPageRoute(
                       builder: (context) => BlocProvider(
                             create: (context) => GetMaterialApiBloc(
                               GetMaterialRepo(),
                             ),
-                            child: MaterialsPage(),
+                            child: const MaterialsPage(),
                           ));
                 case 'yourmaterialPage':
                   return MaterialPageRoute(
@@ -242,7 +241,7 @@ class _MyAppState extends State<MyApp> {
                             create: (context) => GetMaterialApiBloc(
                               GetMaterialRepo(),
                             ),
-                            child: YourMaterialPage(),
+                            child: const YourMaterialPage(),
                           ));
                 case 'approvematerialPage':
                   return MaterialPageRoute(
@@ -250,17 +249,17 @@ class _MyAppState extends State<MyApp> {
                             create: (context) => GetMaterialApiBloc(
                               GetMaterialRepo(),
                             ),
-                            child: ApproveMaterialPage(),
+                            child: const ApproveMaterialPage(),
                           ));
                 case 'bookmark':
                   return MaterialPageRoute(
-                      builder: (context) => BookmarkPage());
+                      builder: (context) => const BookmarkPage());
                 case 'intro':
                   return MaterialPageRoute(
                       builder: (context) => OnBoardingPage());
                 case 'gateMaterial':
                   return MaterialPageRoute(
-                      builder: (context) => GateMaterial());
+                      builder: (context) => const GateMaterial());
                 case 'adminDash':
                   return MaterialPageRoute(
                       builder: (context) => const AdminDashboard());
@@ -269,19 +268,19 @@ class _MyAppState extends State<MyApp> {
                       builder: (context) => const SendNotificationToAllPage());
                 case 'html_editor':
                   return MaterialPageRoute(
-                      builder: (context) => HtmlEditorScreen());
+                      builder: (context) => const HtmlEditorScreen());
                 case 'addNewFeed':
                   return MaterialPageRoute(
-                      builder: (context) => AddNewFeedPage());
+                      builder: (context) => const AddNewFeedPage());
                 case 'addNewExplore':
                   return MaterialPageRoute(
-                      builder: (context) => AddNewExplorePage());
+                      builder: (context) => const AddNewExplorePage());
                 case 'addNewEvent':
                   return MaterialPageRoute(
-                      builder: (context) => AddNewEventPage());
+                      builder: (context) => const AddNewEventPage());
                 case 'selsAdmins':
                   return MaterialPageRoute(
-                      builder: (context) => SELSAdminsPage());
+                      builder: (context) => const SELSAdminsPage());
                 case 'settings':
                   return MaterialPageRoute(
                       builder: (context) => SettingsPage(
@@ -293,11 +292,11 @@ class _MyAppState extends State<MyApp> {
                             create: (context) => AddDataToApiBloc(
                               PostMaterialRepo(),
                             ),
-                            child: AddMaterialPage(),
+                            child: const AddMaterialPage(),
                           ));
                 default:
                   return MaterialPageRoute(
-                      builder: (context) => DashboardPage());
+                      builder: (context) => const DashboardPage());
               }
             },
           ),
@@ -340,14 +339,14 @@ class NotificationController {
     } else if (data['redirectPage']! == "feeds") {
       MyApp.navigatorKey.currentState!.pushAndRemoveUntil(
         MaterialPageRoute(
-          builder: (context) => DashboardPage(
+          builder: (context) => const DashboardPage(
             initialRout: 1,
           ),
         ),
         (route) =>
             route ==
             MaterialPageRoute(
-              builder: (context) => LandingPage(),
+              builder: (context) => const LandingPage(),
             ),
       );
     } else {

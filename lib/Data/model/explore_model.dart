@@ -40,17 +40,17 @@ class ExploreModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
-    data['desc'] = this.desc;
-    data['title'] = this.title;
-    data['id'] = this.id;
-    data['image'] = this.image;
-    data['admins_map'] = this.adminsMap;
-    data['map'] = this.map;
-    data['tagline'] = this.tagline;
-    data['type'] = this.type;
-    data['website'] = this.website;
-    data['events'] = this.events;
-    data['follow'] = this.follow;
+    data['desc'] = desc;
+    data['title'] = title;
+    data['id'] = id;
+    data['image'] = image;
+    data['admins_map'] = adminsMap;
+    data['map'] = map;
+    data['tagline'] = tagline;
+    data['type'] = type;
+    data['website'] = website;
+    data['events'] = events;
+    data['follow'] = follow;
     return data;
   }
 }

@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mbm_elearning/BLoC/AddDataToApi/add_data_to_api_bloc.dart';
-import 'package:mbm_elearning/BLoC/GetMaterialBloc/get_material_bloc.dart';
 import 'package:mbm_elearning/Data/LocalDbConnect.dart';
 import 'package:mbm_elearning/Data/Repository/delete_material_repo.dart';
 import 'package:mbm_elearning/Data/Repository/post_material_repo.dart';
@@ -85,7 +84,7 @@ class _MaterialDetailsPageState extends State<MaterialDetailsPage> {
                     const SizedBox(width: 10),
                     Text(
                       widget.material['mttype'],
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 15,
                         color: rPrimaryColor,
                       ),
@@ -101,7 +100,7 @@ class _MaterialDetailsPageState extends State<MaterialDetailsPage> {
               },
               child: Text(
                 widget.material['mtname'],
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 25,
                   fontWeight: FontWeight.bold,
                 ),
@@ -130,7 +129,7 @@ class _MaterialDetailsPageState extends State<MaterialDetailsPage> {
                           ),
                         );
                       },
-                      icon: Icon(Icons.edit),
+                      icon: const Icon(Icons.edit),
                     ),
                 if (widget.isMe)
                   IconButton(
@@ -138,18 +137,18 @@ class _MaterialDetailsPageState extends State<MaterialDetailsPage> {
                       bool status = await showDialog(
                         context: context,
                         builder: (context) => AlertDialog(
-                          title: Text('Delete Material'),
-                          content: Text(
+                          title: const Text('Delete Material'),
+                          content: const Text(
                               'Are you sure you want to delete this material?'),
                           actions: [
                             TextButton(
-                              child: Text('Cancel'),
+                              child: const Text('Cancel'),
                               onPressed: () {
                                 Navigator.pop(context, false);
                               },
                             ),
                             TextButton(
-                              child: Text('Delete'),
+                              child: const Text('Delete'),
                               onPressed: () async {
                                 ScaffoldMessenger.of(ctx).showSnackBar(
                                   const SnackBar(
@@ -183,14 +182,14 @@ class _MaterialDetailsPageState extends State<MaterialDetailsPage> {
                         Navigator.pop(context, true);
                       }
                     },
-                    icon: Icon(Icons.delete),
+                    icon: const Icon(Icons.delete),
                   ),
                 IconButton(
                   key: openInBrowserKey,
                   onPressed: () {
                     launch(widget.material['mturl']);
                   },
-                  icon: Icon(Icons.open_in_browser),
+                  icon: const Icon(Icons.open_in_browser),
                 ),
                 if (!kIsWeb)
                   if (!widget.ismeSuperAdmin)
@@ -242,7 +241,7 @@ class _MaterialDetailsPageState extends State<MaterialDetailsPage> {
                                 '',
                                 scrapTableProvider!);
                             if (output == 'SUCCESS') {
-                              Future.delayed(Duration(milliseconds: 300), () {
+                              Future.delayed(const Duration(milliseconds: 300), () {
                                 ScaffoldMessenger.of(ctx).showSnackBar(
                                   const SnackBar(
                                     content:
@@ -254,7 +253,7 @@ class _MaterialDetailsPageState extends State<MaterialDetailsPage> {
                               });
                             }
                           },
-                          icon: Icon(Icons.done),
+                          icon: const Icon(Icons.done),
                         )
                       : Tooltip(
                           message: widget.material['approve']
@@ -278,7 +277,7 @@ class _MaterialDetailsPageState extends State<MaterialDetailsPage> {
             const SizedBox(height: 10),
             Text(
               "Subject: ${widget.material['mtsub']}",
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 12,
               ),
             ),
@@ -286,42 +285,42 @@ class _MaterialDetailsPageState extends State<MaterialDetailsPage> {
             Row(
               children: [
                 Row(children: [
-                  Icon(
+                  const Icon(
                     Icons.timer,
                     size: 15,
                   ),
                   const SizedBox(width: 5),
                   Text(
                     "${time.day}/${time.month}/${time.year} ${time.hour}:${time.minute}",
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 12,
                     ),
                   ),
                 ]),
                 const SizedBox(width: 5),
                 Row(children: [
-                  Icon(
+                  const Icon(
                     Icons.school,
                     size: 15,
                   ),
                   const SizedBox(width: 5),
                   Text(
                     widget.material['mtsem'],
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 12,
                     ),
                   ),
                 ]),
                 const SizedBox(width: 5),
                 Row(children: [
-                  Icon(
+                  const Icon(
                     Icons.margin,
                     size: 15,
                   ),
                   const SizedBox(width: 5),
                   Text(
                     " ${allBranchSemsData.contains(widget.material['mtsem']) ? "All" : widget.material['branch']}",
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 12,
                     ),
                   ),
@@ -332,7 +331,7 @@ class _MaterialDetailsPageState extends State<MaterialDetailsPage> {
             if (widget.material['desc'] != '')
               Text(
                 widget.material['desc'],
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 15,
                 ),
               ),
@@ -343,7 +342,7 @@ class _MaterialDetailsPageState extends State<MaterialDetailsPage> {
                   backgroundColor: rPrimaryLiteColor,
                   child: Text(
                     widget.material['uploaded_by_user'].substring(0, 1) ?? 'U',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 25,
                       color: rTextColor,
                     ),
@@ -351,7 +350,7 @@ class _MaterialDetailsPageState extends State<MaterialDetailsPage> {
                 ),
                 title: Text(
                   '${widget.material['uploaded_by_user'] ?? 'Unknown'}',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
@@ -359,7 +358,7 @@ class _MaterialDetailsPageState extends State<MaterialDetailsPage> {
                 subtitle: Text(
                   '${widget.material['uploaded_by_user_uid'] ?? 'N/A'}',
                   maxLines: 1,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 11,
                   ),
                 ),

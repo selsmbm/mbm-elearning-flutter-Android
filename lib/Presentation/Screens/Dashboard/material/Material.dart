@@ -1,19 +1,13 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mbm_elearning/BLoC/GetMaterialBloc/get_material_bloc.dart';
-import 'package:mbm_elearning/Data/LocalDbConnect.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
-import 'package:mbm_elearning/Presentation/Constants/textfieldDeco.dart';
-import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/dashboard.dart';
-import 'package:mbm_elearning/Presentation/Screens/Dashboard/material/material_details_page.dart';
 import 'package:mbm_elearning/Presentation/Widgets/material_data_list_tile.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 String? sem;
 String? branch;
@@ -60,8 +54,8 @@ class _MaterialsPageState extends State<MaterialsPage> {
           onPressed: () {
             Navigator.pushNamed(context, 'addMaterialPage');
           },
-          icon: Icon(Icons.add),
-          label: Text('Add material'),
+          icon: const Icon(Icons.add),
+          label: const Text('Add material'),
         ),
         appBar: AppBar(
           centerTitle: true,
@@ -206,11 +200,11 @@ class _MtCardState extends State<MtCard> {
                   ),
           );
         } else if (state is GetMaterialApiIsLoading) {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         } else {
-          return Center(
+          return const Center(
             child: Text("Something went wrong"),
           );
         }

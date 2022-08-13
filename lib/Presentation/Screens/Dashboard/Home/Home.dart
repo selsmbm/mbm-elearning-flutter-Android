@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
@@ -44,13 +43,13 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text('MBM E-Learning'),
+          title: const Text('MBM E-Learning'),
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             Navigator.pushNamed(context, 'addMaterialPage');
           },
-          child: Icon(Icons.add),
+          child: const Icon(Icons.add),
         ),
         body: SafeArea(
           child: SingleChildScrollView(
@@ -92,7 +91,7 @@ class _HomePageState extends State<HomePage> {
                         decoration: InputDecoration(
                           isDense: true,
                           contentPadding:
-                              EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                              const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
                           hintText: 'Globel Search',
                           hintStyle: TextStyle(
                             color: Theme.of(context).primaryColor ==
@@ -102,14 +101,14 @@ class _HomePageState extends State<HomePage> {
                             fontSize: 16,
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                               width: 2,
                               color: rPrimaryLiteColor,
                             ),
                             borderRadius: BorderRadius.circular(20),
                           ),
                           border: OutlineInputBorder(
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                               width: 2,
                               color: rPrimaryLiteColor,
                             ),
@@ -128,7 +127,7 @@ class _HomePageState extends State<HomePage> {
                     const SizedBox(
                       height: 9,
                     ),
-                    Text(
+                    const Text(
                       'or',
                       style: TextStyle(fontSize: 17),
                     ),
@@ -159,7 +158,7 @@ class _HomePageState extends State<HomePage> {
                         items: semsData
                             .map((subject) => DropdownMenuItem(
                                 value: subject,
-                                child: Text("${subject.toUpperCase()}")))
+                                child: Text(subject.toUpperCase())))
                             .toList(),
                       ),
                     ),
@@ -193,7 +192,7 @@ class _HomePageState extends State<HomePage> {
                               .map(
                                 (subject) => DropdownMenuItem(
                                   value: subject,
-                                  child: Text("${subject.toUpperCase()}"),
+                                  child: Text(subject.toUpperCase()),
                                 ),
                               )
                               .toList(),

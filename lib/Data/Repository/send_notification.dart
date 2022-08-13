@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:math';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:http/http.dart' as http;

@@ -33,7 +33,7 @@ class _LandingPageState extends State<LandingPage> {
         if (kIsWeb) {
           Timer(const Duration(seconds: 1), () {
             Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (context) => SigninPage()));
+                context, MaterialPageRoute(builder: (context) => const SigninPage()));
           });
         } else {
           Timer(const Duration(seconds: 1), () {
@@ -54,7 +54,7 @@ class _LandingPageState extends State<LandingPage> {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => ProfilePage(
+                builder: (context) => const ProfilePage(
                   isItInitialUpdate: true,
                 ),
               ),
@@ -81,7 +81,6 @@ class _LandingPageState extends State<LandingPage> {
   Widget build(BuildContext context) {
     scrapTableProvider = Provider.of<ScrapTableProvider>(context);
     scrapTableProvider.scrapAllData();
-    scrapTableProvider.getCustomAds();
     return Scaffold(
       body: Center(
         child: Column(

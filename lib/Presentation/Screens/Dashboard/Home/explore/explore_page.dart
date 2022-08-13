@@ -40,7 +40,7 @@ class _ExplorePageState extends State<ExplorePage> {
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text('Explore'),
+          title: const Text('Explore'),
         ),
         // floatingActionButton: FloatingActionButton(
         //   onPressed: () {

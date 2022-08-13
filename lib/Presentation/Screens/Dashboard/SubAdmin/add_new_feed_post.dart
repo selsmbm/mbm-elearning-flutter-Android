@@ -72,7 +72,7 @@ class _AddNewFeedPageState extends State<AddNewFeedPage> {
                     String? output = await Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => HtmlEditorScreen(
+                        builder: (context) => const HtmlEditorScreen(
                           showdesc: true,
                         ),
                       ),
@@ -109,7 +109,7 @@ class _AddNewFeedPageState extends State<AddNewFeedPage> {
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: const Text('Please fill all required fields'),
+                        content: Text('Please fill all required fields'),
                       ),
                     );
                   }
@@ -135,7 +135,7 @@ class _AddNewFeedPageState extends State<AddNewFeedPage> {
               child: Column(
                 children: [
                   TextField(
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'What is the title of your post? *',
                     ),
                     onChanged: (value) {
@@ -146,7 +146,7 @@ class _AddNewFeedPageState extends State<AddNewFeedPage> {
                     height: 10,
                   ),
                   TextField(
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Url {website, form link, etc.} (optional)',
                     ),
                     onChanged: (value) {

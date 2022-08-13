@@ -1,10 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mbm_elearning/Data/Repository/add_new_admin.dart';
 import 'package:mbm_elearning/Data/Repository/get_verification_users_repo.dart';
 import 'package:mbm_elearning/Data/Repository/request_acievement_repo.dart';
-import 'package:mbm_elearning/Data/Repository/sheet_scrap.dart';
 import 'package:mbm_elearning/Data/model/verification_user_model.dart';
 import 'package:mbm_elearning/Presentation/Widgets/model_progress.dart';
 
@@ -37,7 +35,7 @@ class _VerifiedUsersState extends State<VerifiedUsers> {
                   VerificationUserModel model = data[index];
                   return ListTile(
                     trailing: IconButton(
-                      icon: Icon(Icons.delete),
+                      icon: const Icon(Icons.delete),
                       onPressed: () async {
                         setState(() {
                           _isLoading = true;
@@ -50,7 +48,7 @@ class _VerifiedUsersState extends State<VerifiedUsers> {
                       },
                     ),
                     leading: IconButton(
-                      icon: Icon(Icons.check),
+                      icon: const Icon(Icons.check),
                       onPressed: () async {
                         setState(() {
                           _isLoading = true;
@@ -98,7 +96,7 @@ class _VerifiedUsersState extends State<VerifiedUsers> {
             } else if (snapshot.hasError) {
               return Center(child: Text('${snapshot.error}'));
             }
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           },
         ),
       ),

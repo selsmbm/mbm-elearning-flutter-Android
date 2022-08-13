@@ -4,7 +4,6 @@ import 'package:mbm_elearning/BLoC/GetMaterialBloc/get_material_bloc.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Presentation/Widgets/material_data_list_tile.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
-import 'package:mbm_elearning/Presentation/Widgets/model_progress.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
@@ -102,15 +101,15 @@ class _ApproveMaterialPageState extends State<ApproveMaterialPage> {
                       ),
               );
             } else if (state is GetMaterialApiIsLoading) {
-              return Center(
+              return const Center(
                 child: CircularProgressIndicator(),
               );
             } else if (state is GetMaterialApiIsFailed) {
-              return Center(
+              return const Center(
                 child: Text("Something went wrong"),
               );
             } else {
-              return SizedBox();
+              return const SizedBox();
             }
           },
         ),

@@ -33,7 +33,7 @@ class _SettingsPageState extends State<SettingsPage> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title:const Text('Settings'),
+        title: const Text('Settings'),
       ),
       body: Column(
         children: [
@@ -56,7 +56,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                   );
                 } else {
-                  return SizedBox();
+                  return const SizedBox();
                 }
               }),
           if (scrapTableProvider.checkIsMeSuperAdmin())
@@ -151,6 +151,20 @@ class _SettingsPageState extends State<SettingsPage> {
             title: 'Logout',
             subtitle: 'Logout from this app',
             icon: Icons.logout,
+          ),
+          const Center(
+            child: Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                "Made With ❤ by SELS.",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Color(0xff9c9191),
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
           ),
         ],
       ),

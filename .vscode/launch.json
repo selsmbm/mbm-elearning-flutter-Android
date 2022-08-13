@@ -4,28 +4,28 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-        {
-            "name": "Studyem",
-            "request": "launch",
-            "type": "dart",
-            "args": [
-                "--flavor", 
-                "mprod",
-                "-t", 
-                "lib/main_mprod.dart" 
-            ]
-        },
         // {
-        //     "name": "MBM Elearning",
+        //     "name": "Studyem",
         //     "request": "launch",
         //     "type": "dart",
         //     "args": [
         //         "--flavor", 
-        //         "mdev",
+        //         "mprod",
         //         "-t", 
-        //         "lib/main_mdev.dart" 
+        //         "lib/main_mprod.dart" 
         //     ]
         // },
+        {
+            "name": "MBM Elearning",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "--flavor", 
+                "mdev",
+                "-t", 
+                "lib/main_mdev.dart" 
+            ]
+        },
         // {
         //     "name": "MBM Elearning",
         //     "request": "launch",

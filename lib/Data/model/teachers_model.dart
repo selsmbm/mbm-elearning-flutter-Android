@@ -36,17 +36,17 @@ class TeachersModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['name'] = this.name;
-    data['mobile_no'] = this.mobileNo;
-    data['email'] = this.email;
-    data['department'] = this.department;
-    data['post'] = this.post;
-    data['image'] = this.image;
-    data['UG'] = this.uG;
-    data['PG'] = this.pG;
-    data['phd'] = this.phd;
-    data['DOB'] = this.dOB;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['name'] = name;
+    data['mobile_no'] = mobileNo;
+    data['email'] = email;
+    data['department'] = department;
+    data['post'] = post;
+    data['image'] = image;
+    data['UG'] = uG;
+    data['PG'] = pG;
+    data['phd'] = phd;
+    data['DOB'] = dOB;
     return data;
   }
 }

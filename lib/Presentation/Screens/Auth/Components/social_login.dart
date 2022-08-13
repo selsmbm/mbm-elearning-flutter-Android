@@ -48,7 +48,7 @@ class SocialSigninButton extends StatelessWidget {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ProfilePage(
+                          builder: (context) => const ProfilePage(
                             isItInitialUpdate: true,
                           ),
                         ),

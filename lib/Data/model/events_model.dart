@@ -33,16 +33,16 @@ class EventsModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['desc'] = this.desc;
-    data['title'] = this.title;
-    data['id'] = this.id;
-    data['image'] = this.image;
-    data['starttime'] = this.starttime;
-    data['endtime'] = this.endtime;
-    data['admin_org'] = this.adminOrg;
-    data['admin_org_ids'] = this.adminOrgIds;
-    data['website'] = this.website;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['desc'] = desc;
+    data['title'] = title;
+    data['id'] = id;
+    data['image'] = image;
+    data['starttime'] = starttime;
+    data['endtime'] = endtime;
+    data['admin_org'] = adminOrg;
+    data['admin_org_ids'] = adminOrgIds;
+    data['website'] = website;
     return data;
   }
 }
