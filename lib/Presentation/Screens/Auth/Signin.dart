@@ -232,7 +232,9 @@ class _SigninPageState extends State<SigninPage> with TickerProviderStateMixin {
                 },
                 text: 'Sign Up',
               ),
-              const ORDevider(
+            kIsWeb
+            ? const SizedBox()
+            :  const ORDevider(
                 text: 'Or Sign Up with',
               ),
               const SocialSigninButton(),
@@ -413,7 +415,9 @@ class _SigninPageState extends State<SigninPage> with TickerProviderStateMixin {
                 },
                 text: 'Sign In',
               ),
-              const ORDevider(
+             kIsWeb
+            ? const SizedBox()
+            : const ORDevider(
                 text: 'Or Sign in with',
               ),
               const SocialSigninButton(),

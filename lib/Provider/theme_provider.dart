@@ -56,6 +56,10 @@ class ThemeController with ChangeNotifier {
       backgroundColor: rPrimaryLiteColor,
       indicatorColor: rPrimaryMaterialColor,
     ),
+    navigationRailTheme: const NavigationRailThemeData(
+      backgroundColor: rPrimaryLiteColor,
+      indicatorColor: rPrimaryMaterialColor,
+    ),
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
       backgroundColor: rPrimaryColor,
     ),
@@ -107,6 +111,10 @@ class ThemeController with ChangeNotifier {
       ),
     ),
     navigationBarTheme: const NavigationBarThemeData(
+      backgroundColor: rPrimaryDarkLiteColor,
+      indicatorColor: Colors.tealAccent,
+    ),
+    navigationRailTheme: const NavigationRailThemeData(
       backgroundColor: rPrimaryDarkLiteColor,
       indicatorColor: Colors.tealAccent,
     ),

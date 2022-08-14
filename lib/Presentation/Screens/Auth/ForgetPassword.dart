@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
@@ -34,6 +35,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                 Image.asset('assets/lottie/sign-in-yellow.gif', width: 300),
                 Container(
                   height: 200,
+                  width: kIsWeb ? 400 : double.infinity,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
                     color: Theme.of(context).primaryColor ==

@@ -44,6 +44,7 @@ class _DashboardPageState extends State<DashboardPage> {
   late ScrapTableProvider scrapTableProvider;
   late FirebaseMessaging messaging;
   late List<Widget> _pages;
+  bool extended = false;
   int currentIndex = 0;
   @override
   void initState() {
@@ -221,6 +222,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
+    print(MediaQuery.of(context).size.width);
     return WillPopScope(
       onWillPop: () async {
         SystemNavigator.pop();
@@ -240,60 +242,123 @@ class _DashboardPageState extends State<DashboardPage> {
                     scrapTableProvider.banner1!['image'],
                   ),
                 ),
-            NavigationBar(
+            MediaQuery.of(context).size.width > 750
+                ? const SizedBox()
+                : NavigationBar(
+                    selectedIndex: currentIndex,
+                    onDestinationSelected: (value) {
+                      setState(() {
+                        currentIndex = value;
+                      });
+                    },
+                    destinations: [
+                        if (user!.photoURL!.contains(student) ||
+                            user!.photoURL!.contains(teacher))
+                          const NavigationDestination(
+                            icon: Icon(Icons.home_outlined),
+                            selectedIcon: Icon(Icons.home),
+                            label: 'Home',
+                          ),
+                        const NavigationDestination(
+                          icon: Icon(Icons.feed_outlined),
+                          selectedIcon: Icon(Icons.feed),
+                          label: 'Feeds',
+                        ),
+                        const NavigationDestination(
+                          icon: Icon(Icons.dashboard_outlined),
+                          selectedIcon: Icon(Icons.dashboard),
+                          label: 'Explore',
+                        ),
+                        const NavigationDestination(
+                          icon: Icon(Icons.event_available_outlined),
+                          selectedIcon: Icon(Icons.event_available),
+                          label: 'Events',
+                        ),
+                        const NavigationDestination(
+                          icon: Icon(Icons.more_horiz_outlined),
+                          selectedIcon: Icon(Icons.more_horiz),
+                          label: 'More',
+                        ),
+                      ]),
+          ],
+        ),
+        body: Row(
+          children: [
+            if (MediaQuery.of(context).size.width > 750)
+              NavigationRail(
+                minExtendedWidth: 150,
+                leading: Row(
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        setState(() {
+                          extended = !extended;
+                        });
+                      },
+                      icon: const Icon(
+                        Icons.menu,
+                      ),
+                    ),
+                  ],
+                ),
+                extended: extended,
+                useIndicator: true,
                 selectedIndex: currentIndex,
                 onDestinationSelected: (value) {
                   setState(() {
                     currentIndex = value;
                   });
                 },
-                destinations: [
+                destinations: <NavigationRailDestination>[
                   if (user!.photoURL!.contains(student) ||
                       user!.photoURL!.contains(teacher))
-                    const NavigationDestination(
+                    const NavigationRailDestination(
                       icon: Icon(Icons.home_outlined),
                       selectedIcon: Icon(Icons.home),
-                      label: 'Home',
+                      label: Text('Home'),
                     ),
-                  const NavigationDestination(
+                  const NavigationRailDestination(
                     icon: Icon(Icons.feed_outlined),
                     selectedIcon: Icon(Icons.feed),
-                    label: 'Feeds',
+                    label: Text('Feeds'),
                   ),
-                  const NavigationDestination(
+                  const NavigationRailDestination(
                     icon: Icon(Icons.dashboard_outlined),
                     selectedIcon: Icon(Icons.dashboard),
-                    label: 'Explore',
+                    label: Text('Explore'),
                   ),
-                  const NavigationDestination(
+                  const NavigationRailDestination(
                     icon: Icon(Icons.event_available_outlined),
                     selectedIcon: Icon(Icons.event_available),
-                    label: 'Events',
+                    label: Text('Events'),
                   ),
-                  const NavigationDestination(
+                  const NavigationRailDestination(
                     icon: Icon(Icons.more_horiz_outlined),
                     selectedIcon: Icon(Icons.more_horiz),
-                    label: 'More',
+                    label: Text('More'),
                   ),
-                ]),
-          ],
-        ),
-        body: ModalProgressHUD(
-          inAsyncCall: scrapTableProvider.isGettingData,
-          progressIndicator: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: const [
-              SizedBox(width: 80, child: LinearProgressIndicator()),
-              SizedBox(height: 10),
-              Text(
-                'Getting data from server',
-                style: TextStyle(
-                  fontSize: 15,
-                ),
+                ],
               ),
-            ],
-          ),
-          child: _pages[currentIndex],
+            Expanded(
+              child: ModalProgressHUD(
+                inAsyncCall: scrapTableProvider.isGettingData,
+                progressIndicator: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    SizedBox(width: 80, child: LinearProgressIndicator()),
+                    SizedBox(height: 10),
+                    Text(
+                      'Getting data from server',
+                      style: TextStyle(
+                        fontSize: 15,
+                      ),
+                    ),
+                  ],
+                ),
+                child: _pages[currentIndex],
+              ),
+            ),
+          ],
         ),
       ),
     );
