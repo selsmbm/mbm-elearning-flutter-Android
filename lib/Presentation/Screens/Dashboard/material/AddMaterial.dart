@@ -96,7 +96,7 @@ class _AddMaterialPageState extends State<AddMaterialPage> {
                       materialSem != '' &&
                       materialType != '') {
                     if (!allBranchSemsData.contains(materialSem)) {
-                      if (materialBranch != '') {
+                      if (materialBranch == '') {
                         ScaffoldMessenger.of(ctx).showSnackBar(
                           const SnackBar(
                             content: Text('Please select branch'),

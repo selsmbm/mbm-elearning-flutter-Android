@@ -16,6 +16,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   var userInitData;
+  bool isNewUser = false;
   bool showProgress = true;
   final User? user = FirebaseAuth.instance.currentUser;
   DateTime selectedDate = DateTime.now();
@@ -41,6 +42,9 @@ class _ProfilePageState extends State<ProfilePage> {
         .doc(user!.uid)
         .get();
     userInitData = userd.data();
+    if (userInitData == null) {
+      isNewUser = true;
+    }
     Map userData = userInitData ?? {};
     _nameController.text = userData['username'] ?? '';
     _emailController.text = userData['useremail'] ?? '';
@@ -48,12 +52,14 @@ class _ProfilePageState extends State<ProfilePage> {
     _registrationController.text = userData['registrationNo'] ?? '';
     _branchController.text = userData['branch'] ?? '';
     _passoutyearController.text =
-        userData['year'].length != 4 ? "" : userData['year'];
+        (userData['year'] ?? "").length != 4 ? "" : userData['year'];
     _typeController.text = userData['type'] ?? '';
     _rollnoController.text = userData['rollNo'] ?? '';
-    setState(() {
-      showProgress = false;
-    });
+    if (mounted) {
+      setState(() {
+        showProgress = false;
+      });
+    }
   }
 
   @override
@@ -114,22 +120,39 @@ class _ProfilePageState extends State<ProfilePage> {
                           setState(() {
                             showProgress = true;
                           });
-                          await FirebaseFirestore.instance
-                              .collection('users')
-                              .doc(user!.uid)
-                              .update({
-                            'username': _nameController.text,
-                            'useremail': _emailController.text,
-                            'mobileNo': _phoneController.text,
-                            'registrationNo': _registrationController.text,
-                            'branch': _branchController.text,
-                            'year': _passoutyearController.text,
-                            'type': _typeController.text,
-                            'rollNo': _rollnoController.text,
-                            "updatedat": DateTime.now(),
-                          });
-                          user!.updateDisplayName(_nameController.text);
-                          user!.updatePhotoURL(_typeController.text);
+                          if (isNewUser) {
+                            await FirebaseFirestore.instance
+                                .collection('users')
+                                .doc(user!.uid)
+                                .set({
+                              'username': _nameController.text,
+                              'useremail': _emailController.text,
+                              'mobileNo': _phoneController.text,
+                              'registrationNo': _registrationController.text,
+                              'branch': _branchController.text,
+                              'year': _passoutyearController.text,
+                              'type': _typeController.text,
+                              'rollNo': _rollnoController.text,
+                              "updatedat": DateTime.now(),
+                            });
+                          } else {
+                            await FirebaseFirestore.instance
+                                .collection('users')
+                                .doc(user!.uid)
+                                .update({
+                              'username': _nameController.text,
+                              'useremail': _emailController.text,
+                              'mobileNo': _phoneController.text,
+                              'registrationNo': _registrationController.text,
+                              'branch': _branchController.text,
+                              'year': _passoutyearController.text,
+                              'type': _typeController.text,
+                              'rollNo': _rollnoController.text,
+                              "updatedat": DateTime.now(),
+                            });
+                          }
+                          await user!.updateDisplayName(_nameController.text);
+                          await user!.updatePhotoURL(_typeController.text);
                           SharedPreferences pref =
                               await SharedPreferences.getInstance();
                           pref.setBool(SP.initialProfileSaved, true);
@@ -182,7 +205,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ),
                       DropdownSearch<String>(
-                        enabled: _typeController.text == '',
+                        enabled: _typeController.text == '' || isNewUser,
                         popupProps: const PopupProps.dialog(
                           showSearchBox: true,
                           searchFieldProps: TextFieldProps(
@@ -220,7 +243,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       TextFormField(
                         controller: _emailController,
-                        readOnly: true,
+                        readOnly: _emailController.text != "",
                         decoration: const InputDecoration(
                           labelText: 'Your email *',
                         ),

@@ -58,22 +58,24 @@ class _FeedDetailsPageState extends State<FeedDetailsPage> {
       return ModalProgressHUD(
         inAsyncCall: _scrapTableProvider.isGettingData,
         child: Scaffold(
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Please wait...'),
-                  duration: Duration(seconds: 1),
+          floatingActionButton: kIsWeb
+              ? null
+              : FloatingActionButton(
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Please wait...'),
+                        duration: Duration(seconds: 1),
+                      ),
+                    );
+                    shareDynamicLink(
+                      id: feed!.id.toString(),
+                      title: feed!.title!,
+                      purpose: DL.feeds,
+                    );
+                  },
+                  child: const Icon(Icons.share),
                 ),
-              );
-              shareDynamicLink(
-                id: feed!.id.toString(),
-                title: feed!.title!,
-                purpose: DL.feeds,
-              );
-            },
-            child: const Icon(Icons.share),
-          ),
           bottomNavigationBar: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -211,7 +213,7 @@ class _FeedDetailsPageState extends State<FeedDetailsPage> {
                               url!,
                             );
                           }
-                        }),
+                        },),
                   ],
                 ),
               ),

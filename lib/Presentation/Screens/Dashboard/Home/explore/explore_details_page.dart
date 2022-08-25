@@ -59,7 +59,7 @@ class _ExploreDetailsPageState extends State<ExploreDetailsPage> {
               element.adminOrgIds!.contains(explore!.id.toString())).toSet()
           .toList();
       return Scaffold(
-        floatingActionButton: FloatingActionButton(
+        floatingActionButton: kIsWeb ?null:FloatingActionButton(
           key: shareButtonKey,
           onPressed: () {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -118,7 +118,7 @@ class _ExploreDetailsPageState extends State<ExploreDetailsPage> {
                               setState(() {});
                             },
                             child: const Text(
-                              "unFollow",
+                              "Unfollow",
                               style: TextStyle(
                                 color: rPrimaryColor,
                               ),

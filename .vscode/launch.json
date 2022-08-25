@@ -15,26 +15,26 @@
         //         "lib/main_mprod.dart" 
         //     ]
         // },
-        // {
-        //     "name": "MBM Elearning",
-        //     "request": "launch",
-        //     "type": "dart",
-        //     "args": [
-        //         "--flavor", 
-        //         "mdev",
-        //         "-t", 
-        //         "lib/main_mdev.dart" 
-        //     ]
-        // },
         {
             "name": "MBM Elearning",
             "request": "launch",
             "type": "dart",
-            "args": ["-d", "chrome","--web-port", "8000", "--web-renderer", "html", "--flavor", 
-            "mdev",
-            "-t", 
-            "lib/main_mdev.dart" ],
-        }
+            "args": [
+                "--flavor", 
+                "mdev",
+                "-t", 
+                "lib/main_mdev.dart" 
+            ]
+        },
+        // {
+        //     "name": "MBM Elearning",
+        //     "request": "launch",
+        //     "type": "dart",
+        //     "args": ["-d", "chrome","--web-port", "8000", "--web-renderer", "html", "--flavor", 
+        //     "mdev",
+        //     "-t", 
+        //     "lib/main_mdev.dart" ],
+        // }
         // {
         //     "name": "studyem",
         //     "request": "launch",

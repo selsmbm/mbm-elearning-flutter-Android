@@ -22,7 +22,7 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends State<LandingPage> {
-  final _auth = FirebaseAuth.instance.currentUser;
+  final User? _auth = FirebaseAuth.instance.currentUser;
   late ScrapTableProvider scrapTableProvider;
 
   checkUser() async {
@@ -32,8 +32,8 @@ class _LandingPageState extends State<LandingPage> {
       if (_auth == null) {
         if (kIsWeb) {
           Timer(const Duration(seconds: 1), () {
-            Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (context) => const SigninPage()));
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => const SigninPage()));
           });
         } else {
           Timer(const Duration(seconds: 1), () {
@@ -42,7 +42,8 @@ class _LandingPageState extends State<LandingPage> {
           });
         }
       } else {
-        if (prefs.getBool(SP.initialProfileSaved) != null) {
+        if (prefs.getBool(SP.initialProfileSaved) != null ||
+            prefs.getBool(SP.initialProfileSaved) != false) {
           Timer(const Duration(seconds: 1), () async {
             Navigator.pushReplacement(
               context,

@@ -222,7 +222,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(MediaQuery.of(context).size.width);
+    print(user!.photoURL!);
     return WillPopScope(
       onWillPop: () async {
         SystemNavigator.pop();

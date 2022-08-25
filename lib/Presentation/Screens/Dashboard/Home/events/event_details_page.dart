@@ -59,7 +59,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
           int.parse(event!.endtime!) * 1000);
     }
     return Scaffold(
-      floatingActionButton: event != null
+      floatingActionButton: event != null && !kIsWeb
           ? FloatingActionButton(
               onPressed: () {
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -97,7 +97,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                                 setState(() {});
                               },
                               child: const Text(
-                                "unFollow",
+                                "Unfollow",
                                 style: TextStyle(
                                   color: rPrimaryColor,
                                 ),
