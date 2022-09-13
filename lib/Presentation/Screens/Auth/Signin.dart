@@ -232,11 +232,11 @@ class _SigninPageState extends State<SigninPage> with TickerProviderStateMixin {
                 },
                 text: 'Sign Up',
               ),
-            kIsWeb
-            ? const SizedBox()
-            :  const ORDevider(
-                text: 'Or Sign Up with',
-              ),
+              kIsWeb
+                  ? const SizedBox()
+                  : const ORDevider(
+                      text: 'Or Sign Up with',
+                    ),
               const SocialSigninButton(),
               const SizedBox(
                 height: 10,
@@ -349,15 +349,25 @@ class _SigninPageState extends State<SigninPage> with TickerProviderStateMixin {
                           Navigator.popAndPushNamed(context, 'dashboard');
                         } else {
                           if (FirebaseAuth.instance.currentUser!.photoURL !=
-                                      null &&
-                                  FirebaseAuth.instance.currentUser!.photoURL!
-                                      .contains(student) ||
-                              FirebaseAuth.instance.currentUser!.photoURL!
-                                  .contains(teacher) ||
-                              FirebaseAuth.instance.currentUser!.photoURL!
-                                  .contains(alumni)) {
-                            prefs.setBool(SP.initialProfileSaved, true);
-                            Navigator.popAndPushNamed(context, 'dashboard');
+                              null) {
+                            if (FirebaseAuth.instance.currentUser!.photoURL!
+                                    .contains(student) ||
+                                FirebaseAuth.instance.currentUser!.photoURL!
+                                    .contains(teacher) ||
+                                FirebaseAuth.instance.currentUser!.photoURL!
+                                    .contains(alumni)) {
+                              prefs.setBool(SP.initialProfileSaved, true);
+                              Navigator.popAndPushNamed(context, 'dashboard');
+                            } else {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const ProfilePage(
+                                    isItInitialUpdate: true,
+                                  ),
+                                ),
+                              );
+                            }
                           } else {
                             Navigator.pushReplacement(
                               context,
@@ -415,11 +425,11 @@ class _SigninPageState extends State<SigninPage> with TickerProviderStateMixin {
                 },
                 text: 'Sign In',
               ),
-             kIsWeb
-            ? const SizedBox()
-            : const ORDevider(
-                text: 'Or Sign in with',
-              ),
+              kIsWeb
+                  ? const SizedBox()
+                  : const ORDevider(
+                      text: 'Or Sign in with',
+                    ),
               const SocialSigninButton(),
               const SizedBox(
                 height: 10,
