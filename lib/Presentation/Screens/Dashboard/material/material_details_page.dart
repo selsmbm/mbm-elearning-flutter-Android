@@ -194,7 +194,14 @@ class _MaterialDetailsPageState extends State<MaterialDetailsPage> {
                 IconButton(
                   key: openInBrowserKey,
                   onPressed: () {
-                    launch(widget.material['mturl']);
+                    // launch(widget.material['mturl']);
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return WebViewMaterialPage(
+                        url: widget.material['mturl'],
+                        title: widget.material['mtname'],
+                      );
+                    }));
                   },
                   icon: const Icon(Icons.open_in_browser),
                 ),
