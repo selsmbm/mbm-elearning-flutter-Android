@@ -83,7 +83,7 @@ class _WebViewMaterialPageState extends State<WebViewMaterialPage> {
           ),
           Expanded(
             child: WebView(
-              initialUrl: 'https://mbmec.weebly.com/civil2.html',
+              initialUrl: widget.url,
               javascriptMode: JavascriptMode.unrestricted,
               onWebViewCreated: (WebViewController webViewController) {
                 _controller.complete(webViewController);
