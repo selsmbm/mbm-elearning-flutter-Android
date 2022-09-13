@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mbm_elearning/Data/AuthFunc/Google.dart';
@@ -28,6 +29,10 @@ class SocialSigninButton extends StatelessWidget {
                 ),
                 child: TextButton(
                   onPressed: () async {
+                    if (!kIsWeb) {
+                      await FirebaseMessaging.instance
+                          .subscribeToTopic(mbmEleFcmChannel);
+                    }
                     SharedPreferences prefs =
                         await SharedPreferences.getInstance();
                     var credential = await googleSignIn(context);

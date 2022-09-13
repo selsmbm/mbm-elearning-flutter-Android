@@ -326,6 +326,10 @@ class _SigninPageState extends State<SigninPage> with TickerProviderStateMixin {
                 onPressed: () async {
                   if (_password != null && _email != null) {
                     try {
+                       if (!kIsWeb) {
+                          await FirebaseMessaging.instance
+                              .subscribeToTopic(mbmEleFcmChannel);
+                        }
                       SharedPreferences prefs =
                           await SharedPreferences.getInstance();
                       setState(() {
@@ -337,10 +341,6 @@ class _SigninPageState extends State<SigninPage> with TickerProviderStateMixin {
                               email: _email!, password: _password!);
                       if (FirebaseAuth.instance.currentUser != null &&
                           FirebaseAuth.instance.currentUser!.emailVerified) {
-                        if (!kIsWeb) {
-                          await FirebaseMessaging.instance
-                              .subscribeToTopic(mbmEleFcmChannel);
-                        }
                         setState(() {
                           showProgress = false;
                         });
