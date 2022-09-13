@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
@@ -26,6 +27,9 @@ class _LandingPageState extends State<LandingPage> {
   late ScrapTableProvider scrapTableProvider;
 
   checkUser() async {
+    if (!kIsWeb) {
+      FirebaseMessaging.instance.subscribeToTopic(mbmEleFcmChannel);
+    }
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult != ConnectivityResult.none) {
