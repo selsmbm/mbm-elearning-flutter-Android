@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:mbm_elearning/Data/Repository/add_event_repo.dart';
+import 'package:mbm_elearning/Data/Repository/send_notification.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Data/model/explore_model.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
@@ -103,6 +104,12 @@ class _AddNewEventPageState extends State<AddNewEventPage> {
                       file,
                       _scrapTableProvider,
                       context,
+                    );
+                    await FirebaseNotiSender.send(
+                      iconImageCompleteUrl: image,
+                      topic: "O-$orgid",
+                      title: title,
+                      desc: "A new event By $org",
                     );
                     setState(() {
                       showProgress = false;
