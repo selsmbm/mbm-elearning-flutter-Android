@@ -308,7 +308,11 @@ class NavigationControls extends StatelessWidget {
                   } else if (snapshot.data == WebViewButtonStatus.dl) {
                     return IconButton(
                       icon: const Icon(Icons.download),
-                      onPressed: () {},
+                      onPressed: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Coming soon')),
+                        );
+                      },
                     );
                   } else {
                     return SizedBox();
