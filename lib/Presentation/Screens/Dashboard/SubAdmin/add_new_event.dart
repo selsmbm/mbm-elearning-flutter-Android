@@ -58,7 +58,7 @@ class _AddNewEventPageState extends State<AddNewEventPage> {
       inAsyncCall: showProgress,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Add new explore'),
+          title: const Text('Add new event'),
         ),
         bottomNavigationBar: BottomAppBar(
           child: Row(

@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 const String mbmEleFcmChannel = "mbm_ele_fcm_channel";
 
 // const String driveImageShowUrl = "https://drive.google.com/uc?export=view&id=";
+const String driveFileDownloadUrl = "https://drive.google.com/uc?export=download&id=";
 const String driveImageShowUrl = "https://lh3.googleusercontent.com/d/";
 const String defaultDriveImageShowUrl = "14HZftHO6_LaoMOdzcE1t5RmrrpQSCGis";
 const String defaultUserDriveImageShowUrl = "1VnGXzQ1HW6W5MZwSQQdJgbqL4dHc30OB";
+
 
 const List<String> mttypes = [
   'notes',
@@ -70,4 +72,9 @@ class DL {
   static const String feeds = "feeds";
   static const String explore = "explore";
   static const String event = "event";
+}
+
+enum WebViewButtonStatus{
+  yt,
+  dl,
 }

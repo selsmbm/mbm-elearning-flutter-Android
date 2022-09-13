@@ -92,7 +92,7 @@ class _HomePageState extends State<HomePage> {
                           isDense: true,
                           contentPadding:
                               const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                          hintText: 'Globel Search',
+                          hintText: 'Global Search',
                           hintStyle: TextStyle(
                             color: Theme.of(context).primaryColor ==
                                     rPrimaryMaterialColorLite

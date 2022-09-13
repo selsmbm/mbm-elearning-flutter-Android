@@ -51,6 +51,8 @@ dependencies:
   chips_choice_null_safety: ^2.0.6
   lottie: any
   update_available: ^2.2.0-dev.1 # android and ios
+  webview_flutter: ^3.0.4
+  path_provider: ^2.0.11
   
 
 

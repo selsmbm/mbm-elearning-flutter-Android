@@ -13,6 +13,7 @@ import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/Presentation/Constants/utills.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/dashboard.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/material/AddMaterial.dart';
+import 'package:mbm_elearning/Presentation/Screens/Dashboard/material/web_view_material_page.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -96,7 +97,13 @@ class _MaterialDetailsPageState extends State<MaterialDetailsPage> {
             const SizedBox(height: 10),
             GestureDetector(
               onTap: () {
-                launch(widget.material['mturl']);
+                // launch(widget.material['mturl']);
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return WebViewMaterialPage(
+                    url: widget.material['mturl'],
+                    title: widget.material['mtname'],
+                  );
+                }));
               },
               child: Text(
                 widget.material['mtname'],
@@ -241,7 +248,8 @@ class _MaterialDetailsPageState extends State<MaterialDetailsPage> {
                                 '',
                                 scrapTableProvider!);
                             if (output == 'SUCCESS') {
-                              Future.delayed(const Duration(milliseconds: 300), () {
+                              Future.delayed(const Duration(milliseconds: 300),
+                                  () {
                                 ScaffoldMessenger.of(ctx).showSnackBar(
                                   const SnackBar(
                                     content:
