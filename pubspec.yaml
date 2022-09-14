@@ -1,7 +1,7 @@
 name: mbm_elearning
 description: mbm_elearning, A notes sharing platform.
 
-version: 7.1.0+17
+version: 7.1.2+19
 
 environment:
   sdk: ">=2.15.1 <3.0.0"
@@ -51,7 +51,6 @@ dependencies:
   chips_choice_null_safety: ^2.0.6
   lottie: any
   update_available: ^2.2.0-dev.1 # android and ios
-  flutter_inappwebview: ^5.4.3+7
   path_provider: ^2.0.11
   
 
