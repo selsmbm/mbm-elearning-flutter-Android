@@ -97,13 +97,13 @@ class _MaterialDetailsPageState extends State<MaterialDetailsPage> {
             const SizedBox(height: 10),
             GestureDetector(
               onTap: () {
-                // launch(widget.material['mturl']);
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return WebViewMaterialPage(
-                    url: widget.material['mturl'],
-                    title: widget.material['mtname'],
-                  );
-                }));
+                launch(widget.material['mturl']);
+                // Navigator.push(context, MaterialPageRoute(builder: (context) {
+                //   return WebViewMaterialPage(
+                //     url: widget.material['mturl'],
+                //     title: widget.material['mtname'],
+                //   );
+                // }));
               },
               child: Text(
                 widget.material['mtname'],
@@ -194,14 +194,14 @@ class _MaterialDetailsPageState extends State<MaterialDetailsPage> {
                 IconButton(
                   key: openInBrowserKey,
                   onPressed: () {
-                    // launch(widget.material['mturl']);
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return WebViewMaterialPage(
-                        url: widget.material['mturl'],
-                        title: widget.material['mtname'],
-                      );
-                    }));
+                    launch(widget.material['mturl']);
+                    // Navigator.push(context,
+                    //     MaterialPageRoute(builder: (context) {
+                    //   return WebViewMaterialPage(
+                    //     url: widget.material['mturl'],
+                    //     title: widget.material['mtname'],
+                    //   );
+                    // }));
                   },
                   icon: const Icon(Icons.open_in_browser),
                 ),
