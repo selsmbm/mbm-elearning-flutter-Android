@@ -60,7 +60,7 @@ class LocalDbConnect {
   Future<void> addBookMarkMt(BookMarkMt bookMarkmt) async {
     await _db.transaction(
       (Transaction txn) async {
-        final int id = await txn.rawInsert(
+        await txn.rawInsert(
             '''INSERT INTO $kDbTableName(title,url,subject,type,sem,branch) VALUES("${bookMarkmt.title}","${bookMarkmt.url}","${bookMarkmt.subject}","${bookMarkmt.type}","${bookMarkmt.sem}","${bookMarkmt.branch}")''');
       },
     );
@@ -68,7 +68,7 @@ class LocalDbConnect {
 
   // Deletes records in the db table.
   Future<void> deleteMt(int id) async {
-    final count = await _db.rawDelete('''
+    await _db.rawDelete('''
         DELETE FROM $kDbTableName
         WHERE id = $id
       ''');

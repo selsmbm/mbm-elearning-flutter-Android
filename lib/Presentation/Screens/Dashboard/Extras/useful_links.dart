@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class UsefulLinksPage extends StatefulWidget {
-  const UsefulLinksPage({Key? key}) : super(key: key);
+  const UsefulLinksPage({super.key});
   @override
   _UsefulLinksPageState createState() => _UsefulLinksPageState();
 }

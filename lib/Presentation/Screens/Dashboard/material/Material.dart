@@ -15,7 +15,7 @@ String? branch;
 class MaterialsPage extends StatefulWidget {
   final String? sem;
   final String? branch;
-  const MaterialsPage({Key? key, this.sem, this.branch}) : super(key: key);
+  const MaterialsPage({super.key, this.sem, this.branch});
   @override
   _MaterialsPageState createState() => _MaterialsPageState();
 }
@@ -105,9 +105,9 @@ class _MaterialsPageState extends State<MaterialsPage> {
 class MtCard extends StatefulWidget {
   final String title;
   const MtCard({
-    Key? key,
+    super.key,
     required this.title,
-  }) : super(key: key);
+  });
 
   @override
   _MtCardState createState() => _MtCardState();

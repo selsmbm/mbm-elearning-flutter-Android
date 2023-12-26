@@ -11,8 +11,7 @@ import 'package:url_launcher/url_launcher.dart';
 class AdminDashboard extends StatefulWidget {
   final bool isSuperAdmin;
   final int? orgId;
-  const AdminDashboard({Key? key, this.isSuperAdmin = true, this.orgId})
-      : super(key: key);
+  const AdminDashboard({super.key, this.isSuperAdmin = true, this.orgId});
   @override
   _AdminDashboardState createState() => _AdminDashboardState();
 }

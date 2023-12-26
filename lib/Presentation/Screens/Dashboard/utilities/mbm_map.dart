@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_html_all/flutter_html_all.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/Presentation/Constants/utills.dart';
+import 'package:mbm_elearning/Presentation/Widgets/html_viewer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MBMMap extends StatefulWidget {
-  const MBMMap({Key? key, this.url, this.title}) : super(key: key);
+  const MBMMap({super.key, this.url, this.title});
   final String? url;
   final String? title;
   @override
@@ -47,12 +46,10 @@ class _MBMMapState extends State<MBMMap> {
           ),
         ],
       ),
-      body: Html(
+      body: HtmlViewer(
         data: """
 <iframe src="${widget.url ?? "https://www.google.com/maps/d/embed?mid=1_Wg8w4EujrRyn9PHpoZdT1pvy73Pwvc&ehbc=2E312F&z=15"}" width="${size.width}" height="${size.height * 0.90}">Loading...</iframe>""",
-        customRenders: {
-          iframeMatcher(): iframeRender(),
-        },
+        shrinkWrap: false,
       ),
     );
   }
@@ -66,20 +63,23 @@ class _MBMMapState extends State<MBMMap> {
     SharedPreferences pref = await SharedPreferences.getInstance();
     if (pref.getBool(SP.mapPageTutorial) == null) {
       initTargets();
-      tutorialCoachMark = TutorialCoachMark(context,
+      tutorialCoachMark = TutorialCoachMark(
           targets: targets,
           colorShadow: rPrimaryDarkLiteColor,
           textSkip: "SKIP",
           alignSkip: Alignment.bottomRight,
           paddingFocus: 10,
           hideSkip: true,
-          opacityShadow: 0.8, onSkip: () {
-        targets.clear();
-        pref.setBool(SP.mapPageTutorial, true);
-      }, onFinish: () {
-        pref.setBool(SP.mapPageTutorial, true);
-      })
-        ..show();
+          opacityShadow: 0.8,
+          onSkip: () {
+            targets.clear();
+            pref.setBool(SP.mapPageTutorial, true);
+            return true;
+          },
+          onFinish: () {
+            pref.setBool(SP.mapPageTutorial, true);
+          })
+        ..show(context: context);
     }
   }
 

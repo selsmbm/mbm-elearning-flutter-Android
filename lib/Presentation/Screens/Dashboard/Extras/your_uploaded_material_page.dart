@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class YourMaterialPage extends StatefulWidget {
-  const YourMaterialPage({Key? key}) : super(key: key);
+  const YourMaterialPage({super.key});
   @override
   _YourMaterialPageState createState() => _YourMaterialPageState();
 }

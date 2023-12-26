@@ -129,7 +129,7 @@ class StickyGroupedListView<T, E> extends StatefulWidget {
 
   /// Creates a [StickyGroupedListView].
   const StickyGroupedListView({
-    Key? key,
+    super.key,
     required this.elements,
     required this.groupBy,
     required this.groupSeparatorBuilder,
@@ -155,8 +155,7 @@ class StickyGroupedListView<T, E> extends StatefulWidget {
     this.initialAlignment = 0,
     this.initialScrollIndex = 0,
     this.shrinkWrap = false,
-  })  : assert(itemBuilder != null || indexedItemBuilder != null),
-        super(key: key);
+  })  : assert(itemBuilder != null || indexedItemBuilder != null);
 
   @override
   State<StatefulWidget> createState() => _StickyGroupedListViewState<T, E>();

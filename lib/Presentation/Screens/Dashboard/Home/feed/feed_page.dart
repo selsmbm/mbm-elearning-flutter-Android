@@ -8,7 +8,7 @@ import 'package:mbm_elearning/Presentation/Widgets/model_progress.dart';
 import 'package:provider/provider.dart';
 
 class FeedsPage extends StatefulWidget {
-  const FeedsPage({Key? key}) : super(key: key);
+  const FeedsPage({super.key});
   @override
   _FeedsPageState createState() => _FeedsPageState();
 }

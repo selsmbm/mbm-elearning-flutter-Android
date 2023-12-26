@@ -10,7 +10,7 @@ import 'package:mbm_elearning/Presentation/Widgets/model_progress.dart';
 import 'package:provider/provider.dart';
 
 class ExplorePage extends StatefulWidget {
-  const ExplorePage({Key? key}) : super(key: key);
+  const ExplorePage({super.key});
   @override
   _ExplorePageState createState() => _ExplorePageState();
 }

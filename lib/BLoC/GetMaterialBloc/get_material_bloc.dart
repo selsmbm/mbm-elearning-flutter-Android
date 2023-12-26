@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
@@ -69,52 +68,48 @@ class GetMaterialApiNotCall extends GetMaterialApiState {}
 class GetMaterialApiBloc
     extends Bloc<GetMaterialApiEvent, GetMaterialApiState> {
   GetMaterialRepo allNetworkRequest;
-  GetMaterialApiBloc(this.allNetworkRequest) : super(GetMaterialApiNotCall());
-
-  GetMaterialApiState get initialState => GetMaterialApiNotCall();
-
-  @override
-  Stream<GetMaterialApiState> mapEventToState(
-      GetMaterialApiEvent event) async* {
-    if (event is FetchGetMaterialApi) {
-      if (event.scrapTableProvider.checkIsNotEmpty() &&
-          !event.getDataFromLiveSheet) {
-        if (event.query != '') {
-          yield GetMaterialApiIsLoading();
-          yield GetMaterialApiIsSuccess(
-              event.scrapTableProvider.getMaterialsByQuary(event.query));
-        } else if (event.sem != '' && event.type != '') {
-          yield GetMaterialApiIsLoading();
-          yield GetMaterialApiIsSuccess(event.scrapTableProvider
-              .getMaterialsBySemesterAndBranch(event.sem, event.type,
-                  branch: event.branch));
-        } else if (event.userId != '') {
-          yield GetMaterialApiIsSuccess(
-              event.scrapTableProvider.getMaterialsByUserid(event.userId));
+  GetMaterialApiBloc(this.allNetworkRequest) : super(GetMaterialApiNotCall()) {
+    on<GetMaterialApiEvent>((event, emit) async {
+      if (event is FetchGetMaterialApi) {
+        if (event.scrapTableProvider.checkIsNotEmpty() &&
+            !event.getDataFromLiveSheet) {
+          if (event.query != '') {
+            emit(GetMaterialApiIsLoading());
+            emit(GetMaterialApiIsSuccess(
+                event.scrapTableProvider.getMaterialsByQuary(event.query)));
+          } else if (event.sem != '' && event.type != '') {
+            emit(GetMaterialApiIsLoading());
+            emit(GetMaterialApiIsSuccess(event.scrapTableProvider
+                .getMaterialsBySemesterAndBranch(event.sem, event.type,
+                    branch: event.branch)));
+          } else if (event.userId != '') {
+            emit(GetMaterialApiIsSuccess(
+                event.scrapTableProvider.getMaterialsByUserid(event.userId)));
+          }
+        } else {
+          if (event.showProgress) {
+            emit(GetMaterialApiIsLoading());
+          }
+          try {
+            var output = await allNetworkRequest.getMaterialRequest(
+              event.sem,
+              event.branch,
+              event.query,
+              event.userId,
+              event.approve,
+              event.type,
+              event.skip,
+              event.limit,
+            );
+            emit(GetMaterialApiIsSuccess(output));
+          } catch (_) {
+            log(_.toString());
+            emit(GetMaterialApiIsFailed());
+          }
         }
-      } else {
-        if (event.showProgress) {
-          yield GetMaterialApiIsLoading();
-        }
-        try {
-          var output = await allNetworkRequest.getMaterialRequest(
-            event.sem,
-            event.branch,
-            event.query,
-            event.userId,
-            event.approve,
-            event.type,
-            event.skip,
-            event.limit,
-          );
-          yield GetMaterialApiIsSuccess(output);
-        } catch (_) {
-          log(_.toString());
-          yield GetMaterialApiIsFailed();
-        }
+      } else if (event is ResetGetMaterialApi) {
+        emit(GetMaterialApiNotCall());
       }
-    } else if (event is ResetGetMaterialApi) {
-      yield GetMaterialApiNotCall();
-    }
+    });
   }
 }

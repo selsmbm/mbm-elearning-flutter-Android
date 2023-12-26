@@ -2,13 +2,10 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:mbm_elearning/Presentation/Widgets/model_progress.dart';
-import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
-import 'package:provider/provider.dart';
 
 class HtmlEditorScreen extends StatefulWidget {
   const HtmlEditorScreen(
-      {Key? key, this.initialVal, this.characterLimit, this.showdesc})
-      : super(key: key);
+      {super.key, this.initialVal, this.characterLimit, this.showdesc});
   final String? initialVal;
   final int? characterLimit;
   final bool? showdesc;
@@ -18,7 +15,6 @@ class HtmlEditorScreen extends StatefulWidget {
 
 class _HtmlEditorScreenState extends State<HtmlEditorScreen> {
   final HtmlEditorController controller = HtmlEditorController();
-  late ScrapTableProvider _scrapTableProvider;
   bool showProgress = false;
 
   @override
@@ -28,7 +24,6 @@ class _HtmlEditorScreenState extends State<HtmlEditorScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _scrapTableProvider = Provider.of<ScrapTableProvider>(context);
     return ModalProgressHUD(
       inAsyncCall: showProgress,
       child: Scaffold(

@@ -8,7 +8,7 @@ class SignInButton extends StatelessWidget {
   final Color color;
   final Color textcolor;
   const SignInButton(
-      {this.onPressed,
+      {super.key, this.onPressed,
       required this.text,
       this.width,
       this.color = Colors.white,

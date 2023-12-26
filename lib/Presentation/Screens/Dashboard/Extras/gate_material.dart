@@ -11,7 +11,7 @@ import 'package:mbm_elearning/Presentation/Constants/unity_ads.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class GateMaterial extends StatefulWidget {
-  const GateMaterial({Key? key}) : super(key: key);
+  const GateMaterial({super.key});
   @override
   _GateMaterialState createState() => _GateMaterialState();
 }

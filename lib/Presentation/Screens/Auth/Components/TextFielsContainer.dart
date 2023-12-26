@@ -6,11 +6,11 @@ class TextFieldContainer extends StatelessWidget {
   final double? height;
   final double? width;
   const TextFieldContainer({
-    Key? key,
+    super.key,
     required this.child,
     this.height,
     this.width,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

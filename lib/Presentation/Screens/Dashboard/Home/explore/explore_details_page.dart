@@ -20,8 +20,7 @@ import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ExploreDetailsPage extends StatefulWidget {
-  const ExploreDetailsPage({Key? key, this.explore, required this.exploreId})
-      : super(key: key);
+  const ExploreDetailsPage({super.key, this.explore, required this.exploreId});
   final ExploreModel? explore;
   final int exploreId;
   @override
@@ -56,26 +55,29 @@ class _ExploreDetailsPageState extends State<ExploreDetailsPage> {
       List admins = jsonDecode(explore!.adminsMap!);
       List<EventsModel> events = _scrapTableProvider.events
           .where((EventsModel element) =>
-              element.adminOrgIds!.contains(explore!.id.toString())).toSet()
+              element.adminOrgIds!.contains(explore!.id.toString()))
+          .toSet()
           .toList();
       return Scaffold(
-        floatingActionButton: kIsWeb ?null:FloatingActionButton(
-          key: shareButtonKey,
-          onPressed: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Please wait...'),
-                duration: Duration(seconds: 1),
+        floatingActionButton: kIsWeb
+            ? null
+            : FloatingActionButton(
+                key: shareButtonKey,
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Please wait...'),
+                      duration: Duration(seconds: 1),
+                    ),
+                  );
+                  shareDynamicLink(
+                    id: explore!.id.toString(),
+                    title: explore!.title!,
+                    purpose: DL.explore,
+                  );
+                },
+                child: const Icon(Icons.share),
               ),
-            );
-            shareDynamicLink(
-              id: explore!.id.toString(),
-              title: explore!.title!,
-              purpose: DL.explore,
-            );
-          },
-          child: const Icon(Icons.share),
-        ),
         bottomNavigationBar: BottomAppBar(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -333,18 +335,21 @@ class _ExploreDetailsPageState extends State<ExploreDetailsPage> {
     SharedPreferences pref = await SharedPreferences.getInstance();
     if (pref.getBool(SP.exploreDetailsPageTutorial) == null) {
       initTargets();
-      tutorialCoachMark = TutorialCoachMark(context,
+      tutorialCoachMark = TutorialCoachMark(
           targets: targets,
           colorShadow: rPrimaryDarkLiteColor,
           textSkip: "SKIP",
           paddingFocus: 10,
-          opacityShadow: 0.8, onSkip: () {
-        targets.clear();
-        pref.setBool(SP.exploreDetailsPageTutorial, true);
-      }, onFinish: () {
-        pref.setBool(SP.exploreDetailsPageTutorial, true);
-      })
-        ..show();
+          opacityShadow: 0.8,
+          onSkip: () {
+            targets.clear();
+            pref.setBool(SP.exploreDetailsPageTutorial, true);
+            return true;
+          },
+          onFinish: () {
+            pref.setBool(SP.exploreDetailsPageTutorial, true);
+          })
+        ..show(context: context);
     }
   }
 

@@ -1,22 +1,19 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html_all/flutter_html_all.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Data/model/blog_model.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/Presentation/Constants/utills.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/explore/explore_details_page.dart';
+import 'package:mbm_elearning/Presentation/Widgets/html_viewer.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 import 'package:mbm_elearning/Presentation/Widgets/model_progress.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_html/flutter_html.dart';
-
 import '../events/event_details_page.dart';
 
 class FeedDetailsPage extends StatefulWidget {
-  const FeedDetailsPage({Key? key, this.feed, required this.feedId})
-      : super(key: key);
+  const FeedDetailsPage({super.key, this.feed, required this.feedId});
   final BlogModel? feed;
   final int feedId;
   @override
@@ -193,27 +190,10 @@ class _FeedDetailsPageState extends State<FeedDetailsPage> {
                     const SizedBox(
                       height: 20,
                     ),
-                    Html(
+                    HtmlViewer(
                         shrinkWrap: true,
                         data: feed!.description ?? "N/A",
-                        customRenders: {
-                          iframeMatcher(): iframeRender(),
-                          svgTagMatcher(): svgTagRender(),
-                          svgDataUriMatcher(): svgDataImageRender(),
-                          svgAssetUriMatcher(): svgAssetImageRender(),
-                          svgNetworkSourceMatcher(): svgNetworkImageRender(),
-                          videoMatcher(): videoRender(),
-                        },
-                        onLinkTap: (url, ctx, attributes, element) =>
-                            launch(url!),
-                        onImageTap: (url, ctx, attributes, element) {
-                          if (!kIsWeb) {
-                            bigImageShower(
-                              context,
-                              url!,
-                            );
-                          }
-                        },),
+                       ),
                   ],
                 ),
               ),

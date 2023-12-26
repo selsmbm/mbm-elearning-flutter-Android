@@ -6,7 +6,7 @@ import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MBMStories extends StatefulWidget {
-  const MBMStories({Key? key}) : super(key: key);
+  const MBMStories({super.key});
   @override
   _MBMStoriesState createState() => _MBMStoriesState();
 }

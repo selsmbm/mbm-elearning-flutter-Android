@@ -4,10 +4,10 @@ import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 
 class ImageCus extends StatelessWidget {
   const ImageCus({
-    Key? key,
+    super.key,
     this.image,
     this.completeUrl,
-  }) : super(key: key);
+  });
 
   final String? image;
   final String? completeUrl;
@@ -32,9 +32,9 @@ class ImageCus extends StatelessWidget {
 
 class UserImageCus extends StatelessWidget {
   const UserImageCus({
-    Key? key,
+    super.key,
     this.image,
-  }) : super(key: key);
+  });
 
   final String? image;
 
@@ -59,10 +59,10 @@ class UserImageCus extends StatelessWidget {
 
 class BigImageCus extends StatelessWidget {
   const BigImageCus({
-    Key? key,
+    super.key,
     this.image,
     this.completeUrl,
-  }) : super(key: key);
+  });
 
   final String? image;
   final String? completeUrl;
@@ -85,9 +85,9 @@ class BigImageCus extends StatelessWidget {
 
 class UserImageByName extends StatelessWidget {
   const UserImageByName({
-    Key? key,
+    super.key,
     required this.name,
-  }) : super(key: key);
+  });
 
   final String name;
 

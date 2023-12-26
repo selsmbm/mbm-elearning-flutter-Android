@@ -7,7 +7,7 @@ import 'package:mbm_elearning/Data/model/verification_user_model.dart';
 import 'package:mbm_elearning/Presentation/Widgets/model_progress.dart';
 
 class VerifiedUsers extends StatefulWidget {
-  const VerifiedUsers({Key? key}) : super(key: key);
+  const VerifiedUsers({super.key});
 
   @override
   State<VerifiedUsers> createState() => _VerifiedUsersState();

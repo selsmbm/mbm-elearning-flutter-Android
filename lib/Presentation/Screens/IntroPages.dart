@@ -5,6 +5,8 @@ import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Screens/Auth/Signin.dart';
 
 class OnBoardingPage extends StatefulWidget {
+  const OnBoardingPage({super.key});
+
   @override
   _OnBoardingPageState createState() => _OnBoardingPageState();
 }

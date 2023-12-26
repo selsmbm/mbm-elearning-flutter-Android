@@ -1,11 +1,13 @@
 {
     "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": true
+        "source.fixAll": "explicit",
+        "source.organizeImports": "explicit"
     },
+    "editor.formatOnSave": true,
+    "editor.autoClosingBrackets": "always",
     "cSpell.words": [
         "elearning",
         "mbmecj",
         "sels"
     ]
-    
 }

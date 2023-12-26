@@ -13,7 +13,7 @@ import 'package:provider/provider.dart';
 
 class AddNewFeedPage extends StatefulWidget {
   final int? orgId;
-  const AddNewFeedPage({Key? key, this.orgId}) : super(key: key);
+  const AddNewFeedPage({super.key, this.orgId});
 
   @override
   State<AddNewFeedPage> createState() => _AddNewFeedPageState();

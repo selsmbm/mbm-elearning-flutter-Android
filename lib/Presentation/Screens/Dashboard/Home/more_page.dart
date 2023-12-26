@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MorePage extends StatefulWidget {
-  const MorePage({Key? key}) : super(key: key);
+  const MorePage({super.key});
 
   @override
   State<MorePage> createState() => _MorePageState();
@@ -266,13 +266,13 @@ class SettingButton extends StatelessWidget {
   final String subtitle;
   final Widget? child;
   const SettingButton({
-    Key? key,
+    super.key,
     this.onTap,
     required this.icon,
     required this.title,
     required this.subtitle,
     this.child,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -12,7 +12,7 @@ import 'package:mbm_elearning/Presentation/Widgets/model_progress.dart';
 import 'package:provider/provider.dart';
 
 class EventsPage extends StatefulWidget {
-  const EventsPage({Key? key}) : super(key: key);
+  const EventsPage({super.key});
   @override
   _EventsPageState createState() => _EventsPageState();
 }

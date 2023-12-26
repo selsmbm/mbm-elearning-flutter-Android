@@ -19,11 +19,10 @@ class AddMaterialPage extends StatefulWidget {
   final String? approveStatus;
   final Map<dynamic, dynamic>? materialData;
   const AddMaterialPage(
-      {Key? key,
+      {super.key,
       this.purpose = AddMaterialPagePurpose.add,
       this.materialData,
-      this.approveStatus})
-      : super(key: key);
+      this.approveStatus});
   @override
   _AddMaterialPageState createState() => _AddMaterialPageState();
 }
@@ -133,6 +132,7 @@ class _AddMaterialPageState extends State<AddMaterialPage> {
                         });
                       }
                     } else {
+                      // ignore: unnecessary_null_comparison
                       if (file == null && materialUrl == null) {
                         ScaffoldMessenger.of(ctx).showSnackBar(
                           const SnackBar(

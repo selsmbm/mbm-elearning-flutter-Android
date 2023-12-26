@@ -17,7 +17,7 @@ import 'package:provider/provider.dart';
 
 class AddNewEventPage extends StatefulWidget {
   final int? orgId;
-  const AddNewEventPage({Key? key, this.orgId}) : super(key: key);
+  const AddNewEventPage({super.key, this.orgId});
   @override
   State<AddNewEventPage> createState() => _AddNewEventPageState();
 }

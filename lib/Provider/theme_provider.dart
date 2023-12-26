@@ -9,7 +9,6 @@ class ThemeController with ChangeNotifier {
 
   ThemeData litethemeData = ThemeData.light().copyWith(
     primaryColor: rPrimaryMaterialColorLite,
-    useMaterial3: true,
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: ButtonStyle(
         shape: MaterialStateProperty.all(RoundedRectangleBorder(
@@ -66,7 +65,6 @@ class ThemeController with ChangeNotifier {
   );
   ThemeData darkthemeData = ThemeData.dark().copyWith(
     primaryColor: rPrimaryDarkLiteColor,
-    useMaterial3: true,
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(rPrimaryDarkLiteColor),

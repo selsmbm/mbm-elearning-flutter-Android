@@ -13,7 +13,6 @@ import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/Presentation/Constants/utills.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/dashboard.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/material/AddMaterial.dart';
-import 'package:mbm_elearning/Presentation/Screens/Dashboard/material/web_view_material_page.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,11 +21,10 @@ import 'package:url_launcher/url_launcher.dart';
 
 class MaterialDetailsPage extends StatefulWidget {
   const MaterialDetailsPage(
-      {Key? key,
+      {super.key,
       required this.material,
       required this.isMe,
-      required this.ismeSuperAdmin})
-      : super(key: key);
+      required this.ismeSuperAdmin});
   final Map material;
   final bool isMe;
   final bool ismeSuperAdmin;
@@ -394,18 +392,21 @@ class _MaterialDetailsPageState extends State<MaterialDetailsPage> {
     SharedPreferences pref = await SharedPreferences.getInstance();
     if (pref.getBool(SP.materialDetailsPageTutorial) == null) {
       initTargets();
-      tutorialCoachMark = TutorialCoachMark(context,
+      tutorialCoachMark = TutorialCoachMark(
           targets: targets,
           colorShadow: rPrimaryDarkLiteColor,
           textSkip: "SKIP",
           paddingFocus: 10,
-          opacityShadow: 0.8, onSkip: () {
-        targets.clear();
-        pref.setBool(SP.materialDetailsPageTutorial, true);
-      }, onFinish: () {
-        pref.setBool(SP.materialDetailsPageTutorial, true);
-      })
-        ..show();
+          opacityShadow: 0.8,
+          onSkip: () {
+            targets.clear();
+            pref.setBool(SP.materialDetailsPageTutorial, true);
+            return true;
+          },
+          onFinish: () {
+            pref.setBool(SP.materialDetailsPageTutorial, true);
+          })
+        ..show(context: context);
     }
   }
 

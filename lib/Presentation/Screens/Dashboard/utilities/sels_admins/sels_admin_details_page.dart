@@ -8,7 +8,7 @@ import 'package:mbm_elearning/Presentation/Constants/utills.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SELSAdminDetails extends StatefulWidget {
-  const SELSAdminDetails({Key? key, this.admin}) : super(key: key);
+  const SELSAdminDetails({super.key, this.admin});
   final AdminsModel? admin;
   @override
   State<SELSAdminDetails> createState() => _SELSAdminDetailsState();

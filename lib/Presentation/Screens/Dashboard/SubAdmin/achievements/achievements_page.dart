@@ -5,7 +5,7 @@ import 'package:mbm_elearning/Presentation/Screens/Admin/dashboard.dart';
 import 'package:mbm_elearning/Presentation/Widgets/model_progress.dart';
 
 class AchievementsPage extends StatefulWidget {
-  const AchievementsPage({Key? key}) : super(key: key);
+  const AchievementsPage({super.key});
 
   @override
   State<AchievementsPage> createState() => _AchievementsPageState();

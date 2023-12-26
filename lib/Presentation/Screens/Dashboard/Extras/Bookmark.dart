@@ -5,7 +5,7 @@ import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/dashboard.dart
 import 'package:url_launcher/url_launcher.dart';
 
 class BookmarkPage extends StatefulWidget {
-  const BookmarkPage({Key? key}) : super(key: key);
+  const BookmarkPage({super.key});
 
   @override
   _BookmarkPageState createState() => _BookmarkPageState();
@@ -96,10 +96,10 @@ class _BookmarkPageState extends State<BookmarkPage> {
                 ),
               );
             } else {
-              return Center(
+              return const Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
+                  children: [
                     Text(
                       'No data available',
                       textAlign: TextAlign.center,

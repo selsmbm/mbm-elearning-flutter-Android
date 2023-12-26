@@ -6,7 +6,7 @@ import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/Presentation/Widgets/model_progress.dart';
 
 class SendNotificationToAllPage extends StatefulWidget {
-  const SendNotificationToAllPage({Key? key}) : super(key: key);
+  const SendNotificationToAllPage({super.key});
   @override
   State<SendNotificationToAllPage> createState() =>
       _SendNotificationToAllPageState();

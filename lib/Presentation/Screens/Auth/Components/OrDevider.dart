@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 class ORDevider extends StatelessWidget {
   final String text;
   const ORDevider({
-    Key? key, required this.text,
-  }) : super(key: key);
+    super.key, required this.text,
+  });
 
   @override
   Widget build(BuildContext context) {

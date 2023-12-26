@@ -8,7 +8,7 @@ import 'package:mbm_elearning/Presentation/Widgets/model_progress.dart';
 import 'package:provider/provider.dart';
 
 class RequestAchievementPage extends StatefulWidget {
-  const RequestAchievementPage({Key? key}) : super(key: key);
+  const RequestAchievementPage({super.key});
 
   @override
   State<RequestAchievementPage> createState() => _RequestAchievementPageState();

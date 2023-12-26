@@ -15,7 +15,7 @@ import 'Components/RoundedInputField.dart';
 import 'Components/social_login.dart';
 
 class SigninPage extends StatefulWidget {
-  const SigninPage({Key? key}) : super(key: key);
+  const SigninPage({super.key});
 
   @override
   _SigninPageState createState() => _SigninPageState();
@@ -185,7 +185,7 @@ class _SigninPageState extends State<SigninPage> with TickerProviderStateMixin {
                       setState(() {
                         showProgress = true;
                       });
-                      UserCredential userCredential = await FirebaseAuth
+                      await FirebaseAuth
                           .instance
                           .createUserWithEmailAndPassword(
                               email: _emailSignup!, password: _passwordSignup!);
@@ -335,7 +335,7 @@ class _SigninPageState extends State<SigninPage> with TickerProviderStateMixin {
                       setState(() {
                         showProgress = true;
                       });
-                      UserCredential userCredential = await FirebaseAuth
+                      await FirebaseAuth
                           .instance
                           .signInWithEmailAndPassword(
                               email: _email!, password: _password!);

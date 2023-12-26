@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class ApproveMaterialPage extends StatefulWidget {
-  const ApproveMaterialPage({Key? key}) : super(key: key);
+  const ApproveMaterialPage({super.key});
   @override
   _ApproveMaterialPageState createState() => _ApproveMaterialPageState();
 }

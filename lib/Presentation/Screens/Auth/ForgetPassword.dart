@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +9,8 @@ import 'package:mbm_elearning/Presentation/Widgets/Buttons/SigninButton.dart';
 import 'Components/RoundedInputField.dart';
 
 class ForgetPasswordPage extends StatefulWidget {
+  const ForgetPasswordPage({super.key});
+
   @override
   _ForgetPasswordPageState createState() => _ForgetPasswordPageState();
 }
@@ -78,7 +78,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                                         duration: Duration(seconds: 3),
                                         content: Text(
                                             'Successfully send reset password email, also check mail in spam box.')));
-                              }).catchError((e) => log("Error: $e"));
+                              });
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(

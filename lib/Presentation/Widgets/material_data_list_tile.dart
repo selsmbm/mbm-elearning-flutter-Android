@@ -10,11 +10,11 @@ import 'package:provider/provider.dart';
 
 class MaterialListTile extends StatefulWidget {
   const MaterialListTile({
-    Key? key,
+    super.key,
     required this.materialData,
     this.isMe = false,
     this.ismeSuperAdmin = false,
-  }) : super(key: key);
+  });
 
   final Map<dynamic, dynamic> materialData;
   final bool isMe;

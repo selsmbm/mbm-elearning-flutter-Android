@@ -17,7 +17,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LandingPage extends StatefulWidget {
-  const LandingPage({Key? key}) : super(key: key);
+  const LandingPage({super.key});
   @override
   _LandingPageState createState() => _LandingPageState();
 }
@@ -42,7 +42,7 @@ class _LandingPageState extends State<LandingPage> {
         } else {
           Timer(const Duration(seconds: 1), () {
             Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => OnBoardingPage()));
+                MaterialPageRoute(builder: (context) => const OnBoardingPage()));
           });
         }
       } else {

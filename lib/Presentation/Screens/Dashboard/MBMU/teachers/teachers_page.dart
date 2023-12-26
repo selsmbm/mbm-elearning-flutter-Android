@@ -8,7 +8,7 @@ import 'package:mbm_elearning/Presentation/Screens/Dashboard/MBMU/teachers/teach
 import 'package:mbm_elearning/Presentation/Widgets/image_cus.dart';
 
 class TeachersPage extends StatefulWidget {
-  const TeachersPage({Key? key}) : super(key: key);
+  const TeachersPage({super.key});
   @override
   _TeachersPageState createState() => _TeachersPageState();
 }

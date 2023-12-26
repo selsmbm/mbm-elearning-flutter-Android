@@ -3,7 +3,7 @@ import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 
 class SignupButton extends StatelessWidget {
   final void Function()? onPressed;
-  const SignupButton({this.onPressed});
+  const SignupButton({super.key, this.onPressed});
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

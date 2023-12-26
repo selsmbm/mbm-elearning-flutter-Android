@@ -9,13 +9,13 @@ class RoundedInputField extends StatelessWidget {
   final int maxLines;
   final TextEditingController? controller;
   const RoundedInputField({
-    Key? key,
+    super.key,
     this.hintText,
     this.onChanged,
     this.errorText,
     this.maxLines = 1,
     this.controller,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -40,11 +40,11 @@ class NormalInputField extends StatelessWidget {
   final int maxLines;
   final TextEditingController? controller;
   const NormalInputField({
-    Key? key,
+    super.key,
     this.hintText,
     this.maxLines = 1,
     this.controller,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +64,7 @@ typedef TextChanged = void Function(String text);
 // Helper widget to track caret position.
 class TrackingTextInput extends StatefulWidget {
   const TrackingTextInput({
-    Key? key,
+    super.key,
     required this.onTextChanged,
     required this.hint,
     required this.icon,
@@ -72,7 +72,7 @@ class TrackingTextInput extends StatefulWidget {
     this.suffixIcon = const SizedBox(
       width: 0,
     ),
-  }) : super(key: key);
+  });
   final TextChanged onTextChanged;
   final String hint;
   final IconData icon;

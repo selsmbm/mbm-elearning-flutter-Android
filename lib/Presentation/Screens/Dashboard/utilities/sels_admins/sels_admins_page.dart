@@ -9,7 +9,7 @@ import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 import 'package:provider/provider.dart';
 
 class SELSAdminsPage extends StatefulWidget {
-  const SELSAdminsPage({Key? key}) : super(key: key);
+  const SELSAdminsPage({super.key});
 
   @override
   State<SELSAdminsPage> createState() => _SELSAdminsPageState();

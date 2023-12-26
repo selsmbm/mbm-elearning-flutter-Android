@@ -26,14 +26,13 @@ import 'package:mbm_elearning/Presentation/Widgets/model_progress.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:update_available/update_available.dart';
-import 'package:update_available_platform_interface/update_available_platform_interface.dart';
 
 LocalDbConnect localDbConnect = LocalDbConnect();
 final StreamController<bool> scrapSubscriptionIsGettingData =
     StreamController<bool>();
 
 class DashboardPage extends StatefulWidget {
-  const DashboardPage({Key? key, this.initialRout}) : super(key: key);
+  const DashboardPage({super.key, this.initialRout});
   final int? initialRout;
   @override
   _DashboardPageState createState() => _DashboardPageState();
@@ -168,16 +167,15 @@ class _DashboardPageState extends State<DashboardPage> {
           await (Connectivity().checkConnectivity());
       if (connectivityResult != ConnectivityResult.none) {
         try {
-          await getUpdateAvailability().then((value) {
-            value.fold(
-              available: () {
+          final updateAvailability = await getUpdateAvailability();
+          final text = switch (updateAvailability) {
+            UpdateAvailable() => () {
                 showDialog(
                   barrierDismissible: false,
                   context: context,
-                  builder: (context) => WillPopScope(
-                    onWillPop: () async {
-                      return false;
-                    },
+                  builder: (context) => PopScope(
+                    canPop: false,
+                    
                     child: AlertDialog(
                       title: const Text('Update available!'),
                       content: const Text(
@@ -195,11 +193,14 @@ class _DashboardPageState extends State<DashboardPage> {
                     ),
                   ),
                 );
+                return "There's an update to you app! Please, update it so you have access to the latest features!";
               },
-              notAvailable: () {},
-              unknown: () {},
-            );
-          });
+            NoUpdateAvailable() => 'No update is available for your app.',
+            UnknownAvailability() =>
+              "It was not possible to determine if there is or not "
+                  "an update for your app.",
+          };
+          print(text);
         } catch (e) {
           print("Error");
           print(e);
@@ -342,9 +343,9 @@ class _DashboardPageState extends State<DashboardPage> {
             Expanded(
               child: ModalProgressHUD(
                 inAsyncCall: scrapTableProvider.isGettingData,
-                progressIndicator: Column(
+                progressIndicator: const Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: const [
+                  children: [
                     SizedBox(width: 80, child: LinearProgressIndicator()),
                     SizedBox(height: 10),
                     Text(
@@ -362,16 +363,5 @@ class _DashboardPageState extends State<DashboardPage> {
         ),
       ),
     );
-  }
-}
-
-const platform = MethodChannel('me.mateusfccp/update_available');
-
-Future<Availability> getUpdateAvailability() async {
-  try {
-    final available = await platform.invokeMethod('getUpdateAvailability');
-    return available ? UpdateAvailable : NoUpdateAvailable;
-  } on PlatformException {
-    return UnknownAvailability;
   }
 }

@@ -8,8 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {
   final bool isItInitialUpdate;
-  const ProfilePage({Key? key, this.isItInitialUpdate = false})
-      : super(key: key);
+  const ProfilePage({super.key, this.isItInitialUpdate = false});
   @override
   State<ProfilePage> createState() => _ProfilePageState();
 }

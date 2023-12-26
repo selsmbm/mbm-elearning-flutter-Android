@@ -7,7 +7,7 @@ import 'package:mbm_elearning/Presentation/Constants/utills.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class TeacherDetails extends StatefulWidget {
-  const TeacherDetails({Key? key, this.teacherData}) : super(key: key);
+  const TeacherDetails({super.key, this.teacherData});
   final TeachersModel? teacherData;
   @override
   State<TeacherDetails> createState() => _TeacherDetailsState();

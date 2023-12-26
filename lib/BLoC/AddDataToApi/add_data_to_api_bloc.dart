@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
@@ -31,7 +30,8 @@ class FetchAddDataToApi extends AddDataToApiEvent {
     this.url,
     this.approve,
     this.subject,
-    this.file, this.context,
+    this.file,
+    this.context,
   );
 }
 
@@ -59,36 +59,32 @@ class SignupGetOtpApiYetIsNotCall extends AddDataToApiState {}
 class AddDataToApiBloc extends Bloc<AddDataToApiEvent, AddDataToApiState> {
   PostMaterialRepo allNetworkRequest;
   AddDataToApiBloc(this.allNetworkRequest)
-      : super(SignupGetOtpApiYetIsNotCall());
-
-  AddDataToApiState get initialState => SignupGetOtpApiYetIsNotCall();
-
-  @override
-  Stream<AddDataToApiState> mapEventToState(AddDataToApiEvent event) async* {
-    if (event is FetchAddDataToApi) {
-      yield AddDataToApiIsLoading();
-
-      try {
-        var addDataToApiOut = await allNetworkRequest.postMaterialRequest(
-          event.name,
-          event.desc,
-          event.type,
-          event.branch,
-          event.sem,
-          event.url,
-          event.approve,
-          event.subject,
-          event.file,
-          event.context,
-        );
-        yield AddDataToApiIsSuccess(addDataToApiOut);
-      } catch (_) {
-        print('error catch');
-        print(_);
-        yield AddDataToApiIsFailed();
+      : super(SignupGetOtpApiYetIsNotCall()) {
+    on<AddDataToApiEvent>((event, emit) async {
+      if (event is FetchAddDataToApi) {
+        emit(AddDataToApiIsLoading());
+        try {
+          var addDataToApiOut = await allNetworkRequest.postMaterialRequest(
+            event.name,
+            event.desc,
+            event.type,
+            event.branch,
+            event.sem,
+            event.url,
+            event.approve,
+            event.subject,
+            event.file,
+            event.context,
+          );
+          emit(AddDataToApiIsSuccess(addDataToApiOut));
+        } catch (_) {
+          print('error catch');
+          print(_);
+          emit(AddDataToApiIsFailed());
+        }
+      } else if (event is ResetAddDataToApi) {
+        emit(SignupGetOtpApiYetIsNotCall());
       }
-    } else if (event is ResetAddDataToApi) {
-      yield SignupGetOtpApiYetIsNotCall();
-    }
+    });
   }
 }

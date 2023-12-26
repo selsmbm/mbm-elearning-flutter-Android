@@ -18,10 +18,10 @@ import 'package:url_launcher/url_launcher.dart';
 
 class EventDetailsPage extends StatefulWidget {
   const EventDetailsPage({
-    Key? key,
+    super.key,
     this.event,
     required this.eventId,
-  }) : super(key: key);
+  });
   final EventsModel? event;
   final int eventId;
   @override

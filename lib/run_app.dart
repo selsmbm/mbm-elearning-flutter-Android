@@ -131,9 +131,9 @@ Future<Widget> runMainApp() async {
 
 class MyApp extends StatefulWidget {
   const MyApp({
-    Key? key,
+    super.key,
     required this.theme,
-  }) : super(key: key);
+  });
   static final GlobalKey<NavigatorState> navigatorKey =
       GlobalKey<NavigatorState>();
   final ThemeController theme;
@@ -175,7 +175,6 @@ class _MyAppState extends State<MyApp> {
             themeMode: widget.theme.themeMode,
             initialRoute: '/',
             onGenerateRoute: (settings) {
-              final args = settings.arguments;
               switch (settings.name) {
                 case '/':
                   return MaterialPageRoute(builder: (context) => const LandingPage());
@@ -183,7 +182,7 @@ class _MyAppState extends State<MyApp> {
                   return MaterialPageRoute(builder: (context) => const SigninPage());
                 case 'forgetPage':
                   return MaterialPageRoute(
-                      builder: (context) => ForgetPasswordPage());
+                      builder: (context) => const ForgetPasswordPage());
                 case 'dashboard':
                   return MaterialPageRoute(
                       builder: (context) => const DashboardPage());
@@ -256,7 +255,7 @@ class _MyAppState extends State<MyApp> {
                       builder: (context) => const BookmarkPage());
                 case 'intro':
                   return MaterialPageRoute(
-                      builder: (context) => OnBoardingPage());
+                      builder: (context) => const OnBoardingPage());
                 case 'gateMaterial':
                   return MaterialPageRoute(
                       builder: (context) => const GateMaterial());
