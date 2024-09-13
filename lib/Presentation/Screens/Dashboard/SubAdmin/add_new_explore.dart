@@ -1,15 +1,15 @@
 import 'dart:io';
 
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:mbm_elearning/Data/Repository/add_new_explore_repo.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
-import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 import 'package:mbm_elearning/Presentation/Widgets/model_progress.dart';
+import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 import 'package:provider/provider.dart';
 
 class AddNewExplorePage extends StatefulWidget {
@@ -54,7 +54,7 @@ class _AddNewExplorePageState extends State<AddNewExplorePage> {
                 child: const Text('Cancel'),
               ),
               const SizedBox(width: 10),
-              ElevatedButton(
+              FilledButton(
                 onPressed: () async {
                   if (title != null && desc != null && type != null) {
                     setState(() {

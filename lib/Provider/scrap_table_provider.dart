@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
+import 'package:mbm_elearning/Data/Repository/get_mterial_repo.dart';
 import 'package:mbm_elearning/Data/Repository/sheet_scrap.dart';
 import 'package:mbm_elearning/Data/model/admins_model.dart';
 import 'package:mbm_elearning/Data/model/blog_model.dart';
@@ -113,7 +114,7 @@ class ScrapTableProvider with ChangeNotifier {
       }
     }
     isGettingData = true;
-    List data = await Scrap.scrapAllData(scrapMt: scrapMt);
+    List<Set> data = await Scrap.scrapAllData(scrapMt: scrapMt);
     if (scrapMt) {
       _materials.addAll(data[0] as Set<Map<String, dynamic>>);
     }
@@ -133,7 +134,8 @@ class ScrapTableProvider with ChangeNotifier {
       _materials.clear();
     }
     updateGettingMaterialStatus(true);
-    _materials.addAll(await Scrap.scrapMaterial());
+    _materials.addAll(await GetMaterialRepo()
+        .getMaterialRequest(isGetAllData: true) as Set<Map<String, dynamic>>);
     _materials.toSet();
     updateGettingMaterialStatus(false);
     notifyListeners();

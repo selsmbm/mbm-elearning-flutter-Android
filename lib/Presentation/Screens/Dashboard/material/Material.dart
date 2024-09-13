@@ -42,7 +42,7 @@ class _MaterialsPageState extends State<MaterialsPage> {
   Widget build(BuildContext context) {
     var tabPadding = const EdgeInsets.symmetric(horizontal: 0, vertical: 5);
     var tabTextStyle = TextStyle(
-      color: Theme.of(context).primaryColor == rPrimaryMaterialColorLite
+      color: Theme.of(context).primaryColor == rConditionColor
           ? rTextColor
           : Colors.white,
       fontSize: 12,

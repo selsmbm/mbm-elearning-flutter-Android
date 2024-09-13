@@ -3,8 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mbm_elearning/Data/Repository/request_acievement_repo.dart';
 import 'package:mbm_elearning/Data/model/explore_model.dart';
-import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 import 'package:mbm_elearning/Presentation/Widgets/model_progress.dart';
+import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 import 'package:provider/provider.dart';
 
 class RequestAchievementPage extends StatefulWidget {
@@ -43,7 +43,7 @@ class _RequestAchievementPageState extends State<RequestAchievementPage> {
                 child: const Text('Cancel'),
               ),
               const SizedBox(width: 10),
-              ElevatedButton(
+              FilledButton(
                 onPressed: () async {
                   if (title != null &&
                       mobile != null &&

@@ -2,17 +2,17 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:date_time_picker/date_time_picker.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:mbm_elearning/Data/Repository/add_event_repo.dart';
 import 'package:mbm_elearning/Data/Repository/send_notification.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Data/model/explore_model.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
-import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 import 'package:mbm_elearning/Presentation/Widgets/model_progress.dart';
+import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 import 'package:provider/provider.dart';
 
 class AddNewEventPage extends StatefulWidget {
@@ -72,7 +72,7 @@ class _AddNewEventPageState extends State<AddNewEventPage> {
                 child: const Text('Cancel'),
               ),
               const SizedBox(width: 10),
-              ElevatedButton(
+              FilledButton(
                 onPressed: () async {
                   if (title != null && desc != null && orgid != null) {
                     setState(() {

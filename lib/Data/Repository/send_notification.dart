@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
+import 'package:mbm_elearning/Presentation/Constants/utills.dart';
 
 class FirebaseNotiSender {
   static Future send({
@@ -18,7 +19,7 @@ class FirebaseNotiSender {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult != ConnectivityResult.none) {
       Map content = {
-        "id": Random().nextInt(10000),
+        "id": uniqueIntId(),
         "channelKey": "feed_notification",
         "title": title,
         "body": desc,

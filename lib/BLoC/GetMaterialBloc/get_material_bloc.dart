@@ -92,14 +92,14 @@ class GetMaterialApiBloc
           }
           try {
             var output = await allNetworkRequest.getMaterialRequest(
-              event.sem,
-              event.branch,
-              event.query,
-              event.userId,
-              event.approve,
-              event.type,
-              event.skip,
-              event.limit,
+              sem: event.sem,
+              branch: event.branch,
+              query: event.query,
+              userid: event.userId,
+              approve: event.approve,
+              type: event.type,
+              skip: event.skip,
+              limit: event.limit,
             );
             emit(GetMaterialApiIsSuccess(output));
           } catch (_) {

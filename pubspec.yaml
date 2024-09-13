@@ -40,7 +40,10 @@ dependencies:
   googleapis_auth: ^1.4.1
   html: ^0.15.4
   flutter_html: ^3.0.0-alpha.5
-  flutter_html_all: ^3.0.0-alpha.5
+  flutter_html_iframe: ^3.0.0-alpha.5
+  flutter_html_svg: ^3.0.0-alpha.5
+  flutter_html_table: ^3.0.0-alpha.5
+  flutter_html_video: ^3.0.0-alpha.5
   dropdown_search: ^5.0.2
   html_editor_enhanced: ^2.5.1 # warning flutter build web --web-renderer html
   awesome_notifications: 0.7.4+1 #android ios
@@ -51,6 +54,7 @@ dependencies:
   update_available: ^3.0.0 # android and ios
   path_provider: ^2.1.1
   webview_flutter: ^4.4.2
+  flex_color_scheme: ^7.3.1
   
 
 

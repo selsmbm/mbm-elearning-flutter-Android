@@ -1,6 +1,7 @@
-
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,26 +17,26 @@ import 'package:mbm_elearning/Presentation/Screens/Admin/send_only_notification.
 import 'package:mbm_elearning/Presentation/Screens/Admin/verified_users.dart';
 import 'package:mbm_elearning/Presentation/Screens/Auth/ForgetPassword.dart';
 import 'package:mbm_elearning/Presentation/Screens/Auth/Signin.dart';
+import 'package:mbm_elearning/Presentation/Screens/Dashboard/Extras/Bookmark.dart';
+import 'package:mbm_elearning/Presentation/Screens/Dashboard/Extras/gate_material.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Extras/useful_links.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Extras/your_uploaded_material_page.dart';
+import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/Home.dart';
+import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/dashboard.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/events/events_page.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/feed/feed_page.dart';
+import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/more_page.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/MBMU/mbm_story/mbm_stories.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/MBMU/teachers/teacher_details_page.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/MBMU/teachers/teachers_page.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/SubAdmin/achievements/achievements_page.dart';
+import 'package:mbm_elearning/Presentation/Screens/Dashboard/SubAdmin/achievements/request_achievements_page.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/SubAdmin/add_new_event.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/SubAdmin/add_new_explore.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/SubAdmin/add_new_feed_post.dart';
-import 'package:mbm_elearning/Presentation/Screens/Dashboard/SubAdmin/achievements/request_achievements_page.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/material/AddMaterial.dart';
-import 'package:mbm_elearning/Presentation/Screens/Dashboard/Extras/Bookmark.dart';
-import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/Home.dart';
-import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/dashboard.dart';
-import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/more_page.dart';
-import 'package:mbm_elearning/Presentation/Screens/Dashboard/Extras/gate_material.dart';
-import 'package:mbm_elearning/Presentation/Screens/Dashboard/profile_page.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/material/search_page.dart';
+import 'package:mbm_elearning/Presentation/Screens/Dashboard/profile_page.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/utilities/mbm_map.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/utilities/sels_admins/sels_admins_page.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/utilities/settings_page.dart';
@@ -45,8 +46,8 @@ import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 import 'package:mbm_elearning/Provider/theme_provider.dart';
 import 'package:mbm_elearning/flavors.dart';
 import 'package:provider/provider.dart';
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import 'Data/Repository/post_material_repo.dart';
 import 'Presentation/Screens/Dashboard/material/Material.dart';
 import 'Presentation/Screens/IntroPages.dart';
@@ -170,16 +171,24 @@ class _MyAppState extends State<MyApp> {
             title: Flavors.title,
             navigatorKey: MyApp.navigatorKey,
             debugShowCheckedModeBanner: false,
-            theme: widget.theme.litethemeData,
-            darkTheme: widget.theme.darkthemeData,
+            theme: FlexThemeData.light(
+              useMaterial3: true,
+              scheme: FlexScheme.indigoM3,
+            ),
+            darkTheme: FlexThemeData.dark(
+              useMaterial3: true,
+              scheme: FlexScheme.indigoM3,
+            ),
             themeMode: widget.theme.themeMode,
             initialRoute: '/',
             onGenerateRoute: (settings) {
               switch (settings.name) {
                 case '/':
-                  return MaterialPageRoute(builder: (context) => const LandingPage());
+                  return MaterialPageRoute(
+                      builder: (context) => const LandingPage());
                 case 'signInPage':
-                  return MaterialPageRoute(builder: (context) => const SigninPage());
+                  return MaterialPageRoute(
+                      builder: (context) => const SigninPage());
                 case 'forgetPage':
                   return MaterialPageRoute(
                       builder: (context) => const ForgetPasswordPage());
@@ -187,11 +196,14 @@ class _MyAppState extends State<MyApp> {
                   return MaterialPageRoute(
                       builder: (context) => const DashboardPage());
                 case 'home':
-                  return MaterialPageRoute(builder: (context) => const HomePage());
+                  return MaterialPageRoute(
+                      builder: (context) => const HomePage());
                 case 'feeds':
-                  return MaterialPageRoute(builder: (context) => const FeedsPage());
+                  return MaterialPageRoute(
+                      builder: (context) => const FeedsPage());
                 case 'events':
-                  return MaterialPageRoute(builder: (context) => const EventsPage());
+                  return MaterialPageRoute(
+                      builder: (context) => const EventsPage());
                 case 'achievementPage':
                   return MaterialPageRoute(
                       builder: (context) => const AchievementsPage());
@@ -202,9 +214,11 @@ class _MyAppState extends State<MyApp> {
                   return MaterialPageRoute(
                       builder: (context) => const RequestAchievementPage());
                 case 'more':
-                  return MaterialPageRoute(builder: (context) => const MorePage());
+                  return MaterialPageRoute(
+                      builder: (context) => const MorePage());
                 case 'map':
-                  return MaterialPageRoute(builder: (context) => const MBMMap());
+                  return MaterialPageRoute(
+                      builder: (context) => const MBMMap());
                 case 'search':
                   return MaterialPageRoute(
                       builder: (context) => BlocProvider(
@@ -214,7 +228,8 @@ class _MyAppState extends State<MyApp> {
                             child: const SearchPage(),
                           ));
                 case 'profile':
-                  return MaterialPageRoute(builder: (context) => const ProfilePage());
+                  return MaterialPageRoute(
+                      builder: (context) => const ProfilePage());
                 case 'teachers':
                   return MaterialPageRoute(
                       builder: (context) => const TeachersPage());
@@ -222,7 +237,8 @@ class _MyAppState extends State<MyApp> {
                   return MaterialPageRoute(
                       builder: (context) => const TeacherDetails());
                 case 'mbmstory':
-                  return MaterialPageRoute(builder: (context) => const MBMStories());
+                  return MaterialPageRoute(
+                      builder: (context) => const MBMStories());
                 case 'usefullinks':
                   return MaterialPageRoute(
                       builder: (context) => const UsefulLinksPage());

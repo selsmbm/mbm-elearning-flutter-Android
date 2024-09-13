@@ -44,7 +44,7 @@ class _SendNotificationToAllPageState extends State<SendNotificationToAllPage> {
                 child: const Text('Cancel'),
               ),
               const SizedBox(width: 10),
-              ElevatedButton(
+              FilledButton(
                 onPressed: () async {
                   if (title != null && desc != null) {
                     setState(() {

@@ -47,7 +47,7 @@ class _UsefulLinksPageState extends State<UsefulLinksPage> {
         itemComparator: (UsefulLinksModel e1, UsefulLinksModel e2) =>
             e1.type!.compareTo(e2.type!),
         groupSeparatorBuilder: (UsefulLinksModel element) => Container(
-          color: Theme.of(context).primaryColor == rPrimaryMaterialColorLite
+          color: Theme.of(context).primaryColor == rConditionColor
               ? rTextColor
               : Colors.white,
           child: Padding(
@@ -57,7 +57,7 @@ class _UsefulLinksPageState extends State<UsefulLinksPage> {
               style: TextStyle(
                 fontSize: 20,
                 color:
-                    Theme.of(context).primaryColor == rPrimaryMaterialColorLite
+                    Theme.of(context).primaryColor == rConditionColor
                         ? Colors.white
                         : rTextColor,
                 fontWeight: FontWeight.bold,

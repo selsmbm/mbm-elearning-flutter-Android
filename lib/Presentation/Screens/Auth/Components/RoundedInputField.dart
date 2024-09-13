@@ -1,39 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
-import 'TextFielsContainer.dart';
-
-class RoundedInputField extends StatelessWidget {
-  final String? hintText;
-  final String? errorText;
-  final Function(String)? onChanged;
-  final int maxLines;
-  final TextEditingController? controller;
-  const RoundedInputField({
-    super.key,
-    this.hintText,
-    this.onChanged,
-    this.errorText,
-    this.maxLines = 1,
-    this.controller,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFieldContainer(
-      child: TextField(
-        controller: controller,
-        maxLines: maxLines,
-        onChanged: onChanged,
-        cursorColor: rPrimaryColor,
-        decoration: InputDecoration(
-          hintText: hintText,
-          errorText: errorText,
-          border: InputBorder.none,
-        ),
-      ),
-    );
-  }
-}
 
 class NormalInputField extends StatelessWidget {
   final String? hintText;
@@ -93,7 +59,7 @@ class _TrackingTextInputState extends State<TrackingTextInput> {
       padding: const EdgeInsets.symmetric(horizontal: 5),
       width: MediaQuery.of(context).size.width * 0.8,
       decoration: BoxDecoration(
-        color: Theme.of(context).primaryColor == rPrimaryMaterialColorLite
+        color: Theme.of(context).primaryColor == rConditionColor
             ? rPrimaryLiteColor
             : Colors.white30,
         borderRadius: BorderRadius.circular(20),

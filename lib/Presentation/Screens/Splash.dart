@@ -6,7 +6,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
-import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/Presentation/Screens/Auth/Signin.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/dashboard.dart';
@@ -41,8 +40,10 @@ class _LandingPageState extends State<LandingPage> {
           });
         } else {
           Timer(const Duration(seconds: 1), () {
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => const OnBoardingPage()));
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const OnBoardingPage()));
           });
         }
       } else {
@@ -108,16 +109,12 @@ class _LandingPageState extends State<LandingPage> {
                 const SizedBox(
                   height: 10,
                 ),
-                Text(
+                const Text(
                   'MBM E-Learning',
                   style: TextStyle(
                     fontSize: 23,
                     fontWeight: FontWeight.bold,
                     fontFamily: 'Righteous',
-                    color: Theme.of(context).primaryColor ==
-                            rPrimaryMaterialColorLite
-                        ? rPrimaryColor
-                        : Colors.white,
                   ),
                 ),
               ],

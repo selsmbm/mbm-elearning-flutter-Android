@@ -88,7 +88,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       child: const Text('Cancel'),
                     ),
                     const SizedBox(width: 10),
-                    ElevatedButton(
+                    FilledButton(
                       onPressed: () async {
                         if (_typeController.text.isNotEmpty ||
                             _phoneController.text.isNotEmpty ||

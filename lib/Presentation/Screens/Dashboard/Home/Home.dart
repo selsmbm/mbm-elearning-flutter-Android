@@ -1,20 +1,17 @@
-
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:mbm_elearning/BLoC/GetMaterialBloc/get_material_bloc.dart';
 import 'package:mbm_elearning/Data/Repository/get_mterial_repo.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
-import 'package:mbm_elearning/Presentation/Screens/Auth/Components/TextFielsContainer.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/material/Material.dart';
-import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 import 'package:mbm_elearning/Presentation/Widgets/model_progress.dart';
+import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -28,7 +25,7 @@ class _HomePageState extends State<HomePage> {
   String? materialSem;
   late ScrapTableProvider _scrapTableProvider;
   late FirebaseMessaging messaging;
-  
+
   @override
   void initState() {
     super.initState();
@@ -90,14 +87,10 @@ class _HomePageState extends State<HomePage> {
                         readOnly: true,
                         decoration: InputDecoration(
                           isDense: true,
-                          contentPadding:
-                              const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 0),
                           hintText: 'Global Search',
-                          hintStyle: TextStyle(
-                            color: Theme.of(context).primaryColor ==
-                                    rPrimaryMaterialColorLite
-                                ? rTextColor
-                                : Colors.white,
+                          hintStyle: const TextStyle(
                             fontSize: 16,
                           ),
                           focusedBorder: OutlineInputBorder(
@@ -114,12 +107,8 @@ class _HomePageState extends State<HomePage> {
                             ),
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          suffixIcon: Icon(
+                          suffixIcon: const Icon(
                             Icons.search,
-                            color: Theme.of(context).primaryColor ==
-                                    rPrimaryMaterialColorLite
-                                ? rTextColor
-                                : Colors.white,
                           ),
                         ),
                       ),
@@ -134,10 +123,26 @@ class _HomePageState extends State<HomePage> {
                     const SizedBox(
                       height: 9,
                     ),
-                    TextFieldContainer(
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.8,
                       child: DropdownButtonFormField(
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
+                        decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 0),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              width: 2,
+                              color: rPrimaryLiteColor,
+                            ),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          border: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              width: 2,
+                              color: rPrimaryLiteColor,
+                            ),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
                           hintText: 'Material Sem',
                         ),
                         value: materialSem,
@@ -167,10 +172,26 @@ class _HomePageState extends State<HomePage> {
                     ),
                     if (materialSem != null &&
                         !allBranchSemsData.contains(materialSem))
-                      TextFieldContainer(
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.8,
                         child: DropdownButtonFormField(
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
+                          decoration: InputDecoration(
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 0),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                width: 2,
+                                color: rPrimaryLiteColor,
+                              ),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            border: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                width: 2,
+                                color: rPrimaryLiteColor,
+                              ),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
                             hintText: 'Material Branch',
                           ),
                           value: materialBranch,

@@ -40,3 +40,12 @@ const String getCustomAdsApi =
     "https://docs.google.com/spreadsheets/d/e/2PACX-1vSqJJ3iTf-n9Onljxfw59zF3UcoOUtoNVEGpppnpz1pvXNGv-HPTLL6m3Y4FWvOWy3uDKTj5Gg_OrcY/pubhtml";
 
 const String mbmStoryApi = 'https://mbmstories.com/wp-json/wp/v2/posts';
+
+const String mongodbUrlToFindData =
+    "https://ap-south-1.aws.data.mongodb-api.com/app/data-wmqqk/endpoint/data/v1/action/find";
+const String mongodbUrlToAddData =
+    "https://ap-south-1.aws.data.mongodb-api.com/app/data-wmqqk/endpoint/data/v1/action/insertOne";
+const String mongodbUrlToUpdateData =
+    "https://ap-south-1.aws.data.mongodb-api.com/app/data-wmqqk/endpoint/data/v1/action/updateOne";
+const String mongodbUrlToDeleteData =
+    "https://ap-south-1.aws.data.mongodb-api.com/app/data-wmqqk/endpoint/data/v1/action/deleteOne";

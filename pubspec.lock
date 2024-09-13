@@ -97,14 +97,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.7.4"
-  chewie_audio:
-    dependency: transitive
-    description:
-      name: chewie_audio
-      sha256: "73948a8b9841d050433af3498a1f8b11320bd5a2cd70b449bdbe16d4405e97c5"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.5.0"
   clock:
     dependency: transitive
     description:
@@ -409,6 +401,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.3.0"
+  flex_color_scheme:
+    dependency: "direct main"
+    description:
+      name: flex_color_scheme
+      sha256: "32914024a4f404d90ff449f58d279191675b28e7c08824046baf06826e99d984"
+      url: "https://pub.dev"
+    source: hosted
+    version: "7.3.1"
   flex_seed_scheme:
     dependency: transitive
     description:
@@ -446,40 +446,16 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0-beta.2"
-  flutter_html_all:
-    dependency: "direct main"
-    description:
-      name: flutter_html_all
-      sha256: d44d534df3689bbd6b1c8b5ccdc96dd3c294f92f3720cb41b4a0f8602d2e2b05
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.0-alpha.6"
-  flutter_html_audio:
-    dependency: transitive
-    description:
-      name: flutter_html_audio
-      sha256: "94ae28ab56a8d556b7c5409e3eb59ca5215812bda87c67ddfa768812b76f8511"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.0-beta.2"
   flutter_html_iframe:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: flutter_html_iframe
       sha256: "979405fafcbd29c930bf96d9f3f0ade9d87dfd567a03180b13424a0e89a5de46"
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0-beta.2"
-  flutter_html_math:
-    dependency: transitive
-    description:
-      name: flutter_html_math
-      sha256: b5ad41d5980effcf9841b855fd34080583feff4a8e45a379c8a2f00836ba3184
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.0-alpha.4"
   flutter_html_svg:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: flutter_html_svg
       sha256: "793be10cfa6fd0925a7adde9f58d73d2ce6a84c02ae12d01a985244f55ee631a"
@@ -487,7 +463,7 @@ packages:
     source: hosted
     version: "3.0.0-beta.2"
   flutter_html_table:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: flutter_html_table
       sha256: e20c72d67ea2512e7b4949f6f7dd13d004e773b0f82c586a21f895e6bd90383c
@@ -495,7 +471,7 @@ packages:
     source: hosted
     version: "3.0.0-beta.2"
   flutter_html_video:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: flutter_html_video
       sha256: ecc8bcc614dd8a8286d32ace462481817660f5a7e854c663c1fcb3424fc3be89
@@ -582,14 +558,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.1"
-  flutter_math_fork:
-    dependency: transitive
-    description:
-      name: flutter_math_fork
-      sha256: "94bee4642892a94939af0748c6a7de0ff8318feee588379dcdfea7dc5cba06c8"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.7.2"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -1229,14 +1197,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.1"
-  tuple:
-    dependency: transitive
-    description:
-      name: tuple
-      sha256: a97ce2013f240b2f3807bcbaf218765b6f301c3eff91092bcfa23a039e7dd151
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.2"
   tutorial_coach_mark:
     dependency: "direct main"
     description:

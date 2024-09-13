@@ -83,7 +83,7 @@ class _ExploreDetailsPageState extends State<ExploreDetailsPage> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               if (explore!.map != null && explore!.map != "")
-                ElevatedButton(
+                FilledButton(
                   key: mapShareKey,
                   onPressed: () async {
                     Navigator.push(context,
@@ -127,7 +127,7 @@ class _ExploreDetailsPageState extends State<ExploreDetailsPage> {
                             ),
                           );
                         } else {
-                          return ElevatedButton(
+                          return FilledButton(
                             key: followButtonKey,
                             onPressed: () async {
                               await FirebaseMessaging.instance

@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Widgets/Buttons/SigninButton.dart';
@@ -38,8 +37,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                   width: kIsWeb ? 400 : double.infinity,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
-                    color: Theme.of(context).primaryColor ==
-                            rPrimaryMaterialColorLite
+                    color: Theme.of(context).primaryColor == rConditionColor
                         ? rPrimaryColor
                         : rPrimaryDarkLiteColor,
                   ),

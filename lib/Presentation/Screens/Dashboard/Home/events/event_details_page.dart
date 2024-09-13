@@ -82,51 +82,52 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                if (!kIsWeb)  FutureBuilder<SharedPreferences>(
-                      future: SharedPreferences.getInstance(),
-                      builder:
-                          (context, AsyncSnapshot<SharedPreferences> snapshot) {
-                        String key = "E-${event!.id}";
-                        if (snapshot.hasData) {
-                          if (snapshot.data!.getBool(key) ?? false) {
-                            return OutlinedButton(
-                              onPressed: () async {
-                                await FirebaseMessaging.instance
-                                    .unsubscribeFromTopic(key);
-                                await snapshot.data!.setBool(key, false);
-                                setState(() {});
-                              },
-                              child: const Text(
-                                "Unfollow",
-                                style: TextStyle(
-                                  color: rPrimaryColor,
+                  if (!kIsWeb)
+                    FutureBuilder<SharedPreferences>(
+                        future: SharedPreferences.getInstance(),
+                        builder: (context,
+                            AsyncSnapshot<SharedPreferences> snapshot) {
+                          String key = "E-${event!.id}";
+                          if (snapshot.hasData) {
+                            if (snapshot.data!.getBool(key) ?? false) {
+                              return OutlinedButton(
+                                onPressed: () async {
+                                  await FirebaseMessaging.instance
+                                      .unsubscribeFromTopic(key);
+                                  await snapshot.data!.setBool(key, false);
+                                  setState(() {});
+                                },
+                                child: const Text(
+                                  "Unfollow",
+                                  style: TextStyle(
+                                    color: rPrimaryColor,
+                                  ),
                                 ),
-                              ),
-                            );
+                              );
+                            } else {
+                              return FilledButton(
+                                onPressed: () async {
+                                  await FirebaseMessaging.instance
+                                      .subscribeToTopic(key);
+                                  await snapshot.data!.setBool(key, true);
+                                  setState(() {});
+                                },
+                                child: const Text(
+                                  "Follow",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              );
+                            }
                           } else {
-                            return ElevatedButton(
-                              onPressed: () async {
-                                await FirebaseMessaging.instance
-                                    .subscribeToTopic(key);
-                                await snapshot.data!.setBool(key, true);
-                                setState(() {});
-                              },
-                              child: const Text(
-                                "Follow",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                ),
-                              ),
+                            return const SizedBox(
+                              height: 40,
+                              width: 40,
+                              child: CircularProgressIndicator(),
                             );
                           }
-                        } else {
-                          return const SizedBox(
-                            height: 40,
-                            width: 40,
-                            child: CircularProgressIndicator(),
-                          );
-                        }
-                      }),
+                        }),
                   IconButton(
                     onPressed: () {
                       launch(event!.website!);

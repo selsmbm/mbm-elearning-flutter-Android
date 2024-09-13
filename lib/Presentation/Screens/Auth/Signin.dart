@@ -2,15 +2,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
+import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/Presentation/Screens/Auth/Components/OrDevider.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/profile_page.dart';
-import 'package:mbm_elearning/Presentation/Widgets/model_progress.dart';
-import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Widgets/Buttons/SigninButton.dart';
+import 'package:mbm_elearning/Presentation/Widgets/model_progress.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'Components/RoundedInputField.dart';
 import 'Components/social_login.dart';
 
@@ -62,7 +62,7 @@ class _SigninPageState extends State<SigninPage> with TickerProviderStateMixin {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(15),
                         color: Theme.of(context).primaryColor ==
-                                rPrimaryMaterialColorLite
+                                rConditionColor
                             ? rPrimaryColor
                             : rPrimaryDarkLiteColor,
                       ),
@@ -185,16 +185,15 @@ class _SigninPageState extends State<SigninPage> with TickerProviderStateMixin {
                       setState(() {
                         showProgress = true;
                       });
-                      await FirebaseAuth
-                          .instance
+                      await FirebaseAuth.instance
                           .createUserWithEmailAndPassword(
                               email: _emailSignup!, password: _passwordSignup!);
+                      setState(() {
+                        showProgress = false;
+                      });
                       if (FirebaseAuth.instance.currentUser != null) {
                         await FirebaseAuth.instance.currentUser!
                             .sendEmailVerification();
-                        setState(() {
-                          showProgress = false;
-                        });
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text(
@@ -326,24 +325,22 @@ class _SigninPageState extends State<SigninPage> with TickerProviderStateMixin {
                 onPressed: () async {
                   if (_password != null && _email != null) {
                     try {
-                       if (!kIsWeb) {
-                          await FirebaseMessaging.instance
-                              .subscribeToTopic(mbmEleFcmChannel);
-                        }
                       SharedPreferences prefs =
                           await SharedPreferences.getInstance();
                       setState(() {
                         showProgress = true;
                       });
-                      await FirebaseAuth
-                          .instance
-                          .signInWithEmailAndPassword(
-                              email: _email!, password: _password!);
+                      await FirebaseAuth.instance.signInWithEmailAndPassword(
+                          email: _email!, password: _password!);
+                      setState(() {
+                        showProgress = false;
+                      });
                       if (FirebaseAuth.instance.currentUser != null &&
                           FirebaseAuth.instance.currentUser!.emailVerified) {
-                        setState(() {
-                          showProgress = false;
-                        });
+                        if (!kIsWeb) {
+                          await FirebaseMessaging.instance
+                              .subscribeToTopic(mbmEleFcmChannel);
+                        }
                         if (!mounted) return;
                         if (prefs.getBool(SP.initialProfileSaved) != null) {
                           Navigator.popAndPushNamed(context, 'dashboard');

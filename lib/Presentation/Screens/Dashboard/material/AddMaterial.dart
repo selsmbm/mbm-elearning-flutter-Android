@@ -4,13 +4,13 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mbm_elearning/Data/Repository/update_material_repo.dart';
-import 'package:mbm_elearning/Presentation/Constants/constants.dart';
-import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
-import 'package:mbm_elearning/Presentation/Widgets/model_progress.dart';
 import 'package:mbm_elearning/BLoC/AddDataToApi/add_data_to_api_bloc.dart';
+import 'package:mbm_elearning/Data/Repository/update_material_repo.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
+import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/Presentation/Screens/Auth/Components/RoundedInputField.dart';
+import 'package:mbm_elearning/Presentation/Widgets/model_progress.dart';
+import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:provider/provider.dart';
 
@@ -88,7 +88,7 @@ class _AddMaterialPageState extends State<AddMaterialPage> {
                 child: const Text('Cancel'),
               ),
               const SizedBox(width: 10),
-              ElevatedButton(
+              FilledButton(
                 onPressed: () async {
                   if (materialName.text != '' &&
                       materialSubject.text != '' &&

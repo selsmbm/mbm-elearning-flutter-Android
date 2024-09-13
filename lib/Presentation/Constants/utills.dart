@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,8 @@ import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/flavors.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
+
+int uniqueIntId() => Random().nextInt(10000000000000) + 5000;
 
 String getDriveImageWithSize(String imageurl, {int? width, int? height}) {
   return "$driveImageShowUrl$imageurl=${width != null && height != null ? "w$width-h$height" : ""}";

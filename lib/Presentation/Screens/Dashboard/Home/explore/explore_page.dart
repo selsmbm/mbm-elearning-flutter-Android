@@ -5,8 +5,8 @@ import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/Presentation/Constants/utills.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/explore/explore_details_page.dart';
 import 'package:mbm_elearning/Presentation/Widgets/image_cus.dart';
-import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 import 'package:mbm_elearning/Presentation/Widgets/model_progress.dart';
+import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 import 'package:provider/provider.dart';
 
 class ExplorePage extends StatefulWidget {
@@ -70,7 +70,7 @@ class _ExplorePageState extends State<ExplorePage> {
         //                     padding: const EdgeInsets.symmetric(
         //                       horizontal: 5,
         //                     ),
-        //                     child: ElevatedButton(
+        //                     child: FilledButton(
         //                       onPressed: () {
         //                         setState(() {
         //                           filterExplores = _scrapTableProvider.explores
