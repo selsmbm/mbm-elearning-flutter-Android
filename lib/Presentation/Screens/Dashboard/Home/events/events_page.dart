@@ -6,6 +6,7 @@ import 'package:mbm_elearning/Data/model/events_model.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/Presentation/Constants/utills.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/events/event_details_page.dart';
+import 'package:mbm_elearning/Presentation/Widgets/empty_state_view.dart';
 import 'package:mbm_elearning/Presentation/Widgets/image_cus.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 import 'package:mbm_elearning/Presentation/Widgets/model_progress.dart';
@@ -102,39 +103,53 @@ class _EventsPageState extends State<EventsPage> {
             Expanded(
               child: RefreshIndicator(
                 onRefresh: () => _scrapTableProvider.updateScrapEvents(),
-                child: ListView.builder(
-                  itemCount: events.length,
-                  itemBuilder: (context, index) {
-                    EventsModel event = events[index];
-                    String org = json.decode(event.adminOrg!)['name'];
-                    DateTime date = DateTime.fromMillisecondsSinceEpoch(
-                        int.parse(event.starttime!) * 1000);
-                    return ListTile(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return EventDetailsPage(
-                                  event: event, eventId: event.id!);
-                            },
+                child: events.isEmpty
+                    ? ListView(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        children: const [
+                          SizedBox(
+                            height: 500,
+                            child: EmptyStateView(
+                              icon: Icons.event_note_outlined,
+                              title: 'No events available',
+                              message: 'Events will appear here when data is available.',
+                            ),
                           ),
-                        );
-                      },
-                      leading: GestureDetector(
-                          onTap: () {
-                            bigImageShower(
-                              context,
-                              "$driveImageShowUrl${event.image != null && event.image != '' ? event.image : defaultDriveImageShowUrl}",
-                            );
-                          },
-                          child: ImageCus(image: event.image)),
-                      title: Text(event.title ?? "N/A"),
-                      subtitle: Text(
-                          "$org | Start from: ${date.day}-${date.month}-${date.year}"),
-                    );
-                  },
-                ),
+                        ],
+                      )
+                    : ListView.builder(
+                        itemCount: events.length,
+                        itemBuilder: (context, index) {
+                          EventsModel event = events[index];
+                          String org = json.decode(event.adminOrg!)['name'];
+                          DateTime date = DateTime.fromMillisecondsSinceEpoch(
+                              int.parse(event.starttime!) * 1000);
+                          return ListTile(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return EventDetailsPage(
+                                        event: event, eventId: event.id!);
+                                  },
+                                ),
+                              );
+                            },
+                            leading: GestureDetector(
+                                onTap: () {
+                                  bigImageShower(
+                                    context,
+                                    "$driveImageShowUrl${event.image != null && event.image != '' ? event.image : defaultDriveImageShowUrl}",
+                                  );
+                                },
+                                child: ImageCus(image: event.image)),
+                            title: Text(event.title ?? "N/A"),
+                            subtitle: Text(
+                                "$org | Start from: ${date.day}-${date.month}-${date.year}"),
+                          );
+                        },
+                      ),
               ),
             ),
           ],

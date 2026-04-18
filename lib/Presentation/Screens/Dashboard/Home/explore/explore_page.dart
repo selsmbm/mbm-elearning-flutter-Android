@@ -4,6 +4,7 @@ import 'package:mbm_elearning/Data/model/explore_model.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/Presentation/Constants/utills.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/explore/explore_details_page.dart';
+import 'package:mbm_elearning/Presentation/Widgets/empty_state_view.dart';
 import 'package:mbm_elearning/Presentation/Widgets/image_cus.dart';
 import 'package:mbm_elearning/Presentation/Widgets/model_progress.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
@@ -35,6 +36,7 @@ class _ExplorePageState extends State<ExplorePage> {
   @override
   Widget build(BuildContext context) {
     explores = _scrapTableProvider.explores.toList();
+    final currentExplores = filterExplores ?? explores;
     return ModalProgressHUD(
       inAsyncCall: _scrapTableProvider.isGettingExploreData,
       child: Scaffold(
@@ -98,40 +100,50 @@ class _ExplorePageState extends State<ExplorePage> {
         // ),
         body: RefreshIndicator(
           onRefresh: () => _scrapTableProvider.updateScrapExplore(),
-          child: ListView.builder(
-            itemCount: filterExplores != null
-                ? filterExplores!.length
-                : explores.length,
-            itemBuilder: (context, index) {
-              ExploreModel explore = filterExplores != null
-                  ? filterExplores![index]
-                  : explores[index];
-              return ListTile(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return ExploreDetailsPage(
-                            explore: explore, exploreId: explore.id!);
-                      },
+          child: currentExplores.isEmpty
+              ? ListView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  children: const [
+                    SizedBox(
+                      height: 500,
+                      child: EmptyStateView(
+                        icon: Icons.explore_outlined,
+                        title: 'No explores available',
+                        message: 'Explore entries will appear here when data is available.',
+                      ),
                     ),
-                  );
-                },
-                leading: GestureDetector(
-                    onTap: () {
-                      bigImageShower(
-                        context,
-                        "$driveImageShowUrl${explore.image != null && explore.image != '' ? explore.image : defaultDriveImageShowUrl}",
-                      );
-                    },
-                    child: ImageCus(image: explore.image)),
-                title: Text(explore.title ?? "N/A"),
-                subtitle:
-                    explore.tagline != null ? Text(explore.tagline!) : null,
-              );
-            },
-          ),
+                  ],
+                )
+              : ListView.builder(
+                  itemCount: currentExplores.length,
+                  itemBuilder: (context, index) {
+                    ExploreModel explore = currentExplores[index];
+                    return ListTile(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return ExploreDetailsPage(
+                                  explore: explore, exploreId: explore.id!);
+                            },
+                          ),
+                        );
+                      },
+                      leading: GestureDetector(
+                          onTap: () {
+                            bigImageShower(
+                              context,
+                              "$driveImageShowUrl${explore.image != null && explore.image != '' ? explore.image : defaultDriveImageShowUrl}",
+                            );
+                          },
+                          child: ImageCus(image: explore.image)),
+                      title: Text(explore.title ?? "N/A"),
+                      subtitle:
+                          explore.tagline != null ? Text(explore.tagline!) : null,
+                    );
+                  },
+                ),
         ),
       ),
     );

@@ -5,6 +5,7 @@ import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Data/Repository/get_mterial_repo.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
+import 'package:mbm_elearning/Presentation/Widgets/empty_state_view.dart';
 import 'package:mbm_elearning/Presentation/Widgets/material_data_list_tile.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 import 'package:provider/provider.dart';
@@ -208,8 +209,11 @@ class _MtCardState extends State<MtCard> {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: material.isEmpty
-                ? const Center(
-                    child: Text('No Data'),
+                ? EmptyStateView(
+                    icon: _getMaterialEmptyIcon(widget.title),
+                    title: 'No ${widget.title} available',
+                    message:
+                        'Materials for this tab will appear here when data is available.',
                   )
                 : ScrollablePositionedList.builder(
                     itemPositionsListener: itemPositionsListener,
@@ -233,5 +237,22 @@ class _MtCardState extends State<MtCard> {
         }
       },
     );
+  }
+
+  IconData _getMaterialEmptyIcon(String type) {
+    switch (type) {
+      case 'notes':
+        return Icons.description_outlined;
+      case 'paper':
+        return Icons.article_outlined;
+      case 'book':
+        return Icons.menu_book_outlined;
+      case 'file':
+        return Icons.folder_open_outlined;
+      case 'video':
+        return Icons.ondemand_video_outlined;
+      default:
+        return Icons.inbox_outlined;
+    }
   }
 }

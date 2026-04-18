@@ -3,6 +3,7 @@ import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Data/model/blog_model.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/feed/feed_details_page.dart';
+import 'package:mbm_elearning/Presentation/Widgets/empty_state_view.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 import 'package:mbm_elearning/Presentation/Widgets/model_progress.dart';
 import 'package:provider/provider.dart';
@@ -44,37 +45,52 @@ class _FeedsPageState extends State<FeedsPage> {
         // ),
         body: RefreshIndicator(
           onRefresh: () => _scrapTableProvider.updateScrapBlogPosts(),
-          child: ListView.builder(
-            itemCount: blogPosts.length,
-            itemBuilder: (context, index) {
-              BlogModel post = blogPosts[index];
-              DateTime date = DateTime.fromMillisecondsSinceEpoch(
-                  int.parse(post.posttime!) * 1000);
-              return ListTile(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return FeedDetailsPage(feed: post, feedId: post.id!);
-                      },
+          child: blogPosts.isEmpty
+              ? ListView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  children: const [
+                    SizedBox(
+                      height: 500,
+                      child: EmptyStateView(
+                        icon: Icons.feed_outlined,
+                        title: 'No feeds yet',
+                        message: 'Feed posts will appear here when data is available.',
+                      ),
                     ),
-                  );
-                },
-                leading: const CircleAvatar(
-                  radius: 23,
-                  backgroundColor: rPrimaryLiteColor,
-                  child: Icon(
-                    Icons.feed_outlined,
-                    color: rPrimaryColor,
-                  ),
+                  ],
+                )
+              : ListView.builder(
+                  itemCount: blogPosts.length,
+                  itemBuilder: (context, index) {
+                    BlogModel post = blogPosts[index];
+                    DateTime date = DateTime.fromMillisecondsSinceEpoch(
+                        int.parse(post.posttime!) * 1000);
+                    return ListTile(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return FeedDetailsPage(
+                                  feed: post, feedId: post.id!);
+                            },
+                          ),
+                        );
+                      },
+                      leading: const CircleAvatar(
+                        radius: 23,
+                        backgroundColor: rPrimaryLiteColor,
+                        child: Icon(
+                          Icons.feed_outlined,
+                          color: rPrimaryColor,
+                        ),
+                      ),
+                      title: Text(post.title ?? "N/A"),
+                      subtitle: Text(
+                          "${date.day}-${date.month}-${date.year} ${post.org != "" ? "| ${post.org}" : ""}"),
+                    );
+                  },
                 ),
-                title: Text(post.title ?? "N/A"),
-                subtitle: Text(
-                    "${date.day}-${date.month}-${date.year} ${post.org != "" ? "| ${post.org}" : ""}"),
-              );
-            },
-          ),
         ),
       ),
     );

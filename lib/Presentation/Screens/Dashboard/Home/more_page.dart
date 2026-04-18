@@ -91,15 +91,15 @@ class _MorePageState extends State<MorePage> {
                     subtitle: 'Manage your bookmarked',
                     icon: Icons.bookmark,
                   ),
-              if (user!.photoURL!.contains(student))
-                SettingButton(
-                  onTap: () {
-                    Navigator.pushNamed(context, 'gateMaterial');
-                  },
-                  title: 'GATE SSC Prep.',
-                  subtitle: 'All type of exam material',
-                  icon: Icons.book,
-                ),
+              // if (user!.photoURL!.contains(student))
+              //   SettingButton(
+              //     onTap: () {
+              //       Navigator.pushNamed(context, 'gateMaterial');
+              //     },
+              //     title: 'GATE SSC Prep.',
+              //     subtitle: 'All type of exam material',
+              //     icon: Icons.book,
+              //   ),
               if (user!.photoURL!.contains(student) ||
                   user!.photoURL!.contains(teacher))
                 SettingButton(
