@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mbm_elearning/BLoC/AddDataToApi/add_data_to_api_bloc.dart';
 import 'package:mbm_elearning/Data/Repository/post_material_repo.dart';
+import 'package:mbm_elearning/Data/Repository/send_notification.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/SubAdmin/add_new_event.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/SubAdmin/add_new_feed_post.dart';
@@ -146,6 +147,17 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 size: 20,
               ),
               title: const Text('Edit mbmu campus map'),
+            ),
+          if (widget.isSuperAdmin)
+            ListTile(
+              onTap: () {
+                FirebaseNotiSender.sendToToken();
+              },
+              leading: const Icon(
+                Icons.arrow_forward_ios,
+                size: 20,
+              ),
+              title: const Text('Send notification to specific self for test'),
             ),
         ],
       ),

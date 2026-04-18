@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -27,6 +28,10 @@ class _LandingPageState extends State<LandingPage> {
 
   checkUser() async {
     if (!kIsWeb) {
+      final allowed = await AwesomeNotifications().isNotificationAllowed();
+      if (!allowed) {
+        await AwesomeNotifications().requestPermissionToSendNotifications();
+      }
       FirebaseMessaging.instance.subscribeToTopic(mbmEleFcmChannel);
     }
     SharedPreferences prefs = await SharedPreferences.getInstance();

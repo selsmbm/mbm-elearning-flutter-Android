@@ -75,6 +75,7 @@ flutter:
     - assets/icons/
     - assets/rive/
     - assets/lottie/
+    - assets/service-account.json
 
   fonts:
     - family: Righteous

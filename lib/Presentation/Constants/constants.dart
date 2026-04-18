@@ -48,8 +48,7 @@ const String gdriveUploadClientId =
 const String gDriveUploadClientSecreat = "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";
 const String gDriveMaterialFolder = '17RjQvK979j3RjwjtTBP5LtyEQ9Qh8Qdh';
 const String gDriveImageFolder = '1kenlPK8OUsJGT2-3v2NmMH5kXm-n-wrf';
-const String firebaseFCMsenderKey =
-    "AAAARtu--_4:APA91bHkPHgeB2vxNtA4T9mYzK6cRWEnl2SAZdtFt6DlXmAK2NEgZ6e6UGPMyqsNcFTUvTGj1YTftdJS8zxE9piJwaohCniPv0pXmYcluDYSIrFEKZPfgYKiQbNN8fXQujypjAGl1c-n";
+
 
 enum AddMaterialPagePurpose { add, update }
 
