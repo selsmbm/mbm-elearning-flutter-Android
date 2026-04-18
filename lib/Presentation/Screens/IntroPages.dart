@@ -32,43 +32,45 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
       imagePadding: EdgeInsets.zero,
     );
 
-    return IntroductionScreen(
-      key: introKey,
-      pages: [
-        PageViewModel(
-          title: "No need to worry",
-          body: "No need to worry for Exams,\nWe got your Back.",
-          image: _buildImage('woman'),
-          decoration: pageDecoration,
+    return SafeArea(
+      child: IntroductionScreen(
+        key: introKey,
+        pages: [
+          PageViewModel(
+            title: "No need to worry",
+            body: "No need to worry for Exams,\nWe got your Back.",
+            image: _buildImage('woman'),
+            decoration: pageDecoration,
+          ),
+          PageViewModel(
+            title: "Enjoy your Freedom",
+            body: "Do what you have to do,\nWe are always there for you.",
+            image: _buildImage('boy'),
+            decoration: pageDecoration,
+          ),
+        ],
+        onDone: () => _onIntroEnd(context),
+        onSkip: () => _onIntroEnd(context),
+        showSkipButton: true,
+        nextFlex: 0,
+        skip: const Text('Skip'),
+        next: const Icon(Icons.arrow_forward),
+        done: const Text('Done', style: TextStyle(fontWeight: FontWeight.w600)),
+        curve: Curves.fastLinearToSlowEaseIn,
+        controlsMargin: const EdgeInsets.all(16),
+        controlsPadding: const EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
+        dotsDecorator: const DotsDecorator(
+          size: Size(10.0, 10.0),
+          activeSize: Size(22.0, 10.0),
+          activeShape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(25.0)),
+          ),
         ),
-        PageViewModel(
-          title: "Enjoy your Freedom",
-          body: "Do what you have to do,\nWe are always there for you.",
-          image: _buildImage('boy'),
-          decoration: pageDecoration,
-        ),
-      ],
-      onDone: () => _onIntroEnd(context),
-      onSkip: () => _onIntroEnd(context),
-      showSkipButton: true,
-      nextFlex: 0,
-      skip: const Text('Skip'),
-      next: const Icon(Icons.arrow_forward),
-      done: const Text('Done', style: TextStyle(fontWeight: FontWeight.w600)),
-      curve: Curves.fastLinearToSlowEaseIn,
-      controlsMargin: const EdgeInsets.all(16),
-      controlsPadding: const EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
-      dotsDecorator: const DotsDecorator(
-        size: Size(10.0, 10.0),
-        activeSize: Size(22.0, 10.0),
-        activeShape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(25.0)),
-        ),
-      ),
-      dotsContainerDecorator: const ShapeDecoration(
-        color: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(8.0)),
+        dotsContainerDecorator: const ShapeDecoration(
+          color: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8.0)),
+          ),
         ),
       ),
     );

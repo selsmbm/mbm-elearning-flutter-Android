@@ -95,13 +95,12 @@ class _LandingPageState extends State<LandingPage> {
   Widget build(BuildContext context) {
     scrapTableProvider = Provider.of<ScrapTableProvider>(context);
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const SizedBox(
-              height: 30,
-            ),
+      body: SafeArea(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const SizedBox(height: 30),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -128,6 +127,7 @@ class _LandingPageState extends State<LandingPage> {
             ),
             const Text("Made With ❤ by SELS"),
           ],
+          ),
         ),
       ),
     );

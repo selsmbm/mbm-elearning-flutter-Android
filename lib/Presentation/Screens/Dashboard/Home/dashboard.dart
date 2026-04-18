@@ -231,7 +231,8 @@ class _DashboardPageState extends State<DashboardPage> {
                       ]),
           ],
         ),
-        body: Row(
+        body: SafeArea(
+          child: Row(
           children: [
             if (MediaQuery.of(context).size.width > 750)
               NavigationRail(
@@ -308,6 +309,7 @@ class _DashboardPageState extends State<DashboardPage> {
               ),
             ),
           ],
+        ),
         ),
       ),
     );

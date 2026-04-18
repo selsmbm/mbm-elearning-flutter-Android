@@ -27,14 +27,15 @@ class _TeacherDetailsState extends State<TeacherDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      body: Center(
-        child: Stack(
-          alignment: Alignment.topRight,
-          children: [
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const SizedBox(height: 60),
+      body: SafeArea(
+        child: Center(
+          child: Stack(
+            alignment: Alignment.topRight,
+            children: [
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 60),
                 Container(
                   width: MediaQuery.of(context).size.width * 0.9,
                   decoration: BoxDecoration(
@@ -241,6 +242,7 @@ class _TeacherDetailsState extends State<TeacherDetails> {
               ),
             ),
           ],
+        ),
         ),
       ),
     );
