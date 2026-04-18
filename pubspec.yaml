@@ -13,31 +13,31 @@ dependencies:
   cupertino_icons: ^1.0.6
   uuid: ^4.2.2
   http: ^1.1.2
-  firebase_core: ^2.24.2
-  firebase_analytics: ^10.7.4
-  url_launcher: ^6.2.2
-  flutter_bloc: ^8.1.3
+  firebase_core: ^3.15.2
+  firebase_analytics: ^11.6.0
+  url_launcher: ^6.3.2
+  flutter_bloc: ^9.1.1
   equatable: ^2.0.5
-  firebase_auth: ^4.15.3
+  firebase_auth: ^5.7.0
   google_sign_in: ^6.2.1 # need to setup with double condition
-  share_plus: ^7.2.1
-  carousel_slider: ^4.2.1
-  firebase_messaging: ^14.7.9
+  share_plus: ^12.0.2
+  carousel_slider: ^5.1.2
+  firebase_messaging: ^15.2.10
   flutter_linkify: ^6.0.0
-  introduction_screen: ^3.1.12
-  sqflite: ^2.3.0 # android ios
+  introduction_screen: ^4.0.0
+  sqflite: ^2.4.2 # android ios
   connectivity_plus: ^5.0.2
-  cloud_firestore: ^4.13.6
-  shared_preferences: ^2.2.2
-  firebase_dynamic_links: ^5.4.8
-  flutter_svg: 2.0.9
-  permission_handler: ^11.1.0 # android and ios // need to setup with double condition
+  cloud_firestore: ^5.6.12
+  shared_preferences: ^2.5.5
+  firebase_dynamic_links: ^6.1.10
+  flutter_svg: ^2.2.4
+  permission_handler: ^12.0.1 # android and ios // need to setup with double condition
   provider: ^6.1.1
   scrollable_positioned_list: ^0.3.8
   linkfy_text: ^1.1.5
-  googleapis: ^12.0.0
-  file_picker: ^5.2.0+1
-  googleapis_auth: ^1.4.1
+  googleapis: ^16.0.0
+  file_picker: ^10.3.10
+  googleapis_auth: ^2.0.0
   html: ^0.15.4
   flutter_html: ^3.0.0-alpha.5
   flutter_html_iframe: ^3.0.0-alpha.5
@@ -46,21 +46,25 @@ dependencies:
   flutter_html_video: ^3.0.0-alpha.5
   dropdown_search: ^5.0.2
   html_editor_enhanced: ^2.5.1 # warning flutter build web --web-renderer html
-  awesome_notifications: 0.7.4+1 #android ios
+  awesome_notifications: ^0.10.1 #android ios
   date_time_picker: ^2.1.0
-  firebase_in_app_messaging: ^0.7.4+8 #android ios
+  firebase_in_app_messaging: ^0.8.1+10 #android ios
   tutorial_coach_mark: ^1.2.11
   lottie: any
-  update_available: ^3.0.0 # android and ios
-  path_provider: ^2.1.1
-  webview_flutter: ^4.4.2
-  flex_color_scheme: ^7.3.1
+  path_provider: ^2.1.5
+  webview_flutter: ^4.13.1
+  flex_color_scheme: ^8.3.1
+  video_player: ^2.10.1
   
 
 
 dev_dependencies:
-  flutter_lints: ^3.0.1
+  flutter_lints: ^6.0.0
   flutter_flavorizr: ^2.2.1
+
+dependency_overrides:
+  archive: ^4.0.9
+  intl: ^0.20.2
 
 flutter:
 

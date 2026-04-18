@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -21,11 +20,9 @@ import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/feed/feed_deta
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/feed/feed_page.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/more_page.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
-import 'package:mbm_elearning/flavors.dart';
 import 'package:mbm_elearning/Presentation/Widgets/model_progress.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:update_available/update_available.dart';
 
 LocalDbConnect localDbConnect = LocalDbConnect();
 final StreamController<bool> scrapSubscriptionIsGettingData =
@@ -63,7 +60,6 @@ class _DashboardPageState extends State<DashboardPage> {
     }
     setNotifications();
     setCurrentScreenInGoogleAnalytics('Dashboard Page');
-    checkForUpdate();
     if (!kIsWeb) initDynamicLinks();
   }
 
@@ -158,54 +154,6 @@ class _DashboardPageState extends State<DashboardPage> {
         backgroundColor: Colors.green,
         content: Text("${message.data['title']}: ${message.data['body']}"),
       ));
-    }
-  }
-
-  checkForUpdate() async {
-    if (!kIsWeb) {
-      ConnectivityResult connectivityResult =
-          await (Connectivity().checkConnectivity());
-      if (connectivityResult != ConnectivityResult.none) {
-        try {
-          final updateAvailability = await getUpdateAvailability();
-          final text = switch (updateAvailability) {
-            UpdateAvailable() => () {
-                showDialog(
-                  barrierDismissible: false,
-                  context: context,
-                  builder: (context) => PopScope(
-                    canPop: false,
-                    
-                    child: AlertDialog(
-                      title: const Text('Update available!'),
-                      content: const Text(
-                          'Please update this app for new features.'),
-                      actions: [
-                        TextButton(
-                          child: const Text('OK'),
-                          onPressed: () async {
-                            launch(
-                                'https://play.google.com/store/apps/details?id=${Flavors.package}');
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-                return "There's an update to you app! Please, update it so you have access to the latest features!";
-              },
-            NoUpdateAvailable() => 'No update is available for your app.',
-            UnknownAvailability() =>
-              "It was not possible to determine if there is or not "
-                  "an update for your app.",
-          };
-          print(text);
-        } catch (e) {
-          print("Error");
-          print(e);
-        }
-      }
     }
   }
 

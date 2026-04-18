@@ -1,17 +1,3 @@
-buildscript {
-    ext.kotlin_version = '1.9.0'
-    repositories {
-        google()
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath 'com.android.tools.build:gradle:7.1.3'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.google.gms:google-services:4.3.15'
-    }
-}
-
 allprojects {
     repositories {
         google()
@@ -25,6 +11,24 @@ subprojects {
 }
 subprojects {
     project.evaluationDependsOn(':app')
+}
+subprojects { subproject ->
+    subproject.plugins.withId("com.android.library") {
+        def androidExtension = subproject.extensions.findByName("android")
+        if (androidExtension != null && androidExtension.hasProperty("namespace")) {
+            def currentNamespace = androidExtension.namespace
+            if (currentNamespace == null || currentNamespace.toString().trim().isEmpty()) {
+                def manifestFile = androidExtension.sourceSets?.main?.manifest?.srcFile
+                if (manifestFile?.exists()) {
+                    def manifestText = manifestFile.getText('UTF-8')
+                    def packageMatcher = manifestText =~ /package="([^"]+)"/
+                    if (packageMatcher.find()) {
+                        androidExtension.namespace = packageMatcher.group(1)
+                    }
+                }
+            }
+        }
+    }
 }
 
 tasks.register("clean", Delete) {
