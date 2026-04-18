@@ -3,7 +3,6 @@ import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
-import 'package:mbm_elearning/Data/Repository/get_mterial_repo.dart';
 import 'package:mbm_elearning/Data/Repository/sheet_scrap.dart';
 import 'package:mbm_elearning/Data/model/admins_model.dart';
 import 'package:mbm_elearning/Data/model/blog_model.dart';
@@ -134,8 +133,7 @@ class ScrapTableProvider with ChangeNotifier {
       _materials.clear();
     }
     updateGettingMaterialStatus(true);
-    _materials.addAll(await GetMaterialRepo()
-        .getMaterialRequest(isGetAllData: true) as Set<Map<String, dynamic>>);
+    _materials.addAll(await Scrap.scrapMaterial());
     _materials.toSet();
     updateGettingMaterialStatus(false);
     notifyListeners();

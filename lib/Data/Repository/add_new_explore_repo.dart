@@ -4,6 +4,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:mbm_elearning/Data/Repository/GDrive/upload_to_drive.dart';
+import 'package:mbm_elearning/Data/network/api_debug_logger.dart';
 import 'package:mbm_elearning/Presentation/Constants/apis.dart';
 import 'package:mbm_elearning/Provider/scrap_table_provider.dart';
 
@@ -29,11 +30,16 @@ class AddNewExploreRepo {
         finalData['time'] = time;
         finalData['image'] = url ?? "";
         print(finalData);
-        http.Response response = await http.post(
-          Uri.parse(
-            addExploreApi,
-          ),
-          body: finalData,
+        final uri = Uri.parse(addExploreApi);
+        ApiDebugLogger.logRequest(method: 'POST', uri: uri, body: finalData);
+        http.Response response = await http.post(uri, body: finalData);
+        ApiDebugLogger.logResponse(
+          method: 'POST',
+          uri: uri,
+          statusCode: response.statusCode,
+          reasonPhrase: response.reasonPhrase,
+          headers: response.headers,
+          body: response.body,
         );
         if (response.statusCode == 200 || response.statusCode == 302) {
           scrapTableProvider.updateScrapExplore();

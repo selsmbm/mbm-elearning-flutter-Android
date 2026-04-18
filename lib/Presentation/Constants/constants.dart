@@ -7,7 +7,6 @@ const String driveFileDownloadUrl = "https://drive.google.com/uc?export=download
 const String driveImageShowUrl = "https://lh3.googleusercontent.com/d/";
 const String defaultDriveImageShowUrl = "14HZftHO6_LaoMOdzcE1t5RmrrpQSCGis";
 const String defaultUserDriveImageShowUrl = "1VnGXzQ1HW6W5MZwSQQdJgbqL4dHc30OB";
-const String mongoDataApiKey = "DzlPZKNgNUIgN1M2ok2zhMh36k4B5nemhvenRdjRnjcEcyWNKuknioB5UKZ6lO4C";
 
 
 const List<String> mttypes = [

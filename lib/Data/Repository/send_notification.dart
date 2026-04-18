@@ -1,8 +1,8 @@
-import 'dart:math';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:mbm_elearning/Data/network/api_debug_logger.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/Presentation/Constants/utills.dart';
 
@@ -50,9 +50,20 @@ class FirebaseNotiSender {
           }
         });
         request.headers.addAll(headers);
+        ApiDebugLogger.logRequest(
+          method: request.method,
+          uri: request.url,
+          headers: request.headers,
+          body: request.body,
+        );
         http.StreamedResponse response = await request.send();
+        final responseBody = await ApiDebugLogger.logStreamedResponse(
+          method: request.method,
+          uri: request.url,
+          response: response,
+        );
         if (response.statusCode == 200) {
-          print(await response.stream.bytesToString());
+          print(responseBody);
         } else {
           print(response.reasonPhrase);
         }

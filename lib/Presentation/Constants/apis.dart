@@ -9,7 +9,7 @@ const String getGateSSCApi =
 const String requestAchievementApi =
     "https://script.google.com/macros/s/AKfycbzASMPRZzJVMC6TuBbc7BfW4uK2s4WY4JfLIvRNYsWcg5TGjkCa1cqIs3-174KJS9F37Q/exec";
 const String getMaterialTable =
-    "https://docs.google.com/spreadsheets/d/e/2PACX-1vTGOH3yf_in_iZeit55eYBfwr2TKUQdBNj_PZCISFq6LqEFwXjbEwEYzNFsVX5YAK9SjoJwB5UCRsJs/pubhtml";
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vTGOH3yf_in_iZeit55eYBfwr2TKUQdBNj_PZCISFq6LqEFwXjbEwEYzNFsVX5YAK9SjoJwB5UCRsJs/pubhtml/sheet?headers=false&gid=0";
 const String addMaterialApi =
     "https://script.google.com/macros/s/AKfycbzsre6Iu4Wu2r9yqE-xuCzVlFl0knMw7lMPx73CEFM5MwZbkCWIU0bA82WhQxn9BIfMaQ/exec";
 const String addBlogPostApi =
@@ -25,27 +25,18 @@ const String addEventApi =
 const String addAdminToExplore =
     "https://script.google.com/macros/s/AKfycbwSq0H6A4oR_hdAEBPc8GHPlkLvlJZu8bj5wAF6iFjcdq747sNXMwLudEf0ZoG3AVEb/exec";
 const String getBlogTable =
-    "https://docs.google.com/spreadsheets/d/e/2PACX-1vRkeaR_JfcrXsMLGndnFKscZdBuz5OcLsPVxpiFjIMwiLRLUbtd4BVbUwiznM3UBT2WPetmzJiqjort/pubhtml";
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vRkeaR_JfcrXsMLGndnFKscZdBuz5OcLsPVxpiFjIMwiLRLUbtd4BVbUwiznM3UBT2WPetmzJiqjort/pubhtml/sheet?headers=false&gid=0";
 const String getExploreTable =
-    "https://docs.google.com/spreadsheets/d/e/2PACX-1vRGkXFR5XPh0OZZ2S59V4m046O-DqxHCbQEcXsq5jEmR6HCR2dn5LuY9wiyZIqKLFTwcZaiAPsrWzFt/pubhtml";
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vRGkXFR5XPh0OZZ2S59V4m046O-DqxHCbQEcXsq5jEmR6HCR2dn5LuY9wiyZIqKLFTwcZaiAPsrWzFt/pubhtml/sheet?headers=false&gid=0";
 const String getEventsTable =
-    "https://docs.google.com/spreadsheets/d/e/2PACX-1vRG3L745bIvLQy70gC3hkLf8gVWklhUBrAM9lQUx-Eeu3QFBg7HdlFJKf7pKFKvsojwL5jrtJ6BqoCL/pubhtml";
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vRG3L745bIvLQy70gC3hkLf8gVWklhUBrAM9lQUx-Eeu3QFBg7HdlFJKf7pKFKvsojwL5jrtJ6BqoCL/pubhtml/sheet?headers=false&gid=0";
 const String getUsefulLinksTable =
-    "https://docs.google.com/spreadsheets/d/e/2PACX-1vR63HgTfZci0afiD0vM2HLI7PQaihT2wiaJoFNZ-ShB-JfgGUSAxh1igrMmkidahZnPjdx8yO3wEwU0/pubhtml";
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vR63HgTfZci0afiD0vM2HLI7PQaihT2wiaJoFNZ-ShB-JfgGUSAxh1igrMmkidahZnPjdx8yO3wEwU0/pubhtml/sheet?headers=false&gid=0";
 const String getSELSAdminsTable =
-    "https://docs.google.com/spreadsheets/d/e/2PACX-1vRKpibLy0uJ9E-iWQ9lOdTD9f2PRjpa7N22-aVczHIHOSkLfDAFDXVoSRe_9-yVjFaSuhqaXjRLOsTc/pubhtml";
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vRKpibLy0uJ9E-iWQ9lOdTD9f2PRjpa7N22-aVczHIHOSkLfDAFDXVoSRe_9-yVjFaSuhqaXjRLOsTc/pubhtml/sheet?headers=false&gid=0";
 const String getVerificationUsers =
-    "https://docs.google.com/spreadsheets/d/e/2PACX-1vRIYVKNh0DSlVFO8k-g74OE4S_CANIoK4NMLnDQ4GStlXtA0UixCtzj3_9k4Vi7kCf_npZDF1usKUjZ/pubhtml";
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vRIYVKNh0DSlVFO8k-g74OE4S_CANIoK4NMLnDQ4GStlXtA0UixCtzj3_9k4Vi7kCf_npZDF1usKUjZ/pubhtml/sheet?headers=false&gid=0";
 const String getCustomAdsApi =
-    "https://docs.google.com/spreadsheets/d/e/2PACX-1vSqJJ3iTf-n9Onljxfw59zF3UcoOUtoNVEGpppnpz1pvXNGv-HPTLL6m3Y4FWvOWy3uDKTj5Gg_OrcY/pubhtml";
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vSqJJ3iTf-n9Onljxfw59zF3UcoOUtoNVEGpppnpz1pvXNGv-HPTLL6m3Y4FWvOWy3uDKTj5Gg_OrcY/pubhtml/sheet?headers=false&gid=0";
 
 const String mbmStoryApi = 'https://mbmstories.com/wp-json/wp/v2/posts';
-
-const String mongodbUrlToFindData =
-    "https://ap-south-1.aws.data.mongodb-api.com/app/data-wmqqk/endpoint/data/v1/action/find";
-const String mongodbUrlToAddData =
-    "https://ap-south-1.aws.data.mongodb-api.com/app/data-wmqqk/endpoint/data/v1/action/insertOne";
-const String mongodbUrlToUpdateData =
-    "https://ap-south-1.aws.data.mongodb-api.com/app/data-wmqqk/endpoint/data/v1/action/updateOne";
-const String mongodbUrlToDeleteData =
-    "https://ap-south-1.aws.data.mongodb-api.com/app/data-wmqqk/endpoint/data/v1/action/deleteOne";

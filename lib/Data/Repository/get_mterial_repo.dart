@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:http/http.dart' as http;
+import 'package:mbm_elearning/Data/network/api_debug_logger.dart';
 import 'package:mbm_elearning/Presentation/Constants/apis.dart';
-import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 
 class GetMaterialRepo {
   Future<Set<Map<String, dynamic>>> getMaterialRequest(
@@ -19,34 +19,27 @@ class GetMaterialRepo {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult != ConnectivityResult.none) {
       try {
-        var headers = {
-          'Content-Type': 'application/json',
-          'Access-Control-Request-Headers': '*',
-          'api-key': mongoDataApiKey
-        };
-        var request = http.Request('POST', Uri.parse(mongodbUrlToFindData));
-        request.body = json.encode({
-          "collection": "material_db",
-          "database": "mbmdb",
-          "dataSource": "mbmecj-Cluster",
-          "projection": {},
-          if (!isGetAllData)
-            "filter": {
-              "mtsem": sem,
-              "branch": branch,
-              "uid": userid,
-              "mttype": type,
-              "approve": approve
-            },
-          "sort": {"Timestamp": 1},
-          if (!isGetAllData) "skip": skip ?? 0,
-          if (!isGetAllData) "limit": limit ?? 0
-        });
-        request.headers.addAll(headers);
-        http.StreamedResponse response = await request.send();
+        final uri = isGetAllData
+            ? Uri.parse(getMaterialApi)
+            : Uri.parse(
+                "$getMaterialApi?limits=${limit ?? ''}&skips=${skip ?? ''}&sem=${sem ?? ''}&branch=${branch ?? ''}&userid=${userid ?? ''}&query=${query ?? ''}&type=${type ?? ''}&approve=${approve ?? ''}",
+              );
+        ApiDebugLogger.logRequest(
+          method: 'GET',
+          uri: uri,
+        );
+        http.Response response = await http.get(uri);
+        ApiDebugLogger.logResponse(
+          method: 'GET',
+          uri: uri,
+          statusCode: response.statusCode,
+          reasonPhrase: response.reasonPhrase,
+          headers: response.headers,
+          body: response.body,
+        );
         if (response.statusCode == 200) {
-          var finalOut = jsonDecode(await response.stream.bytesToString());
-          return (finalOut['documents'] ?? []).toSet();
+          final decodedBody = json.decode(response.body);
+          return Set<Map<String, dynamic>>.from(decodedBody['list'] ?? []);
         } else {
           print(response.reasonPhrase);
         }

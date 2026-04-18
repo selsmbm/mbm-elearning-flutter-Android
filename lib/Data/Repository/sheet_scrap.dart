@@ -5,20 +5,18 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' as parse;
 import 'package:http/http.dart' as http;
-import 'package:mbm_elearning/Data/Repository/get_mterial_repo.dart';
 import 'package:mbm_elearning/Data/model/admins_model.dart';
 import 'package:mbm_elearning/Data/model/blog_model.dart';
 import 'package:mbm_elearning/Data/model/events_model.dart';
 import 'package:mbm_elearning/Data/model/explore_model.dart';
 import 'package:mbm_elearning/Data/model/useful_links_model.dart';
+import 'package:mbm_elearning/Data/network/api_debug_logger.dart';
 import 'package:mbm_elearning/Presentation/Constants/apis.dart';
 
 class Scrap {
   static Future<List<Set<dynamic>>> scrapAllData({bool scrapMt = true}) async {
     return Future.wait([
-      scrapMt
-          ? GetMaterialRepo().getMaterialRequest(isGetAllData: true)
-          : Future.value({}),
+      scrapMt ? scrapMaterial() : Future.value({}),
       scrapBlogPosts(),
       scrapExplores(),
       scrapEvents(),
@@ -27,13 +25,70 @@ class Scrap {
     ]);
   }
 
+  static Future<Set<Map<String, dynamic>>> scrapMaterial() async {
+    Set<Map<String, dynamic>> material = {};
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult != ConnectivityResult.none) {
+      try {
+        final uri = Uri.parse(getMaterialTable);
+        ApiDebugLogger.logRequest(method: 'GET', uri: uri);
+        http.Response response = await http.get(uri);
+        ApiDebugLogger.logResponse(
+          method: 'GET',
+          uri: uri,
+          statusCode: response.statusCode,
+          reasonPhrase: response.reasonPhrase,
+          headers: response.headers,
+          body: response.body,
+        );
+        if (response.statusCode == 200) {
+          Document document = parse.parse(response.body);
+          List<Element> trs = document.getElementsByTagName('tr');
+          int i = 3;
+          int j = trs.length;
+          while (i < j) {
+            List<Element> tds = trs[i].querySelectorAll('td');
+            material.add({
+              "desc": tds[3].text,
+              "mtid": tds[2].text,
+              "mtname": tds[0].text,
+              "mtsem": tds[4].text,
+              "mtsub": tds[5].text,
+              "mttype": tds[6].text,
+              "mturl": tds[7].text,
+              "approve": tds[8].text,
+              "branch": tds[9].text,
+              "time": tds[10].text,
+              "uploaded_by_user": tds[11].text,
+              "uploaded_by_user_uid": tds[12].text
+            });
+            i++;
+          }
+        }
+      } catch (e) {
+        log(e.toString());
+      }
+    }
+    return material;
+  }
+
   static Future<Set<BlogModel>> scrapBlogPosts() async {
     Set<BlogModel> posts = {};
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult != ConnectivityResult.none) {
       posts.clear();
       try {
-        http.Response response = await http.get(Uri.parse(getBlogTable));
+        final uri = Uri.parse(getBlogTable);
+        ApiDebugLogger.logRequest(method: 'GET', uri: uri);
+        http.Response response = await http.get(uri);
+        ApiDebugLogger.logResponse(
+          method: 'GET',
+          uri: uri,
+          statusCode: response.statusCode,
+          reasonPhrase: response.reasonPhrase,
+          headers: response.headers,
+          body: response.body,
+        );
         if (response.statusCode == 200) {
           Document document = parse.parse(response.body);
           List<Element> trs = document.getElementsByTagName('tr');
@@ -69,7 +124,17 @@ class Scrap {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult != ConnectivityResult.none) {
       try {
-        http.Response response = await http.get(Uri.parse(getExploreTable));
+        final uri = Uri.parse(getExploreTable);
+        ApiDebugLogger.logRequest(method: 'GET', uri: uri);
+        http.Response response = await http.get(uri);
+        ApiDebugLogger.logResponse(
+          method: 'GET',
+          uri: uri,
+          statusCode: response.statusCode,
+          reasonPhrase: response.reasonPhrase,
+          headers: response.headers,
+          body: response.body,
+        );
         if (response.statusCode == 200) {
           Document document = parse.parse(response.body);
           List<Element> trs = document.getElementsByTagName('tr');
@@ -105,7 +170,17 @@ class Scrap {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult != ConnectivityResult.none) {
       try {
-        http.Response response = await http.get(Uri.parse(getEventsTable));
+        final uri = Uri.parse(getEventsTable);
+        ApiDebugLogger.logRequest(method: 'GET', uri: uri);
+        http.Response response = await http.get(uri);
+        ApiDebugLogger.logResponse(
+          method: 'GET',
+          uri: uri,
+          statusCode: response.statusCode,
+          reasonPhrase: response.reasonPhrase,
+          headers: response.headers,
+          body: response.body,
+        );
         if (response.statusCode == 200) {
           Document document = parse.parse(response.body);
           List<Element> trs = document.getElementsByTagName('tr');
@@ -139,7 +214,17 @@ class Scrap {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult != ConnectivityResult.none) {
       try {
-        http.Response response = await http.get(Uri.parse(getUsefulLinksTable));
+        final uri = Uri.parse(getUsefulLinksTable);
+        ApiDebugLogger.logRequest(method: 'GET', uri: uri);
+        http.Response response = await http.get(uri);
+        ApiDebugLogger.logResponse(
+          method: 'GET',
+          uri: uri,
+          statusCode: response.statusCode,
+          reasonPhrase: response.reasonPhrase,
+          headers: response.headers,
+          body: response.body,
+        );
         if (response.statusCode == 200) {
           Document document = parse.parse(response.body);
           List<Element> trs = document.getElementsByTagName('tr');
@@ -170,7 +255,17 @@ class Scrap {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult != ConnectivityResult.none) {
       try {
-        http.Response response = await http.get(Uri.parse(getSELSAdminsTable));
+        final uri = Uri.parse(getSELSAdminsTable);
+        ApiDebugLogger.logRequest(method: 'GET', uri: uri);
+        http.Response response = await http.get(uri);
+        ApiDebugLogger.logResponse(
+          method: 'GET',
+          uri: uri,
+          statusCode: response.statusCode,
+          reasonPhrase: response.reasonPhrase,
+          headers: response.headers,
+          body: response.body,
+        );
         if (response.statusCode == 200) {
           Document document = parse.parse(response.body);
           List<Element> trs = document.getElementsByTagName('tr');
@@ -204,7 +299,17 @@ class Scrap {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult != ConnectivityResult.none) {
       try {
-        http.Response response = await http.get(Uri.parse(getCustomAdsApi));
+        final uri = Uri.parse(getCustomAdsApi);
+        ApiDebugLogger.logRequest(method: 'GET', uri: uri);
+        http.Response response = await http.get(uri);
+        ApiDebugLogger.logResponse(
+          method: 'GET',
+          uri: uri,
+          statusCode: response.statusCode,
+          reasonPhrase: response.reasonPhrase,
+          headers: response.headers,
+          body: response.body,
+        );
         if (response.statusCode == 200) {
           Document document = parse.parse(response.body);
           List<Element> trs = document.getElementsByTagName('tr');

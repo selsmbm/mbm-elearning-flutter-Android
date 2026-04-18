@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:http/http.dart' as http;
+import 'package:mbm_elearning/Data/network/api_debug_logger.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Constants/apis.dart';
@@ -28,7 +29,17 @@ class _GateMaterialState extends State<GateMaterial> {
     });
     _outPutData.clear();
     try {
-      http.Response response = await http.get(Uri.parse(requestAchievementApi));
+      final uri = Uri.parse(requestAchievementApi);
+      ApiDebugLogger.logRequest(method: 'GET', uri: uri);
+      http.Response response = await http.get(uri);
+      ApiDebugLogger.logResponse(
+        method: 'GET',
+        uri: uri,
+        statusCode: response.statusCode,
+        reasonPhrase: response.reasonPhrase,
+        headers: response.headers,
+        body: response.body,
+      );
       if (response.statusCode == 200) {
         for (var mt in json.decode(response.body)) {
           _outPutData.add({

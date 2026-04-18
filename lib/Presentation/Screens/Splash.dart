@@ -81,12 +81,14 @@ class _LandingPageState extends State<LandingPage> {
     super.initState();
     checkUser();
     setCurrentScreenInGoogleAnalytics('Splash Page');
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<ScrapTableProvider>(context, listen: false).scrapAllData();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     scrapTableProvider = Provider.of<ScrapTableProvider>(context);
-    scrapTableProvider.scrapAllData();
     return Scaffold(
       body: Center(
         child: Column(

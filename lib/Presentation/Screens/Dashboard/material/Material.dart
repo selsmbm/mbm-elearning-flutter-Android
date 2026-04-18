@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mbm_elearning/BLoC/GetMaterialBloc/get_material_bloc.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
+import 'package:mbm_elearning/Data/Repository/get_mterial_repo.dart';
 import 'package:mbm_elearning/Presentation/Constants/Colors.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/Presentation/Widgets/material_data_list_tile.dart';
@@ -118,6 +119,8 @@ class _MtCardState extends State<MtCard> {
   int limit = 15;
   bool showMt = false;
   List material = [];
+  bool _didLoadInitialData = false;
+  late final GetMaterialApiBloc _materialBloc;
   final ItemPositionsListener itemPositionsListener =
       ItemPositionsListener.create();
   ScrapTableProvider? scrapTableProvider;
@@ -125,41 +128,45 @@ class _MtCardState extends State<MtCard> {
   @override
   void initState() {
     super.initState();
+    _materialBloc = GetMaterialApiBloc(GetMaterialRepo());
     itemPositionsListener.itemPositions.addListener(() {
-      if (!scrapTableProvider!.checkIsNotEmpty()) {
-        if (itemPositionsListener.itemPositions.value.last.index == skip + 14) {
-          skip = skip + limit;
-          BlocProvider.of<GetMaterialApiBloc>(context).add(
-            FetchGetMaterialApi(
-              '',
-              '',
-              skip,
-              limit,
-              '',
-              '',
-              '',
-              'true',
-              false,
-              scrapTableProvider!,
-            ),
-          );
-        }
+      if (scrapTableProvider == null ||
+          scrapTableProvider!.checkIsNotEmpty() ||
+          itemPositionsListener.itemPositions.value.isEmpty ||
+          material.isEmpty) {
+        return;
+      }
+
+      if (itemPositionsListener.itemPositions.value.last.index >=
+          material.length - 1) {
+        skip = skip + limit;
+        _materialBloc.add(
+          FetchGetMaterialApi(
+            sem ?? '',
+            branch ?? '',
+            skip,
+            limit,
+            widget.title,
+            '',
+            '',
+            'true',
+            false,
+            scrapTableProvider!,
+          ),
+        );
       }
     });
   }
 
   @override
-  void dispose() {
-    if (material.isNotEmpty) {
-      material.clear();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    scrapTableProvider ??= Provider.of<ScrapTableProvider>(context);
+    if (_didLoadInitialData) {
+      return;
     }
-    super.dispose();
-  }
 
-  @override
-  Widget build(BuildContext context) {
-    scrapTableProvider = Provider.of<ScrapTableProvider>(context);
-    BlocProvider.of<GetMaterialApiBloc>(context).add(
+    _materialBloc.add(
       FetchGetMaterialApi(
         sem ?? '',
         branch ?? '',
@@ -173,7 +180,23 @@ class _MtCardState extends State<MtCard> {
         scrapTableProvider!,
       ),
     );
+    _didLoadInitialData = true;
+  }
+
+  @override
+  void dispose() {
+    if (material.isNotEmpty) {
+      material.clear();
+    }
+    _materialBloc.close();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    scrapTableProvider = Provider.of<ScrapTableProvider>(context);
     return BlocBuilder<GetMaterialApiBloc, GetMaterialApiState>(
+      bloc: _materialBloc,
       builder: (context, state) {
         if (state is GetMaterialApiIsSuccess) {
           if (skip == 0) {
