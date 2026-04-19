@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:mbm_elearning/Data/googleAnalytics.dart';
 import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/Home/more_page.dart';
@@ -90,7 +89,7 @@ class _SettingsPageState extends State<SettingsPage> {
               showAboutDialog(
                 context: context,
                 applicationName: 'MBM E-Learning',
-                applicationVersion: 'v3.0.0',
+                applicationVersion: 'v7.1.3',
                 applicationIcon: ClipRRect(
                   borderRadius: BorderRadius.circular(100),
                   child: Image.asset(
@@ -102,17 +101,35 @@ class _SettingsPageState extends State<SettingsPage> {
                 applicationLegalese:
                     'Copyright © ${DateTime.now().year} MBM E-Learning',
                 children: [
+                  const Padding(
+                    padding: EdgeInsets.only(top: 8),
+                    child: Text(
+                      'MBM E-Learning is an application that helps teachers, students and alumni share notes and information.',
+                    ),
+                  ),
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Html(
-                      data: """
-                      <p>
-                        MBM E-Learning is a application that is used to help teachers, students and alumni to share notes and information.
-                      </p>
-                      <p>
-                        This application is developed by <a href="https://mbmec.weebly.com/">SELS</a> and is licensed under the <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">GNU General Public License v3.0</a>.
-                      </p>
-                      """,
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Wrap(
+                      children: [
+                        const Text('Developed by '),
+                        InkWell(
+                          onTap: () => launch('https://mbmec.weebly.com/'),
+                          child: const Text('SELS',
+                              style: TextStyle(
+                                  color: Colors.blue,
+                                  decoration: TextDecoration.underline)),
+                        ),
+                        const Text('. Licensed under '),
+                        InkWell(
+                          onTap: () => launch(
+                              'https://www.gnu.org/licenses/gpl-3.0.en.html'),
+                          child: const Text('GPL v3.0',
+                              style: TextStyle(
+                                  color: Colors.blue,
+                                  decoration: TextDecoration.underline)),
+                        ),
+                        const Text('.'),
+                      ],
                     ),
                   ),
                 ],

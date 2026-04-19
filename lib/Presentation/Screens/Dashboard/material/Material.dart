@@ -117,7 +117,7 @@ class MtCard extends StatefulWidget {
 
 class _MtCardState extends State<MtCard> {
   int skip = 0;
-  int limit = 15;
+  int limit = 100;
   bool showMt = false;
   List material = [];
   bool _didLoadInitialData = false;
@@ -131,6 +131,7 @@ class _MtCardState extends State<MtCard> {
     super.initState();
     _materialBloc = GetMaterialApiBloc(GetMaterialRepo());
     itemPositionsListener.itemPositions.addListener(() {
+      // Only paginate via API when cache has no material data
       if (scrapTableProvider == null ||
           scrapTableProvider!.checkIsNotEmpty() ||
           itemPositionsListener.itemPositions.value.isEmpty ||
@@ -138,8 +139,11 @@ class _MtCardState extends State<MtCard> {
         return;
       }
 
-      if (itemPositionsListener.itemPositions.value.last.index >=
-          material.length - 1) {
+      final lastVisible = itemPositionsListener.itemPositions.value
+          .where((pos) => pos.itemTrailingEdge > 0 && pos.itemTrailingEdge <= 1)
+          .fold<int>(-1, (max, pos) => pos.index > max ? pos.index : max);
+
+      if (lastVisible >= material.length - 3) {
         skip = skip + limit;
         _materialBloc.add(
           FetchGetMaterialApi(

@@ -8,7 +8,6 @@ import 'package:mbm_elearning/Presentation/Constants/constants.dart';
 import 'package:mbm_elearning/Presentation/Screens/Auth/Components/OrDevider.dart';
 import 'package:mbm_elearning/Presentation/Screens/Dashboard/profile_page.dart';
 import 'package:mbm_elearning/Presentation/Widgets/Buttons/SigninButton.dart';
-import 'package:mbm_elearning/Presentation/Widgets/model_progress.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Components/RoundedInputField.dart';
@@ -26,7 +25,8 @@ class _SigninPageState extends State<SigninPage> with TickerProviderStateMixin {
   String? _password;
   String? _emailSignup;
   String? _passwordSignup;
-  bool showProgress = false;
+  bool _signinLoading = false;
+  bool _signupLoading = false;
   late TabController tabController;
 
   @override
@@ -44,9 +44,7 @@ class _SigninPageState extends State<SigninPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return ModalProgressHUD(
-      inAsyncCall: showProgress,
-      child: Scaffold(
+    return Scaffold(
         body: SafeArea(
           child: Center(
             child: SingleChildScrollView(
@@ -118,7 +116,6 @@ class _SigninPageState extends State<SigninPage> with TickerProviderStateMixin {
             ),
           ),
         ),
-      ),
     );
   }
 
@@ -179,21 +176,18 @@ class _SigninPageState extends State<SigninPage> with TickerProviderStateMixin {
                 height: 14,
               ),
               SignInButton(
+                isLoading: _signupLoading,
                 onPressed: () async {
                   if (_passwordSignup != null) {
                     try {
-                      setState(() {
-                        showProgress = true;
-                      });
+                      setState(() => _signupLoading = true);
                       await FirebaseAuth.instance
                           .createUserWithEmailAndPassword(
                               email: _emailSignup!, password: _passwordSignup!);
-                      setState(() {
-                        showProgress = false;
-                      });
                       if (FirebaseAuth.instance.currentUser != null) {
                         await FirebaseAuth.instance.currentUser!
                             .sendEmailVerification();
+                        if (!mounted) return;
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text(
@@ -202,31 +196,22 @@ class _SigninPageState extends State<SigninPage> with TickerProviderStateMixin {
                         );
                       }
                     } on FirebaseAuthException catch (e) {
+                      if (!mounted) return;
                       if (e.code == 'weak-password') {
-                        setState(() {
-                          showProgress = false;
-                        });
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                content: Text(
-                                    'The password provided is too weak.')));
-                      } else if (e.code == 'email-already-in-use') {
-                        setState(() {
-                          showProgress = false;
-                        });
                         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                            content: Text(
-                                'The account already exists for that email.')));
+                            content: Text('The password provided is too weak.')));
+                      } else if (e.code == 'email-already-in-use') {
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                            content: Text('The account already exists for that email.')));
                       }
                     } catch (e) {
-                      setState(() {
-                        showProgress = false;
-                      });
                       print(e);
+                    } finally {
+                      if (mounted) setState(() => _signupLoading = false);
                     }
                   } else {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text('Please fill all details')));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Please fill all details')));
                   }
                 },
                 text: 'Sign Up',
@@ -322,19 +307,14 @@ class _SigninPageState extends State<SigninPage> with TickerProviderStateMixin {
                 height: 14,
               ),
               SignInButton(
+                isLoading: _signinLoading,
                 onPressed: () async {
                   if (_password != null && _email != null) {
                     try {
-                      SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      setState(() {
-                        showProgress = true;
-                      });
+                      final prefs = await SharedPreferences.getInstance();
+                      setState(() => _signinLoading = true);
                       await FirebaseAuth.instance.signInWithEmailAndPassword(
                           email: _email!, password: _password!);
-                      setState(() {
-                        showProgress = false;
-                      });
                       if (FirebaseAuth.instance.currentUser != null &&
                           FirebaseAuth.instance.currentUser!.emailVerified) {
                         if (!kIsWeb) {
@@ -343,81 +323,50 @@ class _SigninPageState extends State<SigninPage> with TickerProviderStateMixin {
                         }
                         if (!mounted) return;
                         if (prefs.getBool(SP.initialProfileSaved) != null) {
-                          Navigator.popAndPushNamed(context, 'dashboard');
+                          Navigator.pushReplacementNamed(context, 'dashboard');
                         } else {
-                          if (FirebaseAuth.instance.currentUser!.photoURL !=
-                              null) {
-                            if (FirebaseAuth.instance.currentUser!.photoURL!
-                                    .contains(student) ||
-                                FirebaseAuth.instance.currentUser!.photoURL!
-                                    .contains(teacher) ||
-                                FirebaseAuth.instance.currentUser!.photoURL!
-                                    .contains(alumni)) {
+                          if (FirebaseAuth.instance.currentUser!.photoURL != null) {
+                            if (FirebaseAuth.instance.currentUser!.photoURL!.contains(student) ||
+                                FirebaseAuth.instance.currentUser!.photoURL!.contains(teacher) ||
+                                FirebaseAuth.instance.currentUser!.photoURL!.contains(alumni)) {
                               prefs.setBool(SP.initialProfileSaved, true);
-                              Navigator.popAndPushNamed(context, 'dashboard');
+                              Navigator.pushReplacementNamed(context, 'dashboard');
                             } else {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const ProfilePage(
-                                    isItInitialUpdate: true,
-                                  ),
-                                ),
-                              );
+                              Navigator.pushReplacement(context,
+                                  MaterialPageRoute(builder: (_) => const ProfilePage(isItInitialUpdate: true)));
                             }
                           } else {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const ProfilePage(
-                                  isItInitialUpdate: true,
-                                ),
-                              ),
-                            );
+                            Navigator.pushReplacement(context,
+                                MaterialPageRoute(builder: (_) => const ProfilePage(isItInitialUpdate: true)));
                           }
                         }
-                      } else if (!FirebaseAuth
-                          .instance.currentUser!.emailVerified) {
-                        await FirebaseAuth.instance.currentUser!
-                            .sendEmailVerification();
-                        setState(() {
-                          showProgress = false;
-                        });
+                      } else if (!FirebaseAuth.instance.currentUser!.emailVerified) {
+                        await FirebaseAuth.instance.currentUser!.sendEmailVerification();
                         if (!mounted) return;
+                        setState(() => _signinLoading = false);
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text(
-                                'Please verify your email. and retry login, also check mail in spam box'),
+                            content: Text('Please verify your email. and retry login, also check mail in spam box'),
                           ),
                         );
                       }
                     } on FirebaseAuthException catch (e) {
+                      if (!mounted) return;
+                      setState(() => _signinLoading = false);
                       if (e.code == 'user-not-found') {
-                        setState(() {
-                          showProgress = false;
-                        });
                         ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                content:
-                                    Text('No user found for that email.')));
+                            const SnackBar(content: Text('No user found for that email.')));
                       } else if (e.code == 'wrong-password') {
-                        setState(() {
-                          showProgress = false;
-                        });
                         ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                content: Text(
-                                    'Wrong password provided for that user.')));
+                            const SnackBar(content: Text('Wrong password provided for that user.')));
                       }
                     } catch (e) {
-                      setState(() {
-                        showProgress = false;
-                      });
+                      if (mounted) setState(() => _signinLoading = false);
                       print(e);
                     }
                   } else {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text('Please fill all details')));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Please fill all details')));
                   }
                 },
                 text: 'Sign In',

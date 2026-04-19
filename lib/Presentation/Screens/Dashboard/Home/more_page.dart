@@ -152,14 +152,14 @@ class _MorePageState extends State<MorePage> {
                 subtitle: 'All teachers of MBMU',
                 icon: Icons.group,
               ),
-              SettingButton(
-                onTap: () {
-                  Navigator.pushNamed(context, 'mbmstory');
-                },
-                title: 'MBM stories',
-                subtitle: 'Powered by mbmstories.com',
-                icon: Icons.album,
-              ),
+              // SettingButton(
+              //   onTap: () {
+              //     Navigator.pushNamed(context, 'mbmstory');
+              //   },
+              //   title: 'MBM stories',
+              //   subtitle: 'Powered by mbmstories.com',
+              //   icon: Icons.album,
+              // ),
               SettingButton(
                 onTap: () {
                   Navigator.pushNamed(context, 'map');

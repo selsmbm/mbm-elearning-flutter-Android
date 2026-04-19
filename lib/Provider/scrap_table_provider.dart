@@ -290,14 +290,14 @@ class ScrapTableProvider with ChangeNotifier {
       return _materials
           .where((element) =>
               getContains(element["mtsem"], semester) &&
-              getContains(element["mttype"], type) &&
+              element["mttype"].toString().toLowerCase() == type.toLowerCase() &&
               getContains(element["approve"], 'true'))
           .toSet();
     } else {
       return _materials
           .where((element) =>
               getContains(element["mtsem"], semester) &&
-              getContains(element["mttype"], type) &&
+              element["mttype"].toString().toLowerCase() == type.toLowerCase() &&
               element["branch"] == branch &&
               getContains(element["approve"], 'true'))
           .toSet();
