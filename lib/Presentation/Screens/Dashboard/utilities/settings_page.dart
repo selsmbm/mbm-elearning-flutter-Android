@@ -145,6 +145,43 @@ class _SettingsPageState extends State<SettingsPage> {
                 context: context,
                 builder: (context) => AlertDialog(
                   title: const Text('Are you sure?'),
+                  content: const Text('Do you want to delete your account? This action cannot be undone.'),
+                  actions: [
+                    TextButton(
+                      child: const Text('No'),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                    TextButton(
+                      child: const Text('Yes'),
+                      onPressed: () async {
+                        try {
+                          await FirebaseAuth.instance.currentUser?.delete();
+                          await FirebaseAuth.instance.signOut();
+                          SystemNavigator.pop();
+                        } catch (e) {
+                          Navigator.pop(context);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Error deleting account. You may need to log in again to perform this action.')),
+                          );
+                        }
+                      },
+                    ),
+                  ],
+                ),
+              );
+            },
+            title: 'Delete Account',
+            subtitle: 'Permanently delete your account',
+            icon: Icons.delete_forever,
+          ),
+          SettingButton(
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text('Are you sure?'),
                   content: const Text('Do you want to logout?'),
                   actions: [
                     TextButton(
