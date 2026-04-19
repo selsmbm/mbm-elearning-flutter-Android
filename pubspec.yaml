@@ -1,7 +1,7 @@
 name: mbm_elearning
 description: mbm_elearning, A notes sharing platform.
 
-version: 7.1.4+21
+version: 7.1.5+25
 
 environment:
   sdk: ">=3.2.1 <4.0.0"
